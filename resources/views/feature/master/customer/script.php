@@ -2,6 +2,7 @@
 app.controller("myCtrl", function($scope,$http) {
     angular.element(document).ready(function () {
         autosize($("#alamat"));
+        autosize($("#catatan"));
         $("#viewtabel").DataTable({
             scrollY: "50vh",
             scrollX: !0,
@@ -23,4 +24,24 @@ app.controller("myCtrl", function($scope,$http) {
         $('#m_create').modal('show');
     }
 });
+
+function tambah(){
+    hasil = 20
+    grade = grade(hasil);
+    alert(grade);
+}
+
+function grade(nilai){
+    if(nilai >= 90){
+        return "A"
+    }else if(nilai >= 80){
+        return "B"
+    }else if(nilai >= 70){
+        return "C"
+    }else if(nilai >= 60){
+        return "D"
+    }else{
+        return "E"
+    }
+}
 </script>

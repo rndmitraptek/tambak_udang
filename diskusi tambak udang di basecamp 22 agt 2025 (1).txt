@@ -1,0 +1,269 @@
+Setup Data
+1. Setup Lokasi
+       1. Sekuro
+            A
+              A1 -> petak/kolam (luas dalam meter persegi) 
+              A2 -> petak/kolam
+              A3
+            B
+              B1 -> petak/kolam
+              B2 -> petak/kolam
+            C
+
+       2. lain
+       3. Madura
+
+   total luas sekuro 60000 m2
+              lain   30000 m2
+
+   total luas 9000 m2 
+
+  10 juta = sekuro 6000/9000 *10 jt 
+
+2.Setup Supplier 
+3.Setup pakan 
+4.Setup benur 
+5.Setup Customer 
+6.Setup Siklus per lokasi 
+     1.Sekuro 
+          dari tanggal 1 okt 2025 sd 31 des 2025
+       perlu checklist /mapping lagi petak mana saja yang ikut siklus ini
+
+7.Setup Master COA
+   depan 1 -> Kas/Harta
+   depan 2 -> Persediaan
+   depan 3 -> Hutang
+   depan 4 -> Pendapatan
+   depan 5 -> Biaya
+   default:
+       DEBIT                KREDIT 
+   Harta + PendaPatan = Utang + Modal + Biaya
+  
+    Jurnal:
+      Pembelian
+           
+ COA          Debit          Kredit
+1.Persediaan  5 jt             -
+3.Hutang        -             5 juta
+  
+
+
+8.Setup Biaya
+
+Alur
+
+1.Pemesanan (PO) benur
+	Lokasi
+        Supplier
+		Detail
+		Benur
+        	Harga
+        	Qty
+		Subtotal
+
+
+2.Pembelian/Penerimaan/Penaburan benur jadi satu dengan form penaburan benur -> per petak  -> hutang benur dg supplier
+  A2    jenis benur   supplier   Harga  qty Sub Total   (Bruto, Netto, Aktual) -> HPP benur
+  1 PO bisa dikirimkan beberapa kali pembelian
+  apakah ada kemungkinan pembelian benur, tetapi belum di tabur ke kolam ??
+
+
+	Form Penaburan
+	pillih PO
+	tanggal
+	keterangan	
+	Detail
+	 kolam
+	 benur
+	 jumlah benur bruto
+	 Harga satuan bruto 
+	 Subtotal Bruto	 
+	 jumlah benur netto
+	 Harga satuan netto
+	 Subtotal Netto
+	 jumlah benur aktual
+	 Harga satuan aktual
+	 subtotal Aktual
+
+
+3.Pakan ada inventory
+  Pakan tidak ada PO, tetapi lgsg dpt faktur
+
+  Form Pembelian/Penerimaan Pakan di Gudang -> barang masuk -> hutang pakan dengan supplier
+  
+  	pillih supplier 
+	detail
+	pakan
+	qty
+	Harga
+	subtotal
+
+4.Form pemberian pakan -> barang keluar
+  A2  tanggal  jenis pakan   supp   Harga  qty sub total  -> HPP Pakan
+
+	lokasi
+	detail
+	petak 
+	jenis pakan
+	qty
+	harga
+	subtotal
+	 
+
+5.Form retur pakan->potong tagihan-> link ke pembayaran hutang supplier
+	pillih supplier
+	detail
+	pecan
+	qty
+	Harga	
+	subtotal
+
+6.Biaya biaya 
+  setup pengelompokan biaya:
+   a)biaya gabungan : untuk semua lokasi contoh untuk biaya kantor smg, perjalanan dinas
+   b)biaya per lokasi : untuk sekuro hanya di bagi dengan semua petak di sekuro yang masih aktif 
+   c)biaya per petak : benur, pakan 
+
+  Ketika input transaksi biaya bisa memilih biaya ini untuk siklus/periode kapan
+  input coa jurnal apa saja pada menu setup biaya
+
+  perhitungan biaya 
+   
+   setup biaya lgsg muncul lokasi yg ada, kmd checklist
+   Ketika ada lokasi baru maka harus adjut setup biaya dengan men checklist lokasi tsb
+
+	form setup biaya 
+	- nama biaya,  ex. biaya gaji
+	- pillih kelompok biaya, ex. biaya per lokasi
+		gabungan
+			 detail 
+				- sekuro
+				- bandengan
+				- meduro 1
+				- meduro 2
+		perlokasi
+				- sekuro
+		petak
+	- pillihan periode biaya (bulan, one charges)
+	- pillihan COA 5 
+
+	transaksi
+	- pillih siklus
+	- pillih nama biaya -> dari setup biaya
+	- jika petak wajib pillih petak yang mana
+	- jika di nama biaya periode biaya bulanan maka wajib mengisi ranga date dari tanggal s/d tanggal
+	- nominal
+	
+7. jika ada yang tumbang (dipanen meskipun siklus belum selesai)
+   pilih periode siklus
+   pilih petak
+   input tanggal tumbang 
+        input total biomass dalam kg :  10 kg
+        dijual ke customer siapa -> piutang
+           ke customer a dengan Harga Rp 5.000 sebanyak 3 kg
+           ke customer b dengan Harga Rp 4.000 sebanyak 5 kg
+           ke customer c dengan Harga Rp 3.000 sebanyak 2 kg
+   
+   kemudian
+   1. proporsi biaya untuk petak tsb dikeluarkan
+   2. input biaya untuk petak tsb secara simulasi karena ada biaya yang belum muncul angka pasti semisal listrik dsb, kmd akhir bulan baru input biaya yang real semisal biaya listrik dsb
+
+8. Sampling atau simulasi
+   Waktu sampling untuk semua petak dalam satu lokasi apakah sama ??
+
+   ada 2 komponen :
+   1.Pendapatan 
+         per petak
+           Harga per kg        rp 5000
+            biomas per kg        10 kg
+         sub total 2500
+
+        input per petak 
+      
+   2.Biaya
+         sdh diposting  (benur, pakan)
+         input biaya simulasi
+           beban gaji
+           beban operasional
+                    listrik
+ 
+     
+Laba atau Rugi
+
+  
+9. Panen semua (akhir siklus)
+   pilih periode siklus
+   pilih petak
+   input tanggal panen
+        input total biomass dalam kg :  10 kg
+        dijual ke customer siapa -> piutang
+           ke customer a dengan Harga Rp 5.000 sebanyak 3 kg
+           ke customer b dengan Harga Rp 4.000 sebanyak 5 kg
+           ke customer c dengan Harga Rp 3.000 sebanyak 2 kg
+
+ input transaksi penjualan pada saat panen kan harus per petak?
+
+biaya bulanan Ketika siklus panen terjadi di pertengahan bulan, kmd biaya masuk ke siklus yang panen tsb atau setalah nya atau di bagi
+
+
+biaya yg gabungan untuk semua lokai
+ 
+apakah ada biaya yang sudah diinput secara actual pada awal bulan untuk bulan berjalan? semisal uang internet dibayarkan awal bulan untuk satu bulan berjalan
+
+
+10) pembayaran hutang ke supplier
+11) pembayaran piutang ke customer
+
+
+siklus dimulai 1 Juli 2025
+
+list simulasi :
+1)sampling pada hari ke 35 => 5 Agustus 2025
+    Biaya :
+       1. dari tgl 1 Juli sd 31 Juli 2025 ada biaya actual (benur, pakan dan biaya actual akhir bulan)  : 10 jt
+       2. dari tgl 1 Agt sd 5 Agt 2025 selama 5 hari di bulan ags ada proporsi biaya actual (benur,pakan) dan input simulasi (uang listrik, gaji prediksi selama 1 bulan pada bulan agustus) : 1 jt
+2)sampling pada hari ke 42  =>12 Agustus 2025
+    Biaya :
+       1. dari tgl 1 Juli sd 31 Juli 2025 ada biaya actual (benur, pakan dan biaya actual akhir bulan)  : 10 jt
+       2. dari tgl 1 Agt sd 12 Agt 2025 selama 12 hari di bulan ags ada proporsi biaya actual (benur,pakan) dan input simulasi (uang listrik, gaji prediksi selama 1 bulan pada bulan agustus)  : 1,5 jt
+4)sampling pada hari ke 49  =>19 Agustus 2025
+    Biaya :
+       1. dari tgl 1 Juli sd 31 Juli 2025 ada biaya actual (benur, pakan dan biaya actual akhir bulan)  : 10 jt
+       2. dari tgl 1 Agt sd 19 Agt 2025 selama 19 hari di bulan ags ada proporsi biaya actual (benur,pakan) dan input simulasi : 2 jt
+
+6)sampling pada hari ke 67  =>5 September 2025
+    Biaya :
+       1. dari tgl 1 Juli sd 31 Juli 2025 ada biaya actual (benur, pakan dan biaya actual akhir bulan)  : 10 jt
+       1. dari tgl 1 Agt sd 31 agt 2025 ada biaya actual (benur, pakan dan biaya actual akhir bulan)  : 10 jt
+       2. dari tgl 1 Agt sd 5 Sept 2025 selama 5 hari di bulan sept ada proporsi biaya actual (benur,pakan) dan input simulasi : 2 jt
+
+                   
+tidak bisa input biaya back date Ketika sdh ada simulasi sebelumnya
+
+
+Setup Data
+	- Lokasi
+Management Tambak
+	- Siklus 
+	- Transaksi 
+	 	- biaya
+		- penaburan Benur 
+		- pemberian Pakan 
+	- Stok Pakan 
+	- Simulasi Siklus 
+	- laporan
+Finance 
+	- PO Benur
+	- Pembelian Pakan 
+Akuntansi 
+	- Setup Biaya 
+	- COA 
+	- Jurnal Umum
+		- cetak jurnal
+		- input jurnal
+	- Buku Besar 
+	- Neraca Saldo
+	- Jurnal Penyesuaian
+	- Neraca Lajur
+	- Laporan Rugi Laba
+	- Laporan Neraca

@@ -67,9 +67,19 @@ License: You must have a valid license purchased only from themeforest(the above
 				color: #3f4047!important;
 			}
 			.form-control {
-				padding: .55rem 1.15rem!important;
+				padding: .55rem 1rem!important;
 				font-weight: bold!important;
-    			font-size: 1.1rem!important;
+    			font-size: 1.15rem!important;
+			}
+			input.form-control,
+			select.form-control {
+				height: 35px!important;
+			}
+			 .input-group>.input-group-append>.btn{
+				height: 35px!important;
+			}
+			.input-group>.custom-select:not(:last-child), .input-group> input.form-control:not(:last-child) {
+				height: 35px!important;
 			}
 		</style>
 		<script src="{{ url('/') }}/angularJS/angular.min.js"></script>
@@ -2853,11 +2863,11 @@ License: You must have a valid license purchased only from themeforest(the above
 
 		<!--end::Page Vendors -->
 
-		<!--begin::Page Snippets -->
-		<script src="{{ url('/') }}/template/assets/app/js/dashboard.js" type="text/javascript"></script>
+		{{-- <!--begin::Page Snippets -->
+		<script src="{{ url('/') }}/template/assets/app/js/dashboard.js" type="text/javascript"></script> --}}
 
 		<!--end::Page Snippets -->
+		@yield('js')
 	</body>
-	@yield('js')
 	<!-- end::Body -->
 </html>

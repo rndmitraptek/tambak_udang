@@ -3,7 +3,7 @@
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('ctrl')
-@include('feature.master.lokasi.script')
+@include('feature.master.kelompok_kolam.script')
 @endsection
 
 @section('content')
@@ -31,7 +31,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Master Lokasi
+                                Master Kelompok Kolam
                             </h3>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                 <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
-                                        <span>Tambah Lokasi</span>
+                                        <span>Tambah Kelompok Kolam</span>
                                     </span>
                                 </button>
                             </li>
@@ -54,23 +54,23 @@
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
                         <thead>
                             <tr>
-                                <th>Kode</th>
                                 <th>Nama Lokasi</th>
-                                <th>Nama Alamat Lengkap</th>
+                                <th>Nama Kelompok Kolam</th>
+                                <th>Keterangan</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>TB001</td>
                                 <td>Sekuro</td>
-                                <td>Jalan Sekuro, jepara</td>
+                                <td>A1</td>
+                                <td>keterangan sekuro kelompok kolam A1</td>
                                 <td nowrap></td>
                             </tr>
                             <tr>
-                                <td>TB002</td>
-                                <td>Bandengan</td>
-                                <td>Jalan Bandengan Kartini, jepara</td>
+                                <td>Sekuro</td>
+                                <td>A2</td>
+                                <td>keterangan sekuro kelompok kolam A2</td>
                                 <td nowrap></td>
                             </tr>
                         </tbody>
@@ -86,22 +86,25 @@
         <div class="modal-content">
             <form>
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Lokasi</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Kelompok Kolam</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="exampleSelect1">Nama Lokasi</label>
+                        <select class="form-control" id="exampleSelect1">
+                            <option>Sekuro</option>
+                            <option>Bandengan</option>
+                        </select>
+                    </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Kode Lokasi</label>
+                        <label for="recipient-name" class="form-control-label">Nama Kelompok Kolam</label>
                         <input type="text" class="form-control" id="recipient-name">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Lokasi</label>
-                        <input type="text" class="form-control" id="recipient-name">
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="form-control-label" >Alamat Lokasi</label>
+                        <label for="message-text" class="form-control-label" >Keterangan</label>
                         <textarea class="form-control" id="alamat"></textarea>
                     </div>
                 </div>
