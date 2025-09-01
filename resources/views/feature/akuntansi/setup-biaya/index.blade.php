@@ -3,7 +3,7 @@
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('ctrl')
-@include('feature.master.kolam.script')
+@include('feature.akuntansi.setup-biaya.script')
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
 <!-- END: Subheader -->
 <div class="m-content">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -31,7 +31,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Master Kolam
+                                Master Setup Biaya
                             </h3>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                 <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
-                                        <span>Tambah Kolam</span>
+                                        <span>Tambah Setup Biaya</span>
                                     </span>
                                 </button>
                             </li>
@@ -54,29 +54,45 @@
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
                         <thead>
                             <tr>
-                                <th>Nama Lokasi</th>
-                                <th>Area</th>
-                                <th>Nama Kolam</th>
-                                <th>Luas</th>
-                                <th>Keterangan</th>
+                                <th>Kode Biaya</th>
+                                <th>Nama Biaya</th>
+                                <th>Kelompok Biaya</th>
+                                <th>Periode Biaya</th>
+                                <th>COA</th>
+                                <th>Default Nominal</th>
+                                <th>Catatan</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Sekuro</td>
-                                <td>A1</td>
-                                <td>Kolam 001</td>
-                                <td>1.000</td>
-                                <td>keterangan kolam 001 luas 1.000 meter persegi</td>
+                                <td>BBN50001</td>
+                                <td>Biaya Gaji Pegawai Sekuro</td>
+                                <td>Perlokasi</td>
+                                <td>Ya</td>
+                                <td>51111 - Biaya Gaji Pegawai</td>
+                                <td>25.000.000</td>
+                                <td>Biaya gaji pegawai sekuro</td>
                                 <td nowrap></td>
                             </tr>
                             <tr>
-                                <td>Sekuro</td>
-                                <td>A1</td>
-                                <td>Kolam 002</td>
-                                <td>2.000</td>
-                                <td>keterangan kolam 002 luas 2.000 meter persegi</td>
+                                <td>BBN50002</td>
+                                <td>Biaya Gaji Pegawai Semarang</td>
+                                <td>Gabungan</td>
+                                <td>Ya</td>
+                                <td>51111 - Biaya Gaji Pegawai</td>
+                                <td>30.000.000</td>
+                                <td>Biaya gaji pegawai semarang</td>
+                                <td nowrap></td>
+                            </tr>
+                            <tr>
+                                <td>BBN50003</td>
+                                <td>Biaya Pakan</td>
+                                <td>Perpetak</td>
+                                <td>tidak</td>
+                                <td>51112 - Biaya Pakan</td>
+                                <td>-</td>
+                                <td>pakan benur</td>
                                 <td nowrap></td>
                             </tr>
                         </tbody>
@@ -88,40 +104,70 @@
 </div>
 <!--begin::Modal-->
 <div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form>
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kolam</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Setup Biaya</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group m-form__group">
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Kode Biaya</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Nama Biaya</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleSelect1">Kelompok Biaya</label>
+                        <select class="form-control" id="exampleSelect1" ng-model="kelompok" value="Perpetak">
+                            <option value=""></option>
+                            <option value="Gabungan">Gabungan</option>
+                            <option value="Perlokasi">Perlokasi</option>
+                            <option value="Perpetak">Perpetak</option>
+                        </select>
+                    </div>
+                    <div class="form-group" ng-model="lokasi" ng-if="kelompok != 'Perpetak'">
                         <label for="exampleSelect1">Nama Lokasi</label>
                         <select class="form-control" id="exampleSelect1">
+                            <option value=""></option>
                             <option>Sekuro</option>
                             <option>Bandengan</option>
                         </select>
                     </div>
-                    <div class="form-group m-form__group">
-                        <label for="exampleSelect1">Area</label>
+                    <div ng-if="kelompok=='Gabungan'" class="form-group" ng-model="lokasi" ng-if="kelompok != 'Perpetak'">
+                        <label for="exampleSelect1">Nama Lokasi</label>
                         <select class="form-control" id="exampleSelect1">
-                            <option>A1</option>
-                            <option>A2</option>
+                            <option value=""></option>
+                            <option>Sekuro</option>
+                            <option>Bandengan</option>
+                        </select>
+                    </div>
+                    <button ng-if="kelompok=='Gabungan'" ng-click="tambah()" href="#" class=" btn btn-primary " title="View"><i class="la la-plus"></i>Tambah Lokasi</button>
+                    </td>
+                    <div class="form-group">
+                        <label class="m-checkbox" style="margin-top: 10px;">
+                            <input type="checkbox"> Biaya Periode
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Default Nominal</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group" ng-model="lokasi">
+                        <label for="exampleSelect1">COA</label>
+                        <select class="form-control" id="exampleSelect1">
+                            <option value=""></option>
+                            <option ng-repeat="akun in coa"><% akun.kode_akun %> - <% akun.nama_akun %></option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Kolam</label>
-                        <input type="text" class="form-control" id="recipient-name">
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Luas</label>
-                        <input type="text" class="form-control" id="recipient-name">
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="form-control-label" >Keterangan</label>
+                        <label for="message-text" class="form-control-label" id="catatan" >Catatan</label>
                         <textarea class="form-control" id="alamat"></textarea>
                     </div>
                 </div>

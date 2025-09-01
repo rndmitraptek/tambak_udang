@@ -92,7 +92,7 @@ var app = angular.module("app", [],function($interpolateProvider,$locationProvid
         "shortTime": "HH.mm"
     },
     "NUMBER_FORMATS": {
-        "CURRENCY_SYM": "Rp",
+        "CURRENCY_SYM": "",
         "DECIMAL_SEP": ",",
         "GROUP_SEP": ".",
         "PATTERNS": [

@@ -193,7 +193,6 @@ Laba atau Rugi
   
 9. Panen semua (akhir siklus)
    pilih periode siklus
-   pilih petak
    input tanggal panen
         input total biomass dalam kg :  10 kg
         dijual ke customer siapa -> piutang
@@ -246,24 +245,36 @@ Setup Data
 Management Tambak
 	- Siklus 
 	- Transaksi 
-	 	- biaya
+	 	- biaya 
+		- biaya validasi 
 		- penaburan Benur 
 		- pemberian Pakan 
+  - Simulasi Siklus
 	- Stok Pakan 
-	- Simulasi Siklus 
-	- laporan
+	- laporan 
 Finance 
-	- PO Benur
+	- PO Benur 
 	- Pembelian Pakan 
+  - Retur Pakan 
+  - Input Pembayaran piutang Customer 
+  - Input Pembayaran hutang Supplier 
 Akuntansi 
-	- Setup Biaya 
+	- Setup Biaya  
 	- COA 
-	- Jurnal Umum
-		- cetak jurnal
-		- input jurnal
-	- Buku Besar 
-	- Neraca Saldo
-	- Jurnal Penyesuaian
-	- Neraca Lajur
-	- Laporan Rugi Laba
-	- Laporan Neraca
+	- Jurnal Umum 
+		- cetak jurnal 
+		- input jurnal 
+  - Laporan Keuangan
+	  - Buku Besar 
+	  - Neraca Saldo
+	  - Jurnal Penyesuaian
+	  - Neraca Lajur
+	  - Laporan Rugi Laba
+	  - Laporan Neraca
+
+
+
+update 
+1. kelompok kolam di ganti Area 
+2. di input siklus di table kolam tambahin Area 
+3. penaburan benur kolomnya tidak pas

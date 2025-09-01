@@ -10,6 +10,6 @@ class GroupKolamController extends Controller
     //
     public function index()
     {
-        return view('feature.master.kelompok_kolam.index');
+        return view('feature.master.kelompok-kolam.index');
     }
 }

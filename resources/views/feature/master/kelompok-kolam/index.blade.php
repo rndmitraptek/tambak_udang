@@ -3,7 +3,7 @@
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('ctrl')
-@include('feature.master.kelompok_kolam.script')
+@include('feature.master.kelompok-kolam.script')
 @endsection
 
 @section('content')
@@ -31,7 +31,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Master Kelompok Kolam
+                                Master Area
                             </h3>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                 <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
-                                        <span>Tambah Kelompok Kolam</span>
+                                        <span>Tambah Area</span>
                                     </span>
                                 </button>
                             </li>
@@ -55,7 +55,7 @@
                         <thead>
                             <tr>
                                 <th>Nama Lokasi</th>
-                                <th>Nama Kelompok Kolam</th>
+                                <th>Area</th>
                                 <th>Keterangan</th>
                                 <th>Actions</th>
                             </tr>
@@ -100,7 +100,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Kelompok Kolam</label>
+                        <label for="recipient-name" class="form-control-label">Nama Area</label>
                         <input type="text" class="form-control" id="recipient-name">
                     </div>
                     <div class="form-group">
