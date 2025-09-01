@@ -136,7 +136,7 @@
                                     <input type="text" class="form-control" id="recipient-name" value="PO202508003" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="recipient-name" class="form-control-label">Tanggal PO</label>
+                                    <label for="recipient-name" class="form-control-label">Tanggal</label>
                                     <input type="date" class="form-control" id="recipient-name" value="2025-08-26">
                                 </div>
                             </div>

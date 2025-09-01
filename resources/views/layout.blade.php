@@ -449,6 +449,12 @@ License: You must have a valid license purchased only from themeforest(the above
 									<span class="m-menu__link-text">Setup Customer</span>
 								</a>
 							</li>
+							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+								<a href="/setup_biaya" class="m-menu__link m-menu__toggle">
+									<i class="m-menu__link-icon flaticon-layers"></i>
+									<span class="m-menu__link-text">Setup Biaya</span>
+								</a>
+							</li>
 							{{-- MANAGEMENT TAMBAK --}}
 							<li class="m-menu__section ">
 								<h4 class="m-menu__section-text">Management Tambak</h4>
@@ -567,12 +573,6 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li class="m-menu__section ">
 								<h4 class="m-menu__section-text">Akuntansi</h4>
 								<i class="m-menu__section-icon flaticon-more-v3"></i>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/setup_biaya" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Biaya</span>
-								</a>
 							</li>
 							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
 								<a href="/coa" class="m-menu__link m-menu__toggle">
