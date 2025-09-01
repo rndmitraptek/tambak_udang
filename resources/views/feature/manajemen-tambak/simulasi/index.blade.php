@@ -314,7 +314,7 @@
                                         <option value="all">Biaya Gaji Pegawai Sekuro</option>
                                         <option value="all">Biaya Gaji Pegawai Semarang	</option>
                                         <option value="periode">Perjalanan Ke Tambak</option>
-                                        <option value="perkolam">Biaya Pakan</option>
+                                        <option value="perkolam">Biaya Kuras Air</option>
                                     </select>
                                 </div>
                                 <div class="form-group m-form__group" ng-show="biaya=='perkolam'">
