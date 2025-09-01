@@ -91,7 +91,7 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.save_pendapatan = function(){
         $scope.detail.kolam.forEach(function(item, index) {
             item.laba = item.pendapatan - item.biaya;
-            item.hpp_per_kg = item.laba / item.biomassa;
+            item.hpp_per_kg = item.biaya / item.biomassa;
         });
         $scope.list_simulasi[$scope.selected_index] = angular.copy($scope.detail);
     }
