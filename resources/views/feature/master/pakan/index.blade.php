@@ -3,7 +3,7 @@
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('ctrl')
-@include('feature.master.benur.script')
+@include('feature.master.pakan.script')
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
 <!-- END: Subheader -->
 <div class="m-content">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -56,6 +56,8 @@
                             <tr>
                                 <th>Kode Pakan</th>
                                 <th>Nama Pakan</th>
+                                <th>Jenis Pakan</th>
+                                <th>Merk</th>
                                 <th>Satuan</th>
                                 <th>Harga</th>
                                 <th>Keterangan</th>
@@ -66,6 +68,8 @@
                             <tr>
                                 <td>PK001</td>
                                 <td>PELET UK S</td>
+                                <td>0.1</td>
+                                <td>Jaya Utama</td>
                                 <td>KG</td>
                                 <td>5.000</td>
                                 <td>Pelet untuk benur usia 0-14 hari</td>
@@ -74,6 +78,8 @@
                             <tr>
                                 <td>PK002</td>
                                 <td>PELET UK M</td>
+                                <td>0.2</td>
+                                <td>Mandiri Utama</td>
                                 <td>KG</td>
                                 <td>7.000</td>
                                 <td>Pelet untuk benur usia 14-30 hari </td>
@@ -104,6 +110,14 @@
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="form-control-label">Nama Pakan</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Jenis Pakan</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Merk Pakan</label>
                         <input type="text" class="form-control" id="recipient-name">
                     </div>
                     <div class="form-group">

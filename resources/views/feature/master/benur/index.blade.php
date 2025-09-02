@@ -55,6 +55,7 @@
                         <thead>
                             <tr>
                                 <th>Kode Benur</th>
+                                <th>Kode Supplier</th>
                                 <th>Jenis Benur</th>
                                 <th>Harga</th>
                                 <th>Keterangan</th>
@@ -64,6 +65,7 @@
                         <tbody>
                             <tr>
                                 <td>BJ001</td>
+                                <td>Merah</td>
                                 <td>BJ1</td>
                                 <td>1.500</td>
                                 <td>Benur Kualitas F1</td>
@@ -71,6 +73,7 @@
                             </tr>
                             <tr>
                                 <td>BJ002</td>
+                                <td>Kuning</td>
                                 <td>BJ2</td>
                                 <td>1.000</td>
                                 <td>Benur Kualitas F2</td>
@@ -97,6 +100,10 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="recipient-name" class="form-control-label">Kode Benur</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Kode Supplier</label>
                         <input type="text" class="form-control" id="recipient-name">
                     </div>
                     <div class="form-group">

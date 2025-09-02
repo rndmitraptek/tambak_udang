@@ -54,7 +54,6 @@
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
                         <thead>
                             <tr>
-                                <th>Kode Siklus</th>
                                 <th>Nama Siklus</th>
                                 <th>Lokasi Tambak</th>
                                 <th>Tanggal Mulai</th>
@@ -66,7 +65,6 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>SKL0001</td>
                                 <td>2025-06-01 sd 2025-09-31</td>
                                 <td>Sekuro</td>
                                 <td>2025-06-01</td>
@@ -76,7 +74,6 @@
                                 <td nowrap></td>
                             </tr>
                             <tr>
-                                <td>SKL0002</td>
                                 <td>2025-10-01 sd 2025-12-31</td>
                                 <td>Sekuro</td>
                                 <td>2025-10-01</td>
@@ -116,10 +113,6 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="recipient-name" class="form-control-label">Kode</label>
-                                <input type="text" class="form-control" id="recipient-name">
-                            </div>
-                            <div class="form-group">
                                 <label for="recipient-name" class="form-control-label">Nama</label>
                                 <input type="text" class="form-control" id="recipient-name">
                             </div>
@@ -128,7 +121,7 @@
                                 <input type="text" class="form-control" id="recipient-name">
                             </div>
                             <div class="form-group">
-                                <label for="recipient-name" class="form-control-label">Tanggal Selesai</label>
+                                <label for="recipient-name" class="form-control-label">Tanggal Selesai</label> <!--Optional-->
                                 <input type="text" class="form-control" id="recipient-name">
                             </div>
                             <div class="form-group">

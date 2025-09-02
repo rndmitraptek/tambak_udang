@@ -56,6 +56,7 @@
                             <tr>
                                 <th>No PO</th>
                                 <th>Tanggal PO</th>
+                                <th>Tanggal Kirim</th>
                                 <th>Supplier</th>
                                 <th>Lokasi</th>
                                 <th>Jumlah Item</th>
@@ -68,6 +69,7 @@
                             <tr>
                                 <td>PO202508002</td>
                                 <td>2025-08-26</td>
+                                <td>2025-09-26</td>
                                 <td>Supriyadi - PT. BENUR JAYA</td>
                                 <td>Sekuro</td>
                                 <td>3</td>
@@ -78,6 +80,7 @@
                             <tr>
                                 <td>PO202508001</td>
                                 <td>2025-08-26</td>
+                                <td>2025-10-26</td>
                                 <td>Sudarsono - PT. NUSANTARA UDANG</td>
                                 <td>Bandengan</td>
                                 <td>4</td>
@@ -132,12 +135,6 @@
                                     <label for="recipient-name" class="form-control-label">No PO</label>
                                     <input type="text" class="form-control" id="recipient-name" value="PO202508003" readonly>
                                 </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="form-control-label">Tanggal PO</label>
-                                    <input type="date" class="form-control" id="recipient-name" value="2025-08-26">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
                                 <div class="form-group m-form__group">
                                     <label>Supplier</label>
                                     <div class="input-group">
@@ -147,6 +144,20 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="form-control-label">Tanggal PO</label>
+                                    <input type="date" class="form-control" id="recipient-name" value="2025-08-26">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="form-control-label">Tanggal Kirim</label>
+                                    <input type="date" class="form-control" id="recipient-name" value="2025-08-26">
+                                </div>
+                                
+                            </div>
+                            <div class="col-lg-4">
                                 <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Lokasi</label>
                                     <select class="form-control" id="exampleSelect1">
@@ -154,8 +165,6 @@
                                         <option>Bandengan</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-lg-4">
                                 <div class="form-group m-form__group">
                                     <label for="exampleTextarea">Keterangan</label>
                                     <textarea class="form-control" rows="4"></textarea>

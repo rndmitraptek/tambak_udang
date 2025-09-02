@@ -148,6 +148,14 @@
                                             <p style="margin-bottom:0px">HPP /KG</P>
                                             <span ng-class="{'m-badge m-badge--success m-badge--wide':kolam.laba > 0,'m-badge m-badge--danger m-badge--wide':kolam.laba < 0}" style="font-size:15px;font-weight:bold"><% kolam.hpp_per_kg | currency %></span>
                                         </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <p ng-class="{'m--font-success':kolam.laba > 0,'m--font-danger':kolam.laba < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="margin-bottom:0px">DOC</P>
+                                            <p ng-class="{'m--font-success':kolam.laba > 0,'m--font-danger':kolam.laba < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="font-size: 1.2rem;font-weight: 500;margin-bottom:.25rem;">45 hari</p>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <p ng-class="{'m--font-success':kolam.laba > 0,'m--font-danger':kolam.laba < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="margin-bottom:0px">FCR</P>
+                                            <p ng-class="{'m--font-success':kolam.laba > 0,'m--font-danger':kolam.laba < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="font-size: 1.2rem;font-weight: 500;margin-bottom:.25rem;">245</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

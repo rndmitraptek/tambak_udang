@@ -31,7 +31,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Panen Kolam
+                                Panen
                             </h3>
                         </div>
                     </div>
@@ -58,6 +58,8 @@
                                 <th>Tanggal Panen</th>
                                 <th>Siklus</th>
                                 <th>Lokasi</th>
+                                <th>Kolam</th>
+                                <th>Luas</th>
                                 <th>Total</th>
                                 <th>Harga Per Kg</th>
                                 <th>Biomass</th>
@@ -71,6 +73,8 @@
                                 <td>2025-10-31</td>
                                 <td>2025-10-01 sd 2025-12-31</td>
                                 <td>Sekuro</td>
+                                <td>Kolam 003</td>
+                                <td>500</td>
                                 <td>55.000.000</td>
                                 <td>200.000</td>
                                 <td>3.000 kg</td>
@@ -91,7 +95,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Panen
+                                Buat Panen
                             </h3>
                         </div>
                     </div>
@@ -137,6 +141,38 @@
                                 </div>
                             </div>
                             <div class="col-lg-4">
+                                <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Lokasi</label>
+                                    <select class="form-control" id="exampleSelect1">
+                                        <option>Sekuro</option>
+                                        <option>Bandengan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Area</label>
+                                    <select class="form-control" id="exampleSelect1">
+                                        <option>A1</option>
+                                        <option>A2</option>
+                                        <option>A3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Kolam</label>
+                                    <select class="form-control" id="exampleSelect1">
+                                        <option>Kolam 001</option>
+                                        <option>Kolam 002</option>
+                                        <option>Kolam 003</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Jenis Panen</label>
+                                    <select class="form-control" id="exampleSelect1">
+                                        <option>Partial</option>
+                                        <option>GLobal</option>
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Biomas</label>
                                     <input type="text" class="form-control" id="recipient-name" value="0">
@@ -159,7 +195,6 @@
                                 <table class="table table-striped- table-bordered table-hover table-checkable">
                                     <thead>
                                         <tr>
-                                            <th>Kolam</th>
                                             <th>Tanggal</th>
                                             <th>Nama Customer</th>
                                             <th>Metode Pembayaran</th>
@@ -172,7 +207,6 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Kolam 001</td>
                                             <td>2025-11-01</td>
                                             <td>Sudirman</td>
                                             <td>Piutang</td>
@@ -183,7 +217,6 @@
                                             <td ><a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove m--font-danger"></i></a></td>
                                         </tr>
                                         <tr>
-                                            <td>Kolam 002</td>
                                             <td>2025-11-01</td>
                                             <td>Baharudin</td>
                                             <td>Piutang</td>
@@ -194,7 +227,6 @@
                                             <td ><a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove m--font-danger"></i></a></td>
                                         </tr>
                                         <tr>
-                                            <td>Kolam 003</td>
                                             <td>2025-11-01</td>
                                             <td>Komarudin</td>
                                             <td>Tunai</td>
@@ -207,13 +239,21 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="6" class="text-right">Total</th>
+                                            <th colspan="5" class="text-right">Total</th>
                                             <th class="text-right">4</th>
                                             <th class="text-right">55.000.000</th> 
                                             <th></th>
                                         </tr>
                                     </tfoot>
                                 </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="message-text" class="form-control-label" >Keterangan</label>
+                                    <textarea class="form-control" id="alamat"></textarea>
+                                </div>
                             </div>
                         </div>
                     </form>

@@ -284,19 +284,19 @@ update
 
 
 Feedback 1 Sep 2025 (Cedea)
-- Area diganti Blok
-- Kolam diganti Petak
+- Area diganti Blok ✅
+- Kolam diganti Petak ✅
 - All Kode dpt digenerate dr sistem / manual
 - master pakan :
-  - ditambah jenis (akan berkaitan ke ukuran pakan)
-  - merk pakan (bisa di isi nama pabrik)
+  - ditambah jenis (akan berkaitan ke ukuran pakan)✅
+  - merk pakan (bisa di isi nama pabrik)✅
 - master benur :
-  - add kode supplier (kode dr supplier)
+  - add kode supplier (kode dr supplier)✅
 - siklus :
-  - takeout kode
-  - tgl selesai (optional)
+  - takeout kode✅
+  - tgl selesai (optional)✅
 - PO benur :
-  - add tgl kirim (perkiraan kirim actual 1 minggu partial)
+  - add tgl kirim (perkiraan kirim actual 1 minggu partial)✅
   - benur baru tau setelah dikirim,
 - Penaburan Benur : (pengiriman dan penaburan jadi 1)
   - bruto (ditambah allowance)
@@ -309,11 +309,11 @@ Feedback 1 Sep 2025 (Cedea)
   - biaya actual minta bisa di update
 - Simulasi :
   - biaya beban bisa di update
-  - add umur hari di card tiap petak (DOC) dr penaburan benur (tiap petak bisa berbeda umur)
-  - FCR (total pakan / total udang)
+  - add umur hari di card tiap petak (DOC) hitung dr penaburan benur (tiap petak bisa berbeda umur)✅
+  - FCR (total pakan / total udang)✅
   - jika sudah ada panen partial akan otomatis masuk ke pendapatan
 - Panen :
-  - bisa panen partial (akan mempengaruhi ke stok benur dipetak) 
+  - bisa panen partial (akan mempengaruhi ke stok benur dipetak) ✅
   - panen dibuat partial, max 1hr 2 petak
   - Biomassa yg di input adalah biomassa sebelum diambil
   - panen langsung dijual :

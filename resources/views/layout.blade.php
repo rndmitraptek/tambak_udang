@@ -432,15 +432,21 @@ License: You must have a valid license purchased only from themeforest(the above
 								</a>
 							</li>
 							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/kelompok_kolam" class="m-menu__link m-menu__toggle">
+								<a href="/blok" class="m-menu__link m-menu__toggle">
 									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Area</span>
+									<span class="m-menu__link-text">Setup Blok Lokasi</span>
 								</a>
 							</li>
 							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/kolam" class="m-menu__link m-menu__toggle">
+								<a href="/petak" class="m-menu__link m-menu__toggle">
 									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Kolam</span>
+									<span class="m-menu__link-text">Setup Petak</span>
+								</a>
+							</li>
+							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+								<a href="/pakan" class="m-menu__link m-menu__toggle">
+									<i class="m-menu__link-icon flaticon-layers"></i>
+									<span class="m-menu__link-text">Setup Pakan</span>
 								</a>
 							</li>
 							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
@@ -522,12 +528,12 @@ License: You must have a valid license purchased only from themeforest(the above
 									<span class="m-menu__link-text">Stok Pakan</span>
 								</a>
 							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+							{{-- <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
 								<a href="/tumbang" class="m-menu__link m-menu__toggle">
 									<i class="m-menu__link-icon flaticon-layers"></i>
 									<span class="m-menu__link-text">Tumbang</span>
 								</a>
-							</li>
+							</li> --}}
 							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
 								<a href="/panen" class="m-menu__link m-menu__toggle">
 									<i class="m-menu__link-icon flaticon-layers"></i>

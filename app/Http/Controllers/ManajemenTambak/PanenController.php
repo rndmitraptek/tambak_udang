@@ -12,8 +12,4 @@ class PanenController extends Controller
     {
         return view('feature.manajemen-tambak.panen.index');
     }
-    public function tumbang()
-    {
-        return view('feature.manajemen-tambak.tumbang.index');
-    }
 }

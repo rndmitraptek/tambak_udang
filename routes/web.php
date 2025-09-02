@@ -7,8 +7,8 @@ Route::get('/', function () {
 });
 
 Route::get('/lokasi', [App\Http\Controllers\Master\LokasiController::class, 'index']);
-Route::get('/kelompok_kolam', [App\Http\Controllers\Master\GroupKolamController::class, 'index']);
-Route::get('/kolam', [App\Http\Controllers\Master\KolamController::class, 'index']);
+Route::get('/blok', [App\Http\Controllers\Master\BlokController::class, 'index']);
+Route::get('/petak', [App\Http\Controllers\Master\PetakController::class, 'index']);
 Route::get('/benur', [App\Http\Controllers\Master\BenurController::class, 'index']);
 Route::get('/supplier', [App\Http\Controllers\Master\SupplierController::class, 'index']);
 Route::get('/pakan', [App\Http\Controllers\Master\PakanController::class, 'index']);
@@ -20,7 +20,7 @@ route::get('/siklus', [App\Http\Controllers\ManajemenTambak\SiklusController::cl
 route::get('/setup_biaya', [App\Http\Controllers\Akuntansi\SetupBiayaController::class, 'index']);
 Route::get('/transaksi_biaya', [App\Http\Controllers\ManajemenTambak\TransaksiBiayaController::class, 'index']);
 Route::get('/panen', [App\Http\Controllers\ManajemenTambak\PanenController::class, 'index']);
-Route::get('/tumbang', [App\Http\Controllers\ManajemenTambak\PanenController::class, 'tumbang']);
+// Route::get('/tumbang', [App\Http\Controllers\ManajemenTambak\PanenController::class, 'tumbang']);
 Route::get('/penaburan_benur', [App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'index']);
 Route::get('/simulasi', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'index']);
 Route::get('/transaksi_biaya_validasi', [App\Http\Controllers\ManajemenTambak\TransaksiBiayaController::class, 'validasi']);
