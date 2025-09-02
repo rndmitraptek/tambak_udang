@@ -99,7 +99,7 @@ Alur
 	Harga
 	subtotal
 
-4.Form pemberian pakan -> barang keluar
+4.Form Penggunaan pakan -> barang keluar
   A2  tanggal  jenis pakan   supp   Harga  qty sub total  -> HPP Pakan
 
 	lokasi
@@ -280,3 +280,48 @@ update
 1. kelompok kolam di ganti Area 
 2. di input siklus di table kolam tambahin Area 
 3. penaburan benur kolomnya tidak pas
+
+
+
+Feedback 1 Sep 2025 (Cedea)
+- Area diganti Blok
+- Kolam diganti Petak
+- All Kode dpt digenerate dr sistem / manual
+- master pakan :
+  - ditambah jenis (akan berkaitan ke ukuran pakan)
+  - merk pakan (bisa di isi nama pabrik)
+- master benur :
+  - add kode supplier (kode dr supplier)
+- siklus :
+  - takeout kode
+  - tgl selesai (optional)
+- PO benur :
+  - add tgl kirim (perkiraan kirim actual 1 minggu partial)
+  - benur baru tau setelah dikirim,
+- Penaburan Benur : (pengiriman dan penaburan jadi 1)
+  - bruto (ditambah allowance)
+  - netto (yg dibayar) => HPP diambil dr netto
+  - actual (yg ditebar)
+- Pemberian Pakan -> Penggunaan Pakan 
+- Setup Biaya :
+??- Transaksi Biaya :
+  - siklus tiap lokasi bisa berbeda periode
+  - biaya actual minta bisa di update
+- Simulasi :
+  - biaya beban bisa di update
+  - add umur hari di card tiap petak (DOC) dr penaburan benur (tiap petak bisa berbeda umur)
+  - FCR (total pakan / total udang)
+  - jika sudah ada panen partial akan otomatis masuk ke pendapatan
+- Panen :
+  - bisa panen partial (akan mempengaruhi ke stok benur dipetak) 
+  - panen dibuat partial, max 1hr 2 petak
+  - Biomassa yg di input adalah biomassa sebelum diambil
+  - panen langsung dijual :
+    - harga trgantung size dan kualitas
+    - bisa dijual ke bbrp customer dan bbrp jenis (fresh,KK,protol)
+  - HPP pakan dihitung dr awal walaupun sudah di panen partial
+- Retur Pakan
+  - potong tagihan invoice pakan
+  - pilih PO yg mana (akan diambil yg terakhir" oleh user)
+
+- productifitas (3100 / 10.000.000)
