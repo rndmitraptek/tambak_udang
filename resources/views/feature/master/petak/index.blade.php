@@ -106,7 +106,7 @@
                         </select>
                     </div>
                     <div class="form-group m-form__group">
-                        <label for="exampleSelect1">Area</label>
+                        <label for="exampleSelect1">Blok</label>
                         <select class="form-control" id="exampleSelect1">
                             <option>A</option>
                             <option>B</option>

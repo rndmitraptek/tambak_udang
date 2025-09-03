@@ -144,6 +144,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="form-control-label">Qty</label>
+                                    <input type="text" class="form-control" id="recipient-name" value="1.000">
+                                </div>
                                 
                             </div>
                             <div class="col-lg-4">
@@ -154,6 +158,10 @@
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Tanggal Kirim</label>
                                     <input type="date" class="form-control" id="recipient-name" value="2025-08-26">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="form-control-label">Harga Satuan</label>
+                                    <input type="text" class="form-control" id="recipient-name" value="Rp 1.000">
                                 </div>
                                 
                             </div>
@@ -169,10 +177,14 @@
                                     <label for="exampleTextarea">Keterangan</label>
                                     <textarea class="form-control" rows="4"></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="form-control-label">Total</label>
+                                    <input type="text" class="form-control" id="recipient-name" value="1.000.000">
+                                </div>
                             </div>
                         </div>
                         <hr/>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-lg-12">
                                 <a href="#" class="btn btn-outline-primary btn-sm m-btn m-btn--icon mb-2">
                                     <span>
@@ -227,7 +239,7 @@
                                     </tfoot>
                                 </table>
                             </div>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>

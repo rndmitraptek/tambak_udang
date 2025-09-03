@@ -298,6 +298,7 @@ Feedback 1 Sep 2025 (Cedea)
 - PO benur :
   - add tgl kirim (perkiraan kirim actual 1 minggu partial)✅
   - benur baru tau setelah dikirim,
+  - tanpa detail form
 - Penaburan Benur : (pengiriman dan penaburan jadi 1)
   - bruto (ditambah allowance)
   - netto (yg dibayar) => HPP diambil dr netto
@@ -307,6 +308,7 @@ Feedback 1 Sep 2025 (Cedea)
 ??- Transaksi Biaya :
   - siklus tiap lokasi bisa berbeda periode
   - biaya actual minta bisa di update
+  - pilihan siklus menyesuaikan dr master biaya yg sdh di set
 - Simulasi :
   - biaya beban bisa di update
   - add umur hari di card tiap petak (DOC) hitung dr penaburan benur (tiap petak bisa berbeda umur)✅

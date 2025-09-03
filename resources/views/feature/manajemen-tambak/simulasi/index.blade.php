@@ -171,6 +171,7 @@
                                         <th  style="width: 150px;">harga_per_kg</th>
                                         <th  style="width: 150px;">biomassa</th>
                                         <th>pendapatan</th>
+                                        <th>pendapatan actual partial</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -180,14 +181,50 @@
                                         <th><input type="text" ng-model="detail.harga_per_kg" input-currency class="form-control text-right"></th>
                                         <th><input type="text" ng-model="detail.biomassa" input-currency class="form-control text-right" ></th>
                                         <th><input type="text" ng-model="detail.pendapatan" input-currency class="form-control text-right" ></th>
+                                        <th><input type="text" ng-model="detail.pendapatan_partial" input-currency class="form-control text-right" readonly></th>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        {{-- TAB BIAYA --}}
+                        {{-- TAB BIAYA SIMULASI--}}
                         <div class="tab-pane" id="m_portlet_base_demo_3_tab_content" role="tabpanel">
                             <button type="button" ng-click="add_biaya()" class="btn btn-primary btn-sm mb-2"><i class="la la-plus"></i> Tambah Biaya Simulasi</button>
+                            <h1>BIAYA SIMULASI</h1>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
+                                <thead>
+                                    <tr>
+                                        <th>No Transaksi</th>
+                                        <th>Tanggal Transaksi</th>
+                                        <th>Biaya</th>
+                                        <th>Nominal Biaya</th>
+                                        <th>Keterangan</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>TR2025082900001</td>
+                                        <td>2025-10-31</td>
+                                        <td>Biaya Gaji Pegawai Sekuro</td>
+                                        <td>25.000.000</td>
+                                        <td>pembayaran gaji pegawai sekuro bulan oktober </td>
+                                        <td nowrap></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TR2025082900002</td>
+                                        <td>2025-10-31</td>
+                                        <td>Biaya Gaji Pegawai Semarang</td>
+                                        <td>30.000.000</td>
+                                        <td>pembayaran gaji pegawai semarang bulan oktober </td>
+                                        <td nowrap></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </br>
+
+                        {{-- TAB BIAYA ACTUAL --}}
+                            <h1>BIAYA ACTUAL</h1>
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabelactual">
                                 <thead>
                                     <tr>
                                         <th>No Transaksi</th>
@@ -239,6 +276,14 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <h4>Simulasi</h4>
+                            <div class="form-group m-form__group">
+                                <label for="exampleSelect1">Lokasi</label>
+                                <select class="form-control" id="exampleSelect1" ng-model="simulasi.lokasi">
+                                    <option value=""></option>
+                                    <option value="Sekuro">Sekuro</option>
+                                    <option value="Blebak">Blebak</option>
+                                </select>
+                            </div>
                             <div class="form-group m-form__group">
                                 <label for="exampleSelect1">Siklus</label>
                                 <select class="form-control" id="exampleSelect1" ng-model="simulasi.siklus">

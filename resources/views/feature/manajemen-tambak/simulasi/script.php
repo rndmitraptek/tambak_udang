@@ -16,6 +16,20 @@ app.controller("myCtrl", function($scope,$http) {
                 }
             }],
         })
+        $("#viewtabelactual").DataTable({
+            scrollY: "50vh",
+            scrollX: !0,
+            scrollCollapse: !0,
+            columnDefs: [{
+                targets: -1,
+                title: "Actions",
+                orderable: !1,
+                render: function(a, e, t, n) {
+                    return `<a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-edit"></i></a>
+                    <a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove"></i></a>`
+                }
+            }],
+        })
         
     });
     $scope.tes = "tes";
@@ -29,6 +43,7 @@ app.controller("myCtrl", function($scope,$http) {
             "luas": 1000,
             "keterangan": "keterangan kolam 001 luas 1.000 meter persegi",
             "pendapatan": 0,
+            "pendapatan_partial": 2000000,
             "biaya": 2000000,
             "laba": -2000000,
             "biomassa": 0,
@@ -42,6 +57,7 @@ app.controller("myCtrl", function($scope,$http) {
             "luas": 2000,
             "keterangan": "keterangan kolam 002 luas 2.000 meter persegi",
             "pendapatan": 0,
+            "pendapatan_partial": 2000000,
             "biaya": 4000000,
             "laba": -4000000,
             "biomassa": 0,
@@ -55,6 +71,7 @@ app.controller("myCtrl", function($scope,$http) {
             "luas": 500,
             "keterangan": "keterangan kolam 002 luas 2.000 meter persegi",
             "pendapatan": 0,
+            "pendapatan_partial": 2000000,
             "biaya": 1000000,
             "laba": -1000000,
             "biomassa": 0,

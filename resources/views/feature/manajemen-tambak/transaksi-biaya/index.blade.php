@@ -134,13 +134,6 @@
                                     <input type="date" class="form-control" id="recipient-name" value="2025-08-01" readonly>
                                 </div>
                                 <div class="form-group m-form__group">
-                                    <label for="exampleSelect1">Siklus</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>2025-06-01 sd 2025-09-31</option>
-                                        <option>2025-10-01 sd 2025-12-31</option>
-                                    </select>
-                                </div>
-                                <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Biaya</label>
                                     <select class="form-control" id="exampleSelect1">
                                         <option>Biaya Gaji Pegawai Sekuro</option>
@@ -148,6 +141,20 @@
                                         <option>Biaya Pakan	</option>
                                     </select>
                                 </div>
+                                <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Siklus<b> Sekuro</b></label>
+                                    <select class="form-control" id="exampleSelect1">
+                                        <option>2025-06-01 sd 2025-09-31</option>
+                                        <option>2025-10-01 sd 2025-12-31</option>
+                                    </select>
+                                </div>                                
+                                <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Siklus<b> Blebak</b></label>
+                                    <select class="form-control" id="exampleSelect1">
+                                        <option>2025-06-01 sd 2025-09-31</option>
+                                        <option>2025-10-01 sd 2025-12-31</option>
+                                    </select>
+                                </div>                                
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group m-form__group">

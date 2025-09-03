@@ -170,11 +170,11 @@
                                     <label for="exampleSelect1">Jenis Panen</label>
                                     <select class="form-control" id="exampleSelect1">
                                         <option>Partial</option>
-                                        <option>GLobal</option>
+                                        <option>Final</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="recipient-name" class="form-control-label">Biomas</label>
+                                    <label for="recipient-name" class="form-control-label">Biomassa Sebelum Panen</label>
                                     <input type="text" class="form-control" id="recipient-name" value="0">
                                 </div>
                                 <div class="form-group">
