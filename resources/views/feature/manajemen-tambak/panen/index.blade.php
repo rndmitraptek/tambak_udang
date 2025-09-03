@@ -173,14 +173,20 @@
                                         <option>Final</option>
                                     </select>
                                 </div>
+                                <div class="col-lg-12">
                                 <div class="form-group">
+                                    <label for="message-text" class="form-control-label" >Keterangan</label>
+                                    <textarea class="form-control" id="alamat"></textarea>
+                                </div>
+                                </div>
+                                {{-- <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Biomassa Sebelum Panen</label>
                                     <input type="text" class="form-control" id="recipient-name" value="0">
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Harga Per Kg</label>
                                     <input type="text" class="form-control" id="recipient-name" value="0">
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <hr/>
@@ -248,14 +254,14 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="message-text" class="form-control-label" >Keterangan</label>
                                     <textarea class="form-control" id="alamat"></textarea>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>

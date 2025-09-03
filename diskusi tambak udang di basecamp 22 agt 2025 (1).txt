@@ -322,6 +322,7 @@ Feedback 1 Sep 2025 (Cedea)
     - harga trgantung size dan kualitas
     - bisa dijual ke bbrp customer dan bbrp jenis (fresh,KK,protol)
   - HPP pakan dihitung dr awal walaupun sudah di panen partial
+  - metode bayar
 - Retur Pakan
   - potong tagihan invoice pakan
   - pilih PO yg mana (akan diambil yg terakhir" oleh user)
