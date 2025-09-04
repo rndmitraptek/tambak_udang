@@ -14,7 +14,15 @@ Route::get('/lokasi/show/{uuid}', [App\Http\Controllers\Master\LokasiController:
 Route::post('/lokasi/update/{uuid}', [App\Http\Controllers\Master\LokasiController::class, 'update']);
 Route::delete('/lokasi/delete/{uuid}', [App\Http\Controllers\Master\LokasiController::class, 'destroy']);
 
+// SETUP BLOK
 Route::get('/blok', [App\Http\Controllers\Master\BlokController::class, 'index']);
+Route::get('/blok/lokasi-list', [App\Http\Controllers\Master\BlokController::class, 'lokasiList']);
+Route::get('/blok/data', [App\Http\Controllers\Master\BlokController::class, 'data']);
+Route::post('/blok/store', [App\Http\Controllers\Master\BlokController::class, 'store']);
+Route::get('/blok/show/{uuid}', [App\Http\Controllers\Master\BlokController::class, 'show']);
+Route::post('/blok/update/{uuid}', [App\Http\Controllers\Master\BlokController::class, 'update']);
+Route::delete('/blok/delete/{uuid}', [App\Http\Controllers\Master\BlokController::class, 'destroy']);
+
 Route::get('/petak', [App\Http\Controllers\Master\PetakController::class, 'index']);
 Route::get('/benur', [App\Http\Controllers\Master\BenurController::class, 'index']);
 Route::get('/supplier', [App\Http\Controllers\Master\SupplierController::class, 'index']);

@@ -38,7 +38,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button id="btnTambah" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
                                         <span>Tambah Blok</span>
@@ -60,20 +60,6 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Sekuro</td>
-                                <td>A</td>
-                                <td>keterangan sekuro Blok A</td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>Sekuro</td>
-                                <td>B</td>
-                                <td>keterangan sekuro Blok B</td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -84,7 +70,7 @@
 <div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form>
+            <form id="formBlok">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Kelompok Kolam</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -92,25 +78,25 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group m-form__group">
-                        <label for="exampleSelect1">Nama Lokasi</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option>Sekuro</option>
-                            <option>Bandengan</option>
+                        <label for="lokasi_id">Nama Lokasi</label>
+                        <select class="form-control" id="lokasi_id" name="lokasi_id" required>
+                            <!-- Data lokasi diisi dari controller -->
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Blok</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label for="nama">Nama Blok</label>
+                        <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="form-control-label" >Keterangan</label>
-                        <textarea class="form-control" id="alamat"></textarea>
+                        <label for="keterangan">Keterangan</label>
+                        <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -123,7 +109,7 @@
 @section('js')
 <!--begin::Page Vendors -->
 <script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
-
+<script src="{{ url('/') }}/template/assets/src/jquery.validate.min.js"></script>
 <!--end::Page Vendors -->
 
 <!--begin::Page Resources -->

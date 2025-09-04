@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('kode')->unique();
             $table->string('nama');
             $table->string('alamat')->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +28,8 @@ return new class extends Migration
             $table->foreignId('lokasi_id')->constrained('setup_lokasi')->onDelete('cascade');
             $table->string('nama');
             $table->string('keterangan')->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -38,6 +42,8 @@ return new class extends Migration
             $table->string('nama');
             $table->double('luas')->nullable();
             $table->string('keterangan')->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -53,6 +59,8 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('nama_perusahaan')->nullable();
             $table->string('catatan')->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -68,6 +76,8 @@ return new class extends Migration
             $table->string('satuan')->nullable();
             $table->double('harga')->nullable();
             $table->string('keterangan')->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -81,6 +91,8 @@ return new class extends Migration
             $table->string('jenis');
             $table->double('harga')->nullable();
             $table->string('keterangan')->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -95,6 +107,8 @@ return new class extends Migration
             $table->string('telepon')->nullable();
             $table->string('email')->nullable();
             $table->string('catatan')->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -109,6 +123,8 @@ return new class extends Migration
             $table->string('pos_laporan');
             $table->string('kode_parent');
             $table->string('saldo_normal');
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
             $table->softDeletes();
         });

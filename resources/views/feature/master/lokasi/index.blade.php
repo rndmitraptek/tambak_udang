@@ -107,7 +107,7 @@
 @section('js')
 <!--begin::Page Vendors -->
 <script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
-
+<script src="{{ url('/') }}/template/assets/src/jquery.validate.min.js"></script>
 <!--end::Page Vendors -->
 
 <!--begin::Page Resources -->

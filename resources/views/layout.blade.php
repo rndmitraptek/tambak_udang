@@ -85,10 +85,17 @@ License: You must have a valid license purchased only from themeforest(the above
 			.has-danger .form-control, .has-danger .input-group-text {
 				border-color: #f4516c!important;
 			}
+
+			label.error {
+				color: red;
+				font-size: 12px;
+				margin-top: 5px;
+			}
 		</style>
 		<script src="{{ url('/') }}/angularJS/angular.min.js"></script>
   		<script src="{{ url('/') }}/angularJS/app.js"></script>
   		<script src="{{ url('/') }}/template/assets/src/jquery-3.7.1.min.js"></script>
+  		
 		@yield('ctrl')
 	</head>
 	<!-- end::Head -->

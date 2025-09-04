@@ -49,8 +49,9 @@ class LokasiController extends Controller
                 'kode' => $row->kode,
                 'nama' => $row->nama,
                 'alamat' => $row->alamat,
-                'actions' => '<button class="btn btn-sm btn-warning" onclick="editLokasi(\''.$row->uuid.'\')">Edit</button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteLokasi(\''.$row->uuid.'\')">Delete</button>',
+                'actions' => '
+                <a href="javascript:void(0)" onclick="editLokasi(\''.$row->uuid.'\')" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>
+                <a href="javascript:void(0)" onclick="deleteLokasi(\''.$row->uuid.'\')" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Hapus"><i class="m--font-danger la la-remove"></i></a>',
             ];
         }
 

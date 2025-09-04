@@ -1,71 +1,56 @@
 <script>
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    }
-});
-
 app.controller("myCtrl", function($scope,$http) {
     angular.element(document).ready(function () {
         autosize($("#alamat"));
         
     });
+    $scope.tes = "tes";
 });
 
-
 $(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Load data lokasi untuk select
+    $.get('/blok/lokasi-list', function(res) {
+        $('#lokasi_id').empty();
+        res.forEach(function(lokasi) {
+            $('#lokasi_id').append('<option value="'+lokasi.id+'">'+lokasi.nama+'</option>');
+        });
+    });
+
     var table = $('#viewtabel').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ url('/lokasi/data') }}",
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
+        ajax: "/blok/data",
         columns: [
-            { data: 'kode', name: 'kode' },
+            { data: 'nama_lokasi', name: 'nama_lokasi' },
             { data: 'nama', name: 'nama' },
-            { data: 'alamat', name: 'alamat' },
+            { data: 'keterangan', name: 'keterangan' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });
 
     $('#btnTambah').click(function() {
-        $('#formLokasi')[0].reset();
+        $('#formBlok')[0].reset();
         $('#uuid').val('');
         $('#m_create').modal('show');
     });
 
-    // $('#formLokasi').submit(function(e) {
-    //     e.preventDefault();
-    //     var uuid = $('#uuid').val();
-    //     var url = uuid ? '/lokasi/update/' + uuid : '/lokasi/store';
-    //     $.ajax({
-    //         url: url,
-    //         method: 'POST',
-    //         data: $(this).serialize(),
-    //         headers: {
-    //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    //         },
-    //         success: function(res) {
-    //             $('#m_create').modal('hide');
-    //             table.ajax.reload();
-    //         },
-    //         error: function(xhr) {
-    //             alert('Gagal simpan data');
-    //         }
-    //     });
-    // });
-    $("#formLokasi").validate({
+    $("#formBlok").validate({
         rules: {
-            kode: { required: !0, },
+            lokasi_id: { required: !0, },
             nama: { required: !0, }
         },
         invalidHandler: function(e, r) {
-            mUtil.scrollTo("formLokasi", -200)
+            mUtil.scrollTo("formBlok", -200)
         },
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
-            var url = uuid ? '/lokasi/update/' + uuid : '/lokasi/store';
+            var url = uuid ? '/blok/update/' + uuid : '/blok/store';
             swal({title: "Presesing...!",text: "Please Wait",
                 onOpen: function() {
                     swal.showLoading()
@@ -78,44 +63,36 @@ $(document).ready(function() {
                 success: function(res) {
                     Swal.close();
                     if(res.success) {
-                        swal({
-                            title: "Tersimpan ",text: "Data berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                        }).then(function(){
-                            $('#m_create').modal('hide');
-                        })
+                        Swal.fire('Tersimpan', 'Data berhasil tersimpan!', 'success');
+                        $('#m_create').modal('hide');
                         table.ajax.reload();
                     } else {
-                        Swal.fire({
-                            title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                        });
+                        Swal.fire('Gagal', 'Data gagal disimpan!', 'error');
                     }
                 },
                 error: function(xhr) {
                     Swal.close();
-                    Swal.fire({
-                        title: "Gagal ",text: 'Terjadi kesalahan saat menyimpan data!',type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                    });
+                    Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data!', 'error');
                 }
             });
         }
     });
 });
 
-function editLokasi(uuid) {
-    $.get('/lokasi/show/' + uuid, function(res) {
+function editBlok(uuid) {
+    $.get('/blok/show/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
+        $('#lokasi_id').val(res.lokasi_id);
         $('#nama').val(res.nama);
-        $('#alamat').val(res.alamat);
+        $('#keterangan').val(res.keterangan);
         $('#m_create').modal('show');
     });
 }
 
-
-function deleteLokasi(uuid) {
+function deleteBlok(uuid) {
     Swal.fire({
-        title: 'Hapus Lokasi',
-        text: 'Yakin hapus lokasi ini?',
+        title: 'Hapus Blok',
+        text: 'Yakin hapus blok ini?',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus!',
         cancelButtonText: 'Batal'
@@ -129,7 +106,7 @@ function deleteLokasi(uuid) {
                 }
             });
             $.ajax({
-                url: '/lokasi/delete/' + uuid,
+                url: '/blok/delete/' + uuid,
                 method: 'DELETE',
                 data: { _token: $('meta[name="csrf-token"]').attr('content') },
                 success: function(res) {
