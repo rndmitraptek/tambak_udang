@@ -6,7 +6,14 @@ Route::get('/', function () {
     return view('layout');
 });
 
+// SETUP LOKASI
 Route::get('/lokasi', [App\Http\Controllers\Master\LokasiController::class, 'index']);
+Route::get('/lokasi/data', [App\Http\Controllers\Master\LokasiController::class, 'data']);
+Route::post('/lokasi/store', [App\Http\Controllers\Master\LokasiController::class, 'store']);
+Route::get('/lokasi/show/{uuid}', [App\Http\Controllers\Master\LokasiController::class, 'show']);
+Route::post('/lokasi/update/{uuid}', [App\Http\Controllers\Master\LokasiController::class, 'update']);
+Route::delete('/lokasi/delete/{uuid}', [App\Http\Controllers\Master\LokasiController::class, 'destroy']);
+
 Route::get('/blok', [App\Http\Controllers\Master\BlokController::class, 'index']);
 Route::get('/petak', [App\Http\Controllers\Master\PetakController::class, 'index']);
 Route::get('/benur', [App\Http\Controllers\Master\BenurController::class, 'index']);

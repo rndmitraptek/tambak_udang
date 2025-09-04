@@ -38,7 +38,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button id="btnTambah" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
                                         <span>Tambah Lokasi</span>
@@ -56,24 +56,10 @@
                             <tr>
                                 <th>Kode</th>
                                 <th>Nama Lokasi</th>
-                                <th>Nama Alamat Lengkap</th>
+                                <th>Alamat Lengkap</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>TB001</td>
-                                <td>Sekuro</td>
-                                <td>Jalan Sekuro, jepara</td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>TB002</td>
-                                <td>Bandengan</td>
-                                <td>Jalan Bandengan Kartini, jepara</td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -84,7 +70,7 @@
 <div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form>
+            <form id="formLokasi">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Lokasi</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -92,22 +78,23 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Kode Lokasi</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Kode Lokasi</label>
+                        <input type="text" class="form-control" id="kode" name="kode" required>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Lokasi</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Nama Lokasi</label>
+                        <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="form-control-label" >Alamat Lokasi</label>
-                        <textarea class="form-control" id="alamat"></textarea>
+                        <label>Alamat Lokasi</label>
+                        <textarea class="form-control" id="alamat" name="alamat"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>

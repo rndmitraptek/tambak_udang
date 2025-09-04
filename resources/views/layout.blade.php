@@ -17,6 +17,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!-- begin::Head -->
 	<head>
 		<meta charset="utf-8" />
+		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<title>Metronic | Dashboard</title>
 		<meta name="description" content="Latest updates and statistic charts">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
@@ -84,6 +85,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		</style>
 		<script src="{{ url('/') }}/angularJS/angular.min.js"></script>
   		<script src="{{ url('/') }}/angularJS/app.js"></script>
+  		<script src="{{ url('/') }}/template/assets/src/jquery-3.7.1.min.js"></script>
 		@yield('ctrl')
 	</head>
 	<!-- end::Head -->
