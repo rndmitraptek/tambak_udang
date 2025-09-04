@@ -82,6 +82,9 @@ License: You must have a valid license purchased only from themeforest(the above
 			.input-group>.custom-select:not(:last-child), .input-group> input.form-control:not(:last-child) {
 				height: 35px!important;
 			}
+			.has-danger .form-control, .has-danger .input-group-text {
+				border-color: #f4516c!important;
+			}
 		</style>
 		<script src="{{ url('/') }}/angularJS/angular.min.js"></script>
   		<script src="{{ url('/') }}/angularJS/app.js"></script>

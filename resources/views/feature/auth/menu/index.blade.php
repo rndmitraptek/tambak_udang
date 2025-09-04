@@ -3,7 +3,7 @@
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('ctrl')
-@include('feature.master.benur.script')
+@include('feature.auth.menu.script')
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
 <!-- END: Subheader -->
 <div class="m-content">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -49,28 +49,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                {{-- <h1><% tes %></h1> --}}
-                    <!--begin: Datatable -->
-                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        <thead>
-                            <tr>
-                                <th>Nama User</th>
-                                <th>Email</th>
-                                <th>phone</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>BJ001</td>
-                                <td>BJ1</td>
-                                <td>1.500</td>
-                                <td>Benur Kualitas F1</td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel"></table>
                 </div>
             </div>
         </div>
@@ -80,7 +59,7 @@
 <div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form>
+            <form id="formInput">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Menu</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -88,26 +67,36 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Kode Benur</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                    <div class="form-group m-form__group">
+                        <label for="recipient-name" class="form-control-label">urut</label>
+                        <input type="text" class="form-control" name="urut" ng-model="input.urut">
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="recipient-name" class="form-control-label">Label</label>
+                        <input type="text" class="form-control" name="label" ng-model="input.label">
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="recipient-name" class="form-control-label">Icon</label>
+                        <input type="text" class="form-control" name="icon" ng-model="input.icon">
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="message-text" class="form-control-label" id="alamat" >Link</label>
+                        <input type="text" class="form-control" name="route_link" ng-model="input.route_link">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Jenis Benur</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label class="m-checkbox" style="margin-top: 10px;">
+                            <input name="is_parent" ng-model="input.is_parent" type="checkbox"> Is Parent
+                            <span></span>
+                        </label>
                     </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Harga</label>
-                        <input type="text" class="form-control" id="recipient-name">
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="form-control-label" id="alamat" >Keterangan</label>
-                        <textarea class="form-control" id="alamat"></textarea>
+                    <div class="form-group m-form__group">
+                        <label for="message-text" class="form-control-label" id="id_menu_parent" >parent</label>
+                        <input type="text" class="form-control" name="id_menu_parent" ng-model="input.id_menu_parent">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>

@@ -31,3 +31,4 @@ Route::get('/panen', [App\Http\Controllers\ManajemenTambak\PanenController::clas
 Route::get('/penaburan_benur', [App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'index']);
 Route::get('/simulasi', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'index']);
 Route::get('/transaksi_biaya_validasi', [App\Http\Controllers\ManajemenTambak\TransaksiBiayaController::class, 'validasi']);
+Route::get('/menu',[App\Http\Controllers\Auth\MenuController::class, 'index']);
