@@ -21,7 +21,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                 { data: 'created_at', title: 'created_at' },
                 { data: 'updated_by', title: 'updated_by' },
                 { data: 'updated_at', title: 'updated_at' },
-                { data: 'action', title: 'action', orderable: false, searchable: false },
+                { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
             ]
         })
 
@@ -30,6 +30,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             var x = table.row(tr).data();
             $scope.input = x;
             $('#m_create').modal('show');
+            $scope.edit = true;
             $scope.$apply();
         });
 
@@ -42,9 +43,11 @@ app.controller("myCtrl", function($scope,$http,API) {
     });
 
     $scope.input = {};
+    $scope.edit = false;
     $scope.tambah = function(){
         $scope.input = {};
         $('#m_create').modal('show');
+        $scope.edit = false;
     }
     $("#formInput").validate({
         rules: {
@@ -73,7 +76,14 @@ app.controller("myCtrl", function($scope,$http,API) {
                     swal.showLoading()
                 }
             })
-            $http.post("{{ route('auth.menu.insert') }}",$scope.input)
+            let url = ($scope.edit)
+                ? "{{ route('auth.menu.update', ':uuid') }}"
+                : "{{ route('auth.menu.insert') }}";
+
+            if ($scope.edit) {
+                url = url.replace(':uuid', $scope.input.uuid);
+            }
+            $http.post(url,$scope.input)
             .then(function(res){
                 if(res.data.success){
                     swal({
