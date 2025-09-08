@@ -28,3 +28,6 @@ Route::get('/penaburan_benur', [App\Http\Controllers\ManajemenTambak\PenaburanBe
 Route::get('/simulasi', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'index']);
 Route::get('/transaksi_biaya_validasi', [App\Http\Controllers\ManajemenTambak\TransaksiBiayaController::class, 'validasi']);
 Route::get('/menu',[App\Http\Controllers\Auth\MenuController::class, 'index']);
+Route::get('/role',[App\Http\Controllers\Auth\RoleController::class, 'index']);
+Route::get('/user',[App\Http\Controllers\Auth\UsersController::class, 'index']);
+

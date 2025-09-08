@@ -17,12 +17,6 @@ class MenuController extends Controller
         return view('feature.auth.menu.index');
     }
 
-    public function insert(Request $req){
-        $data = $req->all();
-        $insert = MenuModel::create($data);
-        return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
-    }
-
     public function datatable()
     {
         $query = MenuModel::query();
@@ -33,5 +27,36 @@ class MenuController extends Controller
             })
             ->rawColumns(['action'])
             ->make(true);
+    }
+
+    public function insert(Request $req){
+        $req->validate([
+            'icon' => 'required',
+            'label' => 'required',
+            'route_link' => 'required',
+        ]);
+        $data = $req->all();
+        $insert = MenuModel::create($data);
+        return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
+    }
+
+    public function update(Request $req, $uuid)
+    {
+        $benur = MenuModel::where('uuid', $uuid)->firstOrFail();
+        $req->validate([
+            'icon' => 'required',
+            'label' => 'required',
+            'route_link' => 'required',
+        ]);
+        $data = $req->all();
+        $benur->update($data);
+        return response()->json(['success' => true, 'data' => $benur]);
+    }
+
+    public function destroy($uuid)
+    {
+        $benur = MenuModel::where('uuid', $uuid)->firstOrFail();
+        $benur->delete();
+        return response()->json(['success' => true]);
     }
 }

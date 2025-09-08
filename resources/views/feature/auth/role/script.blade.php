@@ -5,20 +5,14 @@ app.controller("myCtrl", function($scope,$http,API) {
         table = $("#viewtabel").DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route("auth.menu.datatable") }}',
+            ajax: '{{ route("auth.role.datatable") }}',
             scrollY: "50vh",
             scrollX: !0,
             scrollCollapse: !0,
             columns: [
-                { data: 'urut', title: 'urut' },
-                { data: 'label', title: 'label' },
-                { data: 'icon', title: 'icon' },
-                { data: 'route_link', title: 'route_link' },
-                { data: 'is_parent', title: 'is_parent' },
-                { data: 'id_menu_parent', title: 'id_menu_parent' },
-                { data: 'created_by', title: 'created_by' },
+                { data: 'role', title: 'role' },
+                { data: 'keterangan', title: 'keterangan' },
                 { data: 'created_at', title: 'created_at' },
-                { data: 'updated_by', title: 'updated_by' },
                 { data: 'updated_at', title: 'updated_at' },
                 { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
             ]
@@ -52,13 +46,13 @@ app.controller("myCtrl", function($scope,$http,API) {
                             swal.showLoading()
                         }
                     })
-                    url = "{{ route('auth.menu.delete',':uuid') }}";
+                    url = "{{ route('auth.role.delete',':uuid') }}";
                     url = url.replace(':uuid', x.uuid);
                     $http.delete(url)
                     .then(function(res){
                         if(res.data.success){
                             swal({
-                                title: "Terhapus ",text: "Data Menu berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                                title: "Terhapus ",text: "Data Role berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                             }).then(function(){
                                 $('#m_create').modal('hide');
                                 table.ajax.reload(null, false);
@@ -88,26 +82,8 @@ app.controller("myCtrl", function($scope,$http,API) {
 
     $("#formInput").validate({
         rules: {
-            urut: {
-                required: true,
-                digits: true
-            },
-            label: {
+            role: {
                 required: true
-            },
-            icon: {
-                required: true
-            },
-            route_link: {
-                required: true
-            },
-            parent: {
-                required: true
-            }
-        },
-        messages: {
-            urut: {
-                digits: "Kolom urut harus berupa angka saja"
             }
         },
         invalidHandler: function(e, r) {
@@ -120,8 +96,8 @@ app.controller("myCtrl", function($scope,$http,API) {
                 }
             })
             let url = ($scope.edit)
-                ? "{{ route('auth.menu.update', ':uuid') }}"
-                : "{{ route('auth.menu.insert') }}";
+                ? "{{ route('auth.role.update', ':uuid') }}"
+                : "{{ route('auth.role.insert') }}";
 
             if ($scope.edit) {
                 url = url.replace(':uuid', $scope.input.uuid);
@@ -130,7 +106,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             .then(function(res){
                 if(res.data.success){
                     swal({
-                        title: "Tersimpan ",text: "Data Menu berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                        title: "Tersimpan ",text: "Data Role berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
                         $('#m_create').modal('hide');
                         table.ajax.reload(null, false);
