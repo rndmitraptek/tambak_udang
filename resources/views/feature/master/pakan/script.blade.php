@@ -4,8 +4,28 @@ app.controller("myCtrl", function($scope,$http) {
         autosize($("#alamat"));
         
     });
+    
 });
 
+function tambah(){
+    hasil = 20
+    grade = grade(hasil);
+    alert(grade);
+}
+
+function grade(nilai){
+    if(nilai >= 90){
+        return "A"
+    }else if(nilai >= 80){
+        return "B"
+    }else if(nilai >= 70){
+        return "C"
+    }else if(nilai >= 60){
+        return "D"
+    }else{
+        return "E"
+    }
+}
 
 $(document).ready(function() {
     $.ajaxSetup({
@@ -17,42 +37,53 @@ $(document).ready(function() {
     var table = $('#viewtabel').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('lokasi.data') }}",
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
+        ajax: "/pakan/data",
         columns: [
             { data: 'kode', name: 'kode' },
             { data: 'nama', name: 'nama' },
-            { data: 'alamat', name: 'alamat' },
+            { data: 'jenis', name: 'jenis' },
+            { data: 'merk', name: 'merk' },
+            { data: 'satuan', name: 'satuan' },
+            { 
+                data: 'harga', 
+                name: 'harga',
+                render: function(data, type, row) {
+                    return 'Rp ' + parseInt(data).toLocaleString('id-ID');
+                }
+            },
+            { data: 'keterangan', name: 'keterangan' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });
 
     $('#btnTambah').click(function() {
-        $('#formLokasi')[0].reset();
+        $('#formPakan')[0].reset();
         $('#uuid').val('');
         $('#m_create').modal('show');
     });
 
-    $("#formLokasi").validate({
+    $("#formPakan").validate({
         rules: {
             kode: { required: !0, },
-            nama: { required: !0, }
+            nama: { required: !0, },
+            jenis: { required: !0, },
+            merk: { required: !0, },
+            satuan: { required: !0, },
+            harga: { required: !0, }
         },
         invalidHandler: function(e, r) {
-            mUtil.scrollTo("formLokasi", -200)
+            mUtil.scrollTo("formPakan", -200)
         },
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
-            var url = uuid
-                ? '{{ route("lokasi.update", ":uuid") }}'.replace(':uuid', uuid)
-                : '{{ route("lokasi.store") }}';
-            swal({title: "Presesing...!",text: "Please Wait",
-                onOpen: function() {
-                    swal.showLoading()
+            var url = uuid ? '/pakan/update/' + uuid : '/pakan/store';
+            Swal.fire({
+                title: 'Menyimpan...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
                 }
-            })
+            });
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -60,46 +91,41 @@ $(document).ready(function() {
                 success: function(res) {
                     Swal.close();
                     if(res.success) {
-                        swal({
-                            title: "Tersimpan ",text: "Data berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                        }).then(function(){
-                            $('#m_create').modal('hide');
-                        })
+                        Swal.fire('Sukses', 'Data berhasil disimpan!', 'success');
+                        $('#m_create').modal('hide');
                         table.ajax.reload();
                     } else {
-                        Swal.fire({
-                            title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                        });
+                        Swal.fire('Gagal', 'Data gagal disimpan!', 'error');
                     }
                 },
                 error: function(xhr) {
                     Swal.close();
-                    Swal.fire({
-                        title: "Gagal ",text: 'Terjadi kesalahan saat menyimpan data!',type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                    });
+                    Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data!', 'error');
                 }
             });
         }
     });
 });
 
-function editLokasi(uuid) {
-    var url = '{{ route("lokasi.show", ":uuid") }}'.replace(':uuid', uuid);
-    $.get(url, function(res) {
+function editPakan(uuid) {
+    $.get('/pakan/show/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
         $('#kode').val(res.kode);
         $('#nama').val(res.nama);
-        $('#alamat').val(res.alamat);
+        $('#jenis').val(res.jenis);
+        $('#merk').val(res.merk);
+        $('#satuan').val(res.satuan);
+        $('#harga').val(res.harga);
+        $('#keterangan').val(res.keterangan);
         $('#m_create').modal('show');
     });
 }
 
-
-function deleteLokasi(uuid) {
-    var url = '{{ route("lokasi.delete", ":uuid") }}'.replace(':uuid', uuid);
+function deletePakan(uuid) {
     Swal.fire({
-        title: 'Hapus Lokasi',
-        text: 'Yakin hapus lokasi ini?',
+        title: 'Hapus Pakan',
+        text: 'Yakin hapus pakan ini?',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus!',
         cancelButtonText: 'Batal'
@@ -113,13 +139,14 @@ function deleteLokasi(uuid) {
                 }
             });
             $.ajax({
-                url: url,
+                url: '/pakan/delete/' + uuid,
                 method: 'DELETE',
                 data: { _token: $('meta[name="csrf-token"]').attr('content') },
                 success: function(res) {
                     Swal.close();
                     if(res.success) {
                         Swal.fire('Berhasil', 'Data berhasil dihapus!', 'success');
+                        $('#m_create').modal('hide');
                         $('#viewtabel').DataTable().ajax.reload();
                     } else {
                         Swal.fire('Gagal', 'Data gagal dihapus!', 'error');

@@ -15,7 +15,7 @@ $(document).ready(function() {
     });
 
     // Load data lokasi untuk select
-    $.get('/blok/lokasi-list', function(res) {
+    $.get('{{ route('blok.lokasi-list') }}', function(res) {
         $('#lokasi_id').empty();
         res.forEach(function(lokasi) {
             $('#lokasi_id').append('<option value="'+lokasi.id+'">'+lokasi.nama+'</option>');
@@ -25,7 +25,7 @@ $(document).ready(function() {
     var table = $('#viewtabel').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "/blok/data",
+        ajax: "{{ route('blok.data') }}",
         columns: [
             { data: 'nama_lokasi', name: 'nama_lokasi' },
             { data: 'nama', name: 'nama' },
@@ -50,7 +50,9 @@ $(document).ready(function() {
         },
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
-            var url = uuid ? '/blok/update/' + uuid : '/blok/store';
+            var url = uuid
+                ? '{{ route("blok.update", ":uuid") }}'.replace(':uuid', uuid)
+                : '{{ route("blok.store") }}';
             swal({title: "Presesing...!",text: "Please Wait",
                 onOpen: function() {
                     swal.showLoading()
@@ -80,7 +82,8 @@ $(document).ready(function() {
 });
 
 function editBlok(uuid) {
-    $.get('/blok/show/' + uuid, function(res) {
+    var url = '{{ route("blok.show", ":uuid") }}'.replace(':uuid', uuid);
+    $.get(url, function(res) {
         $('#uuid').val(res.uuid);
         $('#lokasi_id').val(res.lokasi_id);
         $('#nama').val(res.nama);
@@ -90,6 +93,7 @@ function editBlok(uuid) {
 }
 
 function deleteBlok(uuid) {
+    var url = '{{ route("blok.delete", ":uuid") }}'.replace(':uuid', uuid);
     Swal.fire({
         title: 'Hapus Blok',
         text: 'Yakin hapus blok ini?',
@@ -106,7 +110,7 @@ function deleteBlok(uuid) {
                 }
             });
             $.ajax({
-                url: '/blok/delete/' + uuid,
+                url: url,
                 method: 'DELETE',
                 data: { _token: $('meta[name="csrf-token"]').attr('content') },
                 success: function(res) {

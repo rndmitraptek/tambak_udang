@@ -38,6 +38,7 @@ return new class extends Migration
         Schema::create('setup_petak', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
+            $table->foreignId('lokasi_id')->constrained('setup_lokasi')->onDelete('cascade');
             $table->foreignId('blok_id')->constrained('setup_blok')->onDelete('cascade');
             $table->string('nama');
             $table->double('luas')->nullable();

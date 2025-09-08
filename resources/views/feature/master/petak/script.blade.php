@@ -6,7 +6,6 @@ app.controller("myCtrl", function($scope,$http) {
     });
 });
 
-
 $(document).ready(function() {
     $.ajaxSetup({
         headers: {
@@ -14,45 +13,77 @@ $(document).ready(function() {
         }
     });
 
+    // Load lokasi untuk select
+    $.get('/petak/lokasi-list', function(res) {
+        $('#lokasi_id').empty();
+        res.forEach(function(lokasi) {
+            $('#lokasi_id').append('<option value="'+lokasi.id+'">'+lokasi.nama+'</option>');
+        });
+        // Trigger blok load for first lokasi
+        var firstLokasi = $('#lokasi_id').val();
+        if(firstLokasi) loadBlok(firstLokasi);
+    });
+
+    // Saat lokasi berubah, load blok sesuai lokasi
+    $('#lokasi_id').on('change', function() {
+        var lokasiId = $(this).val();
+        loadBlok(lokasiId);
+    });
+
+    function loadBlok(lokasiId) {
+        $('#blok_id').empty();
+        $.get('/petak/blok-list-by-lokasi/' + lokasiId, function(res) {
+            res.forEach(function(blok) {
+                $('#blok_id').append('<option value="'+blok.id+'">'+blok.nama+'</option>');
+            });
+        });
+    }
+
     var table = $('#viewtabel').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('lokasi.data') }}",
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
+        ajax: "/petak/data",
         columns: [
-            { data: 'kode', name: 'kode' },
+            { data: 'nama_lokasi', name: 'nama_lokasi' },
+            { data: 'nama_blok', name: 'nama_blok' },
             { data: 'nama', name: 'nama' },
-            { data: 'alamat', name: 'alamat' },
+            { 
+                data: 'luas', 
+                name: 'luas',
+                render: function(data, type, row) {
+                    return  parseInt(data).toLocaleString('id-ID');
+                }
+            },
+            { data: 'keterangan', name: 'keterangan' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });
 
     $('#btnTambah').click(function() {
-        $('#formLokasi')[0].reset();
+        $('#formPetak')[0].reset();
         $('#uuid').val('');
         $('#m_create').modal('show');
     });
 
-    $("#formLokasi").validate({
+    $("#formPetak").validate({
         rules: {
-            kode: { required: !0, },
+            lokasi_id: { required: !0, },
+            blok_id: { required: !0, },
             nama: { required: !0, }
         },
         invalidHandler: function(e, r) {
-            mUtil.scrollTo("formLokasi", -200)
+            mUtil.scrollTo("formPetak", -200)
         },
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
-            var url = uuid
-                ? '{{ route("lokasi.update", ":uuid") }}'.replace(':uuid', uuid)
-                : '{{ route("lokasi.store") }}';
-            swal({title: "Presesing...!",text: "Please Wait",
-                onOpen: function() {
-                    swal.showLoading()
+            var url = uuid ? '/petak/update/' + uuid : '/petak/store';
+            Swal.fire({
+                title: 'Menyimpan...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
                 }
-            })
+            });
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -60,46 +91,39 @@ $(document).ready(function() {
                 success: function(res) {
                     Swal.close();
                     if(res.success) {
-                        swal({
-                            title: "Tersimpan ",text: "Data berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                        }).then(function(){
-                            $('#m_create').modal('hide');
-                        })
+                        Swal.fire('Sukses', 'Data berhasil disimpan!', 'success');
+                        $('#m_create').modal('hide');
                         table.ajax.reload();
                     } else {
-                        Swal.fire({
-                            title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                        });
+                        Swal.fire('Gagal', 'Data gagal disimpan!', 'error');
                     }
                 },
                 error: function(xhr) {
                     Swal.close();
-                    Swal.fire({
-                        title: "Gagal ",text: 'Terjadi kesalahan saat menyimpan data!',type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                    });
+                    Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data!', 'error');
                 }
             });
         }
     });
 });
 
-function editLokasi(uuid) {
-    var url = '{{ route("lokasi.show", ":uuid") }}'.replace(':uuid', uuid);
-    $.get(url, function(res) {
+function editPetak(uuid) {
+    $.get('/petak/show/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
+        $('#lokasi_id').val(res.lokasi_id);
+        $('#blok_id').val(res.blok_id);
         $('#nama').val(res.nama);
-        $('#alamat').val(res.alamat);
+        $('#luas').val(res.luas);
+        $('#keterangan').val(res.keterangan);
         $('#m_create').modal('show');
     });
 }
 
-
-function deleteLokasi(uuid) {
-    var url = '{{ route("lokasi.delete", ":uuid") }}'.replace(':uuid', uuid);
+function deletePetak(uuid) {
     Swal.fire({
-        title: 'Hapus Lokasi',
-        text: 'Yakin hapus lokasi ini?',
+        title: 'Hapus Petak',
+        text: 'Yakin hapus petak ini?',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus!',
         cancelButtonText: 'Batal'
@@ -113,13 +137,14 @@ function deleteLokasi(uuid) {
                 }
             });
             $.ajax({
-                url: url,
+                url: '/petak/delete/' + uuid,
                 method: 'DELETE',
                 data: { _token: $('meta[name="csrf-token"]').attr('content') },
                 success: function(res) {
                     Swal.close();
                     if(res.success) {
                         Swal.fire('Berhasil', 'Data berhasil dihapus!', 'success');
+                        $('#m_create').modal('hide');
                         $('#viewtabel').DataTable().ajax.reload();
                     } else {
                         Swal.fire('Gagal', 'Data gagal dihapus!', 'error');

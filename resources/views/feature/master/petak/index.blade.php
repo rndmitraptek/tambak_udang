@@ -38,7 +38,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button id="btnTambah" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
                                         <span>Tambah Petak</span>
@@ -57,29 +57,11 @@
                                 <th>Nama Lokasi</th>
                                 <th>Blok</th>
                                 <th>Nama Petak</th>
-                                <th>Luas</th>
+                                <th>Luas (m<sup>2</sup>)</th>
                                 <th>Keterangan</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Sekuro</td>
-                                <td>A</td>
-                                <td>001</td>
-                                <td>1.000</td>
-                                <td>keterangan petak 001 luas 1.000 meter persegi</td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>Sekuro</td>
-                                <td>A</td>
-                                <td>002</td>
-                                <td>2.000</td>
-                                <td>keterangan petak 002 luas 2.000 meter persegi</td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -90,7 +72,7 @@
 <div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form>
+            <form id="formPetak">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Petak</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -98,36 +80,31 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group m-form__group">
-                        <label for="exampleSelect1">Nama Lokasi</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option>Sekuro</option>
-                            <option>Bandengan</option>
-                        </select>
+                        <label>Nama Lokasi</label>
+                        <select class="form-control" id="lokasi_id" name="lokasi_id" required></select>
                     </div>
                     <div class="form-group m-form__group">
-                        <label for="exampleSelect1">Blok</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option>A</option>
-                            <option>B</option>
-                        </select>
+                        <label>Blok</label>
+                        <select class="form-control" id="blok_id" name="blok_id" required></select>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Petak</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Nama Petak</label>
+                        <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Luas</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Luas (m<sup>2</sup>)</label>
+                        <input type="text" class="form-control" id="luas" name="luas">
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="form-control-label" >Keterangan</label>
-                        <textarea class="form-control" id="alamat"></textarea>
+                        <label>Keterangan</label>
+                        <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -140,7 +117,7 @@
 @section('js')
 <!--begin::Page Vendors -->
 <script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
-
+<script src="{{ url('/') }}/template/assets/src/jquery.validate.min.js"></script>
 <!--end::Page Vendors -->
 
 <!--begin::Page Resources -->
