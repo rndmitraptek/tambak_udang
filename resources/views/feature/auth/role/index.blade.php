@@ -40,7 +40,7 @@
                             <li class="m-portlet__nav-item">
                                 <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
-                                        <i class="la la-map-marker"></i>
+                                        <i class="la la-plus"></i>
                                         <span>Tambah Role</span>
                                     </span>
                                 </button>
@@ -84,7 +84,69 @@
         </div>
     </div>
 </div>
-
+<!--end::Modal-->
+<!--begin::Modal-->
+<div class="modal fade" id="m_member" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="formInput">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Member</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group m-form__group">
+                                <label>Member</label>
+                                <div class="input-group">
+                                    <select class="form-control" id="id_user" ng-model="id_user" name="id_user">
+                                        <option ng-repeat="x in member" value="<% x.id_user %>" ><% x.nama %></option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button"><i class="la la-plus"></i>Tambah Member</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-sm m-table m-table--head-bg-brand">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>#</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Username</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Jhon</td>
+                                <td>Stone</td>
+                                <td>@jhon</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Lisa</td>
+                                <td>Nilson</td>
+                                <td>@lisa</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Larry</td>
+                                <td>the Bird</td>
+                                <td>@twitter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <!--end::Modal-->
 @endsection
 

@@ -11,7 +11,7 @@ class UserModel extends Model
     //
     use CreatedUpdatedBy;
 
-    protected $table = 'user';
+    protected $table = 'setup_user';
     protected $primaryKey = 'id_user';
     protected $fillable = ['nama','username','password','keterangan'];
 }

@@ -14,7 +14,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                 { data: 'keterangan', title: 'keterangan' },
                 { data: 'created_at', title: 'created_at' },
                 { data: 'updated_at', title: 'updated_at' },
-                { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
+                { data: 'action', title: 'action', orderable: false, searchable: false,width:'260px' },
             ]
         })
 
@@ -70,8 +70,23 @@ app.controller("myCtrl", function($scope,$http,API) {
                 }
             })
         });
+
+        $('#viewtabel tbody').on('click', '#member', function () {
+            var tr = $(this).closest('tr');
+            var x = table.row(tr).data();
+            $scope.input = x;
+            url = "{{ route('auth.role.get_user_role',':id') }}";
+            url = url.replace(':id', x.id_role);
+            $http.get(url).then(function(res){
+                $scope.member = res.data.data;
+                $('#m_member').modal('show');
+            }).catch(function(error) {
+                swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+            });
+        });
     });
 
+    $scope.member = [];
     $scope.input = {};
     $scope.edit = false;
     $scope.tambah = function(){

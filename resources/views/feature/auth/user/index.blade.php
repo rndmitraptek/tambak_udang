@@ -75,7 +75,7 @@
                         <label for="recipient-name" class="form-control-label">username</label>
                         <input type="text" class="form-control" name="username" ng-model="input.username">
                     </div>
-                    <div class="form-group m-form__group">
+                    <div class="form-group m-form__group" ng-hide="edit">
                         <label for="recipient-name" class="form-control-label">password</label>
                         <input type="text" class="form-control" name="password" ng-model="input.password">
                     </div>

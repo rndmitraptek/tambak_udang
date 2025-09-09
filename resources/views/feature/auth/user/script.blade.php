@@ -49,8 +49,8 @@ app.controller("myCtrl", function($scope,$http,API) {
                             swal.showLoading()
                         }
                     })
-                    url = "{{ route('auth.user.delete',':uuid') }}";
-                    url = url.replace(':uuid', x.uuid);
+                    url = "{{ route('auth.user.delete',':id_user') }}";
+                    url = url.replace(':id_user', x.id_user);
                     $http.delete(url)
                     .then(function(res){
                         if(res.data.success){
@@ -102,11 +102,11 @@ app.controller("myCtrl", function($scope,$http,API) {
                 }
             })
             let url = ($scope.edit)
-                ? "{{ route('auth.user.update', ':uuid') }}"
+                ? "{{ route('auth.user.update', ':id_user') }}"
                 : "{{ route('auth.user.insert') }}";
 
             if ($scope.edit) {
-                url = url.replace(':uuid', $scope.input.uuid);
+                url = url.replace(':id_user', $scope.input.id_user);
             }
             $http.post(url,$scope.input)
             .then(function(res){

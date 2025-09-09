@@ -42,9 +42,9 @@ class UsersController extends Controller
         return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
     }
 
-    public function update(Request $req, $uuid)
+    public function update(Request $req, $id)
     {
-        $benur = UserModel::where('uuid', $uuid)->firstOrFail();
+        $benur = UserModel::where('id_user', $id)->firstOrFail();
         $req->validate([
             'nama' => 'required',
             'username' => 'required',
@@ -56,9 +56,9 @@ class UsersController extends Controller
         return response()->json(['success' => true, 'data' => $benur]);
     }
 
-    public function destroy($uuid)
+    public function destroy($id)
     {
-        $benur = UserModel::where('uuid', $uuid)->firstOrFail();
+        $benur = UserModel::where('id_user', $id)->firstOrFail();
         $benur->delete();
         return response()->json(['success' => true]);
     }

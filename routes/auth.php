@@ -21,11 +21,13 @@ Route::prefix('role')->name('role.')->group(function(){
     Route::get('/get_user',[App\Http\Controllers\Auth\RoleController::class, 'get_user'])->name('get_user');
     Route::delete('/destroy_user/{uuid}',[App\Http\Controllers\Auth\RoleController::class, 'destroy_user'])->name('delete_user');
     Route::post('/insert_role',[App\Http\Controllers\Auth\RoleController::class, 'insert_role'])->name('insert_role');
+    Route::get('/get_user_role/{id}',[App\Http\Controllers\Auth\RoleController::class, 'get_user_role'])->name('get_user_role');
 });
 
 Route::prefix('user')->name('user.')->group(function(){
     Route::post('/insert',[App\Http\Controllers\Auth\UsersController::class, 'insert'])->name('insert');
-    Route::post('/update/{uuid}',[App\Http\Controllers\Auth\UsersController::class, 'update'])->name('update');
+    Route::post('/update/{id}',[App\Http\Controllers\Auth\UsersController::class, 'update'])->name('update');
     Route::get('/datatable',[App\Http\Controllers\Auth\UsersController::class, 'datatable'])->name('datatable');
-    Route::delete('/delete/{uuid}',[App\Http\Controllers\Auth\UsersController::class, 'destroy'])->name('delete');
+    Route::delete('/delete/{id}',[App\Http\Controllers\Auth\UsersController::class, 'destroy'])->name('delete');
+    Route::get('/get_data',[App\Http\Controllers\Auth\UsersController::class, 'get_data'])->name('get_data');
 });

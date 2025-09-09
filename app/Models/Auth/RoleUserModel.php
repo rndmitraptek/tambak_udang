@@ -14,4 +14,8 @@ class RoleUserModel extends Model
     protected $table = 'role_user';
     protected $primaryKey = 'id_role_user';
     protected $fillable = ['id_role','id_user'];
+
+    public function user(){
+        return $this->hasMany(UserModel::class,'id_user','id_user');
+    }
 }
