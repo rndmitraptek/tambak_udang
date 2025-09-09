@@ -96,6 +96,8 @@ class PetakController extends Controller
             'nama' => $request->nama,
             'luas' => $request->luas,
             'keterangan' => $request->keterangan,
+            'created_by' => 1,
+            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $petak]);

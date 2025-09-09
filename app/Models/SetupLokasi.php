@@ -17,6 +17,8 @@ class SetupLokasi extends Model
         'nama',
         'alamat',
         'uuid',
+        'created_by',
+        'updated_by',
     ];
 
     protected static function boot()

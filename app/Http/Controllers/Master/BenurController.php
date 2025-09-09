@@ -81,6 +81,8 @@ class BenurController extends Controller
             'jenis' => $request->jenis,
             'harga' => $request->harga,
             'keterangan' => $request->keterangan,
+            'created_by' => 1,
+            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $benur]);

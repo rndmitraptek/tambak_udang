@@ -19,6 +19,8 @@ class SetupBenur extends Model
         'harga',
         'keterangan',
         'uuid',
+        'created_by',
+        'updated_by',
     ];
 
     protected static function boot()

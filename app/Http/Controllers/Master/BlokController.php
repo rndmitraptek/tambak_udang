@@ -80,6 +80,8 @@ class BlokController extends Controller
             'lokasi_id' => $request->lokasi_id,
             'nama' => $request->nama,
             'keterangan' => $request->keterangan,
+            'created_by' => 1,
+            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $blok]);

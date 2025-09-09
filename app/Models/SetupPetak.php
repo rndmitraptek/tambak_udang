@@ -19,6 +19,8 @@ class SetupPetak extends Model
         'luas',
         'keterangan',
         'uuid',
+        'created_by',
+        'updated_by',
     ];
 
     protected static function boot()

@@ -17,6 +17,8 @@ class SetupBlok extends Model
         'nama',
         'keterangan',
         'uuid',
+        'created_by',
+        'updated_by',
     ];
 
     protected static function boot()

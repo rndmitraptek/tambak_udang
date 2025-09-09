@@ -89,6 +89,8 @@ class PakanController extends Controller
             'satuan' => $request->satuan,
             'harga' => $request->harga,
             'keterangan' => $request->keterangan,
+            'created_by' => 1,
+            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $pakan]);

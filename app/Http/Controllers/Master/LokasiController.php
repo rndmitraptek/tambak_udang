@@ -76,6 +76,8 @@ class LokasiController extends Controller
             'kode' => $request->kode,
             'nama' => $request->nama,
             'alamat' => $request->alamat,
+            'created_by' => 1,
+            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $lokasi]);
