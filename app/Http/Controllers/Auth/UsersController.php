@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,6 +17,11 @@ class UsersController extends Controller
     {
         // penjagaan forbiden
         return view('feature.auth.user.index');
+    }
+
+    public function login()
+    {
+        return view('feature.auth.login.index');
     }
 
     public function datatable()
@@ -40,6 +47,57 @@ class UsersController extends Controller
         $data['password'] = Hash::make($data['password']);
         $insert = UserModel::create($data);
         return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
+    }
+
+    public function cek_login(Request $req){
+        $user = UserModel::where('username',$req->username)->first();
+        if(!$user){
+            return response()->json(['success'=>false,'data'=>null,'message'=>'username tidak di temukan']);
+        }
+        if(!Hash::check($req->password, $user->password)){
+            return response()->json(['success'=>false,'data'=>null,'message'=>'password salah']);
+        }
+        unset($user->password);
+        // auth('web')->login($user);
+        Auth::guard('web')->login($user);
+        request()->session()->regenerate();
+        $menu_query = DB::select("
+                SELECT mm.id_menu,mm.urut,mm.label,mm.icon,mm.is_parent,mm.id_menu_parent,mm.route_link from setup_user su 
+                inner join role_user ru on su.id_user=ru.id_user
+                inner join role_menu rm on ru.id_role=rm.id_role
+                inner join menu mm on rm.id_menu=mm.id_menu
+                where ru.id_user = ?
+                group by mm.id_menu,mm.urut,mm.label,mm.icon,mm.is_parent,mm.id_menu_parent,mm.route_link",[$user->id_user]);
+        $menu = $this->buildMenuTree($menu_query);
+        $hasil =  array_merge($user->toArray(), [
+            'version' => '_development',
+            'menu' => $menu
+        ]);
+        return response()->json(['success'=>true,'data'=>$hasil,'message'=>'']);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
+
+    function buildMenuTree($menuItems, $parentId=null){
+        $branch = [];
+
+        foreach ($menuItems as $menuItem) {
+            if ($menuItem->id_menu_parent === $parentId) {
+                $children = $this->buildMenuTree($menuItems, $menuItem->id_menu);
+                if ($children) {
+                    $menuItem->items = $children;
+                }
+                $branch[] = $menuItem;
+            }
+        }
+
+        return $branch;
     }
 
     public function update(Request $req, $id)

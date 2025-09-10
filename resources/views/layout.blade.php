@@ -367,21 +367,7 @@ License: You must have a valid license purchased only from themeforest(the above
 																<li class="m-nav__separator m-nav__separator--fit">
 																</li>
 																<li class="m-nav__item">
-																	<a href="header/profile.html" class="m-nav__link">
-																		<i class="m-nav__link-icon flaticon-info"></i>
-																		<span class="m-nav__link-text">FAQ</span>
-																	</a>
-																</li>
-																<li class="m-nav__item">
-																	<a href="header/profile.html" class="m-nav__link">
-																		<i class="m-nav__link-icon flaticon-lifebuoy"></i>
-																		<span class="m-nav__link-text">Support</span>
-																	</a>
-																</li>
-																<li class="m-nav__separator m-nav__separator--fit">
-																</li>
-																<li class="m-nav__item">
-																	<a href="snippets/pages/user/login-1.html" class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</a>
+																	<a href="{{ url('/') }}/logout" class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</a>
 																</li>
 															</ul>
 														</div>
