@@ -124,7 +124,7 @@
                             <tr ng-repeat="x in member_role">
                                 <td><% x.nama %></td>
                                 <td><% x.username %></td>
-                                <td><a href="javascript:void(0)" id="hapus" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-danger la la-remove"></i></a></td>
+                                <td><a ng-click="hapus_member(x)" href="javascript:void(0)" id="hapus" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-danger la la-remove"></i></a></td>
                             </tr>
                         </tbody>
                     </table>

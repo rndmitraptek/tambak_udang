@@ -6,6 +6,7 @@ require __DIR__.'/master.php';
 
 Route::get('/', [App\Http\Controllers\Auth\UsersController::class,'login']);
 Route::get('login', [App\Http\Controllers\Auth\UsersController::class,'login'])->name('login');
+Route::get('/user',[App\Http\Controllers\Auth\UsersController::class, 'index']);
 Route::middleware('auth')->group(function () {
     Route::get('/lokasi', [App\Http\Controllers\Master\LokasiController::class, 'index']);
     Route::get('/blok', [App\Http\Controllers\Master\BlokController::class, 'index']);
@@ -27,7 +28,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaksi_biaya_validasi', [App\Http\Controllers\ManajemenTambak\TransaksiBiayaController::class, 'validasi']);
     Route::get('/menu',[App\Http\Controllers\Auth\MenuController::class, 'index']);
     Route::get('/role',[App\Http\Controllers\Auth\RoleController::class, 'index']);
-    Route::get('/user',[App\Http\Controllers\Auth\UsersController::class, 'index']);
     Route::get('/logout', [App\Http\Controllers\Auth\UsersController::class,'logout']);
 });
 

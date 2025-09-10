@@ -183,7 +183,8 @@ app.controller("myCtrl", function($scope,$http,API) {
         });
     }
 
-    $scope.hapus_member = function(){
+    $scope.hapus_member = function(x){
+        console.log(x)
         swal({
             title: "Apakah Kamu Yakin?",
             text: "menghapus data ini!",
@@ -200,7 +201,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                     }
                 })
                 $http.post("{{ route('auth.role.insert_role') }}",{
-                    id_user : $scope.id_user,
+                    id_user : x.id_user,
                     id_role : $scope.id_role
                 })
                 .then(function(res){

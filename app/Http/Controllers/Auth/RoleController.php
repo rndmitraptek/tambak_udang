@@ -95,8 +95,7 @@ class RoleController extends Controller
     public function get_user_role_active($id)
     {
         $data = DB::select(
-            "SELECT id_user,nama,username from setup_user where id_user in 
-            (select id_user from role_user where id_role = ?)",[$id]);
+            "select ru.id_role_user,su.* from role_user ru inner join setup_user su on ru.id_user=su.id_user where ru.id_role = ?)",[$id]);
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
 
