@@ -25,6 +25,18 @@
                             </h3>
                         </div>
                     </div>
+                    <div class="m-portlet__head-tools">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <button id="btnTambah" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-map-marker"></i>
+                                        <span>Tambah COA</span>
+                                    </span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="m-portlet__body">
                     <table class="table m-table m-table--head-bg-brand" id="viewtabel">
@@ -39,7 +51,7 @@
                             <th>Action</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                         <tr ng-repeat="akun in coa | filter:searchText">
                             <td style="width:150px"><%akun.kode_akun%></td>
                             <td><%akun.nama_akun%></td>
@@ -53,7 +65,7 @@
                                 <button ng-click="tambah()" ng-show="akun.kode_parent" href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-primary m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-plus m--font-primary"></i></button>
                             </td>
                         </tr>
-                        </tbody>
+                        </tbody> --}}
                     </table>
                 </div>
             </div>
@@ -64,7 +76,7 @@
 <div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form>
+            <form id="formCoa">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">COA</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -72,6 +84,7 @@
                     </button>
                 </div> 
                 <div class="modal-body">
+                    <input type="hidden" id="uuid" name="uuid">
                     <h5>Akun Parent</h5>
                     <div class="row">
                         <div class="col-lg-6 mb-2">
@@ -125,7 +138,7 @@
 @section('js')
 <!--begin::Page Vendors -->
 <script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
-
+<script src="{{ url('/') }}/template/assets/src/jquery.validate.min.js"></script>
 <!--end::Page Vendors -->
 
 <!--end::Page Resources -->

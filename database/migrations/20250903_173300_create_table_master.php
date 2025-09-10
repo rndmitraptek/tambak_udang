@@ -122,7 +122,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('tipe');
             $table->string('pos_laporan');
-            $table->string('kode_parent');
+            $table->string('kode_parent')->nullable();
             $table->string('saldo_normal');
             $table->integer('created_by');
             $table->integer('updated_by');

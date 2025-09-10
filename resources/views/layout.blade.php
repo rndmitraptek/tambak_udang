@@ -468,6 +468,12 @@ License: You must have a valid license purchased only from themeforest(the above
 								</a>
 							</li>
 							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+								<a href="/supplier" class="m-menu__link m-menu__toggle">
+									<i class="m-menu__link-icon flaticon-layers"></i>
+									<span class="m-menu__link-text">Setup Supplier</span>
+								</a>
+							</li>
+							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
 								<a href="/setup_biaya" class="m-menu__link m-menu__toggle">
 									<i class="m-menu__link-icon flaticon-layers"></i>
 									<span class="m-menu__link-text">Setup Biaya</span>

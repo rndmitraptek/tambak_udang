@@ -1,6 +1,7 @@
 @extends('layout')
 @section('css')
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{ url('/') }}/template/assets/src/select2.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section('ctrl')
 @include('feature.akuntansi.setup-biaya.script')
@@ -38,7 +39,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button id="btnTambah" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
                                         <span>Tambah Setup Biaya</span>
@@ -64,38 +65,6 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>BBN50001</td>
-                                <td>Biaya Gaji Pegawai Sekuro</td>
-                                <td>Perlokasi</td>
-                                <td>Ya</td>
-                                <td>51111 - Biaya Gaji Pegawai</td>
-                                <td>25.000.000</td>
-                                <td>Biaya gaji pegawai sekuro</td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>BBN50002</td>
-                                <td>Biaya Gaji Pegawai Semarang</td>
-                                <td>Gabungan</td>
-                                <td>Ya</td>
-                                <td>51111 - Biaya Gaji Pegawai</td>
-                                <td>30.000.000</td>
-                                <td>Biaya gaji pegawai semarang</td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>BBN50003</td>
-                                <td>Biaya Pakan</td>
-                                <td>Perpetak</td>
-                                <td>tidak</td>
-                                <td>51112 - Biaya Pakan</td>
-                                <td>-</td>
-                                <td>pakan benur</td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -106,7 +75,7 @@
 <div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form>
+            <form id="formSetupBiaya">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Setup Biaya</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -114,66 +83,83 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Kode Biaya</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Kode Biaya</label>
+                        <input type="text" class="form-control" id="kode" name="kode" required>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Biaya</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Nama Biaya</label>
+                        <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>
                     <div class="form-group">
-                        <label for="exampleSelect1">Kelompok Biaya</label>
-                        <select class="form-control" id="exampleSelect1" ng-model="kelompok" value="Perpetak">
-                            <option value=""></option>
+                        <label for="kelompok">Kelompok Biaya</label>
+                        <select class="form-control" id="kelompok" name="kelompok" ng-model="kelompok" required>
+                            <option value="">- Pilih -</option>
                             <option value="Gabungan">Gabungan</option>
                             <option value="Perlokasi">Perlokasi</option>
                             <option value="Perpetak">Perpetak</option>
                         </select>
                     </div>
-                    <div class="form-group" ng-model="lokasi" ng-if="kelompok != 'Perpetak'">
-                        <label for="exampleSelect1">Nama Lokasi</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option value=""></option>
-                            <option>Sekuro</option>
-                            <option>Bandengan</option>
+
+                    <!-- Perlokasi -->
+                    <div class="form-group" ng-show="kelompok == 'Perlokasi'">
+                    <label for="lokasi_id_single">Nama Lokasi</label>
+                    <select class="form-control"
+                            id="lokasi_id_single"
+                            ng-attr-name="@{{ kelompok == 'Perlokasi' ? 'lokasi[]' : undefined }}"
+                            ng-model="lokasiSingle"
+                            ng-options="l.id as l.nama for l in lokasiList"
+                            ng-change="lokasi = lokasiSingle ? [lokasiSingle] : []">
+                        <option value="">- Pilih Lokasi -</option>
+                    </select>
+                    </div>
+
+                    <!-- Gabungan -->
+                    <div class="form-group" ng-show="kelompok == 'Gabungan'">
+                    <label for="lokasi_id_multi">Nama Lokasi (Bisa pilih lebih dari 1)</label>
+                    <select class="form-control select2"
+                            id="lokasi_id_multi"
+                            ng-model="lokasi"
+                            name="lokasi[]"
+                            multiple
+                            style="width:100%; min-height:120px; font-size:14px;"
+                            ng-options="l.id as l.nama for l in lokasiList">
+                    </select>
+                    </div>
+
+                    <!-- Petak hanya tampil jika Perpetak -->
+                    <div class="form-group" ng-show="kelompok == 'Perpetak'"  id="petak-group">
+                        <label for="petak">Nama Petak</label>
+                        <select class="form-control" id="petak_id" name="petak_id" ng-model="petak_id">
+                            <option value="">- Pilih Petak -</option>
                         </select>
                     </div>
-                    <div ng-if="kelompok=='Gabungan'" class="form-group" ng-model="lokasi" ng-if="kelompok != 'Perpetak'">
-                        <label for="exampleSelect1">Nama Lokasi</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option value=""></option>
-                            <option>Sekuro</option>
-                            <option>Bandengan</option>
-                        </select>
-                    </div>
-                    <button ng-if="kelompok=='Gabungan'" ng-click="tambah()" href="#" class=" btn btn-primary " title="View"><i class="la la-plus"></i>Tambah Lokasi</button>
-                    </td>
+
                     <div class="form-group">
                         <label class="m-checkbox" style="margin-top: 10px;">
-                            <input type="checkbox"> Biaya Periode
+                            <input type="checkbox" ng-model="periode" name="periode"> Biaya Periode
                             <span></span>
                         </label>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Default Nominal</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Default Nominal</label>
+                        <input type="number" class="form-control" id="nominal" name="nominal">
                     </div>
-                    <div class="form-group" ng-model="lokasi">
-                        <label for="exampleSelect1">COA</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option value=""></option>
-                            <option ng-repeat="akun in coa"><% akun.kode_akun %> - <% akun.nama_akun %></option>
+                    <div class="form-group">
+                        <label>COA</label>
+                        <select class="form-control" id="coa_id" name="coa_id">
+                            <!-- Diisi dari AJAX -->
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="form-control-label" id="catatan" >Catatan</label>
-                        <textarea class="form-control" id="alamat"></textarea>
+                        <label>Catatan</label>
+                        <textarea class="form-control" id="catatan" name="catatan"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -185,8 +171,10 @@
 
 @section('js')
 <!--begin::Page Vendors -->
-<script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
 
+<script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
+<script src="{{ url('/') }}/template/assets/src/jquery.validate.min.js"></script>
+<script src="{{ url('/') }}/template/assets/src/select2.min.js"></script>
 <!--end::Page Vendors -->
 
 <!--begin::Page Resources -->

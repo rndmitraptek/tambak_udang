@@ -38,7 +38,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button id="btnTambah" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
                                         <span>Tambah Supplier</span>
@@ -59,33 +59,11 @@
                                 <th>Alamat</th>
                                 <th>Nomor Telepon</th>
                                 <th>Email</th>
-                                <th>Nama Perusahaan</th>
+                                <th>Nama nama_perusahaan</th>
                                 <th>Catatan</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>SUP0001</td>
-                                <td>Supriyadi</td>
-                                <td>Jalan soekarno hatta, semarang</td>
-                                <td>+62 3456 3453 2343 3453, 024 3456 3456</td>
-                                <td>supriyadi@gmail.com</td>
-                                <td>PT. BENUR JAYA</td>
-                                <td></td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>SUP0001</td>
-                                <td>Sudarsono</td>
-                                <td>bukit mutiara jaya, semarang</td>
-                                <td>+62 8264 9782 6786, 024 5082 3347</td>
-                                <td>supriyadi@gmail.com</td>
-                                <td>PT. NUSANTARA UDANG</td>
-                                <td></td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -96,7 +74,7 @@
 <div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form>
+            <form id="formSupplier">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Supplier</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -104,38 +82,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Kode</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Kode</label>
+                        <input type="text" class="form-control" id="kode" name="kode" required>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Nama</label>
+                        <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="form-control-label" id="alamat" >Alamat</label>
-                        <textarea class="form-control" id="alamat"></textarea>
+                        <label>Alamat</label>
+                        <textarea class="form-control" id="alamat" name="alamat"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">nomor telepon</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Nomor Telepon</label>
+                        <input type="text" class="form-control" id="telepon" name="telepon">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Email</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="email" name="email">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Perusahaan</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <label>Nama Perusahaan</label>
+                        <input type="text" class="form-control" id="nama_perusahaan" name="nama_perusahaan">
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="form-control-label" id="catatan" >Catatan</label>
-                        <textarea class="form-control" id="alamat"></textarea>
+                        <label>Catatan</label>
+                        <textarea class="form-control" id="catatan" name="catatan"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
@@ -148,7 +127,7 @@
 @section('js')
 <!--begin::Page Vendors -->
 <script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
-
+<script src="{{ url('/') }}/template/assets/src/jquery.validate.min.js"></script>
 <!--end::Page Vendors -->
 
 <!--begin::Page Resources -->

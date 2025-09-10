@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SetupBlok;
 use App\Models\SetupLokasi;
+use Yajra\DataTables\Facades\DataTables;
 
 class BlokController extends Controller
 {
@@ -22,69 +23,28 @@ class BlokController extends Controller
 
     public function data(Request $request)
     {
-        $columns = ['nama_lokasi', 'nama', 'keterangan'];
-        $length = $request->input('length', 10);
-        $start = $request->input('start', 0);
-        $search = $request->input('search.value', '');
-
-        $orderColumnIndex = $request->input('order.0.column', 0);
-        $orderColumn = $columns[$orderColumnIndex] ?? 'nama_lokasi';
-        $orderDir = $request->input('order.0.dir', 'asc');
-
         $query = SetupBlok::with('lokasi');
 
-        if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('nama', 'ilike', "%{$search}%")
-                  ->orWhere('keterangan', 'ilike', "%{$search}%");
-            });
-        }
-
-        $total = SetupBlok::count();
-        $filtered = $query->count();
-
-        $data = $query->orderBy($orderColumn == 'nama_lokasi' ? 'lokasi_id' : $orderColumn, $orderDir)
-            ->offset($start)
-            ->limit($length)
-            ->get();
-
-        $result = [];
-        foreach ($data as $row) {
-            $result[] = [
-                'nama_lokasi' => $row->lokasi ? $row->lokasi->nama : '',
-                'nama' => $row->nama,
-                'keterangan' => $row->keterangan,
-                'actions' => '
-                <a href="javascript:void(0)" onclick="editBlok(\''.$row->uuid.'\')" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>
-                <a href="javascript:void(0)" onclick="deleteBlok(\''.$row->uuid.'\')" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Hapus"><i class="m--font-danger la la-remove"></i></a>',
-            ];
-        }
-
-        return response()->json([
-            'draw' => intval($request->input('draw')),
-            'recordsTotal' => $total,
-            'recordsFiltered' => $filtered,
-            'data' => $result,
-        ]);
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'lokasi_id' => 'required|exists:setup_lokasi,id',
-            'nama' => 'required',
-            'keterangan' => 'nullable',
-        ]);
-
-        $blok = SetupBlok::create([
-            'lokasi_id' => $request->lokasi_id,
-            'nama' => $request->nama,
-            'keterangan' => $request->keterangan,
-            'created_by' => 1,
-            'updated_by' => 1,
-        ]);
-
-        return response()->json(['success' => true, 'data' => $blok]);
+        return DataTables::of($query)
+            ->addColumn('nama_lokasi', function ($row) {
+                return $row->lokasi ? $row->lokasi->nama : '';
+            })
+            ->addColumn('actions', function ($row) {
+                return '
+                    <a href="javascript:void(0)" onclick="editBlok(\''.$row->uuid.'\')" 
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" 
+                        title="Edit">
+                        <i class="m--font-warning la la-edit"></i>
+                    </a>
+                    <a href="javascript:void(0)" onclick="deleteBlok(\''.$row->uuid.'\')" 
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" 
+                        title="Hapus">
+                        <i class="m--font-danger la la-remove"></i>
+                    </a>
+                ';
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
     }
 
     public function show($uuid)

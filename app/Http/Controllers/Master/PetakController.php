@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\SetupPetak;
 use App\Models\SetupBlok;
 use App\Models\SetupLokasi;
+use Yajra\DataTables\Facades\DataTables;
 
 class PetakController extends Controller
 {
@@ -32,52 +33,31 @@ class PetakController extends Controller
 
     public function data(Request $request)
     {
-        $columns = ['nama_lokasi', 'nama_blok', 'nama', 'luas', 'keterangan'];
-        $length = $request->input('length', 10);
-        $start = $request->input('start', 0);
-        $search = $request->input('search.value', '');
-
-        $orderColumnIndex = $request->input('order.0.column', 0);
-        $orderColumn = $columns[$orderColumnIndex] ?? 'nama_lokasi';
-        $orderDir = $request->input('order.0.dir', 'asc');
-
         $query = SetupPetak::with(['lokasi', 'blok']);
 
-        if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('keterangan', 'like', "%{$search}%");
-            });
-        }
-
-        $total = SetupPetak::count();
-        $filtered = $query->count();
-
-        $data = $query->orderBy($orderColumn == 'nama_lokasi' ? 'lokasi_id' : ($orderColumn == 'nama_blok' ? 'blok_id' : $orderColumn), $orderDir)
-            ->offset($start)
-            ->limit($length)
-            ->get();
-
-        $result = [];
-        foreach ($data as $row) {
-            $result[] = [
-                'nama_lokasi' => $row->lokasi ? $row->lokasi->nama : '',
-                'nama_blok' => $row->blok ? $row->blok->nama : '',
-                'nama' => $row->nama,
-                'luas' => $row->luas,
-                'keterangan' => $row->keterangan,
-                'actions' => '
-                <a href="javascript:void(0)" onclick="editPetak(\''.$row->uuid.'\')" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>
-                <a href="javascript:void(0)" onclick="deletePetak(\''.$row->uuid.'\')" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="Hapus"><i class="m--font-danger la la-remove"></i></a>',
-            ];
-        }
-
-        return response()->json([
-            'draw' => intval($request->input('draw')),
-            'recordsTotal' => $total,
-            'recordsFiltered' => $filtered,
-            'data' => $result,
-        ]);
+        return DataTables::of($query)
+            ->addColumn('nama_lokasi', function ($row) {
+                return $row->lokasi ? $row->lokasi->nama : '';
+            })
+            ->addColumn('nama_blok', function ($row) {
+                return $row->blok ? $row->blok->nama : '';
+            })
+            ->addColumn('actions', function ($row) {
+                return '
+                    <a href="javascript:void(0)" onclick="editPetak(\''.$row->uuid.'\')" 
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" 
+                        title="Edit">
+                        <i class="m--font-warning la la-edit"></i>
+                    </a>
+                    <a href="javascript:void(0)" onclick="deletePetak(\''.$row->uuid.'\')" 
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" 
+                        title="Hapus">
+                        <i class="m--font-danger la la-remove"></i>
+                    </a>
+                ';
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
     }
 
     public function store(Request $request)
