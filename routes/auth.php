@@ -25,6 +25,7 @@ Route::prefix('role')->name('role.')->group(function(){
 });
 
 Route::prefix('user')->name('user.')->group(function(){
+    Route::post('/login',[App\Http\Controllers\Auth\UsersController::class, 'cek_login'])->name('login');
     Route::post('/insert',[App\Http\Controllers\Auth\UsersController::class, 'insert'])->name('insert');
     Route::post('/update/{id}',[App\Http\Controllers\Auth\UsersController::class, 'update'])->name('update');
     Route::get('/datatable',[App\Http\Controllers\Auth\UsersController::class, 'datatable'])->name('datatable');

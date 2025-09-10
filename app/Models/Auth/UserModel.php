@@ -2,11 +2,12 @@
 
 namespace App\Models\Auth;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\CreatedUpdatedBy;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 
-class UserModel extends Model
+class UserModel extends Authenticatable
 {
     //
     use CreatedUpdatedBy;
