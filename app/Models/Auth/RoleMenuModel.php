@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class RoleMenuModel extends Model
 {
     //
-    use HasUuid,CreatedUpdatedBy;
+    use CreatedUpdatedBy;
 
     protected $table = 'role_menu';
     protected $primaryKey = 'id_role_menu';

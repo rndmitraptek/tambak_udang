@@ -106,7 +106,7 @@
                                         <option ng-repeat="x in member" value="<% x.id_user %>" ><% x.nama %></option>
                                     </select>
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button"><i class="la la-plus"></i>Tambah Member</button>
+                                        <button ng-click="tambah_member()" class="btn btn-primary" type="button"><i class="la la-plus"></i>Tambah Member</button>
                                     </div>
                                 </div>
                             </div>
@@ -115,30 +115,16 @@
                     <table class="table table-sm m-table m-table--head-bg-brand">
                         <thead class="thead-inverse">
                             <tr>
-                                <th>#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
+                                <th>Nama</th>
                                 <th>Username</th>
+                                <th>action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Jhon</td>
-                                <td>Stone</td>
-                                <td>@jhon</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Lisa</td>
-                                <td>Nilson</td>
-                                <td>@lisa</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
+                            <tr ng-repeat="x in member_role">
+                                <td><% x.nama %></td>
+                                <td><% x.username %></td>
+                                <td><a href="javascript:void(0)" id="hapus" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-danger la la-remove"></i></a></td>
                             </tr>
                         </tbody>
                     </table>

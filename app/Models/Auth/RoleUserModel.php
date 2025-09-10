@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class RoleUserModel extends Model
 {
     //
-    use HasUuid,CreatedUpdatedBy;
+    use CreatedUpdatedBy;
 
     protected $table = 'role_user';
     protected $primaryKey = 'id_role_user';

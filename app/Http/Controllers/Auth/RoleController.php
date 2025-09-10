@@ -92,6 +92,14 @@ class RoleController extends Controller
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
 
+    public function get_user_role_active($id)
+    {
+        $data = DB::select(
+            "SELECT id_user,nama,username from setup_user where id_user in 
+            (select id_user from role_user where id_role = ?)",[$id]);
+        return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
+    }
+
     public function get_user(Request $req)
     {
         $data = RoleUserModel::where('id_role',$req->id_role)->get();

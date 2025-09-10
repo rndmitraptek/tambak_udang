@@ -22,6 +22,7 @@ Route::prefix('role')->name('role.')->group(function(){
     Route::delete('/destroy_user/{uuid}',[App\Http\Controllers\Auth\RoleController::class, 'destroy_user'])->name('delete_user');
     Route::post('/insert_role',[App\Http\Controllers\Auth\RoleController::class, 'insert_role'])->name('insert_role');
     Route::get('/get_user_role/{id}',[App\Http\Controllers\Auth\RoleController::class, 'get_user_role'])->name('get_user_role');
+    Route::get('/get_user_role_active/{id}',[App\Http\Controllers\Auth\RoleController::class, 'get_user_role_active'])->name('get_user_role_active');
 });
 
 Route::prefix('user')->name('user.')->group(function(){

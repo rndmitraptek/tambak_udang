@@ -75,16 +75,34 @@ app.controller("myCtrl", function($scope,$http,API) {
             var tr = $(this).closest('tr');
             var x = table.row(tr).data();
             $scope.input = x;
-            url = "{{ route('auth.role.get_user_role',':id') }}";
-            url = url.replace(':id', x.id_role);
-            $http.get(url).then(function(res){
-                $scope.member = res.data.data;
-                $('#m_member').modal('show');
-            }).catch(function(error) {
-                swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
-            });
+            $scope.id_role = x.id_role;
+            $('#m_member').modal('show');
+            $scope.reload_member_lov();
+            $scope.reload_member_role();
         });
     });
+
+    $scope.member = [];
+    $scope.reload_member_lov = function(){
+        url = "{{ route('auth.role.get_user_role',':id') }}";
+        url = url.replace(':id', $scope.id_role);
+        $http.get(url).then(function(res){
+            $scope.member = res.data.data;
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+    }
+
+    $scope.member_role = [];
+    $scope.reload_member_role = function(){
+        url = "{{ route('auth.role.get_user_role_active',':id') }}";
+        url = url.replace(':id', $scope.id_role);
+        $http.get(url).then(function(res){
+            $scope.member_role = res.data.data;
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+    }
 
     $scope.member = [];
     $scope.input = {};
@@ -139,5 +157,72 @@ app.controller("myCtrl", function($scope,$http,API) {
             return false;
         }
     });
+
+    $scope.tambah_member = function(){
+        $http.post("{{ route('auth.role.insert_role') }}",{
+            id_user : $scope.id_user,
+            id_role : $scope.id_role
+        })
+        .then(function(res){
+            if(res.data.success){
+                swal({
+                    title: "Tersimpan ",text: "Data Role berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                }).then(function(){
+                    $scope.reload_member_lov();
+                    $scope.reload_member_role();
+                })
+            }else{
+                swal({
+                    title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                }).then(function(){
+                    
+                })
+            }
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+    }
+
+    $scope.hapus_member = function(){
+        swal({
+            title: "Apakah Kamu Yakin?",
+            text: "menghapus data ini!",
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "Yes, Hapus!",
+            cancelButtonText: "No, Batal!",
+            reverseButtons: !0
+        }).then(function(e) {
+            if(e.value){
+                swal({title: "Presesing...!",text: "Please Wait",
+                    onOpen: function() {
+                        swal.showLoading()
+                    }
+                })
+                $http.post("{{ route('auth.role.insert_role') }}",{
+                    id_user : $scope.id_user,
+                    id_role : $scope.id_role
+                })
+                .then(function(res){
+                    if(res.data.success){
+                        swal({
+                            title: "Terhapus ",text: "Data Role berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                        }).then(function(){
+                            $('#m_create').modal('hide');
+                            table.ajax.reload(null, false);
+                        })
+                    }else{
+                        swal({
+                            title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                        }).then(function(){
+                            $('#m_create').modal('hide');
+                        })
+                    }
+                }).catch(function(error) {
+                    swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+                });
+            }
+        })
+    }
 });
 </script>
