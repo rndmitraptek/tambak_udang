@@ -129,12 +129,12 @@
                     </div>
 
                     <!-- Petak hanya tampil jika Perpetak -->
-                    <div class="form-group" ng-show="kelompok == 'Perpetak'"  id="petak-group">
+                    {{-- <div class="form-group" ng-show="kelompok == 'Perpetak'"  id="petak-group">
                         <label for="petak">Nama Petak</label>
                         <select class="form-control" id="petak_id" name="petak_id" ng-model="petak_id">
                             <option value="">- Pilih Petak -</option>
                         </select>
-                    </div>
+                    </div> --}}
 
                     <div class="form-group">
                         <label class="m-checkbox" style="margin-top: 10px;">

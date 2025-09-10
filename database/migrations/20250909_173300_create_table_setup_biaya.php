@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('kode')->unique();
             $table->string('nama');
             $table->enum('kelompok', ['Gabungan', 'Perlokasi', 'Perpetak']);
-            $table->unsignedBigInteger('petak_id')->nullable();
             $table->boolean('periode')->default(false);
             $table->decimal('nominal', 15, 2)->nullable();
             $table->unsignedBigInteger('coa_id')->nullable();
@@ -25,7 +24,6 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('coa_id')->references('id')->on('setup_coa')->onDelete('set null');
-            $table->foreign('petak_id')->references('id')->on('setup_petak')->onDelete('set null');
         });
 
         Schema::create('setup_biaya_lokasi', function (Blueprint $table) {

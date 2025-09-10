@@ -102,12 +102,12 @@ $(document).ready(function() {
         });
         }, 100);
     });
-    $.get('/setup-biaya/petak-list', function(res) {
-        $('#petak_id').empty();
-        res.forEach(function(petak) {
-            $('#petak_id').append(`<option value="${petak.id}">${petak.nama_lokasi}-${petak.nama_blok}-${petak.nama_petak}</option>`);
-        });
-    });
+    // $.get('/setup-biaya/petak-list', function(res) {
+    //     $('#petak_id').empty();
+    //     res.forEach(function(petak) {
+    //         $('#petak_id').append(`<option value="${petak.id}">${petak.nama_lokasi}-${petak.nama_blok}-${petak.nama_petak}</option>`);
+    //     });
+    // });
 
     // Tampilkan/hidden lokasi sesuai kelompok
     $('#kelompok').on('change', function() {
@@ -219,8 +219,8 @@ function editBiaya(uuid) {
                 scope.lokasi = lokasiIds;
                 $('#lokasi_id_multi').val(lokasiIds).trigger('change'); // sync select2
             } else if (res.kelompok === 'Perpetak') {
-                scope.petak = res.petak_id;
-                $('#petak_id').val(res.petak_id).trigger('change');
+                // scope.petak = res.petak_id;
+                // $('#petak_id').val(res.petak_id).trigger('change');
             }
         });
         
