@@ -1,6 +1,7 @@
 <script>
 app.controller("myCtrl", function($scope,$http,API) {
     angular.element(document).ready(function () {
+        $scope.vh70 = window.innerHeight * 0.7;
         autosize($("#alamat"));
         table = $("#viewtabel").DataTable({
             processing: true,
@@ -80,7 +81,34 @@ app.controller("myCtrl", function($scope,$http,API) {
             $scope.reload_member_lov();
             $scope.reload_member_role();
         });
+
+        $('#viewtabel tbody').on('click', '#akses', function () {
+            var tr = $(this).closest('tr');
+            var x = table.row(tr).data();
+            $scope.input = x;
+            $scope.id_role = x.id_role;
+            $('#m_akses').modal('show');
+            $scope.reload_menu();
+        });
     });
+
+    $scope.menu = [];
+    $scope.reload_menu = function(){
+        swal({title: "Presesing...!",text: "Please Wait",
+            onOpen: function() {
+                swal.showLoading()
+            }
+        })
+        url = "{{ route('auth.role.get_menu_role',':id') }}";
+        url = url.replace(':id', $scope.id_role);
+        $http.get(url).then(function(res){
+            $scope.menu = res.data.data;
+            swal.close();
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+    }
+
 
     $scope.member = [];
     $scope.reload_member_lov = function(){
@@ -200,17 +228,16 @@ app.controller("myCtrl", function($scope,$http,API) {
                         swal.showLoading()
                     }
                 })
-                $http.post("{{ route('auth.role.insert_role') }}",{
-                    id_user : x.id_user,
-                    id_role : $scope.id_role
-                })
+                url = "{{ route('auth.role.delete_user', ':id') }}";
+                url = url.replace(':id', x.id_role_user);
+                $http.delete(url)
                 .then(function(res){
                     if(res.data.success){
                         swal({
                             title: "Terhapus ",text: "Data Role berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                         }).then(function(){
-                            $('#m_create').modal('hide');
-                            table.ajax.reload(null, false);
+                            $scope.reload_member_lov();
+                            $scope.reload_member_role();
                         })
                     }else{
                         swal({
@@ -225,5 +252,35 @@ app.controller("myCtrl", function($scope,$http,API) {
             }
         })
     }
+
+    $scope.update_menu = function(){
+        swal({title: "Presesing...!",text: "Please Wait",
+            onOpen: function() {
+                swal.showLoading()
+            }
+        })
+        $http.post("{{ route('auth.role.update_menu') }}",{
+            data    : $scope.menu,
+            id_role : $scope.id_role
+        })
+        .then(function(res){
+            if(res.data.success){
+                swal({
+                    title: "Terhapus ",text: "Data Role berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                }).then(function(){
+                    $scope.reload_member_lov();
+                    $scope.reload_member_role();
+                })
+            }else{
+                swal({
+                    title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                }).then(function(){
+                    $('#m_create').modal('hide');
+                })
+            }
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+    } 
 });
 </script>

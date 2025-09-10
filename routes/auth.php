@@ -8,6 +8,7 @@ Route::prefix('menu')->name('menu.')->group(function(){
     Route::post('/update/{uuid}',[App\Http\Controllers\Auth\MenuController::class, 'update'])->name('update');
     Route::get('/datatable',[App\Http\Controllers\Auth\MenuController::class, 'datatable'])->name('datatable');
     Route::delete('/delete/{uuid}',[App\Http\Controllers\Auth\MenuController::class, 'destroy'])->name('delete');
+    Route::get('/menu_parent',[App\Http\Controllers\Auth\MenuController::class, 'menu_parent'])->name('menu_parent');
 });
 
 Route::prefix('role')->name('role.')->group(function(){
@@ -15,11 +16,11 @@ Route::prefix('role')->name('role.')->group(function(){
     Route::post('/update/{uuid}',[App\Http\Controllers\Auth\RoleController::class, 'update'])->name('update');
     Route::get('/datatable',[App\Http\Controllers\Auth\RoleController::class, 'datatable'])->name('datatable');
     Route::delete('/delete/{uuid}',[App\Http\Controllers\Auth\RoleController::class, 'destroy'])->name('delete');
-    Route::get('/get_menu',[App\Http\Controllers\Auth\RoleController::class, 'get_menu'])->name('get_menu');
+    Route::get('/get_menu_role/{id}',[App\Http\Controllers\Auth\RoleController::class, 'get_menu_role'])->name('get_menu_role');
     Route::delete('/destroy_menu/{uuid}',[App\Http\Controllers\Auth\RoleController::class, 'destroy_menu'])->name('delete_menu');
-    Route::post('/insert_menu',[App\Http\Controllers\Auth\RoleController::class, 'insert_menu'])->name('insert_menu');
+    Route::post('/update_menu',[App\Http\Controllers\Auth\RoleController::class, 'update_menu'])->name('update_menu');
     Route::get('/get_user',[App\Http\Controllers\Auth\RoleController::class, 'get_user'])->name('get_user');
-    Route::delete('/destroy_user/{uuid}',[App\Http\Controllers\Auth\RoleController::class, 'destroy_user'])->name('delete_user');
+    Route::delete('/destroy_user/{id}',[App\Http\Controllers\Auth\RoleController::class, 'destroy_user'])->name('delete_user');
     Route::post('/insert_role',[App\Http\Controllers\Auth\RoleController::class, 'insert_role'])->name('insert_role');
     Route::get('/get_user_role/{id}',[App\Http\Controllers\Auth\RoleController::class, 'get_user_role'])->name('get_user_role');
     Route::get('/get_user_role_active/{id}',[App\Http\Controllers\Auth\RoleController::class, 'get_user_role_active'])->name('get_user_role_active');

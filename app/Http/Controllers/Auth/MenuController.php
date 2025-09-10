@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\MenuModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -58,5 +59,33 @@ class MenuController extends Controller
         $benur = MenuModel::where('uuid', $uuid)->firstOrFail();
         $benur->delete();
         return response()->json(['success' => true]);
+    }
+
+    public function menu_parent()
+    {
+        $data = MenuModel::where('is_parent',true)->get();
+        return response()->json(['success' => true,'data'=>$data]);
+    }
+
+    function collectCheckedMenus($menus, &$result = [])
+    {
+        foreach ($menus as $menu) {
+            if (!empty($menu['checked']) && $menu['checked'] === true) {
+                $result[] = [
+                    'id_menu'    => $menu['id_menu'],
+                    'uuid'       => $menu['uuid'],
+                    'label'      => $menu['label'],
+                    'route_link' => $menu['route_link'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            if (!empty($menu['items'])) {
+                $this->collectCheckedMenus($menu['items'], $result);
+            }
+        }
+
+        return $result;
     }
 }

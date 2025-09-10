@@ -91,7 +91,9 @@
                     </div>
                     <div class="form-group m-form__group">
                         <label for="message-text" class="form-control-label" id="id_menu_parent" >parent</label>
-                        <input type="text" class="form-control" name="id_menu_parent" ng-model="input.id_menu_parent">
+                        <select class="form-control" id="id_menu_parent" ng-model="input.id_menu_parent" name="id_menu_parent">
+                            <option ng-repeat="x in menu_parent" value="<% x.id_menu %>" ><% x.label %></option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

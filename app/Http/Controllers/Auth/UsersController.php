@@ -57,22 +57,10 @@ class UsersController extends Controller
             return response()->json(['success'=>false,'data'=>null,'message'=>'password salah']);
         }
         unset($user->password);
-        // auth('web')->login($user);
         Auth::guard('web')->login($user);
         request()->session()->regenerate();
-        $menu_query = DB::select("
-                SELECT mm.id_menu,mm.urut,mm.label,mm.icon,mm.is_parent,mm.id_menu_parent,mm.route_link from setup_user su 
-                inner join role_user ru on su.id_user=ru.id_user
-                inner join role_menu rm on ru.id_role=rm.id_role
-                inner join menu mm on rm.id_menu=mm.id_menu
-                where ru.id_user = ?
-                group by mm.id_menu,mm.urut,mm.label,mm.icon,mm.is_parent,mm.id_menu_parent,mm.route_link",[$user->id_user]);
-        $menu = $this->buildMenuTree($menu_query);
-        $hasil =  array_merge($user->toArray(), [
-            'version' => '_development',
-            'menu' => $menu
-        ]);
-        return response()->json(['success'=>true,'data'=>$hasil,'message'=>'']);
+
+        return response()->json(['success'=>true,'data'=>$user,'message'=>'']);
     }
 
     public function logout(Request $request)

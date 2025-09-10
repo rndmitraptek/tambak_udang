@@ -77,11 +77,22 @@ app.controller("myCtrl", function($scope,$http,API) {
             })
         });
     });
+    $scope.menu_parent = [];
+    $http.get("{{ route('auth.menu.menu_parent') }}")
+    .then(function(res){
+        if(res.data.success){
+            $scope.menu_parent = res.data.data;
+        }
+    }).catch(function(error) {
+        swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+    });
 
     $scope.input = {};
     $scope.edit = false;
     $scope.tambah = function(){
-        $scope.input = {};
+        $scope.input = {
+            icon : 'flaticon-layers'
+        };
         $('#m_create').modal('show');
         $scope.edit = false;
     }

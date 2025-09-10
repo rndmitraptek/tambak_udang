@@ -1,6 +1,14 @@
 @extends('layout')
 @section('css')
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    <style>
+        .menu-tree {
+            list-style-type: none;  /* hilangkan bullet */
+        }
+        .menu-tree li ul {
+            list-style-type: none; /* hilangkan bullet di child */
+        }
+    </style>
 @endsection
 @section('ctrl')
 @include('feature.auth.role.script')
@@ -130,6 +138,62 @@
                     </table>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<!--begin::Modal-->
+<div class="modal fade" id="m_akses" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            {{-- <form id="formInput"> --}}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Akses</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="m-scrollable m-scroller ps" data-scrollbar-shown="true" data-scrollable="true" data-height="<% vh70 %>" style="height: 70vh; overflow: hidden;">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="menu-tree">
+                                    <li ng-repeat="menu in menu">
+                                        <label class="m-checkbox m-checkbox--success">
+                                            <input type="checkbox" ng-model="menu.checked"> <i class="<%menu.icon%>"></i> <%menu.label%>
+                                            <span></span>
+                                        </label>
+                                        <!-- Level 2 -->
+                                        <ul ng-if="menu.items && menu.items.length > 0">
+                                            <li ng-repeat="child1 in menu.items">
+                                                <label class="m-checkbox m-checkbox--success">
+                                                    <input type="checkbox" ng-model="child1.checked"> <i class="<%child1.icon%>"></i> <%child1.label%>
+                                                    <span></span>
+                                                </label>
+
+                                                <!-- Level 3 -->
+                                                <ul ng-if="child1.items && child1.items.length > 0">
+                                                    <li ng-repeat="child2 in child1.items">
+
+                                                        <label class="m-checkbox m-checkbox--success">
+                                                            <input type="checkbox" ng-model="child2.checked"> <i class="<%child2.icon%>"></i> <%child2.label%>
+                                                            <span></span>
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                    <button type="button" ng-click="update_menu()" class="btn btn-primary">Simpan</button>
+                </div>
+            {{-- </form> --}}
         </div>
     </div>
 </div>

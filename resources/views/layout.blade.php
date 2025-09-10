@@ -400,284 +400,57 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-light m-aside-menu--submenu-skin-light " m-menu-vertical="1" m-menu-scrollable="1" m-menu-dropdown-timeout="500" style="position: relative;">
 						<ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow ">
 							<li class="m-menu__item  m-menu__item--active" aria-haspopup="true">
-								<a href="index.html" class="m-menu__link ">
+								<a href="dashboard" class="m-menu__link ">
 									<i class="m-menu__link-icon flaticon-line-graph"></i>
 									<span class="m-menu__link-title">
 										<span class="m-menu__link-wrap">
 											<span class="m-menu__link-text">Dashboard</span>
-											<span class="m-menu__link-badge">
-												<span class="m-badge m-badge--danger">2</span>
-											</span>
 										</span>
 									</span>
 								</a>
 							</li>
 							{{-- SETUP DATA --}}
-							<li class="m-menu__section ">
-								<h4 class="m-menu__section-text">Setup Data</h4>
-								<i class="m-menu__section-icon flaticon-more-v3"></i>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/benur" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Benur</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/lokasi" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Lokasi</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/blok" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Blok Lokasi</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/petak" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Petak</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/pakan" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Pakan</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/customer" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Customer</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/supplier" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Supplier</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/setup_biaya" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Biaya</span>
-								</a>
-							</li>
-							{{-- MANAGEMENT TAMBAK --}}
-							<li class="m-menu__section ">
-								<h4 class="m-menu__section-text">Management Tambak</h4>
-								<i class="m-menu__section-icon flaticon-more-v3"></i>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/siklus" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Setup Siklus</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="javascript:;" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Transaksi</span>
-									<i class="m-menu__ver-arrow la la-angle-right"></i>
-								</a>
-								<div class="m-menu__submenu ">
-									<span class="m-menu__arrow"></span>
-									<ul class="m-menu__subnav">
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/transaksi_biaya" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Biaya</span>
+								{{-- <div>{{ json_encode(Auth::user()) }}</div> --}}
+
+							@foreach (Auth::user()->menu as $menu)
+								<li class="m-menu__section ">
+									<h4 class="m-menu__section-text">{{ $menu->label }}</h4>
+									<i class="m-menu__section-icon flaticon-more-v3"></i>
+								</li>
+								@foreach ($menu->items as $menu1)
+									@if(empty($menu1->items))
+										<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+											<a href="/{{ $menu1->route_link }}" class="m-menu__link m-menu__toggle">
+												<i class="m-menu__link-icon flaticon-layers"></i>
+												<span class="m-menu__link-text">{{ $menu1->label }}</span>
 											</a>
 										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/transaksi_biaya_validasi" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Validasi Biaya</span>
+									@else
+										<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+											<a href="javascript:;" class="m-menu__link m-menu__toggle">
+												<i class="m-menu__link-icon flaticon-layers"></i>
+												<span class="m-menu__link-text">{{ $menu1->label }}</span>
+												<i class="m-menu__ver-arrow la la-angle-right"></i>
 											</a>
+											<div class="m-menu__submenu ">
+												<span class="m-menu__arrow"></span>
+												<ul class="m-menu__subnav">
+													@foreach ($menu1->items as $menu2)
+														<li class="m-menu__item " aria-haspopup="true">
+															<a href="/{{ $menu2->route_link }}" class="m-menu__link ">
+																<i class="m-menu__link-bullet m-menu__link-bullet--dot">
+																	<span></span>
+																</i>
+																<span class="m-menu__link-text">{{ $menu2->label }}</span>
+															</a>
+														</li>
+													@endforeach
+												</ul>
+											</div>
 										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/penaburan_benur" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Penaburan Benur</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Pemberian Pakan</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/simulasi" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Simulasi Siklus</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Stok Pakan</span>
-								</a>
-							</li>
-							{{-- <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/tumbang" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Tumbang</span>
-								</a>
-							</li> --}}
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/panen" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Panen</span>
-								</a>
-							</li>
-							{{-- FINANCE --}}
-							<li class="m-menu__section ">
-								<h4 class="m-menu__section-text">Finance</h4>
-								<i class="m-menu__section-icon flaticon-more-v3"></i>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/po" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">PO Benur</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/pembelian_pakan" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Pembelian Pakan</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Retur Pakan</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Pembayaran Piutang Customer</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Pembayaran Hutang Supplier</span>
-								</a>
-							</li>
-							{{-- AKUNTANSI --}}
-							<li class="m-menu__section ">
-								<h4 class="m-menu__section-text">Akuntansi</h4>
-								<i class="m-menu__section-icon flaticon-more-v3"></i>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="/coa" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">COA</span>
-								</a>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="javascript:;" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Jurnal</span>
-									<i class="m-menu__ver-arrow la la-angle-right"></i>
-								</a>
-								<div class="m-menu__submenu ">
-									<span class="m-menu__arrow"></span>
-									<ul class="m-menu__subnav">
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Cetak Jurnal</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Input Jurnal</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-							<li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-								<a href="javascript:;" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-layers"></i>
-									<span class="m-menu__link-text">Laporan Keuangan</span>
-									<i class="m-menu__ver-arrow la la-angle-right"></i>
-								</a>
-								<div class="m-menu__submenu ">
-									<span class="m-menu__arrow"></span>
-									<ul class="m-menu__subnav">
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Buku Besar</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Neraca Saldo</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Jurnal Penyesuaian</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Neraca Lajur</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Laporan Rugi Laba</span>
-											</a>
-										</li>
-										<li class="m-menu__item " aria-haspopup="true">
-											<a href="/" class="m-menu__link ">
-												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
-													<span></span>
-												</i>
-												<span class="m-menu__link-text">Laporan Neraca</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</li>
+									@endif
+								@endforeach
+							@endforeach
 						</ul>
 					</div>
 					<!-- END: Aside Menu -->

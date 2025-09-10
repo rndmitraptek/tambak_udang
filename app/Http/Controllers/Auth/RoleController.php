@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auth\MenuModel;
 use App\Models\Auth\RoleMenuModel;
 use App\Models\Auth\RoleModel;
 use App\Models\Auth\RoleUserModel;
@@ -71,6 +72,7 @@ class RoleController extends Controller
     public function insert_menu(Request $req){
         $req->validate([
             'id_menu' => 'required',
+            'id_role' => 'required',
         ]);
         $data = $req->all();
         $insert = RoleMenuModel::create($data);
@@ -119,5 +121,64 @@ class RoleController extends Controller
         $benur = RoleUserModel::where('id_role_user', $id)->firstOrFail();
         $benur->delete();
         return response()->json(['success' => true]);
+    }
+
+    public function get_menu_role($id)
+    {
+        $menu_query = MenuModel::all();
+        foreach($menu_query as $index=>$val){
+            $cek = RoleMenuModel::where('id_menu',$val->id_menu)->where('id_role',$id)->first();
+            if($cek){
+                $menu_query[$index]->checked = true;
+            }else{
+                $menu_query[$index]->checked = false;
+            }
+        }
+        $menu = $this->buildMenuTree($menu_query);
+        return response()->json(['success' => true,'data'=>$menu]);
+    }
+
+    function buildMenuTree($menuItems, $parentId=null){
+        $branch = [];
+
+        foreach ($menuItems as $menuItem) {
+            if ($menuItem->id_menu_parent === $parentId) {
+                $children = $this->buildMenuTree($menuItems, $menuItem->id_menu);
+                if ($children) {
+                    $menuItem->items = $children;
+                }
+                $branch[] = $menuItem;
+            }
+        }
+
+        return $branch;
+    }
+
+    function update_menu(Request $req){
+        RoleMenuModel::where('id_role',$req->id_role)->delete();
+        foreach($req->data as $menu){
+            if($menu['checked']){
+                RoleMenuModel::create([
+                    'id_menu' => $menu['id_menu'],
+                    'id_role' => $req->id_role
+                ]);
+            }
+            $this->insert_role_menu($menu['items'],$req->id_role);
+        }
+        return response()->json(['success' => true]);
+    }
+
+    function insert_role_menu($items,$id_role){
+        foreach($items as $item){
+            if($item['checked']){
+                RoleMenuModel::create([
+                    'id_menu' => $item['id_menu'],
+                    'id_role' => $id_role
+                ]);
+            }
+            if(!empty($item['items'])){
+                $this->insert_role_menu($item['items'],$id_role);
+            }
+        }
     }
 }
