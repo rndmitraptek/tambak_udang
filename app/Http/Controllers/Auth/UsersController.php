@@ -41,7 +41,6 @@ class UsersController extends Controller
             'nama' => 'required',
             'username' => 'required',
             'password' => 'required',
-            'keterangan' => 'required',
         ]);
         $data = $req->all();
         $data['password'] = Hash::make($data['password']);
@@ -106,7 +105,6 @@ class UsersController extends Controller
         $req->validate([
             'nama' => 'required',
             'username' => 'required',
-            'keterangan' => 'required',
         ]);
         $data = $req->all();
         unset($data['password']);
