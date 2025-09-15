@@ -16,9 +16,9 @@ return new class extends Migration
             $table->id('id_menu');
             $table->uuid('uuid')->default(DB::raw('gen_random_uuid()'))->unique();
             $table->integer('urut');
-            $table->string('label');
-            $table->string('icon');
-            $table->string('route_link');
+            $table->string('label',100);
+            $table->string('icon',100);
+            $table->string('route_link',100);
             $table->boolean('is_parent');
             $table->integer('id_menu_parent');
             $table->integer('created_by');

@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('auth')
                 ->name('auth.')
                 ->group(base_path('routes/auth.php'));
+            Route::middleware('web')
+                ->prefix('finance')
+                ->name('finance.')
+                ->group(base_path('routes/finance.php'));
         },
         health: '/up',
     )

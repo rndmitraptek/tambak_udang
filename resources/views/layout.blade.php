@@ -95,7 +95,6 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script src="{{ url('/') }}/angularJS/angular.min.js"></script>
   		<script src="{{ url('/') }}/angularJS/app.js"></script>
   		<script src="{{ url('/') }}/template/assets/src/jquery-3.7.1.min.js"></script>
-  		
 		@yield('ctrl')
 	</head>
 	<!-- end::Head -->
@@ -1004,6 +1003,16 @@ License: You must have a valid license purchased only from themeforest(the above
 
 		<!--end::Page Snippets -->
 		@yield('js')
+		<script>
+			$('.general_datepicker').datepicker({
+				autoclose: true,
+				todayHighlight: !0,
+                orientation: "bottom left",
+				todayBtn: "linked",
+                clearBtn: !0,
+				format: "yyyy-mm-dd"
+			})
+		</script>
 	</body>
 	<!-- end::Body -->
 </html>

@@ -333,3 +333,161 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     }
     return s;
 }
+
+app.component('lookUpTable', {
+  bindings: {
+    lookupId: '@',          // id modal (contoh: m_supplier)
+    ajaxUrl: '@',          // url ajax server-side
+    columns: '<',          // definisi kolom
+    pageLength: '<',       // jumlah data per halaman
+    onSelect: '&'          // callback ketika row dipilih
+  },
+  controller: function($scope,$http,API) {
+    var ctrl = this;
+    ctrl.textSearch = "";
+    var tableElem
+    ctrl.$onInit = function() {
+      setTimeout(function(){
+        tableElem = $("#" + ctrl.lookupId+'_datatable');
+        // init DataTable
+        ctrl.dt = tableElem.DataTable({
+          processing: true,
+          serverSide: true,
+          ordering: false,
+          searching: false,
+          lengthChange: false,
+          pageLength: ctrl.pageLength || 5,
+          info: false,
+          ajax: {
+            url: ctrl.ajaxUrl,
+            data: function(d) {
+              d.textSearch = ctrl.textSearch;
+            }
+          },
+          scrollY: "50vh",
+          scrollX: true,
+          scrollCollapse: true,
+          select: { style: 'single' },
+          keys: {
+            keys: [13, 38, 40, 8] // Enter, Up, Down, Backspace
+          },
+          columns: ctrl.columns,
+          // createdRow: function(row) {
+          //   $compile(angular.element(row).contents())($scope);
+          // }
+        });
+
+        // auto select first row setiap kali draw
+        tableElem.on('draw.dt', function() {
+          tableElem.find('tbody tr:first td:first').trigger('click');
+          // ctrl.dt.row('.selected').deselect();
+        });
+
+        // console.log(tableElem);
+        // auto adjust width ketika modal tampil
+        $("#" + ctrl.lookupId).on('shown.bs.modal', function() {
+          // console.log(ctrl.dt)
+          ctrl.dt.columns.adjust().draw();
+          setTimeout(() => {
+            $("#" + ctrl.lookupId + " input[data-role='lookup-search']").focus();
+          },10);
+        });
+
+        // key navigation
+        tableElem.on('key-focus.dt', function(e, datatable, cell) {
+          ctrl.dt.row(cell.index().row).select();
+        });
+
+        // click row = select
+        tableElem.on('click', 'tbody td', function(e) {
+          e.stopPropagation();
+          var data = ctrl.dt.row({ selected: true }).data();
+          if (data ){
+            var rowIdx = ctrl.dt.cell(this).index().row;
+            ctrl.dt.row(rowIdx).select();
+          }
+        });
+
+        // enter
+        tableElem.on('key.dt', function(e, datatable, key, cell, originalEvent){
+            if(key === 13){
+              if (!$("#" + ctrl.lookupId + " input[data-role='lookup-search']").is(":focus")) {
+                  console.log("Input sedang fokus");
+                  $('#'+ctrl.lookupId).modal('hide');
+                  ctrl.selectRow();
+              }
+            }
+            if( key == 8){
+                ctrl.dt.row('.selected').deselect();
+                $("#" + ctrl.lookupId + " input[data-role='lookup-search']").focus();
+            }
+            if( key == 38){
+              $("#" + ctrl.lookupId + " input[data-role='lookup-search']").blur();
+              console.log(key)
+            }
+            if( key == 40){
+              $("#" + ctrl.lookupId + " input[data-role='lookup-search']").blur();
+              console.log(key)
+            }
+        });
+
+        tableElem.on('dblclick', 'tbody td', function(e){
+            $('#'+ctrl.lookupId).modal('hide');
+            ctrl.selectRow();
+        });
+
+      },500);
+
+    };
+
+    // fungsi pencarian
+    ctrl.searchData = function() {
+      ctrl.dt.draw();
+      setTimeout(function(){
+        tableElem.find('tbody tr:first td:first').trigger('click');
+      },500);
+    };
+
+    // pilih row dan trigger callback
+    ctrl.selectRow = function() {
+      var data = ctrl.dt.row({ selected: true }).data();
+      if (data && ctrl.onSelect) {
+        ctrl.onSelect({ row: data });
+      }
+    };
+  },
+  template: `
+    <div class="modal fade" id="<% $ctrl.lookupId %>" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Lookup Table</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group m-form__group" style="margin-bottom:0">
+              <div class="input-group">
+                <input type="text"
+                  id="<% $ctrl.lookupId %>_text_search"
+                  class="form-control"
+                  placeholder="Search..."
+                  ng-model="$ctrl.textSearch"
+                  data-role="lookup-search"
+                  focus-me="$ctrl.setFocusSearch"
+                  ng-keyup="$event.keyCode==13 && $ctrl.searchData()">
+                <div class="input-group-append">
+                  <button class="btn btn-info" type="button" ng-click="$ctrl.searchData()">
+                    <i class="la la-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <table class="table table-sm m-table m-table--head-bg-brand table-striped- table-bordered table-hover table-checkable" id="<% $ctrl.lookupId %>_datatable"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+});
