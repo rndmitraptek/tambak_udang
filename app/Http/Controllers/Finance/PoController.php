@@ -20,7 +20,13 @@ class PoController extends Controller
 
     public function datatable()
     {
-        $query = PoModel::query();
+        $query = PoModel::query()
+            ->join('setup_supplier', 'setup_supplier.id', '=', 'po_benur.id_supplier')
+            ->join('setup_lokasi', 'setup_lokasi.id', '=', 'po_benur.id_lokasi')
+            ->select([
+                'po_benur.uuid', 'po_benur.no_po', 'setup_supplier.uuid as uuid_supplier', 'po_benur.tanggal_po','po_benur.tanggal_kirim','po_benur.supplier','po_benur.lokasi',
+                'setup_lokasi.uuid as uuid_lokasi', 'po_benur.qty', 'po_benur.harga_satuan', 'po_benur.total','po_benur.keterangan',
+            ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {
                 return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>

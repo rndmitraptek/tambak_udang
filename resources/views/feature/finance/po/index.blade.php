@@ -148,11 +148,13 @@
     </div>
 </div>
 
+<!--end::Modal-->
+
 <look-up-table
       lookup-id="lookup_supplier"
       ajax-url="{{ route('finance.po.supplier') }}"
       columns="supplierColumns"
-      page-length="4"
+      page-length="8"
       on-select="selectSupplier(row)">
 </look-up-table>
 
