@@ -20,5 +20,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/get_po',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_po'])->name('get_po');
         Route::get('/get_petak/{uuid_lokasi}',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_petak'])->name('get_petak');
         Route::get('/get_benur',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_benur'])->name('get_benur');
+        Route::get('/get_detail/{uuid}',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_detail'])->name('get_detail');
+        
     });
 });
