@@ -120,6 +120,8 @@ class PenaburanBenurController extends Controller
             $data = $d;
             $data['id_benur'] = $benur->id;
             $data['id_petak'] = $petak->id;
+            $data['nama_petak'] = $petak->nama;
+            $data['kode_supplier'] = $d['kode_benur'];
             $data['id_penaburan_benur'] = $penaburanBenur->id_penaburan_benur;
             $insert = penaburanBenurDetailModel::create($data);
         }
@@ -131,5 +133,21 @@ class PenaburanBenurController extends Controller
         $benur = penaburanBenurModel::where('uuid', $uuid)->firstOrFail();
         $benur->delete();
         return response()->json(['success' => true]);
+    }
+
+    public function get_detail($uuid){
+        $penaburan = penaburanBenurModel::where('uuid',$uuid)->first();
+        $detail = penaburanBenurDetailModel::where('id_penaburan_benur',$penaburan->id_penaburan_benur)
+            ->join('setup_benur','penaburan_benur_detail.id_benur','=','setup_benur.id')
+            ->join('setup_petak','penaburan_benur_detail.id_petak','=','setup_petak.id')
+            ->join('setup_blok','setup_petak.blok_id','=','setup_blok.id')
+            ->select([
+                'setup_blok.nama as blok','setup_petak.nama as petak','setup_petak.uuid as uuid_petak','setup_benur.uuid as uuid_benur',
+                'penaburan_benur_detail.kode_supplier as kode_benur','jenis_benur',
+                'harga_bruto','jumlah_bruto','subtotal_bruto',
+                'harga_neto','jumlah_neto','subtotal_neto',
+                'harga_actual','jumlah_actual','subtotal_actual',
+            ])->get();
+        return response()->json(['success'=>true,'data'=>$detail,'message'=>'']);
     }
 }
