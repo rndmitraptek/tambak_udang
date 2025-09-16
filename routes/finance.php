@@ -1,4 +1,6 @@
 <?php
+
+use App\Models\ManajemenTambak\penaburanBenurModel;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -9,5 +11,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('/delete/{uuid}',[App\Http\Controllers\Finance\PoController::class, 'destroy'])->name('delete');
         Route::get('/supplier',[App\Http\Controllers\Finance\PoController::class, 'supplier'])->name('supplier');
         Route::get('/lokasi',[App\Http\Controllers\Finance\PoController::class, 'lokasi'])->name('lokasi');
+    });
+    Route::prefix('penaburan')->name('penaburan.')->group(function(){
+        Route::post('/insert',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'insert'])->name('insert');
+        Route::post('/update/{uuid}',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'update'])->name('update');
+        Route::get('/datatable',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'datatable'])->name('datatable');
+        Route::delete('/delete/{uuid}',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'destroy'])->name('delete');
+        Route::get('/get_po',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_po'])->name('get_po');
+        Route::get('/get_petak/{uuid_lokasi}',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_petak'])->name('get_petak');
+        Route::get('/get_benur',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_benur'])->name('get_benur');
     });
 });

@@ -3,7 +3,7 @@
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('ctrl')
-@include('feature.finance.po.script')
+@include('feature.manajemen-tambak.penaburan-benur.script')
 @endsection
 
 @section('content')
@@ -52,43 +52,6 @@
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        <thead>
-                            <tr>
-                                <th>No Penaburan Benur</th>
-                                <th>Tanggal Penaburan Benur</th>
-                                <th>No PO</th>
-                                <th>Lokasi</th>
-                                <th>Total Bruto</th>
-                                <th>Total Neto</th>
-                                <th>Total Actual</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>PB202508001</td>
-                                <td>2025-08-26</td>
-                                <td>PO202508003</td>
-                                <td>Sekuro</td>
-                                <td>23.000.000</td>
-                                <td>30.000.000</td>
-                                <td>31.000.000</td>
-                                <td>Penaburan </td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>PB202508002</td>
-                                <td>2025-08-26</td>
-                                <td>PO202508003</td>
-                                <td>Sekuro</td>
-                                <td>12.000.000</td>
-                                <td>13.000.000</td>
-                                <td>21.000.000</td>
-                                <td>Penaburan </td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -109,7 +72,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button ng-click="simpan()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-save"></i>
                                         <span>Simpan Transaksi</span>
@@ -128,60 +91,65 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <form>
+                    <form id="formInput">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">No Penaburan Benur</label>
-                                    <input type="text" class="form-control" id="recipient-name" value="PO202508003" readonly>
+                                    <input type="text" class="form-control" id="no_penaburan_benur" nama="no_penaburan_benur" ng-model="input.no_penaburan_benur">
                                 </div>
                                 <div class="form-group">
-                                    <label for="recipient-name" class="form-control-label">Tanggal</label>
-                                    <input type="date" class="form-control" id="recipient-name" value="2025-08-26">
+                                    <label for="recipient-name" class="form-control-label">Tanggal Penaburan</label>
+                                    <input type="text" class="form-control general_datepicker" id="tanggal_penaburan" name="tanggal_penaburan" ng-model="input.tanggal_penaburan" >
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">
                                     <label>Pillih PO</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search for...">
+                                        <input type="text" class="form-control" ng-model="input.no_po" name="no_po" placeholder="Search for...">
                                         <div class="input-group-append">
-                                            <button ng-click="cari_supplier()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
+                                            <button ng-click="cari_po()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group m-form__group">
-                                    <label for="exampleSelect1">Lokasi</label>
-                                    <input type="text" class="form-control" id="recipient-name" value="Sekuro" readonly>
+                                    <label for="exampleSelect1">supplier</label>
+                                    <input type="text" class="form-control" ng-model="input.supplier" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Lokasi</label>
+                                    <input type="text" class="form-control" ng-model="input.lokasi" readonly>
+                                </div>
+                                <div class="form-group m-form__group">
                                     <label for="exampleTextarea">Keterangan</label>
-                                    <textarea class="form-control" rows="4"></textarea>
+                                    <textarea class="form-control" ng-model="input.keterangan" rows="4"></textarea>
                                 </div>
                             </div>
                         </div>
                         <hr/>
                         <div class="row">
                             <div class="col-lg-12">
-                                <a href="#" class="btn btn-outline-primary btn-sm m-btn m-btn--icon mb-2">
+                                <button type="button" ng-click="add_petak()" class="btn btn-outline-primary btn-sm m-btn m-btn--icon mb-2">
                                     <span>
                                         <i class="la la-plus"></i>
-                                        <span>Benur</span>
+                                        <span>PETAK</span>
                                     </span>
-                                </a>
-                                <table class="table table-striped- table-bordered table-hover table-checkable">
+                                </button>
+                                <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
                                     <thead>
                                     <tr>
-                                            <th colspan="3" class="text-center">Item</th>
+                                            <th colspan="4" class="text-center">Item</th>
                                             <th colspan="3" class="text-center">Bruto</th>
                                             <th colspan="3" class="text-center">Neto</th>
                                             <th colspan="3" class="text-center">Actual</th>
                                             <th style="width:40px"></th>
                                         </tr>
                                         <tr>
-                                            <th>Kolam</th>
+                                            <th>Blok</th>
+                                            <th>Petak</th>
                                             <th>Kode Benur</th>
                                             <th>Jenis Benur</th>
                                             <th>Harga</th>
@@ -197,63 +165,36 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Kolam 001</td>
-                                            <td>BEN001</td>
-                                            <td>Benur Super</td>
-                                            <td class="text-right">2.000</td>
-                                            <td class="text-right">10.000</td>
-                                            <td class="text-right">20.000.000</td>
-                                           <td class="text-right">1.000</td>
-                                            <td class="text-right">20.000</td>
-                                            <td class="text-right">20.000.000</td>
-                                            <td class="text-right">2.000</td>
-                                            <td class="text-right">10.000</td>
-                                            <td class="text-right">20.000.000</td>
-                                            <td ><a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove m--font-danger"></i></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Kolam 002</td>
-                                            <td>BEN002</td>
-                                            <td>Benur Medium</td>
-                                            <td class="text-right">5.000</td>
-                                            <td class="text-right">1.000</td>
-                                            <td class="text-right">5.000.000</td>
-                                            <td class="text-right">5.000</td>
-                                            <td class="text-right">1.000</td>
-                                            <td class="text-right">5.000.000</td>
-                                            <td class="text-right">5.000</td>
-                                            <td class="text-right">1.000</td>
-                                            <td class="text-right">5.000.000</td>
-                                            <td ><a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove m--font-danger"></i></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Kolam 003</td>
-                                            <td>BEN003</td>
-                                            <td>Benur Biasa</td>
-                                            <td class="text-right">1.000</td>
-                                            <td class="text-right">5.000</td>
-                                            <td class="text-right">5.000.000</td>
-                                            <td class="text-right">1.000</td>
-                                            <td class="text-right">5.000</td>
-                                            <td class="text-right">5.000.000</td>
-                                            <td class="text-right">1.000</td>
-                                            <td class="text-right">5.000</td>
-                                            <td class="text-right">5.000.000</td>
-                                            <td ><a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove m--font-danger"></i></a></td>
+                                        <tr ng-repeat="item in detail">
+                                            <td><% item.blok %></td>
+                                            <td><% item.petak %></td>
+                                            <td>
+                                            <button type="button" ng-class="{'btn btn-outline-brand btn-sm':item.kode_benur != '','btn btn-outline-danger btn-sm':item.kode_benur == ''}" class="btn btn-outline-brand btn-sm" style="padding: 3px;" ng-click="change_benur($index)"><% item.kode_benur=='' ? 'pillih kode benur' : item.kode_benur%></button>
+                                            </td>
+                                            <td><% item.jenis_benur %></td>
+                                            <td class="text-right"><input style="width: 60px" class="text-right" type="text" input-currency ng-model="item.harga_bruto" ng-change="hitung()"></td>
+                                            <td class="text-right"><input style="width: 90px;" class="text-right" type="text" input-currency ng-model="item.jumlah_bruto" ng-change="hitung()"></td>
+                                            <td class="text-right"><input style="width: 120px;" class="text-right" type="text" input-currency ng-model="item.subtotal_bruto" readonly></td>
+                                            <td class="text-right"><input style="width: 60px" class="text-right" type="text" input-currency ng-model="item.harga_neto" ng-change="hitung()"></td>
+                                            <td class="text-right"><input style="width: 90px;"  class="text-right" type="text" input-currency ng-model="item.jumlah_neto" ng-change="hitung()"></td>
+                                            <td class="text-right"><input style="width: 120px;" class="text-right" type="text" input-currency ng-model="item.subtotal_neto" readonly></td>
+                                            <td class="text-right"><input style="width: 60px" class="text-right" type="text" input-currency ng-model="item.harga_actual" ng-change="hitung()"></td>
+                                            <td class="text-right"><input style="width: 90px;"  class="text-right" type="text" input-currency ng-model="item.jumlah_actual" ng-change="hitung()"></td>
+                                            <td class="text-right"><input style="width: 120px;" class="text-right" type="text" input-currency ng-model="item.subtotal_actual" readonly></td>
+                                            <td ><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="remove" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="4" class="text-right">Total</th>
-                                            <th class="text-right">16.000</th>
-                                            <th class="text-right">30.000.000</th> 
+                                            <th colspan="5" class="text-right">Total</th>
+                                            <th class="text-right"><% total_jumlah_bruto | currency:'' %></th>
+                                            <th class="text-right"><% total_harga_bruto | currency:'' %></th> 
                                             <th  class="text-right">Total</th>
-                                            <th class="text-right">26.000</th>
-                                            <th class="text-right">30.000.000</th> 
+                                            <th class="text-right"><% total_jumlah_neto | currency:'' %></th>
+                                            <th class="text-right"><% total_harga_neto | currency:'' %></th> 
                                             <th  class="text-right">Total</th>
-                                            <th class="text-right">16.000</th>
-                                            <th class="text-right">30.000.000</th> 
+                                            <th class="text-right"><% total_jumlah_actual | currency:'' %></th>
+                                            <th class="text-right"><% total_harga_actual | currency:'' %></th>
                                             <th></th>
                                         </tr>
                                     </tfoot>
@@ -268,67 +209,61 @@
 </div>
 
 <!--begin::Modal-->
-<div class="modal fade" id="m_supplier" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="m_petak" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Data PO</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Pillih Petak</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group m-form__group">
-                    <label>Cari PO</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for...">
-                        <div class="input-group-append">
-                            <button class="btn btn-info" type="button"><i class="la la-search"></i></button>
-                        </div>
-                    </div>
-                </div>
                 <table class="table table-striped- table-bordered table-hover table-checkable">
                     <thead>
-                            <tr>
-                                <th>No PO</th>
-                                <th>Tanggal PO</th>
-                                <th>Supplier</th>
-                                <th>Lokasi</th>
-                                <th>Jumlah Item</th>
-                                <th>Total</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>PO202508002</td>
-                                <td>2025-08-26</td>
-                                <td>Supriyadi - PT. BENUR JAYA</td>
-                                <td>Sekuro</td>
-                                <td>3</td>
-                                <td>30.000.000</td>
-                                <td>Benur untuk di kirim ke sekuro </td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>PO202508001</td>
-                                <td>2025-08-26</td>
-                                <td>Sudarsono - PT. NUSANTARA UDANG</td>
-                                <td>Bandengan</td>
-                                <td>4</td>
-                                <td>35.000.000</td>
-                                <td>benur yang kualitas tinggi</td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
+                        <tr>
+                            <th>#</th>
+                            <th>Blok</th>
+                            <th>Petak</th>
+                            <th>Luas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat='item in data_petak'>
+                            <td><input ng-model="item.checked" type="checkbox"></td>
+                            <td><% item.blok %></td>
+                            <td><% item.petak %></td>
+                            <td><% item.luas %></td>
+                        </tr>
+                    </tbody>
                 </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" ng-click="add_detail()" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
 </div>
 
 <!--end::Modal-->
+
+<look-up-table
+      lookup-id="lookup_po"
+      ajax-url="{{ route('finance.penaburan.get_po') }}"
+      columns="poColumns"
+      page-length="8"
+      on-select="selectPo(row)">
+</look-up-table>
+
+<look-up-table
+      lookup-id="lookup_benur"
+      ajax-url="{{ route('finance.penaburan.get_benur') }}"
+      columns="benurColumns"
+      page-length="8"
+      on-select="selectBenur(row)">
+</look-up-table>
+
 @endsection
 
 @section('js')

@@ -29,6 +29,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             var tr = $(this).closest('tr');
             var x = table.row(tr).data();
             $scope.input = x;
+            $scope.input.nama_supplier = x.supplier;
             $scope.edit = true;
             $scope.form = "input";
             $scope.$apply();
@@ -59,7 +60,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                     .then(function(res){
                         if(res.data.success){
                             swal({
-                                title: "Terhapus ",text: "Data Menu berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                                title: "Terhapus ",text: "Data PO berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                             }).then(function(){
                                 $('#m_create').modal('hide');
                                 table.draw();
@@ -86,11 +87,13 @@ app.controller("myCtrl", function($scope,$http,API) {
         { data: 'kode', title: 'Kode' },
         { data: 'nama', title: 'Nama' }
     ];
-
+    $scope.id_lokasi = null;
     $scope.selectSupplier = function(row) {
         console.log(row);
         $scope.input.uuid_supplier = row.uuid;
         $scope.input.nama_supplier = row.nama;
+        $scope.id_lokasi = row.id_lokasi;
+        
         $scope.$apply();
     };
 
