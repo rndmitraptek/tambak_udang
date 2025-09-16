@@ -26,6 +26,23 @@ app.controller("myCtrl", function($scope,$http) {
             var x = table.row(tr).data();
             $scope.input = x;
             $scope.input.nama_supplier = x.supplier;
+            url = "{{ route('finance.penaburan.get_detail',':uuid') }}"
+            url = url.replace(':uuid', x.uuid)
+            swal({title: "Presesing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
+                }
+            })
+            $http.get(url)
+            .then(function(res){
+                if(res.data.success){
+                    $scope.detail = res.data.data;
+                    $scope.hitung();
+                }
+                Swal.close();
+            }).catch(function(error) {
+                swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+            });
             $scope.edit = true;
             $scope.form = "input";
             $scope.$apply();

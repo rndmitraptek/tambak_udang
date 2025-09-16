@@ -52,36 +52,6 @@
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        <thead>
-                            <tr>
-                                <th>No Panen</th>
-                                <th>Tanggal Panen</th>
-                                <th>Siklus</th>
-                                <th>Lokasi</th>
-                                <th>Kolam</th>
-                                <th>Luas</th>
-                                <th>Total</th>
-                                <th>Harga Per Kg</th>
-                                <th>Biomass</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>PN2025100001</td>
-                                <td>2025-10-31</td>
-                                <td>2025-10-01 sd 2025-12-31</td>
-                                <td>Sekuro</td>
-                                <td>Kolam 003</td>
-                                <td>500</td>
-                                <td>55.000.000</td>
-                                <td>200.000</td>
-                                <td>3.000 kg</td>
-                                <td>panen karna kurang berkembang</td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
