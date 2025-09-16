@@ -29,6 +29,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('siklus_id')->index();
             $table->unsignedBigInteger('petak_id')->index();
+            $table->string('status_panen')->default('AKTIF'); // AKTIF, PARTIAL, FINAL
+            $table->timestamps();
 
             $table->foreign('siklus_id')->references('id')->on('setup_siklus')->onDelete('cascade');
             $table->foreign('petak_id')->references('id')->on('setup_petak')->onDelete('cascade');

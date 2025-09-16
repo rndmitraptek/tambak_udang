@@ -29,7 +29,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             .then(function(res){
                 if(res.data.success){
                     swal({
-                        title: "Login Berhasil ",text: "username dan password cocok!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                        title: "Login Berhasil ",text: "username dan password cocok!",type: "success",confirmButtonClass: "btn btn-primary m-btn m-btn--wide"
                     }).then(function(){
                         window.location.href = "{{ url('lokasi') }}";
                     })

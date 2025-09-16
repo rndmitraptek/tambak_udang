@@ -57,7 +57,13 @@ $(document).ready(function() {
             },
             { data: 'nama_blok', name: 'nama_blok' },
             { data: 'nama_petak', name: 'nama_petak' },
-            { data: 'luas', name: 'luas' },
+            { 
+                data: 'luas', 
+                name: 'luas',
+                render: function(data, type, row) {
+                    return  parseInt(data).toLocaleString('id-ID');
+                }
+            },
             { data: 'keterangan', name: 'keterangan' },
         ]
     });

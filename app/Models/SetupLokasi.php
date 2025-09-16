@@ -31,4 +31,9 @@ class SetupLokasi extends Model
             }
         });
     }
+
+    public function siklus()
+    {
+        return $this->hasMany(SetupSiklus::class, 'lokasi_id');
+    }
 }

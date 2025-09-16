@@ -41,6 +41,19 @@ class SiklusController extends Controller
             ->make(true);
     }
 
+    public function all()
+    {
+        return SetupSiklus::with('lokasi:id,nama')->get(['id','nama','lokasi_id']);
+    }
+
+    public function petak($id)
+    {
+        return SetupSiklusPetak::where('siklus_id', $id)
+            ->with('petak:id,nama')
+            ->get()
+            ->pluck('petak');
+    }
+
     // Data untuk tabel siklus
     public function data()
     {

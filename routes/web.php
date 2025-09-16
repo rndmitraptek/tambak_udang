@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/master.php';
+require __DIR__.'/manajemen-tambak.php';
 
 Route::get('/', [App\Http\Controllers\Auth\UsersController::class,'login']);
 Route::get('login', [App\Http\Controllers\Auth\UsersController::class,'login'])->name('login');

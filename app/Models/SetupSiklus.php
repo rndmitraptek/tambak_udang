@@ -53,6 +53,6 @@ class SetupSiklus extends Model
             'setup_siklus_petak',
             'siklus_id',
             'petak_id'
-        );
+        )->withTimestamps();
     }
 }

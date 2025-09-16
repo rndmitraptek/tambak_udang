@@ -105,6 +105,10 @@ Route::prefix('setup-siklus')->group(function () {
     Route::get('/', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'index'])->name('siklus.index');
     Route::get('/lokasi-list', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'lokasiList'])->name('siklus.lokasi-list');
     Route::get('/petak-list', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'petakList'])->name('siklus.petak-list');
+    // semua siklus
+    Route::get('/all', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'all']);
+    // petak berdasarkan siklus
+    Route::get('/{id}/petak', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'petak']);
     Route::get('/data', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'data'])->name('siklus.data');
     Route::post('/store', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'store'])->name('siklus.store');
     Route::get('/show/{uuid}', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'show'])->name('siklus.show');

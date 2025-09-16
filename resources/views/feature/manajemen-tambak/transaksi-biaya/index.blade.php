@@ -63,26 +63,6 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>TR2025082900001</td>
-                                <td>2025-10-01 sd 2025-12-31</td>
-                                <td>2025-10-31</td>
-                                <td>Biaya Gaji Pegawai Sekuro</td>
-                                <td>25.000.000</td>
-                                <td>pembayaran gaji pegawai sekuro bulan oktober </td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>TR2025082900002</td>
-                                <td>2025-10-01 sd 2025-12-31</td>
-                                <td>2025-10-31</td>
-                                <td>Biaya Gaji Pegawai Semarang</td>
-                                <td>30.000.000</td>
-                                <td>pembayaran gaji pegawai semarang bulan oktober </td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -103,7 +83,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button id="btn-simpan" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-save"></i>
                                         <span>Simpan Transaksi</span>
@@ -122,18 +102,24 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <form>
+                    <form id="formTransaksi">
+                        <input type="hidden" id="uuid" name="uuid">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">No Transaksi</label>
-                                    <input type="text" class="form-control" id="recipient-name" value="TR2025082900003" readonly>
+                                    <input type="text" class="form-control" id="no_transaksi" name="no_transaksi" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Tanggal Transaksi</label>
-                                    <input type="date" class="form-control" id="recipient-name" value="2025-08-01" readonly>
+                                    <input type="text" class="form-control" id="tanggal_transaksi" name="tanggal_transaksi" value="{{ date('Y-m-d') }}" autocomplete="off" required>
                                 </div>
-                                <div class="form-group m-form__group">
+                                <div class="form-group">
+                                    <label for="exampleSelect1">Biaya</label>
+                                    <select id="biaya-dropdown" class="form-control"></select>
+                                    <div id="biaya-detail"></div>
+                                </div>
+                                {{-- <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Biaya</label>
                                     <select class="form-control" id="exampleSelect1">
                                         <option>Biaya Gaji Pegawai Sekuro</option>
@@ -154,71 +140,58 @@
                                         <option>2025-06-01 sd 2025-09-31</option>
                                         <option>2025-10-01 sd 2025-12-31</option>
                                     </select>
-                                </div>                                
-                                <div class="row">
+                                </div>--}}
+                                <div class="row" id="periode-biaya" style="display: none;">
                                     <div class="col-lg-6">
                                         <div class="form-group m-form__group">
                                             <label for="exampleSelect1">Tanggal Mulai</label>
-                                            <input type="date" class="form-control" id="exampleSelect1" value="2025-10-01">
+                                            <input type="text" class="form-control" id="tanggal_mulai" name="tanggal_mulai" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group m-form__group">
                                             <label for="exampleSelect1">Tanggal Selesai</label>
-                                            <input type="date" class="form-control" id="exampleSelect1" value="2025-10-31">
+                                            <input type="text" class="form-control" id="tanggal_selesai" name="tanggal_selesai" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Nominal</label>
-                                    <input type="text" class="form-control text-right" id="recipient-name" value="0" >
+                                    <input type="text" class="form-control text-right" id="nominal" name="nominal" value="0" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleSelect1">COA Pasangan Biaya</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option value=""></option>
-                                        <option ng-repeat="akun in coa"><% akun.kode_akun %> - <% akun.nama_akun %></option>
+                                    <select class="form-control" id="coa_id" name="coa_id">
+                                        <!-- Diisi dari AJAX -->
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="form-control-label" >Keterangan</label>
+                                    <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-8" style="border-left: 1px solid #ccc;">
-                                <table class="table table-striped- table-bordered table-hover table-checkable" ng-if="lokasi != ''">
+                                <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabelpetak">
                                     <thead>
                                         <tr>
+                                            <th>ID Siklus</th>
+                                            <th>ID Petak</th>
                                             <th>Lokasi</th>
-                                            <th>Kolam</th>
+                                            <th>Petak</th>
                                             <th>Status</th>
                                             <th>Luas</th>
                                             <th>Persen</th>
-                                            <th>biaya perkolam</th>
+                                            <th>biaya perpetak</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tfoot>
                                         <tr>
-                                            <td>Sekuro</td>
-                                            <td>Kolam 001</td>
-                                            <td>Active</td>
-                                            <td>1.000</td>
-                                            <td>33,33%</td>
-                                            <td>8.333.333,33</td>
+                                            <th colspan="5" style="text-align:right">Total:</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
                                         </tr>
-                                        <tr>
-                                            <td>Sekuro</td>
-                                            <td>Kolam 002</td>
-                                            <td>Active</td>
-                                            <td>2.000</td>
-                                            <td>66,67%</td>
-                                            <td>16.666.666,67</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sekuro</td>
-                                            <td>Kolam 003</td>
-                                            <td>Panen</td>
-                                            <td>500</td>
-                                            <td>0%</td>
-                                            <td>0</td>
-                                        </tr>
-                                    </tbody>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -290,7 +263,7 @@
 @section('js')
 <!--begin::Page Vendors -->
 <script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
-
+<script src="{{ url('/') }}/template/assets/src/jquery.validate.min.js"></script>
 <!--end::Page Vendors -->
 
 <!--begin::Page Resources -->

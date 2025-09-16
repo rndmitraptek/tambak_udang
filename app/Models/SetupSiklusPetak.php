@@ -13,9 +13,8 @@ class SetupSiklusPetak extends Model
     protected $fillable = [
         'siklus_id',
         'petak_id',
+        'status_panen'
     ];
-
-    public $timestamps = false; // tabel ini tidak punya created_at/updated_at
 
     public function siklus()
     {
