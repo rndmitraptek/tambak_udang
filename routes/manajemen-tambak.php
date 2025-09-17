@@ -14,3 +14,14 @@ Route::prefix('transaksi-biaya')->group(function() {
     Route::post('/validasi/{uuid}', [TransaksiBiayaController::class, 'action_validasi'])->name('transaksi-biaya.validasi');
     Route::delete('/{uuid}', [TransaksiBiayaController::class, 'destroy'])->name('transaksi-biaya.destroy');
 });
+
+Route::prefix('panen')->name('panen.')->group(function(){
+    Route::post('/insert',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'insert'])->name('insert');
+    Route::post('/update/{uuid}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'update'])->name('update');
+    Route::get('/datatable',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'datatable'])->name('datatable');
+    Route::delete('/delete/{uuid}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'destroy'])->name('delete');
+    Route::get('/get_siklus',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_siklus'])->name('get_siklus');
+    Route::get('/get_blok/{uuid_lokasi}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_blok'])->name('get_blok');
+    Route::get('/get_petak/{uuid_blok}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_petak'])->name('get_petak');
+    Route::get('/get_detail/{uuid}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_detail'])->name('get_detail');
+});

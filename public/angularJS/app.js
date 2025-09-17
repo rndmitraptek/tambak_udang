@@ -381,6 +381,11 @@ app.component('lookUpTable', {
         tableElem.on('draw.dt', function() {
           tableElem.find('tbody tr:first td:first').trigger('click');
           // ctrl.dt.row('.selected').deselect();
+          setTimeout(() => {
+            if($("#" + ctrl.lookupId + " input[data-role='lookup-search']").val().trim() != "" ){
+              $("#" + ctrl.lookupId + " input[data-role='lookup-search']").blur();
+            }
+          },100);
         });
 
         // console.log(tableElem);

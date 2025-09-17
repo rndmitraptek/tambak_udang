@@ -35,7 +35,9 @@ class PanenController extends Controller
 
     public function get_siklus()
     {
-        $data = SetupSiklus::where('staus','OPEN')->get();
+        $data = SetupSiklus::where('status','OPEN')
+        ->join('setup_lokasi','setup_siklus.id_lokasi','=','setup_lokasi.id')
+        ->select(['setup_lokasi.nama as lokasi','setup_siklus.uuid','setup_siklus.nama'])->get();
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
 
