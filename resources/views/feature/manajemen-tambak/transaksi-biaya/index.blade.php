@@ -157,7 +157,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Nominal</label>
-                                    <input type="text" class="form-control text-right" id="nominal" name="nominal" value="0" required>
+                                    <input type="text" class="form-control text-right" id="nominal" name="nominal" input-currency ng-model="nominal" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleSelect1">COA Pasangan Biaya</label>
