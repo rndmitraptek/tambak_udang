@@ -21,7 +21,9 @@ return new class extends Migration
             $table->text('keterangan')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
+            $table->unsignedBigInteger('validated_by')->nullable();
             $table->timestamps();
+            $table->timestamp('validated_at')->nullable();
             $table->softDeletes();
 
             // relasi ke tabel lain jika ada

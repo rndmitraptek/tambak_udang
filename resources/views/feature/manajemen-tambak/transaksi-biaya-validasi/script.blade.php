@@ -1,14 +1,19 @@
 <script>
 app.controller("myCtrl", function($scope,$http) {
-    $scope.input = {};
     angular.element(document).ready(function () {
         autosize($("#alamat"));
     });
     $scope.tes = "tes";
     $scope.form = "list";
+    // $('#viewtabel').on('click', '.checklist', function () {
+    //     let table = $('#viewtabel').DataTable();
+    //     let rowData = table.row($(this).closest('tr')).data();
+    //     $scope.$apply(function () {
+    //          $scope.tambah();
+    //     });
+    // });
     $scope.tambah = function(){
         $scope.form = "input";
-        formTransaksi.reset();
     }
     $scope.kembali = function(){
         $scope.form = "list";
@@ -33,6 +38,7 @@ app.controller("myCtrl", function($scope,$http) {
         { "kode_akun": "41",  "nama_akun": "Pendapatan Penjualan","tipe_akun": "Revenue", "pos_laporan": "Laba Rugi","saldo_normal": "Kredit","kode_parent": "4" },
     ]
 });
+
 
 var tablePetak;
 
@@ -316,7 +322,7 @@ $(document).ready(function() {
     var table = $('#viewtabel').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "/transaksi-biaya/data",
+        ajax: "/transaksi-biaya/data?type=validasi",
         columns: [
             { data: 'no_transaksi', name: 'no_transaksi' },
             { data: 'siklus', name: 'siklus' },
@@ -346,112 +352,50 @@ $(document).ready(function() {
         $('#m_create').modal('show');
     });
 
-    $(document).on('click', '#btn-simpan', function() {
-        let biayaId = $("#biaya-dropdown").val();
-        if (!biayaId) {
-            alert("Pilih biaya dulu");
-            return;
-        }
-
-        // nominal
-        let nominal = parseFloat($("#nominal").val().toString().replace(/[^0-9]/g, '')) || 0;
-
-        let petakData = tablePetak.rows().data().toArray();
-
-        // ambil siklus yang dipilih
-        let siklusMap = {}; // key = siklus_id, value = array petak
-        $(".siklus-dropdown").each(function() {
-            let siklusId = $(this).val();
-            let lokasiId = $(this).data("lokasi");
-            if (!siklusId) return;
-
-
-            // map petak ke array sesuai format backend
-            siklusMap[siklusId] = petakData.map(function(p) {
-                return {
-                    petak_id: p.id,
-                    luas: p.luas,
-                    persentase: p.persentase,
-                    nominal_petak: p.biaya_perpetak,
-                    tanggal_mulai: p.tanggal_mulai || null,
-                    tanggal_selesai: p.tanggal_selesai || null
-                };
-            });
-        });
-
-        // Dari dropdown Perpetak (jika ada)
-        let siklusPerpetakId = $("#siklus-perpetak").val();
-        if (siklusPerpetakId) {
-            siklusMap[siklusPerpetakId] = petakData.filter(p => p.siklus_id == siklusPerpetakId).map(function(p) {
-                return {
-                    petak_id: p.petak_id || p.id,
-                    luas: p.luas,
-                    persentase: p.persentase,
-                    nominal_petak: p.biaya_perpetak,
-                    tanggal_mulai: p.tanggal_mulai || null,
-                    tanggal_selesai: p.tanggal_selesai || null
-                };
-            });
-        }
-
-        // generate payload
-        let payload = {
-            uuid: $("#uuid").val(),
-            no_transaksi: $("#no_transaksi").val(),
-            tanggal_transaksi: $("#tanggal_transaksi").val(),
-            tanggal_mulai: $("#tanggal_mulai").val() || null,
-            tanggal_selesai: $("#tanggal_selesai").val() || null,
-            biaya_id: biayaId,
-            nominal: nominal,
-            coa_id: $("#coa_id").val() || null,
-            keterangan: $("#keterangan").val() || null,
-            siklus: Object.keys(siklusMap), // array siklus_id
-            petak: {}
-        };
-
-        // kelompokkan petak per siklus
-        payload.siklus.forEach(function(siklusId){
-            payload.petak[siklusId] = petakData.filter(function(row){
-                return row.siklus_id == siklusId;
-            });
-        });
-
-        console.log("Payload siap dikirim:", payload);
-
-        // kirim ke backend
-        swal({title: "Processing...!",text: "Please Wait",
-            onOpen: function() {
-                swal.showLoading()
-            }
-        })
-        var url = payload.uuid ? '/transaksi-biaya/update/' + payload.uuid : '/transaksi-biaya/store';
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: JSON.stringify(payload),
-            contentType: "application/json",
-            success: function(res) {
-                Swal.close();
-                if(res.success) {
-                    Swal.fire('Sukses', 'Data berhasil disimpan!', 'success');
-                    table.ajax.reload();
-                    angular.element($('#viewtabel')).scope().$apply(function(scope){
-                        scope.form = "list";
-                    });
-                } else {
-                    Swal.fire('Gagal', 'Data gagal disimpan!', 'error');
-                }
-            },
-            error: function(err) {
-                Swal.close();
-                Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data!', 'error');
+    $(document).on('click', '#btn-validasi', function() {
+        let uuid= $("#uuid").val()
+        Swal.fire({
+            title: 'Validasi Transaksi',
+            text: 'Yakin ingin validasi transaksi ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, validasi!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.value) {
+                swal({title: "Processing...!",text: "Please Wait",
+                    onOpen: function() {
+                        swal.showLoading()
+                    }
+                })
+                $.ajax({
+                    url: '/transaksi-biaya/validasi/' + uuid,
+                    method: 'POST',
+                    data: { _token: $('meta[name="csrf-token"]').attr('content') },
+                    success: function(res) {
+                        Swal.close();
+                        if(res.success) {
+                            Swal.fire('Berhasil', 'Data berhasil divalidasi!', 'success');
+                            $('#viewtabel').DataTable().ajax.reload();
+                            angular.element($('#viewtabel')).scope().$apply(function(scope){
+                                scope.form = "list";
+                            });
+                        } else {
+                            Swal.fire('Gagal', 'Data gagal divalidasi!', 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.close();
+                        Swal.fire('Gagal', 'Terjadi kesalahan saat memvalidasi data!', 'error');
+                    }
+                });
             }
         });
     });
 
 });
 
-function editTransaksi(uuid) {
+function validateTransaksi(uuid) {
     $.get('/transaksi-biaya/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
         $('#no_transaksi').val(res.no_transaksi);
@@ -522,44 +466,6 @@ function editTransaksi(uuid) {
         angular.element($('#viewtabel')).scope().$apply(function(scope){
             scope.form = "input";
         });
-    });
-}
-
-function deleteTransaksi(uuid) {
-    Swal.fire({
-        title: 'Hapus Transaksi',
-        text: 'Yakin hapus transaksi ini?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
-            $.ajax({
-                url: '/transaksi-biaya/' + uuid,
-                method: 'DELETE',
-                data: { _token: $('meta[name="csrf-token"]').attr('content') },
-                success: function(res) {
-                    Swal.close();
-                    if(res.success) {
-                        Swal.fire('Berhasil', 'Data berhasil dihapus!', 'success');
-                        $('#m_create').modal('hide');
-                        $('#viewtabel').DataTable().ajax.reload();
-                    } else {
-                        Swal.fire('Gagal', 'Data gagal dihapus!', 'error');
-                    }
-                },
-                error: function() {
-                    Swal.close();
-                    Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus data!', 'error');
-                }
-            });
-        }
     });
 }
 </script>

@@ -72,26 +72,41 @@ class TransaksiBiayaController extends Controller
             ->addColumn('siklus', function($row){
                 if ($row->siklus) {
                     return $row->siklus->map(function($s){
-                        return $s->siklus->tanggal_mulai . " s/d " . $s->siklus->tanggal_selesai;
+                        return $s->siklus->nama ?? '-';
                     })->implode('<br>');
                 }
                 return '-';
             })
             ->addColumn('biaya', fn($row) => $row->biaya->nama ?? '-')
-            ->addColumn('coa', fn($row) => $row->coa->kode_akun ?? '-')
-            ->addColumn('actions', function ($row) {
-                return '
-                    <a href="javascript:void(0)" onclick="editTransaksi(\''.$row->uuid.'\')" 
-                        class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" 
-                        title="Edit">
-                        <i class="m--font-warning la la-edit"></i>
-                    </a>
-                    <a href="javascript:void(0)" onclick="deleteTransaksi(\''.$row->uuid.'\')" 
-                        class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" 
-                        title="Hapus">
-                        <i class="m--font-danger la la-remove"></i>
-                    </a>
-                ';
+            ->addColumn('coa', fn($row) => $row->coa->nama ?? '-')
+            ->addColumn('actions', function ($row) use ($request) {
+                if($request->has('type') && $request->get('type') == 'validasi') {
+                    if ($row->validated_by) {
+                        return '<span class="m--font-success">Sudah divalidasi</span>';
+                    } else {
+                        return '
+                        <a href="javascript:void(0)" onclick="validateTransaksi(\''.$row->uuid.'\')" 
+                            class="m-portlet__nav-link btn m-btn m-btn--hover-success m-btn--icon m-btn--icon-only m-btn--pill" 
+                            title="Validasi">
+                            <i class="m--font-success la la-check"></i>
+                        </a>
+                        ';
+                    }
+                } else {
+
+                    return '
+                        <a href="javascript:void(0)" onclick="editTransaksi(\''.$row->uuid.'\')" 
+                            class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" 
+                            title="Edit">
+                            <i class="m--font-warning la la-edit"></i>
+                        </a>
+                        <a href="javascript:void(0)" onclick="deleteTransaksi(\''.$row->uuid.'\')" 
+                            class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" 
+                            title="Hapus">
+                            <i class="m--font-danger la la-remove"></i>
+                        </a>
+                    ';
+                }
             })
             ->rawColumns(['siklus','actions'])
             ->make(true);
@@ -257,6 +272,16 @@ class TransaksiBiayaController extends Controller
             DB::rollBack();
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
+    }
+
+    public function action_validasi($uuid)
+    {
+        $trans = TransaksiBiaya::where('uuid', $uuid)->firstOrFail();
+        $trans->update([
+            'validated_by'        => 1,
+            'validated_at'        => now(),
+        ]);
+        return response()->json(['success' => true]);
     }
 
     public function destroy($uuid)

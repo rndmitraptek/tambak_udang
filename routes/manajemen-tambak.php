@@ -11,5 +11,6 @@ Route::prefix('transaksi-biaya')->group(function() {
     Route::post('/store', [TransaksiBiayaController::class, 'store'])->name('transaksi-biaya.store');
     Route::get('/{uuid}', [TransaksiBiayaController::class, 'show'])->name('transaksi-biaya.show');
     Route::post('/update/{uuid}', [TransaksiBiayaController::class, 'update'])->name('transaksi-biaya.update');
+    Route::post('/validasi/{uuid}', [TransaksiBiayaController::class, 'action_validasi'])->name('transaksi-biaya.validasi');
     Route::delete('/{uuid}', [TransaksiBiayaController::class, 'destroy'])->name('transaksi-biaya.destroy');
 });

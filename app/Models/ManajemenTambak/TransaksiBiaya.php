@@ -14,7 +14,7 @@ class TransaksiBiaya extends Model
     protected $table = 'transaksi_biaya';
     protected $fillable = [
         'uuid','no_transaksi','tanggal_transaksi','tanggal_mulai','tanggal_selesai',
-        'biaya_id','nominal','coa_id','keterangan','created_by','updated_by'
+        'biaya_id','nominal','coa_id','keterangan','created_by','updated_by','validated_by', 'validated_at'
     ];
 
     public function biaya()

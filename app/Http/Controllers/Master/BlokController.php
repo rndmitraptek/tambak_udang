@@ -72,25 +72,6 @@ class BlokController extends Controller
         return response()->json($blok);
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-             'lokasi_id' => 'required|exists:setup_lokasi,id',
-            'nama' => 'required',
-            'keterangan' => 'nullable',
-        ]);
-
-        $lokasi = SetupBlok::create([
-            'lokasi_id' => $request->lokasi_id,
-            'nama' => $request->nama,
-            'keterangan' => $request->keterangan,
-            'created_by' => 1,
-            'updated_by' => 1,
-        ]);
-
-        return response()->json(['success' => true, 'data' => $lokasi]);
-    }
-
     public function update(Request $request, $uuid)
     {
         $blok = SetupBlok::where('uuid', $uuid)->firstOrFail();
