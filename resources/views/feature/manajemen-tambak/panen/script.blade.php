@@ -5,17 +5,22 @@ app.controller("myCtrl", function($scope,$http) {
         table = $("#viewtabel").DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route("finance.penaburan.datatable") }}',
+            ajax: '{{ route("panen.datatable") }}',
             scrollY: "50vh",
             scrollX: !0,
             scrollCollapse: !0,
             columns: [
-                { data: 'no_penaburan_benur', title: 'No Penaburan benur' },
-                { data: 'tanggal_penaburan', title: 'Tanggal Penaburan' },
-                { data: 'no_po', title: 'No PO' },
+                { data: 'no_panen', title: 'No Panen' },
+                { data: 'tanggal_panen', title: 'Tanggal Panen' },
+                { data: 'siklus', title: 'Siklus' },
                 { data: 'supplier', title: 'Supplier' },
                 { data: 'lokasi', title: 'Lokasi' },
-                { data: 'keterangan', title: 'keterangan' },
+                { data: 'blok', title: 'Blok' },
+                { data: 'petak', title: 'Petak' },
+                { data: 'jenis_panen', title: 'Jenis Panen' },
+                { data: 'keterangan', title: 'Keterangan' },
+                { data: 'jumlah', title: 'Jumlah' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
+                { data: 'total', title: 'Total' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
             ]
         })
@@ -25,7 +30,7 @@ app.controller("myCtrl", function($scope,$http) {
             var x = table.row(tr).data();
             $scope.input = x;
             $scope.input.nama_supplier = x.supplier;
-            url = "{{ route('finance.penaburan.get_detail',':uuid') }}"
+            url = "{{ route('panen.get_detail',':uuid') }}"
             url = url.replace(':uuid', x.uuid)
             swal({title: "Presesing...!",text: "Please Wait",
                 onOpen: function() {
@@ -66,7 +71,7 @@ app.controller("myCtrl", function($scope,$http) {
                             swal.showLoading()
                         }
                     })
-                    url = "{{ route('finance.penaburan.delete',':uuid') }}";
+                    url = "{{ route('panen.delete',':uuid') }}";
                     url = url.replace(':uuid', x.uuid);
                     $http.delete(url)
                     .then(function(res){

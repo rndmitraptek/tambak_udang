@@ -96,67 +96,54 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">No Panen</label>
-                                    <input type="text" class="form-control" id="recipient-name" value="PO202508003" readonly>
+                                    <input type="text" class="form-control" id="no_panen" name="no_panen" ng-model="input.no_panen">
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Tanggal Panen</label>
-                                    <input type="date" class="form-control" id="recipient-name" value="2025-08-26">
+                                    <input type="date" class="form-control" id="tanggal_panen" name="tanggal_panen" ng-model="input.tanggal_panen">
                                 </div>
                                 <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Siklus</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>2025-06-01 sd 2025-09-31</option>
-                                        <option>2025-10-01 sd 2025-12-31</option>
+                                    <select class="form-control" id="uuid_siklus" name="uuid_siklus" ng-model="input.uuid_siklus">
+                                        <option value="">Pillih Siklus</option>
+                                        <option ng-repeat="x in data_siklus" value="<% x.uuid %>"><% x.nama %></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Lokasi</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>Sekuro</option>
-                                        <option>Bandengan</option>
+                                    <input type="text" class="form-control" id="lokasi" name="lokasi" ng-model="input.lokasi">
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Blok</label>
+                                    <select class="form-control" id="uuid_blok" name="uuid_blok" ng-model="uuid_blok">
+                                        <option value="">Pillih Blok</option>
+                                        <option ng-repeat="x in data_blok" value="<% x.uuid %>"><% x.nama %></option>
                                     </select>
                                 </div>
                                 <div class="form-group m-form__group">
-                                    <label for="exampleSelect1">Area</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>A1</option>
-                                        <option>A2</option>
-                                        <option>A3</option>
-                                    </select>
-                                </div>
-                                <div class="form-group m-form__group">
-                                    <label for="exampleSelect1">Kolam</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>Kolam 001</option>
-                                        <option>Kolam 002</option>
-                                        <option>Kolam 003</option>
+                                    <label for="exampleSelect1">Petak</label>
+                                    <select class="form-control" id="uuid_petak" name="uuid_petak" ng-model="uuid_petak">
+                                        <option value="">Pillih Petak</option>
+                                        <option ng-repeat="x in data_petak" value="<% x.uuid %>"><% x.nama %></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Jenis Panen</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>Partial</option>
-                                        <option>Final</option>
+                                    <select class="form-control" id="jenis_panen" name="jenis_panen" ng-model="input.jenis_panen">
+                                        <option value="PARTIAL">PARTIAL</option>
+                                        <option value="FINAL">FINAL</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="message-text" class="form-control-label" >Keterangan</label>
-                                    <textarea class="form-control" id="alamat"></textarea>
+                                    <textarea class="form-control" id="keterangan" nama="keterangan" ng-model="input.keterangan"></textarea>
                                 </div>
                                 </div>
-                                {{-- <div class="form-group">
-                                    <label for="recipient-name" class="form-control-label">Biomassa Sebelum Panen</label>
-                                    <input type="text" class="form-control" id="recipient-name" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="form-control-label">Harga Per Kg</label>
-                                    <input type="text" class="form-control" id="recipient-name" value="0">
-                                </div> --}}
                             </div>
                         </div>
                         <hr/>
