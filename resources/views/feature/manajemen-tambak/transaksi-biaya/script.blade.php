@@ -1,4 +1,6 @@
 <script>
+var tablePetak;
+
 app.controller("myCtrl", function($scope,$http) {
     $scope.input = {};
     angular.element(document).ready(function () {
@@ -33,7 +35,7 @@ app.controller("myCtrl", function($scope,$http) {
         { "kode_akun": "41",  "nama_akun": "Pendapatan Penjualan","tipe_akun": "Revenue", "pos_laporan": "Laba Rugi","saldo_normal": "Kredit","kode_parent": "4" },
     ]
 
-    var tablePetak;
+    
 
     $(document).ready(function() {
         $.ajaxSetup({
@@ -283,7 +285,8 @@ app.controller("myCtrl", function($scope,$http) {
 
         function hitungBiayaPerPetak() {
             //let nominal = parseFloat($("#nominal").val()) || 0;
-            let nominal = $scope.nominal
+            let nominal = $scope.nominal;
+            console.log("Nominal:", nominal);
             // Ambil semua data petak dari DataTable
             let data = tablePetak.rows().data().toArray();
             console.log("Data Petak:", data);
@@ -447,122 +450,204 @@ app.controller("myCtrl", function($scope,$http) {
                 }
             });
         });
+    });
 
-        function editTransaksi(uuid) {
-            $.get('/transaksi-biaya/' + uuid, function(res) {
-                $('#uuid').val(res.uuid);
-                $('#no_transaksi').val(res.no_transaksi);
-                $('#tanggal_transaksi').val(res.tanggal_transaksi).change();
-                $('#tanggal_mulai').val(res.tanggal_mulai).change();
-                $('#tanggal_selesai').val(res.tanggal_selesai).change();
-                $('#keterangan').val(res.keterangan);
-                $('#coa_id').val(res.coa_id);
-                
-                $('#biaya-dropdown').val(res.biaya_id).trigger("change");
 
-                setTimeout(function () {
-                    // kelompok biaya dari relasi biaya
-                    let kelompok = res.biaya.kelompok;
+    $scope.editTransaksi = function(uuid) {
+        $.get('/transaksi-biaya/' + uuid, function(res) {
+            $('#uuid').val(res.uuid);
+            $('#no_transaksi').val(res.no_transaksi);
+            $('#tanggal_transaksi').val(res.tanggal_transaksi).change();
+            $('#tanggal_mulai').val(res.tanggal_mulai).change();
+            $('#tanggal_selesai').val(res.tanggal_selesai).change();
+            $('#keterangan').val(res.keterangan);
+            $('#coa_id').val(res.coa_id);
+            
+            $('#biaya-dropdown').val(res.biaya_id).trigger("change");
 
-                    if (kelompok === 'Perpetak') {
-                        // Ambil hanya satu siklus (karena Perpetak 1 siklus 1 petak)
-                        let siklusId = res.siklus.length ? res.siklus[0].siklus_id : null;
-                        $("#siklus-perpetak").val(siklusId).trigger("change");
+            setTimeout(function () {
+                // kelompok biaya dari relasi biaya
+                let kelompok = res.biaya.kelompok;
 
-                        setTimeout(function () {
-                            // kalau ada petak → pilih salah satu
-                            if (res.siklus[0] && res.siklus[0].petak.length > 0) {
-                                console.log("Pilih petak:", res.siklus[0].petak[0].petak_id);
-                                $("#petak-perpetak").val(res.siklus[0].petak[0].petak_id).trigger("change");
+                if (kelompok === 'Perpetak') {
+                    // Ambil hanya satu siklus (karena Perpetak 1 siklus 1 petak)
+                    let siklusId = res.siklus.length ? res.siklus[0].siklus_id : null;
+                    $("#siklus-perpetak").val(siklusId).trigger("change");
 
-                                // reload table
-                                if (siklusId) {
-                                    let petakId = (res.siklus[0].petak[0]) ? res.siklus[0].petak[0].petak_id : 0;
-                                    console.log("Reload table dengan siklus:", siklusId, "dan petak:", petakId);
-                                    tablePetak.ajax
-                                        .url(`/transaksi-biaya/petak-list?siklus_id[]=${siklusId}&petak_id=${petakId}`)
-                                        .load(function() {
-                                            $('#nominal').val(parseFloat(res.nominal)).trigger("input");
+                    setTimeout(function () {
+                        // kalau ada petak → pilih salah satu
+                        if (res.siklus[0] && res.siklus[0].petak.length > 0) {
+                            console.log("Pilih petak:", res.siklus[0].petak[0].petak_id);
+                            $("#petak-perpetak").val(res.siklus[0].petak[0].petak_id).trigger("change");
+
+                            // reload table
+                            if (siklusId) {
+                                let petakId = (res.siklus[0].petak[0]) ? res.siklus[0].petak[0].petak_id : 0;
+                                console.log("Reload table dengan siklus:", siklusId, "dan petak:", petakId);
+                                tablePetak.ajax
+                                    .url(`/transaksi-biaya/petak-list?siklus_id[]=${siklusId}&petak_id=${petakId}`)
+                                    .load(function() {
+                                        $scope.$applyAsync(function() {
+                                            $scope.nominal = parseFloat(res.nominal);
                                         });
-                                }
+                                        $('#nominal').val($scope.nominal).trigger("input");
+                                    });
                             }
-                        }, 500);
+                        }
+                    }, 500);
 
-                    } else {
-                        // Gabungan / lainnya → bisa banyak siklus
-                        let siklusIds = res.siklus.map(s => s.siklus_id);
+                } else {
+                    // Gabungan / lainnya → bisa banyak siklus
+                    let siklusIds = res.siklus.map(s => s.siklus_id);
 
-                        // isi dropdown siklus sesuai lokasi
-                        siklusIds.forEach(function (siklusId) {
-                            $("[id^='siklus-dropdown']").each(function () {
-                                if ($(this).find("option[value='" + siklusId + "']").length > 0) {
-                                    $(this).val(siklusId).trigger("change");
-                                }
-                            });
+                    // isi dropdown siklus sesuai lokasi
+                    siklusIds.forEach(function (siklusId) {
+                        $("[id^='siklus-dropdown']").each(function () {
+                            if ($(this).find("option[value='" + siklusId + "']").length > 0) {
+                                $(this).val(siklusId).trigger("change");
+                            }
                         });
+                    });
 
-                        // reload DataTable
-                        if (siklusIds.length > 0) {
-                            tablePetak.ajax
-                                .url("/transaksi-biaya/petak-list?siklus_id[]=" + siklusIds.join("&siklus_id[]="))
-                                .load(function() {
-                                    $('#nominal').val(parseFloat(res.nominal)).trigger("input");
+                    // reload DataTable
+                    if (siklusIds.length > 0) {
+                        tablePetak.ajax
+                            .url("/transaksi-biaya/petak-list?siklus_id[]=" + siklusIds.join("&siklus_id[]="))
+                            .load(function() {
+                                $scope.$applyAsync(function() {
+                                    $scope.nominal = parseFloat(res.nominal);
                                 });
-                        } else {
-                            tablePetak.ajax.url("/transaksi-biaya/petak-list").load(function() {
-                                $('#nominal').val(parseFloat(res.nominal)).trigger("input");
+                                $('#nominal').val($scope.nominal).trigger("input");
                             });
-                        }
+                    } else {
+                        tablePetak.ajax.url("/transaksi-biaya/petak-list").load(function() {
+                            $scope.$applyAsync(function() {
+                                $scope.nominal = parseFloat(res.nominal);
+                            });
+                            $('#nominal').val($scope.nominal).trigger("input");
+                        });
                     }
-                }, 500);
-                
-                angular.element($('#viewtabel')).scope().$apply(function(scope){
-                    scope.form = "input";
-                });
+                }
+            }, 500);
+            
+            angular.element($('#viewtabel')).scope().$apply(function(scope){
+                scope.form = "input";
             });
-        }
+        });
+    }
+});
 
-        function deleteTransaksi(uuid) {
+
+
+// function editTransaksi(uuid) {
+//     $.get('/transaksi-biaya/' + uuid, function(res) {
+//         $('#uuid').val(res.uuid);
+//         $('#no_transaksi').val(res.no_transaksi);
+//         $('#tanggal_transaksi').val(res.tanggal_transaksi).change();
+//         $('#tanggal_mulai').val(res.tanggal_mulai).change();
+//         $('#tanggal_selesai').val(res.tanggal_selesai).change();
+//         $('#keterangan').val(res.keterangan);
+//         $('#coa_id').val(res.coa_id);
+        
+//         $('#biaya-dropdown').val(res.biaya_id).trigger("change");
+
+//         setTimeout(function () {
+//             // kelompok biaya dari relasi biaya
+//             let kelompok = res.biaya.kelompok;
+
+//             if (kelompok === 'Perpetak') {
+//                 // Ambil hanya satu siklus (karena Perpetak 1 siklus 1 petak)
+//                 let siklusId = res.siklus.length ? res.siklus[0].siklus_id : null;
+//                 $("#siklus-perpetak").val(siklusId).trigger("change");
+
+//                 setTimeout(function () {
+//                     // kalau ada petak → pilih salah satu
+//                     if (res.siklus[0] && res.siklus[0].petak.length > 0) {
+//                         console.log("Pilih petak:", res.siklus[0].petak[0].petak_id);
+//                         $("#petak-perpetak").val(res.siklus[0].petak[0].petak_id).trigger("change");
+
+//                         // reload table
+//                         if (siklusId) {
+//                             let petakId = (res.siklus[0].petak[0]) ? res.siklus[0].petak[0].petak_id : 0;
+//                             console.log("Reload table dengan siklus:", siklusId, "dan petak:", petakId);
+//                             tablePetak.ajax
+//                                 .url(`/transaksi-biaya/petak-list?siklus_id[]=${siklusId}&petak_id=${petakId}`)
+//                                 .load(function() {
+//                                     $('#nominal').val(parseFloat(res.nominal)).trigger("input");
+//                                 });
+//                         }
+//                     }
+//                 }, 500);
+
+//             } else {
+//                 // Gabungan / lainnya → bisa banyak siklus
+//                 let siklusIds = res.siklus.map(s => s.siklus_id);
+
+//                 // isi dropdown siklus sesuai lokasi
+//                 siklusIds.forEach(function (siklusId) {
+//                     $("[id^='siklus-dropdown']").each(function () {
+//                         if ($(this).find("option[value='" + siklusId + "']").length > 0) {
+//                             $(this).val(siklusId).trigger("change");
+//                         }
+//                     });
+//                 });
+
+//                 // reload DataTable
+//                 if (siklusIds.length > 0) {
+//                     tablePetak.ajax
+//                         .url("/transaksi-biaya/petak-list?siklus_id[]=" + siklusIds.join("&siklus_id[]="))
+//                         .load(function() {
+//                             $('#nominal').val(parseFloat(res.nominal)).trigger("input");
+//                         });
+//                 } else {
+//                     tablePetak.ajax.url("/transaksi-biaya/petak-list").load(function() {
+//                         $('#nominal').val(parseFloat(res.nominal)).trigger("input");
+//                     });
+//                 }
+//             }
+//         }, 500);
+        
+//         angular.element($('#viewtabel')).scope().$apply(function(scope){
+//             scope.form = "input";
+//         });
+//     });
+// }
+
+function deleteTransaksi(uuid) {
+    Swal.fire({
+        title: 'Hapus Transaksi',
+        text: 'Yakin hapus transaksi ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.value) {
             Swal.fire({
-                title: 'Hapus Transaksi',
-                text: 'Yakin hapus transaksi ini?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.value) {
-                    Swal.fire({
-                        title: 'Menghapus...',
-                        allowOutsideClick: false,
-                        didOpen: () => { Swal.showLoading(); }
-                    });
-                    $.ajax({
-                        url: '/transaksi-biaya/' + uuid,
-                        method: 'DELETE',
-                        data: { _token: $('meta[name="csrf-token"]').attr('content') },
-                        success: function(res) {
-                            Swal.close();
-                            if(res.success) {
-                                Swal.fire('Berhasil', 'Data berhasil dihapus!', 'success');
-                                $('#m_create').modal('hide');
-                                $('#viewtabel').DataTable().ajax.reload();
-                            } else {
-                                Swal.fire('Gagal', 'Data gagal dihapus!', 'error');
-                            }
-                        },
-                        error: function() {
-                            Swal.close();
-                            Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus data!', 'error');
-                        }
-                    });
+                title: 'Menghapus...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+            $.ajax({
+                url: '/transaksi-biaya/' + uuid,
+                method: 'DELETE',
+                data: { _token: $('meta[name="csrf-token"]').attr('content') },
+                success: function(res) {
+                    Swal.close();
+                    if(res.success) {
+                        Swal.fire('Berhasil', 'Data berhasil dihapus!', 'success');
+                        $('#m_create').modal('hide');
+                        $('#viewtabel').DataTable().ajax.reload();
+                    } else {
+                        Swal.fire('Gagal', 'Data gagal dihapus!', 'error');
+                    }
+                },
+                error: function() {
+                    Swal.close();
+                    Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus data!', 'error');
                 }
             });
         }
     });
-
-
-});
-
-
+}
 </script>

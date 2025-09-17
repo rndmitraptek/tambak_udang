@@ -95,7 +95,7 @@ class TransaksiBiayaController extends Controller
                 } else {
 
                     return '
-                        <a href="javascript:void(0)" onclick="editTransaksi(\''.$row->uuid.'\')" 
+                        <a href="javascript:void(0)" onclick="angular.element(this).scope().editTransaksi(\''.$row->uuid.'\')" 
                             class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" 
                             title="Edit">
                             <i class="m--font-warning la la-edit"></i>
