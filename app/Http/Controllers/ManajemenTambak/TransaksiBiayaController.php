@@ -170,8 +170,8 @@ class TransaksiBiayaController extends Controller
                             'luas'                  => $p['luas'] ?? null,
                             'persentase'            => $p['persentase'] ?? 0,
                             'nominal_petak'         => $p['biaya_perpetak'] ?? 0,
-                            'tanggal_mulai'         => $validated['tanggal_mulai'] ?? null,
-                            'tanggal_selesai'      => $validated['tanggal_selesai'] ?? null,
+                            'tanggal_mulai'         => $validated['tanggal_mulai'] ?? $validated['tanggal_transaksi'],
+                            'tanggal_selesai'      => $validated['tanggal_selesai'] ?? $validated['tanggal_transaksi'],
                         ]);
                     }
                 }
@@ -256,8 +256,8 @@ class TransaksiBiayaController extends Controller
                             'luas'                  => $p['luas'] ?? null,
                             'persentase'            => $p['persentase'] ?? 0,
                             'nominal_petak'         => $p['biaya_perpetak'] ?? 0,
-                            'tanggal_mulai'         => $validated['tanggal_mulai'] ?? null,
-                            'tanggal_selesai'       => $validated['tanggal_selesai'] ?? null,
+                            'tanggal_mulai'         => $validated['tanggal_mulai'] ?? $validated['tanggal_transaksi'],
+                            'tanggal_selesai'       => $validated['tanggal_selesai'] ?? $validated['tanggal_transaksi'],
                         ]);
                     }
                 }

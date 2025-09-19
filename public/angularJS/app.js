@@ -334,10 +334,6 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     return s;
 }
 
-app.config(function($interpolateProvider){
-    $interpolateProvider.startSymbol('@{{');
-    $interpolateProvider.endSymbol('}}');
-});
 
 app.component('lookUpTable', {
   bindings: {
