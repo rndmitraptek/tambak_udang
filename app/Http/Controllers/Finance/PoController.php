@@ -21,8 +21,8 @@ class PoController extends Controller
     public function datatable()
     {
         $query = PoModel::query()
-            ->join('setup_supplier', 'setup_supplier.id', '=', 'po_benur.id_supplier')
-            ->join('setup_lokasi', 'setup_lokasi.id', '=', 'po_benur.id_lokasi')
+            ->join('setup_supplier', 'setup_supplier.id_supplier', '=', 'po_benur.id_supplier')
+            ->join('setup_lokasi', 'setup_lokasi.id_lokasi', '=', 'po_benur.id_lokasi')
             ->select([
                 'po_benur.uuid', 'po_benur.no_po', 'setup_supplier.uuid as uuid_supplier', 'po_benur.tanggal_po','po_benur.tanggal_kirim','po_benur.supplier','po_benur.lokasi',
                 'setup_lokasi.uuid as uuid_lokasi', 'po_benur.qty', 'po_benur.harga_satuan', 'po_benur.total','po_benur.keterangan',
@@ -37,16 +37,16 @@ class PoController extends Controller
     }
 
     public function lokasi(){
-        $data = SetupLokasi::all()->makeHidden(['id']);
+        $data = SetupLokasi::all()->makeHidden(['id_lokasi']);
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
 
     public function supplier(Request $request){
-        $query = SetupSupplier::select(['uuid','kode','nama','alamat','telepon','email','nama_perusahaan']);
+        $query = SetupSupplier::select(['uuid','kode_supplier','nama_supplier','alamat_supplier','telepon_supplier','email_supplier','nama_perusahaan']);
         if ($request->has('textSearch') && $request->textSearch != '') {
             $text = strtoupper($request->textSearch);
-            $query->where(DB::raw('UPPER(kode)'), 'like', "%{$text}%");
-            $query->orWhere(DB::raw('UPPER(nama)'), 'like', "%{$text}%");
+            $query->where(DB::raw('UPPER(kode_supplier)'), 'like', "%{$text}%");
+            $query->orWhere(DB::raw('UPPER(nama_supplier)'), 'like', "%{$text}%");
         }
         return DataTables::of($query)->make(true);
     }
@@ -65,10 +65,10 @@ class PoController extends Controller
         $data = $req->all();
         unset($data['uuid_supplier']);
         unset($data['uuid_lokasi']);
-        $data['id_supplier'] = $supplier->id;
-        $data['supplier'] = $supplier->nama;
-        $data['id_lokasi'] = $lokasi->id;
-        $data['lokasi'] = $lokasi->nama;
+        $data['id_supplier'] = $supplier->id_supplier;
+        $data['supplier'] = $supplier->nama_supplier;
+        $data['id_lokasi'] = $lokasi->id_lokasi;
+        $data['lokasi'] = $lokasi->nama_lokasi;
         $insert = PoModel::create($data);
         return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
     }
@@ -90,10 +90,10 @@ class PoController extends Controller
         $data = $req->all();
         unset($data['uuid_supplier']);
         unset($data['uuid_lokasi']);
-        $data['id_supplier'] = $supplier->id;
-        $data['supplier'] = $supplier->nama;
-        $data['id_lokasi'] = $lokasi->id;
-        $data['lokasi'] = $lokasi->nama;
+        $data['id_supplier'] = $supplier->id_supplier;
+        $data['supplier'] = $supplier->nama_supplier;
+        $data['id_lokasi'] = $lokasi->id_lokasi;
+        $data['lokasi'] = $lokasi->nama_lokasi;
         $benur->update($data);
         return response()->json(['success' => true, 'data' => $benur]);
     }

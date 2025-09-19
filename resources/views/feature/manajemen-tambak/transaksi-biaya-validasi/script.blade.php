@@ -63,7 +63,7 @@ $(document).ready(function() {
         // isi dropdown biaya
         data.forEach(function(biaya) {
             biayaDropdown.append(
-                `<option value="${biaya.id}" data-biak='${JSON.stringify(biaya)}'>${biaya.nama}</option>`
+                `<option value="${biaya.id_biaya}" data-biak='${JSON.stringify(biaya)}'>${biaya.nama_biaya}</option>`
             );
         });
 
@@ -111,7 +111,7 @@ $(document).ready(function() {
                 $.getJSON("/setup-siklus/all", function(res) {
                     let siklusSelect = $("#siklus-perpetak");
                     res.forEach(function(s) {
-                        siklusSelect.append(`<option value="${s.id}">${s.nama} (${s.lokasi.nama})</option>`);
+                        siklusSelect.append(`<option value="${s.id_siklus}">${s.nama_siklus} (${s.lokasi.nama_lokasi})</option>`);
                     });
                 });
 
@@ -131,7 +131,7 @@ $(document).ready(function() {
                     $.getJSON("/setup-siklus/" + siklusId + "/petak", function(res) {
                         if (res.length > 0) {
                             res.forEach(function(p) {
-                                petakSelect.append(`<option value="${p.id}">${p.nama}</option>`);
+                                petakSelect.append(`<option value="${p.id_petak}">${p.nama_petak}</option>`);
                             });
                             petakContainer.show();
                         } else {
@@ -145,15 +145,15 @@ $(document).ready(function() {
                 html +='</br>'
                 biaya.lokasi.forEach(function(lokasi, i) {
                     html += `<div class="lokasi-group mb-3">`;
-                    html += `<label>Pilih Siklus <b>${lokasi.nama}</b></label>`;
+                    html += `<label>Pilih Siklus <b>${lokasi.nama_lokasi}</b></label>`;
                     html += `<select class="form-control siklus-dropdown" 
-                                data-lokasi="${lokasi.id}" 
+                                data-lokasi="${lokasi.id_lokasi}" 
                                 id="siklus-dropdown-${i}">`;
 
                     if (lokasi.siklus.length > 0) {
                         html += `<option value="">-- Pilih Siklus --</option>`;
                         lokasi.siklus.forEach(function(siklus) {
-                            html += `<option value="${siklus.id}">${siklus.nama}</option>`;
+                            html += `<option value="${siklus.id_siklus}">${siklus.nama_siklus}</option>`;
                         });
                     } else {
                         html += `<option value="">(Tidak ada siklus)</option>`;
@@ -180,7 +180,7 @@ $(document).ready(function() {
     $.get('/setup-biaya/coa-list', function(res) {
         $('#coa_id').empty();
         res.forEach(function(coa) {
-            $('#coa_id').append('<option value="'+coa.id+'">'+coa.kode+' - '+coa.nama+'</option>');
+            $('#coa_id').append('<option value="'+coa.id_coa+'">'+coa.kode_coa+' - '+coa.nama_coa+'</option>');
         });
     });
 
