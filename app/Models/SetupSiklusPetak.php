@@ -10,6 +10,7 @@ class SetupSiklusPetak extends Model
     use HasFactory;
 
     protected $table = 'setup_siklus_petak';
+    protected $primaryKey = 'id_siklus_petak';
     protected $fillable = [
         'siklus_id',
         'petak_id',

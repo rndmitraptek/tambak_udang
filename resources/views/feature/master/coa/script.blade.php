@@ -73,13 +73,11 @@ $(document).ready(function() {
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
             var url = uuid ? '/coa/update/' + uuid : '/coa/store';
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -126,13 +124,11 @@ function deleteCoa(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: '/coa/delete/' + uuid,
                 method: 'DELETE',

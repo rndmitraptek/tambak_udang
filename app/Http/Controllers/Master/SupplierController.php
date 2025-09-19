@@ -16,7 +16,7 @@ class SupplierController extends Controller
 
     public function data(Request $request)
     {
-        $query = SetupSupplier::query();
+        $query = SetupSupplier::query()->orderBy('id_supplier', 'desc');
 
         return DataTables::of($query)
             ->addColumn('actions', function ($row) {
@@ -40,25 +40,23 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:setup_supplier,kode',
-            'nama' => 'required',
-            'alamat' => 'nullable',
-            'telepon' => 'nullable',
-            'email' => 'nullable|email',
+            'kode_supplier' => 'required|unique:setup_supplier,kode_supplier',
+            'nama_supplier' => 'required',
+            'alamat_supplier' => 'nullable',
+            'telepon_supplier' => 'nullable',
+            'email_supplier' => 'nullable',
             'nama_perusahaan' => 'nullable',
             'catatan' => 'nullable',
         ]);
 
         $supplier = SetupSupplier::create([
-            'kode'       => $request->kode,
-            'nama'       => $request->nama,
-            'alamat'     => $request->alamat,
-            'telepon'    => $request->telepon,
-            'email'      => $request->email,
+            'kode_supplier'       => $request->kode_supplier,
+            'nama_supplier'       => $request->nama_supplier,
+            'alamat_supplier'     => $request->alamat_supplier,
+            'telepon_supplier'    => $request->telepon_supplier,
+            'email_supplier'      => $request->email_supplier,
             'nama_perusahaan' => $request->nama_perusahaan,
             'catatan'    => $request->catatan,
-            'created_by' => 1,
-            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $supplier]);
@@ -75,11 +73,11 @@ class SupplierController extends Controller
         $supplier = SetupSupplier::where('uuid', $uuid)->firstOrFail();
 
         $request->validate([
-            'kode' => 'required|unique:setup_supplier,kode,' . $supplier->id,
-            'nama' => 'required',
-            'alamat' => 'nullable',
-            'telepon' => 'nullable',
-            'email' => 'nullable|email',
+            'kode_supplier' => 'required|unique:setup_supplier,kode_supplier,' . $supplier->id_supplier . ',id_supplier',
+            'nama_supplier' => 'required',
+            'alamat_supplier' => 'nullable',
+            'telepon_supplier' => 'nullable',
+            'email_supplier' => 'nullable',
             'nama_perusahaan' => 'nullable',
             'catatan' => 'nullable',
         ]);

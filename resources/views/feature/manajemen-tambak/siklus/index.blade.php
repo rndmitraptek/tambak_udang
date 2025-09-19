@@ -92,8 +92,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="recipient-name" class="form-control-label">Nama</label>
-                                <input type="text" class="form-control" id="nama" name="nama" required>
+                                <label for="recipient-name" class="form-control-label">Nama Siklus</label>
+                                <input type="text" class="form-control" id="nama_siklus" name="nama_siklus" required>
                             </div>
                             <div class="form-group">
                                 <label for="recipient-name" class="form-control-label">Tanggal Mulai</label>

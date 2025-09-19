@@ -16,7 +16,8 @@ class PakanController extends Controller
 
     public function data(Request $request)
     {
-        $query = SetupPakan::query();
+        $query = SetupPakan::query()
+            ->orderBy('id_pakan', 'desc');
 
         return DataTables::of($query)
             ->addColumn('actions', function ($row) {
@@ -40,25 +41,23 @@ class PakanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:setup_pakan,kode',
-            'nama' => 'required',
-            'jenis' => 'required',
-            'merk' => 'required',
-            'satuan' => 'required',
-            'harga' => 'required|numeric',
+            'kode_pakan' => 'required|unique:setup_pakan,kode_pakan',
+            'nama_pakan' => 'required',
+            'jenis_pakan' => 'required',
+            'merk_pakan' => 'required',
+            'satuan_pakan' => 'required',
+            'harga_pakan' => 'required|numeric',
             'keterangan' => 'nullable',
         ]);
 
         $pakan = SetupPakan::create([
-            'kode' => $request->kode,
-            'nama' => $request->nama,
-            'jenis' => $request->jenis,
-            'merk' => $request->merk,
-            'satuan' => $request->satuan,
-            'harga' => $request->harga,
+            'kode_pakan' => $request->kode_pakan,
+            'nama_pakan' => $request->nama_pakan,
+            'jenis_pakan' => $request->jenis_pakan,
+            'merk_pakan' => $request->merk_pakan,
+            'satuan_pakan' => $request->satuan_pakan,
+            'harga_pakan' => $request->harga_pakan,
             'keterangan' => $request->keterangan,
-            'created_by' => 1,
-            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $pakan]);
@@ -75,22 +74,22 @@ class PakanController extends Controller
         $pakan = SetupPakan::where('uuid', $uuid)->firstOrFail();
 
         $request->validate([
-            'kode' => 'required|unique:setup_pakan,kode,' . $pakan->id,
-            'nama' => 'required',
-            'jenis' => 'required',
-            'merk' => 'required',
-            'satuan' => 'required',
-            'harga' => 'required|numeric',
+            'kode_pakan' => 'required|unique:setup_pakan,kode_pakan,' . $pakan->id_pakan . ',id_pakan',
+            'nama_pakan' => 'required',
+            'jenis_pakan' => 'required',
+            'merk_pakan' => 'required',
+            'satuan_pakan' => 'required',
+            'harga_pakan' => 'required|numeric',
             'keterangan' => 'nullable',
         ]);
 
         $pakan->update([
-            'kode' => $request->kode,
-            'nama' => $request->nama,
-            'jenis' => $request->jenis,
-            'merk' => $request->merk,
-            'satuan' => $request->satuan,
-            'harga' => $request->harga,
+            'kode_pakan' => $request->kode_pakan,
+            'nama_pakan' => $request->nama_pakan,
+            'jenis_pakan' => $request->jenis_pakan,
+            'merk_pakan' => $request->merk_pakan,
+            'satuan_pakan' => $request->satuan_pakan,
+            'harga_pakan' => $request->harga_pakan,
             'keterangan' => $request->keterangan,
         ]);
 

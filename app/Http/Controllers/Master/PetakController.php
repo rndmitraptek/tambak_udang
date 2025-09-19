@@ -18,29 +18,30 @@ class PetakController extends Controller
 
     public function lokasiList()
     {
-        return SetupLokasi::select('id', 'nama')->get();
+        return SetupLokasi::select('id_lokasi', 'nama_lokasi')->get();
     }
 
     public function blokListByLokasi($lokasi_id)
     {
-        return \App\Models\SetupBlok::where('lokasi_id', $lokasi_id)->select('id', 'nama')->get();
+        return \App\Models\SetupBlok::where('lokasi_id', $lokasi_id)->select('id_blok', 'nama_blok')->get();
     }
 
     public function blokList()
     {
-        return SetupBlok::select('id', 'nama')->get();
+        return SetupBlok::select('id_blok', 'nama_blok')->get();
     }
 
     public function data(Request $request)
     {
-        $query = SetupPetak::with(['lokasi', 'blok']);
+        $query = SetupPetak::with(['lokasi', 'blok'])
+            ->orderBy('id_petak', 'desc');
 
         return DataTables::of($query)
             ->addColumn('nama_lokasi', function ($row) {
-                return $row->lokasi ? $row->lokasi->nama : '';
+                return $row->lokasi ? $row->lokasi->nama_lokasi : '';
             })
             ->addColumn('nama_blok', function ($row) {
-                return $row->blok ? $row->blok->nama : '';
+                return $row->blok ? $row->blok->nama_blok : '';
             })
             ->addColumn('actions', function ($row) {
                 return '
@@ -63,21 +64,19 @@ class PetakController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'lokasi_id' => 'required|exists:setup_lokasi,id',
-            'blok_id' => 'required|exists:setup_blok,id',
-            'nama' => 'required',
-            'luas' => 'nullable',
+            'lokasi_id' => 'required|exists:setup_lokasi,id_lokasi',
+            'blok_id' => 'required|exists:setup_blok,id_blok',
+            'nama_petak' => 'required',
+            'luas_petak' => 'nullable',
             'keterangan' => 'nullable',
         ]);
 
         $petak = SetupPetak::create([
             'lokasi_id' => $request->lokasi_id,
             'blok_id' => $request->blok_id,
-            'nama' => $request->nama,
-            'luas' => $request->luas,
+            'nama_petak' => $request->nama_petak,
+            'luas_petak' => $request->luas_petak,
             'keterangan' => $request->keterangan,
-            'created_by' => 1,
-            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $petak]);
@@ -94,18 +93,18 @@ class PetakController extends Controller
         $petak = SetupPetak::where('uuid', $uuid)->firstOrFail();
 
         $request->validate([
-            'lokasi_id' => 'required|exists:setup_lokasi,id',
-            'blok_id' => 'required|exists:setup_blok,id',
-            'nama' => 'required',
-            'luas' => 'nullable',
+            'lokasi_id' => 'required|exists:setup_lokasi,id_lokasi',
+            'blok_id' => 'required|exists:setup_blok,id_blok',
+            'nama_petak' => 'required',
+            'luas_petak' => 'nullable',
             'keterangan' => 'nullable',
         ]);
 
         $petak->update([
             'lokasi_id' => $request->lokasi_id,
             'blok_id' => $request->blok_id,
-            'nama' => $request->nama,
-            'luas' => $request->luas,
+            'nama_petak' => $request->nama_petak,
+            'luas_petak' => $request->luas_petak,
             'keterangan' => $request->keterangan,
         ]);
 

@@ -1,7 +1,7 @@
 <script>
 app.controller("myCtrl", function($scope,$http) {
     angular.element(document).ready(function () {
-        autosize($("#alamat"));
+        autosize($("#alamat_customer"));
         autosize($("#catatan"));
         
     });
@@ -40,11 +40,11 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/customer/data",
         columns: [
-            { data: 'kode', name: 'kode' },
-            { data: 'nama', name: 'nama' },
-            { data: 'alamat', name: 'alamat' },
-            { data: 'telepon', name: 'telepon' },
-            { data: 'email', name: 'email' },
+            { data: 'kode_customer', name: 'kode_customer' },
+            { data: 'nama_customer', name: 'nama_customer' },
+            { data: 'alamat_customer', name: 'alamat_customer' },
+            { data: 'telepon_customer', name: 'telepon_customer' },
+            { data: 'email_customer', name: 'email_customer' },
             { data: 'catatan', name: 'catatan' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
@@ -58,8 +58,8 @@ $(document).ready(function() {
 
     $("#formCustomer").validate({
         rules: {
-            kode: { required: !0, },
-            nama: { required: !0, }
+            kode_customer: { required: !0, },
+            nama_customer: { required: !0, }
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formCustomer", -200)
@@ -67,13 +67,11 @@ $(document).ready(function() {
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
             var url = uuid ? '/customer/update/' + uuid : '/customer/store';
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -100,11 +98,11 @@ $(document).ready(function() {
 function editCustomer(uuid) {
     $.get('/customer/show/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
-        $('#nama').val(res.nama);
-        $('#alamat').val(res.alamat);
-        $('#telepon').val(res.telepon);
-        $('#email').val(res.email);
+        $('#kode_customer').val(res.kode_customer);
+        $('#nama_customer').val(res.nama_customer);
+        $('#alamat_customer').val(res.alamat_customer);
+        $('#telepon_customer').val(res.telepon_customer);
+        $('#email_customer').val(res.email_customer);
         $('#catatan').val(res.catatan);
         $('#m_create').modal('show');
     });
@@ -120,13 +118,11 @@ function deleteCustomer(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: '/customer/delete/' + uuid,
                 method: 'DELETE',

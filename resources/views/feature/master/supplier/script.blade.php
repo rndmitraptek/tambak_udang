@@ -1,7 +1,7 @@
 <script>
 app.controller("myCtrl", function($scope,$http) {
     angular.element(document).ready(function () {
-        autosize($("#alamat"));
+        autosize($("#alamat_supplier"));
         autosize($("#catatan"));
     });
 });
@@ -39,11 +39,11 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/supplier/data",
         columns: [
-            { data: 'kode', name: 'kode' },
-            { data: 'nama', name: 'nama' },
-            { data: 'alamat', name: 'alamat' },
-            { data: 'telepon', name: 'telepon' },
-            { data: 'email', name: 'email' },
+            { data: 'kode_supplier', name: 'kode_supplier' },
+            { data: 'nama_supplier', name: 'nama_supplier' },
+            { data: 'alamat_supplier', name: 'alamat_supplier' },
+            { data: 'telepon_supplier', name: 'telepon_supplier' },
+            { data: 'email_supplier', name: 'email_supplier' },
             { data: 'nama_perusahaan', name: 'nama_perusahaan' },
             { data: 'catatan', name: 'catatan' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
@@ -58,8 +58,8 @@ $(document).ready(function() {
 
     $("#formSupplier").validate({
         rules: {
-            kode: { required: !0, },
-            nama: { required: !0, }
+            kode_supplier: { required: !0, },
+            nama_supplier: { required: !0, }
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formSupplier", -200)
@@ -67,13 +67,11 @@ $(document).ready(function() {
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
             var url = uuid ? '/supplier/update/' + uuid : '/supplier/store';
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -100,11 +98,11 @@ $(document).ready(function() {
 function editSupplier(uuid) {
     $.get('/supplier/show/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
-        $('#nama').val(res.nama);
-        $('#alamat').val(res.alamat);
-        $('#telepon').val(res.telepon);
-        $('#email').val(res.email);
+        $('#kode_supplier').val(res.kode_supplier);
+        $('#nama_supplier').val(res.nama_supplier);
+        $('#alamat_supplier').val(res.alamat_supplier);
+        $('#telepon_supplier').val(res.telepon_supplier);
+        $('#email_supplier').val(res.email_supplier);
         $('#nama_perusahaan').val(res.nama_perusahaan);
         $('#catatan').val(res.catatan);
         $('#m_create').modal('show');
@@ -121,13 +119,11 @@ function deleteSupplier(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: '/supplier/delete/' + uuid,
                 method: 'DELETE',

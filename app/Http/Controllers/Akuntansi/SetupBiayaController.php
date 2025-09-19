@@ -21,39 +21,39 @@ class SetupBiayaController extends Controller
 
     public function coaList()
     {
-        return SetupCoa::select('id', 'kode', 'nama')->get();
+        return SetupCoa::select('id_coa', 'kode_coa', 'nama_coa')->get();
     }
 
     public function lokasiList()
     {
-        return SetupLokasi::select('id', 'nama')->get();
+        return SetupLokasi::select('id_lokasi', 'nama_lokasi')->get();
     }
 
     public function petakList()
     {
         // return SetupPetak::select('id', 'nama')->get();
         return SetupPetak::select(
-            'setup_petak.id',
-            'setup_petak.nama as nama_petak',
-            'setup_lokasi.nama as nama_lokasi',
-            'setup_blok.nama as nama_blok'
+            'setup_petak.id_petak',
+            'setup_petak.nama_petak',
+            'setup_lokasi.nama_lokasi',
+            'setup_blok.nama_blok'
         )
-        ->join('setup_lokasi', 'setup_lokasi.id', '=', 'setup_petak.lokasi_id')
-        ->join('setup_blok', 'setup_blok.id', '=', 'setup_petak.blok_id')
+        ->join('setup_lokasi', 'setup_lokasi.id_lokasi', '=', 'setup_petak.lokasi_id')
+        ->join('setup_blok', 'setup_blok.id_blok', '=', 'setup_petak.blok_id')
         ->get();
     }
 
     public function data(Request $request)
     {
-        $query = SetupBiaya::with(['lokasi', 'coa']);
+        $query = SetupBiaya::with(['lokasi', 'coa'])->orderBy('id_biaya', 'desc');
         return DataTables::of($query)
             ->addColumn('nama_lokasi', function($row) {
                 return $row->lokasi->count() 
-                    ? $row->lokasi->pluck('nama')->implode(', ') 
+                    ? $row->lokasi->pluck('nama_lokasi')->implode(', ') 
                     : '-';
             })
             ->addColumn('coa', function($row) {
-                return $row->coa ? $row->coa->kode . ' - ' . $row->coa->nama : '-';
+                return $row->coa ? $row->coa->kode_coa . ' - ' . $row->coa->nama_coa : '-';
             })
             ->addColumn('periode', function($row) {
                 return $row->periode ? 'Ya' : 'Tidak';
@@ -81,30 +81,29 @@ class SetupBiayaController extends Controller
         DB::beginTransaction();
         try {
             $request->validate([
-                'kode' => 'required|unique:setup_biaya,kode',
-                'nama' => 'required',
-                'kelompok' => 'required',
-                'coa_id' => 'required|exists:setup_coa,id',
-                'nominal' => 'nullable|numeric',
+                'kode_biaya' => 'required|unique:setup_biaya,kode_biaya',
+                'nama_biaya' => 'required',
+                'kelompok_biaya' => 'required',
+                'coa_id' => 'required|exists:setup_coa,id_coa',
+                'nominal_biaya' => 'nullable|numeric',
             ]);
             $biaya = SetupBiaya::create([
-                'kode'       => $request->kode,
-                'nama'       => $request->nama,
-                'kelompok'   => $request->kelompok,
-                'petak_id'   => $request->kelompok == 'Perpetak' ? $request->petak_id : null,
+                'kode_biaya'       => $request->kode_biaya,
+                'nama_biaya'       => $request->nama_biaya,
+                'kelompok_biaya'   => $request->kelompok_biaya,
+                'petak_id'   => $request->kelompok_biaya == 'Perpetak' ? $request->petak_id : null,
                 'periode'    => $request->periode ?? false,
-                'nominal'    => $request->nominal,
+                'nominal_biaya'    => $request->nominal_biaya,
                 'coa_id'     => $request->coa_id,
                 'catatan'    => $request->catatan,
-                'created_by' => 1,
-                'updated_by' => 1,
             ]);
 
             // simpan lokasi
-            if (in_array($request->kelompok, ['Gabungan', 'Perlokasi'])) {
-                foreach ($request->lokasi ?? [] as $lokasiId) {
+            if (in_array($request->kelompok_biaya, ['Gabungan', 'Perlokasi'])) {
+                $lokasiIds = array_unique($request->lokasi ?? []);
+                foreach ($lokasiIds as $lokasiId) {
                     SetupBiayaLokasi::create([
-                        'biaya_id' => $biaya->id,
+                        'biaya_id' => $biaya->id_biaya,
                         'lokasi_id'  => $lokasiId,
                     ]);
                 }
@@ -126,25 +125,25 @@ class SetupBiayaController extends Controller
     // }
     public function show($uuid)
     {
-        $biaya = SetupBiaya::with(['lokasi:id,nama', 'coa:id,kode,nama', 'petak:id,nama'])
+        $biaya = SetupBiaya::with(['lokasi:id_lokasi,nama_lokasi', 'coa:id_coa,kode_coa,nama_coa', 'petak:id_petak,nama_petak'])
             ->where('uuid', $uuid)
             ->firstOrFail();
 
         return response()->json([
             'uuid'      => $biaya->uuid,
-            'kode'      => $biaya->kode,
-            'nama'      => $biaya->nama,
-            'kelompok'  => $biaya->kelompok,
-            'periode'   => $biaya->periode,
-            'nominal'   => $biaya->nominal,
+            'kode_biaya'      => $biaya->kode_biaya,
+            'nama_biaya'      => $biaya->nama_biaya,
+            'kelompok_biaya'  => $biaya->kelompok_biaya,
+            'periode_biaya'   => $biaya->periode_biaya,
+            'nominal_biaya'   => $biaya->nominal_biaya,
             'coa_id'    => $biaya->coa_id,
             'catatan'   => $biaya->catatan,
             'petak_id'  => $biaya->petak_id,
             // array lokasi
             'lokasi'    => $biaya->lokasi->map(function($l) {
                 return [
-                    'id'   => $l->id,
-                    'nama' => $l->nama,
+                    'id_lokasi'   => $l->id_lokasi,
+                    'nama_lokasi' => $l->nama_lokasi,
                 ];
             }),
         ]);
@@ -156,30 +155,29 @@ class SetupBiayaController extends Controller
         try {
             $biaya = SetupBiaya::where('uuid', $uuid)->firstOrFail();
             $request->validate([
-                'kode' => 'required|unique:setup_biaya,kode,' . $biaya->id,
-                'nama' => 'required',
-                'kelompok' => 'required',
-                'coa_id' => 'required|exists:setup_coa,id',
-                'nominal' => 'nullable|numeric',
+                'kode_biaya' => 'required|unique:setup_biaya,kode_biaya,' . $biaya->id_biaya . ',id_biaya',
+                'nama_biaya' => 'required',
+                'kelompok_biaya' => 'required',
+                'coa_id' => 'required|exists:setup_coa,id_coa',
+                'nominal_biaya' => 'nullable|numeric',
             ]);
             $biaya->update([
-                'kode'       => $request->kode,
-                'nama'       => $request->nama,
-                'kelompok'   => $request->kelompok,
-                'petak_id'   => $request->kelompok == 'Perpetak' ? $request->petak_id : null,
+                'kode_biaya'       => $request->kode_biaya,
+                'nama_biaya'       => $request->nama_biaya,
+                'kelompok_biaya'   => $request->kelompok_biaya,
+                'petak_id'   => $request->kelompok_biaya == 'Perpetak' ? $request->petak_id : null,
                 'periode'    => $request->periode ?? false,
-                'nominal'    => $request->nominal,
+                'nominal_biaya'    => $request->nominal_biaya,
                 'coa_id'     => $request->coa_id,
                 'catatan'    => $request->catatan,
-                'updated_by' => 1,
             ]);
 
             // refresh lokasi
             SetupBiayaLokasi::where('biaya_id', $biaya->id)->forceDelete();
-            if (in_array($request->kelompok, ['Gabungan', 'Perlokasi'])) {
+            if (in_array($request->kelompok_biaya, ['Gabungan', 'Perlokasi'])) {
                 foreach ($request->lokasi ?? [] as $lokasiId) {
                     SetupBiayaLokasi::create([
-                        'biaya_id' => $biaya->id,
+                        'biaya_id' => $biaya->id_biaya,
                         'lokasi_id'  => $lokasiId,
                     ]);
                 }

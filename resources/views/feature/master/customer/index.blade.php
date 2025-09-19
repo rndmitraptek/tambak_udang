@@ -84,23 +84,23 @@
                     <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
                         <label>Kode Customer</label>
-                        <input type="text" class="form-control" id="kode" name="kode" required>
+                        <input type="text" class="form-control" id="kode_customer" name="kode_customer" required>
                     </div>
                     <div class="form-group">
                         <label>Nama Customer</label>
-                        <input type="text" class="form-control" id="nama" name="nama" required>
+                        <input type="text" class="form-control" id="nama_customer" name="nama_customer" required>
                     </div>
                     <div class="form-group">
                         <label>Alamat</label>
-                        <textarea class="form-control" id="alamat" name="alamat"></textarea>
+                        <textarea class="form-control" id="alamat_customer" name="alamat_customer"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Nomor Telepon</label>
-                        <input type="text" class="form-control" id="telepon" name="telepon">
+                        <input type="text" class="form-control" id="telepon_customer" name="telepon_customer">
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <input type="email" class="form-control" id="email_customer" name="email_customer">
                     </div>
                     <div class="form-group">
                         <label>Catatan</label>

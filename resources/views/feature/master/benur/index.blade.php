@@ -83,7 +83,7 @@
                     <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
                         <label>Kode Benur</label>
-                        <input type="text" class="form-control" id="kode" name="kode" required>
+                        <input type="text" class="form-control" id="kode_benur" name="kode_benur" required>
                     </div>
                     <div class="form-group">
                         <label>Kode Supplier</label>
@@ -91,11 +91,11 @@
                     </div>
                     <div class="form-group">
                         <label>Jenis Benur</label>
-                        <input type="text" class="form-control" id="jenis" name="jenis" required>
+                        <input type="text" class="form-control" id="jenis_benur" name="jenis_benur" required>
                     </div>
                     <div class="form-group">
                         <label>Harga</label>
-                        <input type="number" class="form-control" id="harga" name="harga" required>
+                        <input type="number" class="form-control" id="harga_benur" name="harga_benur" required>
                     </div>
                     <div class="form-group">
                         <label>Keterangan</label>

@@ -33,7 +33,7 @@ $(document).ready(function() {
 
     $.get('/setup-siklus/lokasi-list', function(res) {
         res.forEach(function(lokasi) {
-            $('#lokasi_id').append('<option value="'+lokasi.id+'">'+lokasi.nama+'</option>');
+            $('#lokasi_id').append('<option value="'+lokasi.id_lokasi+'">'+lokasi.nama_lokasi+'</option>');
         });
     });
     
@@ -47,8 +47,8 @@ $(document).ready(function() {
         ajax: "/setup-siklus/petak-list/?lokasi_id=0", // default kosong
         columns: [
             { 
-                data: 'id', 
-                name: 'id',
+                data: 'id_petak', 
+                name: 'id_petak',
                 orderable: false,
                 searchable: false,
                 render: function(data, type, row) {
@@ -58,8 +58,8 @@ $(document).ready(function() {
             { data: 'nama_blok', name: 'nama_blok' },
             { data: 'nama_petak', name: 'nama_petak' },
             { 
-                data: 'luas', 
-                name: 'luas',
+                data: 'luas_petak', 
+                name: 'luas_petak',
                 render: function(data, type, row) {
                     return  parseInt(data).toLocaleString('id-ID');
                 }
@@ -96,7 +96,7 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/setup-siklus/data",
         columns: [
-            { data: 'nama', name: 'nama' },
+            { data: 'nama_siklus', name: 'nama_siklus' },
             { data: 'nama_lokasi', name: 'nama_lokasi' },
             { data: 'tanggal_mulai', name: 'tanggal_mulai' },
             { data: 'tanggal_selesai', name: 'tanggal_selesai' },
@@ -115,7 +115,7 @@ $(document).ready(function() {
     $("#formSiklus").validate({
         rules: {
             lokasi_id: { required: !0, },
-            nama: { required: !0, },
+            nama_siklus: { required: !0, },
             tanggal_mulai: { required: !0, }
         },
         invalidHandler: function(e, r) {
@@ -132,11 +132,11 @@ $(document).ready(function() {
                 payload.push({ name: 'petak_id[]', value: $(this).val() });
             });
             
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
+                }
+            })
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -165,7 +165,7 @@ function editSiklus(uuid) {
         // isi field biasa
         $('#uuid').val(res.uuid);
         $('#lokasi_id').val(res.lokasi_id).trigger('change');
-        $('#nama').val(res.nama);
+        $('#nama_siklus').val(res.nama_siklus);
         $('#tanggal_mulai').val(res.tanggal_mulai);
         $('#tanggal_selesai').val(res.tanggal_selesai);
         $('#catatan').val(res.catatan);
@@ -174,7 +174,7 @@ function editSiklus(uuid) {
         $('#checkAllPetak').prop('checked', false);
 
         // simpan daftar petak_id yang sudah ada di siklus
-        let selectedPetak = res.petak.map(p => p.id);
+        let selectedPetak = res.petak.map(p => p.id_petak);
 
         // tunggu datatable petak reload berdasarkan lokasi
         $('#viewtabelpetak').one('draw.dt', function() {
@@ -205,11 +205,11 @@ function deleteSiklus(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
+                }
+            })
             $.ajax({
                 url: '/setup-siklus/delete/' + uuid,
                 method: 'DELETE',

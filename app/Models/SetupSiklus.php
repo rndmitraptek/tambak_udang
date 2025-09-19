@@ -6,17 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUuid;
 
 class SetupSiklus extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasUuid, CreatedUpdatedBy;
 
     protected $table = 'setup_siklus';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id_siklus';
     protected $fillable = [
         'uuid',
         'lokasi_id',
-        'nama',
+        'nama_siklus',
         'tanggal_mulai',
         'tanggal_selesai',
         'catatan',
@@ -25,16 +27,16 @@ class SetupSiklus extends Model
         'updated_by',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->uuid)) {
-                $model->uuid = (string) Str::uuid();
-            }
-        });
-    }
+    //     static::creating(function ($model) {
+    //         if (empty($model->uuid)) {
+    //             $model->uuid = (string) Str::uuid();
+    //         }
+    //     });
+    // }
 
     public function lokasi()
     {

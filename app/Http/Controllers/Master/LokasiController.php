@@ -42,17 +42,15 @@ class LokasiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:setup_lokasi,kode',
-            'nama' => 'required',
-            'alamat' => 'nullable',
+            'kode_lokasi' => 'required|unique:setup_lokasi,kode_lokasi',
+            'nama_lokasi' => 'required',
+            'alamat_lokasi' => 'nullable',
         ]);
 
         $lokasi = SetupLokasi::create([
-            'kode' => $request->kode,
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'created_by' => 1,
-            'updated_by' => 1,
+            'kode_lokasi' => $request->kode_lokasi,
+            'nama_lokasi' => $request->nama_lokasi,
+            'alamat_lokasi' => $request->alamat_lokasi,
         ]);
 
         return response()->json(['success' => true, 'data' => $lokasi]);
@@ -71,15 +69,15 @@ class LokasiController extends Controller
         $lokasi = SetupLokasi::where('uuid', $uuid)->firstOrFail();
 
         $request->validate([
-            'kode' => 'required|unique:setup_lokasi,kode,' . $lokasi->id,
-            'nama' => 'required',
-            'alamat' => 'nullable',
+            'kode_lokasi' => 'required|unique:setup_lokasi,kode_lokasi,' . $lokasi->id_lokasi . ',id_lokasi',
+            'nama_lokasi' => 'required',
+            'alamat_lokasi' => 'nullable',
         ]);
 
         $lokasi->update([
-            'kode' => $request->kode,
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
+            'kode_lokasi' => $request->kode_lokasi,
+            'nama_lokasi' => $request->nama_lokasi,
+            'alamat_lokasi' => $request->alamat_lokasi,
         ]);
 
         return response()->json(['success' => true, 'data' => $lokasi]);

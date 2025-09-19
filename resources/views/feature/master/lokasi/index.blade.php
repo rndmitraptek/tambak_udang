@@ -81,15 +81,15 @@
                     <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
                         <label>Kode Lokasi</label>
-                        <input type="text" class="form-control" id="kode" name="kode" required>
+                        <input type="text" class="form-control" id="kode_lokasi" name="kode_lokasi" required>
                     </div>
                     <div class="form-group">
                         <label>Nama Lokasi</label>
-                        <input type="text" class="form-control" id="nama" name="nama" required>
+                        <input type="text" class="form-control" id="nama_lokasi" name="nama_lokasi" required>
                     </div>
                     <div class="form-group">
                         <label>Alamat Lokasi</label>
-                        <textarea class="form-control" id="alamat" name="alamat"></textarea>
+                        <textarea class="form-control" id="alamat_lokasi" name="alamat_lokasi"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

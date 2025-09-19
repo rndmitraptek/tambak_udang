@@ -40,21 +40,19 @@ class BenurController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:setup_benur,kode',
+            'kode_benur' => 'required|unique:setup_benur,kode_benur',
             'kode_supplier' => 'required',
-            'jenis' => 'required',
-            'harga' => 'required|numeric',
+            'jenis_benur' => 'required',
+            'harga_benur' => 'required|numeric',
             'keterangan' => 'nullable',
         ]);
 
         $benur = SetupBenur::create([
-            'kode' => $request->kode,
+            'kode_benur' => $request->kode_benur,
             'kode_supplier' => $request->kode_supplier,
-            'jenis' => $request->jenis,
-            'harga' => $request->harga,
+            'jenis_benur' => $request->jenis_benur,
+            'harga_benur' => $request->harga_benur,
             'keterangan' => $request->keterangan,
-            'created_by' => 1,
-            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $benur]);
@@ -71,18 +69,18 @@ class BenurController extends Controller
         $benur = SetupBenur::where('uuid', $uuid)->firstOrFail();
 
         $request->validate([
-            'kode' => 'required|unique:setup_benur,kode,' . $benur->id,
+            'kode_benur' => 'required|unique:setup_benur,kode_benur,' . $benur->id_benur . ',id_benur',
             'kode_supplier' => 'required',
-            'jenis' => 'required',
-            'harga' => 'required|numeric',
+            'jenis_benur' => 'required',
+            'harga_benur' => 'required|numeric',
             'keterangan' => 'nullable',
         ]);
 
         $benur->update([
-            'kode' => $request->kode,
+            'kode_benur' => $request->kode_benur,
             'kode_supplier' => $request->kode_supplier,
-            'jenis' => $request->jenis,
-            'harga' => $request->harga,
+            'jenis_benur' => $request->jenis_benur,
+            'harga_benur' => $request->harga_benur,
             'keterangan' => $request->keterangan,
         ]);
 

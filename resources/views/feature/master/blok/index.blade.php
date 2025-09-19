@@ -86,8 +86,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="nama">Nama Blok</label>
-                        <input type="text" class="form-control" id="nama" name="nama" required>
+                        <label for="nama_blok">Nama Blok</label>
+                        <input type="text" class="form-control" id="nama_blok" name="nama_blok" required>
                     </div>
                     <div class="form-group">
                         <label for="keterangan">Keterangan</label>

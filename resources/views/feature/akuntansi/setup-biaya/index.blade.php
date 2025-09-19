@@ -86,15 +86,15 @@
                     <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
                         <label>Kode Biaya</label>
-                        <input type="text" class="form-control" id="kode" name="kode" required>
+                        <input type="text" class="form-control" id="kode_biaya" name="kode_biaya" required>
                     </div>
                     <div class="form-group">
                         <label>Nama Biaya</label>
-                        <input type="text" class="form-control" id="nama" name="nama" required>
+                        <input type="text" class="form-control" id="nama_biaya" name="nama_biaya" required>
                     </div>
                     <div class="form-group">
-                        <label for="kelompok">Kelompok Biaya</label>
-                        <select class="form-control" id="kelompok" name="kelompok" ng-model="kelompok" required>
+                        <label for="kelompok_biaya">Kelompok Biaya</label>
+                        <select class="form-control" id="kelompok_biaya" name="kelompok_biaya" ng-model="kelompok_biaya" required>
                             <option value="">- Pilih -</option>
                             <option value="Gabungan">Gabungan</option>
                             <option value="Perlokasi">Perlokasi</option>
@@ -103,20 +103,20 @@
                     </div>
 
                     <!-- Perlokasi -->
-                    <div class="form-group" ng-show="kelompok == 'Perlokasi'">
+                    <div class="form-group" ng-show="kelompok_biaya == 'Perlokasi'">
                     <label for="lokasi_id_single">Nama Lokasi</label>
                     <select class="form-control"
                             id="lokasi_id_single"
-                            ng-attr-name="@{{ kelompok == 'Perlokasi' ? 'lokasi[]' : undefined }}"
+                            name="lokasi[]"
                             ng-model="lokasiSingle"
                             ng-options="l.id as l.nama for l in lokasiList"
-                            ng-change="lokasi = lokasiSingle ? [lokasiSingle] : []">
+                            >
                         <option value="">- Pilih Lokasi -</option>
                     </select>
                     </div>
 
                     <!-- Gabungan -->
-                    <div class="form-group" ng-show="kelompok == 'Gabungan'">
+                    <div class="form-group" ng-show="kelompok_biaya == 'Gabungan'">
                     <label for="lokasi_id_multi">Nama Lokasi (Bisa pilih lebih dari 1)</label>
                     <select class="form-control select2"
                             id="lokasi_id_multi"
@@ -129,7 +129,7 @@
                     </div>
 
                     <!-- Petak hanya tampil jika Perpetak -->
-                    {{-- <div class="form-group" ng-show="kelompok == 'Perpetak'"  id="petak-group">
+                    {{-- <div class="form-group" ng-show="kelompok_biaya == 'Perpetak'"  id="petak-group">
                         <label for="petak">Nama Petak</label>
                         <select class="form-control" id="petak_id" name="petak_id" ng-model="petak_id">
                             <option value="">- Pilih Petak -</option>
@@ -138,13 +138,13 @@
 
                     <div class="form-group">
                         <label class="m-checkbox" style="margin-top: 10px;">
-                            <input type="checkbox" ng-model="periode" name="periode"> Biaya Periode
+                            <input type="checkbox" ng-model="periode_biaya" name="periode_biaya"> Biaya Periode
                             <span></span>
                         </label>
                     </div>
                     <div class="form-group">
                         <label>Default Nominal</label>
-                        <input type="number" class="form-control" id="nominal" name="nominal">
+                        <input type="number" class="form-control" id="nominal_biaya" name="nominal_biaya">
                     </div>
                     <div class="form-group">
                         <label>COA</label>

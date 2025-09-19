@@ -39,14 +39,14 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/pakan/data",
         columns: [
-            { data: 'kode', name: 'kode' },
-            { data: 'nama', name: 'nama' },
-            { data: 'jenis', name: 'jenis' },
-            { data: 'merk', name: 'merk' },
-            { data: 'satuan', name: 'satuan' },
+            { data: 'kode_pakan', name: 'kode_pakan' },
+            { data: 'nama_pakan', name: 'nama_pakan' },
+            { data: 'jenis_pakan', name: 'jenis_pakan' },
+            { data: 'merk_pakan', name: 'merk_pakan' },
+            { data: 'satuan_pakan', name: 'satuan_pakan' },
             { 
-                data: 'harga', 
-                name: 'harga',
+                data: 'harga_pakan', 
+                name: 'harga_pakan',
                 render: function(data, type, row) {
                     return 'Rp ' + parseInt(data).toLocaleString('id-ID');
                 }
@@ -64,12 +64,12 @@ $(document).ready(function() {
 
     $("#formPakan").validate({
         rules: {
-            kode: { required: !0, },
-            nama: { required: !0, },
-            jenis: { required: !0, },
-            merk: { required: !0, },
-            satuan: { required: !0, },
-            harga: { required: !0, }
+            kode_pakan: { required: !0, },
+            nama_pakan: { required: !0, },
+            jenis_pakan: { required: !0, },
+            merk_pakan: { required: !0, },
+            satuan_pakan: { required: !0, },
+            harga_pakan: { required: !0, }
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formPakan", -200)
@@ -77,13 +77,11 @@ $(document).ready(function() {
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
             var url = uuid ? '/pakan/update/' + uuid : '/pakan/store';
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -110,12 +108,12 @@ $(document).ready(function() {
 function editPakan(uuid) {
     $.get('/pakan/show/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
-        $('#nama').val(res.nama);
-        $('#jenis').val(res.jenis);
-        $('#merk').val(res.merk);
-        $('#satuan').val(res.satuan);
-        $('#harga').val(res.harga);
+        $('#kode_pakan').val(res.kode_pakan);
+        $('#nama_pakan').val(res.nama_pakan);
+        $('#jenis_pakan').val(res.jenis_pakan);
+        $('#merk_pakan').val(res.merk_pakan);
+        $('#satuan_pakan').val(res.satuan_pakan);
+        $('#harga_pakan').val(res.harga_pakan);
         $('#keterangan').val(res.keterangan);
         $('#m_create').modal('show');
     });
@@ -131,13 +129,11 @@ function deletePakan(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: '/pakan/delete/' + uuid,
                 method: 'DELETE',

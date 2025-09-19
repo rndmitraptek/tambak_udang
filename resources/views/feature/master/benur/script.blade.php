@@ -39,12 +39,12 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/benur/data",
         columns: [
-            { data: 'kode', name: 'kode' },
+            { data: 'kode_benur', name: 'kode_benur' },
             { data: 'kode_supplier', name: 'kode_supplier' },
-            { data: 'jenis', name: 'jenis' },
+            { data: 'jenis_benur', name: 'jenis_benur' },
             { 
-                data: 'harga', 
-                name: 'harga',
+                data: 'harga_benur', 
+                name: 'harga_benur',
                 render: function(data, type, row) {
                     // Format angka ke Rupiah
                     return 'Rp ' + parseInt(data).toLocaleString('id-ID');
@@ -63,10 +63,10 @@ $(document).ready(function() {
 
     $("#formBenur").validate({
         rules: {
-            kode: { required: !0, },
+            kode_benur: { required: !0, },
             kode_supplier: { required: !0, },
-            jenis: { required: !0, },
-            harga: { required: !0, }
+            jenis_benur: { required: !0, },
+            harga_benur: { required: !0, }
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formBenur", -200)
@@ -74,13 +74,12 @@ $(document).ready(function() {
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
             var url = uuid ? '/benur/update/' + uuid : '/benur/store';
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -107,10 +106,10 @@ $(document).ready(function() {
 function editBenur(uuid) {
     $.get('/benur/show/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
+        $('#kode_benur').val(res.kode_benur);
         $('#kode_supplier').val(res.kode_supplier);
-        $('#jenis').val(res.jenis);
-        $('#harga').val(res.harga);
+        $('#jenis_benur').val(res.jenis_benur);
+        $('#harga_benur').val(res.harga_benur);
         $('#keterangan').val(res.keterangan);
         $('#m_create').modal('show');
     });
@@ -126,13 +125,12 @@ function deleteBenur(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: '/benur/delete/' + uuid,
                 method: 'DELETE',

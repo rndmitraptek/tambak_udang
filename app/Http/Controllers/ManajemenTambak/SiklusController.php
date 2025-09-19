@@ -22,7 +22,7 @@ class SiklusController extends Controller
     // Lokasi list untuk dropdown
     public function lokasiList()
     {
-        $lokasi = SetupLokasi::select('id', 'nama')->get();
+        $lokasi = SetupLokasi::select('id_lokasi', 'nama_lokasi')->get();
         return response()->json($lokasi);
     }
 
@@ -33,23 +33,23 @@ class SiklusController extends Controller
             ->when($request->lokasi_id, function ($q) use ($request) {
                 $q->where('lokasi_id', $request->lokasi_id);
             })
-            ->select('id', 'nama', 'blok_id', 'luas', 'keterangan');
+            ->select('id_petak', 'nama_petak', 'blok_id', 'luas_petak', 'keterangan');
 
         return DataTables::of($query)
-            ->addColumn('nama_blok', fn($row) => $row->blok->nama ?? '-')
-            ->addColumn('nama_petak', fn($row) => $row->nama)
+            ->addColumn('nama_blok', fn($row) => $row->blok->nama_blok ?? '-')
+            ->addColumn('nama_petak', fn($row) => $row->nama_petak ?? '-')
             ->make(true);
     }
 
     public function all()
     {
-        return SetupSiklus::with('lokasi:id,nama')->get(['id','nama','lokasi_id']);
+        return SetupSiklus::with('lokasi:id_lokasi,nama_lokasi')->get(['id_siklus','nama_siklus','lokasi_id']);
     }
 
     public function petak($id)
     {
         return SetupSiklusPetak::where('siklus_id', $id)
-            ->with('petak:id,nama')
+            ->with('petak:id_petak,nama_petak')
             ->get()
             ->pluck('petak');
     }
@@ -60,7 +60,7 @@ class SiklusController extends Controller
         $query = SetupSiklus::with('lokasi')->select('setup_siklus.*');
 
         return DataTables::of($query)
-            ->addColumn('nama_lokasi', fn($row) => $row->lokasi->nama ?? '-')
+            ->addColumn('nama_lokasi', fn($row) => $row->lokasi->nama_lokasi ?? '-')
             ->addColumn('actions', function ($row) {
                 return '
                     <a href="javascript:void(0)" onclick="editSiklus(\''.$row->uuid.'\')" 
@@ -86,18 +86,16 @@ class SiklusController extends Controller
         try {
             $validated = $request->validate([
                 'lokasi_id' => 'required',
-                'nama' => 'required',
+                'nama_siklus' => 'required',
                 'tanggal_mulai' => 'required|date',
             ]);
 
             $siklus = SetupSiklus::create([
                 'lokasi_id' => $request->lokasi_id,
-                'nama' => $request->nama,
+                'nama_siklus' => $request->nama_siklus,
                 'tanggal_mulai' => $request->tanggal_mulai,
                 'tanggal_selesai' => $request->tanggal_selesai,
                 'catatan' => $request->catatan,
-                'created_by' => 1,
-                'updated_by' => 1,
             ]);
 
             // simpan petak kalau ada
@@ -129,15 +127,14 @@ class SiklusController extends Controller
 
             $siklus->update([
                 'lokasi_id' => $request->lokasi_id,
-                'nama' => $request->nama,
+                'nama_siklus' => $request->nama_siklus,
                 'tanggal_mulai' => $request->tanggal_mulai,
                 'tanggal_selesai' => $request->tanggal_selesai,
                 'catatan' => $request->catatan,
-                'updated_by' => 1,
             ]);
 
             // simpan petak kalau ada
-            SetupSiklusPetak::where('siklus_id', $siklus->id)->forceDelete();
+            SetupSiklusPetak::where('siklus_id', $siklus->id_siklus)->forceDelete();
             if ($request->petak_id && is_array($request->petak_id)) {
                 $siklus->petak()->sync($request->petak_id);
             }

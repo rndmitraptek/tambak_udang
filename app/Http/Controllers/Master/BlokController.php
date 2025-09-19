@@ -18,7 +18,7 @@ class BlokController extends Controller
 
     public function lokasiList()
     {
-        return SetupLokasi::select('id', 'nama')->get();
+        return SetupLokasi::select('id_lokasi', 'nama_lokasi')->get();
     }
 
     public function data(Request $request)
@@ -27,7 +27,7 @@ class BlokController extends Controller
 
         return DataTables::of($query)
             ->addColumn('nama_lokasi', function ($row) {
-                return $row->lokasi ? $row->lokasi->nama : '';
+                return $row->lokasi ? $row->lokasi->nama_lokasi : '';
             })
             ->addColumn('actions', function ($row) {
                 return '
@@ -50,17 +50,15 @@ class BlokController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'lokasi_id' => 'required|exists:setup_lokasi,id',
-            'nama' => 'required',
+            'lokasi_id' => 'required|exists:setup_lokasi,id_lokasi',
+            'nama_blok' => 'required',
             'keterangan' => 'nullable',
         ]);
 
         $blok = SetupBlok::create([
             'lokasi_id' => $request->lokasi_id,
-            'nama' => $request->nama,
+            'nama_blok' => $request->nama_blok,
             'keterangan' => $request->keterangan,
-            'created_by' => 1,
-            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $blok]);
@@ -77,14 +75,14 @@ class BlokController extends Controller
         $blok = SetupBlok::where('uuid', $uuid)->firstOrFail();
 
         $request->validate([
-            'lokasi_id' => 'required|exists:setup_lokasi,id',
-            'nama' => 'required',
+            'lokasi_id' => 'required|exists:setup_lokasi,id_lokasi',
+            'nama_blok' => 'required',
             'keterangan' => 'nullable',
         ]);
 
         $blok->update([
             'lokasi_id' => $request->lokasi_id,
-            'nama' => $request->nama,
+            'nama_blok' => $request->nama_blok,
             'keterangan' => $request->keterangan,
         ]);
 

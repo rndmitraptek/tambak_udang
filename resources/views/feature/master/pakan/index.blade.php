@@ -85,27 +85,27 @@
                     <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
                         <label>Kode Pakan</label>
-                        <input type="text" class="form-control" id="kode" name="kode" required>
+                        <input type="text" class="form-control" id="kode_pakan" name="kode_pakan" required>
                     </div>
                     <div class="form-group">
                         <label>Nama Pakan</label>
-                        <input type="text" class="form-control" id="nama" name="nama" required>
+                        <input type="text" class="form-control" id="nama_pakan" name="nama_pakan" required>
                     </div>
                     <div class="form-group">
                         <label>Jenis Pakan</label>
-                        <input type="text" class="form-control" id="jenis" name="jenis" required>
+                        <input type="text" class="form-control" id="jenis_pakan" name="jenis_pakan" required>
                     </div>
                     <div class="form-group">
                         <label>Merk</label>
-                        <input type="text" class="form-control" id="merk" name="merk" required>
+                        <input type="text" class="form-control" id="merk_pakan" name="merk_pakan" required>
                     </div>
                     <div class="form-group">
                         <label>Satuan</label>
-                        <input type="text" class="form-control" id="satuan" name="satuan" required>
+                        <input type="text" class="form-control" id="satuan_pakan" name="satuan_pakan" required>
                     </div>
                     <div class="form-group">
                         <label>Harga</label>
-                        <input type="number" class="form-control" id="harga" name="harga" required>
+                        <input type="number" class="form-control" id="harga_pakan" name="harga_pakan" required>
                     </div>
                     <div class="form-group">
                         <label>Keterangan</label>

@@ -27,8 +27,8 @@ return new class extends Migration
             $table->softDeletes();
 
             // relasi ke tabel lain jika ada
-            $table->foreign('coa_id')->references('id')->on('setup_coa')->onDelete('cascade');
-            $table->foreign('biaya_id')->references('id')->on('setup_biaya')->onDelete('cascade');
+            $table->foreign('coa_id')->references('id_coa')->on('setup_coa')->onDelete('cascade');
+            $table->foreign('biaya_id')->references('id_biaya')->on('setup_biaya')->onDelete('cascade');
         });
 
         Schema::create('transaksi_biaya_siklus', function (Blueprint $table) {
@@ -39,7 +39,7 @@ return new class extends Migration
 
             // relasi ke tabel lain jika ada
             $table->foreign('trans_biaya_id')->references('id')->on('transaksi_biaya')->onDelete('cascade');
-            $table->foreign('siklus_id')->references('id')->on('setup_siklus')->onDelete('cascade');
+            $table->foreign('siklus_id')->references('id_siklus')->on('setup_siklus')->onDelete('cascade');
         });
 
         Schema::create('transaksi_biaya_petak', function (Blueprint $table) {
@@ -58,8 +58,8 @@ return new class extends Migration
             // relasi ke tabel lain jika ada
             $table->foreign('trans_biaya_id')->references('id')->on('transaksi_biaya')->onDelete('cascade');
             $table->foreign('trans_biaya_siklus_id')->references('id')->on('transaksi_biaya_siklus')->onDelete('cascade');
-            $table->foreign('petak_id')->references('id')->on('setup_petak')->onDelete('cascade');
-            $table->foreign('biaya_id')->references('id')->on('setup_biaya')->onDelete('cascade');
+            $table->foreign('petak_id')->references('id_petak')->on('setup_petak')->onDelete('cascade');
+            $table->foreign('biaya_id')->references('id_biaya')->on('setup_biaya')->onDelete('cascade');
         });
     }
 

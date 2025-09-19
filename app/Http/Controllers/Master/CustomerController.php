@@ -16,7 +16,7 @@ class CustomerController extends Controller
 
     public function data(Request $request)
     {
-        $query = SetupCustomer::query();
+        $query = SetupCustomer::query()->orderBy('id_customer', 'desc');
 
         return DataTables::of($query)
             ->addColumn('actions', function ($row) {
@@ -41,23 +41,21 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:setup_customer,kode',
-            'nama' => 'required',
-            'alamat' => 'nullable',
-            'telepon' => 'nullable',
-            'email' => 'nullable|email',
+            'kode_customer' => 'required|unique:setup_customer,kode_customer',
+            'nama_customer' => 'required',
+            'alamat_customer' => 'nullable',
+            'telepon_customer' => 'nullable',
+            'email_customer' => 'nullable',
             'catatan' => 'nullable',
         ]);
 
         $customer = SetupCustomer::create([
-            'kode'       => $request->kode,
-            'nama'       => $request->nama,
-            'alamat'     => $request->alamat,
-            'telepon'    => $request->telepon,
-            'email'      => $request->email,
+            'kode_customer'       => $request->kode_customer,
+            'nama_customer'       => $request->nama_customer,
+            'alamat_customer'     => $request->alamat_customer,
+            'telepon_customer'    => $request->telepon_customer,
+            'email_customer'      => $request->email_customer,
             'catatan'    => $request->catatan,
-            'created_by' => 1,
-            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $customer]);
@@ -74,11 +72,11 @@ class CustomerController extends Controller
         $customer = SetupCustomer::where('uuid', $uuid)->firstOrFail();
 
         $request->validate([
-            'kode' => 'required|unique:setup_customer,kode,' . $customer->id,
-            'nama' => 'required',
-            'alamat' => 'nullable',
-            'telepon' => 'nullable',
-            'email' => 'nullable|email',
+            'kode_customer' => 'required|unique:setup_customer,kode_customer,' . $customer->id_customer . ',id_customer',
+            'nama_customer' => 'required',
+            'alamat_customer' => 'nullable',
+            'telepon_customer' => 'nullable',
+            'email_customer' => 'nullable',
             'catatan' => 'nullable',
         ]);
 

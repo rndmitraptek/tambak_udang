@@ -38,25 +38,25 @@ class TransaksiBiayaController extends Controller
         $petakId = $request->input('petak_id', 0);
 
         $query = \DB::table('setup_siklus_petak')
-            ->join('setup_siklus', 'setup_siklus.id', '=', 'setup_siklus_petak.siklus_id')
-            ->join('setup_petak', 'setup_petak.id', '=', 'setup_siklus_petak.petak_id')
-            ->join('setup_lokasi', 'setup_lokasi.id', '=', 'setup_siklus.lokasi_id')
+            ->join('setup_siklus', 'setup_siklus.id_siklus', '=', 'setup_siklus_petak.siklus_id')
+            ->join('setup_petak', 'setup_petak.id_petak', '=', 'setup_siklus_petak.petak_id')
+            ->join('setup_lokasi', 'setup_lokasi.id_lokasi', '=', 'setup_siklus.lokasi_id')
             ->select([
-                'setup_lokasi.nama as nama_lokasi',
-                'setup_siklus.id as siklus_id',
-                'setup_petak.id as petak_id',
-                'setup_petak.nama as nama_petak',
+                'setup_lokasi.nama_lokasi as nama_lokasi',
+                'setup_siklus.id_siklus as siklus_id',
+                'setup_petak.id_petak as petak_id',
+                'setup_petak.nama_petak as nama_petak',
                 'setup_siklus_petak.status_panen',
-                'setup_petak.luas',
+                'setup_petak.luas_petak as luas',
                 \DB::raw('0 as persentase'),
                 \DB::raw('0 as biaya_perpetak'),
             ]);
 
         if (!empty($siklusIds)) {
-            $query->whereIn('setup_siklus.id', $siklusIds);
+            $query->whereIn('setup_siklus.id_siklus', $siklusIds);
         }
         if (!empty($petakId) && $petakId != 0) {
-            $query->whereIn('setup_petak.id', [$petakId]);
+            $query->whereIn('setup_petak.id_petak', [$petakId]);
         }
 
         return datatables()->of($query)->toJson();
@@ -72,13 +72,13 @@ class TransaksiBiayaController extends Controller
             ->addColumn('siklus', function($row){
                 if ($row->siklus) {
                     return $row->siklus->map(function($s){
-                        return $s->siklus->nama ?? '-';
+                        return $s->siklus->nama_siklus ?? '-';
                     })->implode('<br>');
                 }
                 return '-';
             })
-            ->addColumn('biaya', fn($row) => $row->biaya->nama ?? '-')
-            ->addColumn('coa', fn($row) => $row->coa->nama ?? '-')
+            ->addColumn('biaya', fn($row) => $row->biaya->nama_biaya ?? '-')
+            ->addColumn('coa', fn($row) => $row->coa->nama_coa ?? '-')
             ->addColumn('actions', function ($row) use ($request) {
                 if($request->has('type') && $request->get('type') == 'validasi') {
                     if ($row->validated_by) {
@@ -121,9 +121,9 @@ class TransaksiBiayaController extends Controller
                 'tanggal_transaksi' => 'required|date',
                 'tanggal_mulai' => 'nullable|date',
                 'tanggal_selesai'=> 'nullable|date',
-                'biaya_id'      => 'required|exists:setup_biaya,id',
+                'biaya_id'      => 'required|exists:setup_biaya,id_biaya',
                 'nominal'       => 'required|numeric',
-                'coa_id'        => 'nullable|exists:setup_coa,id',
+                'coa_id'        => 'nullable|exists:setup_coa,id_coa',
                 'keterangan'    => 'nullable|string',
                 'siklus'        => 'array', // array id siklus
                 'petak'         => 'array', // array per siklus
@@ -140,8 +140,6 @@ class TransaksiBiayaController extends Controller
                 'nominal'           => $validated['nominal'],
                 'coa_id'            => $validated['coa_id'] ?? null,
                 'keterangan'        => $validated['keterangan'] ?? null,
-                'created_by'        => 1,
-                'updated_by'        => 1,
             ]);
 
             // 2. simpan transaksi_biaya_siklus
@@ -208,9 +206,9 @@ class TransaksiBiayaController extends Controller
                 'tanggal_transaksi' => 'required|date',
                 'tanggal_mulai' => 'nullable|date',
                 'tanggal_selesai'=> 'nullable|date',
-                'biaya_id'      => 'required|exists:setup_biaya,id',
+                'biaya_id'      => 'required|exists:setup_biaya,id_biaya',
                 'nominal'       => 'required|numeric',
-                'coa_id'        => 'nullable|exists:setup_coa,id',
+                'coa_id'        => 'nullable|exists:setup_coa,id_coa',
                 'keterangan'    => 'nullable|string',
                 'siklus'        => 'array', // array id siklus
                 'petak'         => 'array', // array per siklus

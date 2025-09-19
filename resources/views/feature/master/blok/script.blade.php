@@ -18,7 +18,7 @@ $(document).ready(function() {
     $.get('{{ route('blok.lokasi-list') }}', function(res) {
         $('#lokasi_id').empty();
         res.forEach(function(lokasi) {
-            $('#lokasi_id').append('<option value="'+lokasi.id+'">'+lokasi.nama+'</option>');
+            $('#lokasi_id').append('<option value="'+lokasi.id_lokasi+'">'+lokasi.nama_lokasi+'</option>');
         });
     });
 
@@ -28,7 +28,7 @@ $(document).ready(function() {
         ajax: "{{ route('blok.data') }}",
         columns: [
             { data: 'nama_lokasi', name: 'nama_lokasi' },
-            { data: 'nama', name: 'nama' },
+            { data: 'nama_blok', name: 'nama_blok' },
             { data: 'keterangan', name: 'keterangan' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
@@ -43,7 +43,7 @@ $(document).ready(function() {
     $("#formBlok").validate({
         rules: {
             lokasi_id: { required: !0, },
-            nama: { required: !0, }
+            nama_blok: { required: !0, }
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formBlok", -200)
@@ -86,7 +86,7 @@ function editBlok(uuid) {
     $.get(url, function(res) {
         $('#uuid').val(res.uuid);
         $('#lokasi_id').val(res.lokasi_id);
-        $('#nama').val(res.nama);
+        $('#nama_blok').val(res.nama_blok);
         $('#keterangan').val(res.keterangan);
         $('#m_create').modal('show');
     });
@@ -102,13 +102,11 @@ function deleteBlok(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: url,
                 method: 'DELETE',

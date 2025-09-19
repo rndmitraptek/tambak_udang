@@ -5,32 +5,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUuid;
 
 class SetupLokasi extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes,HasUuid,CreatedUpdatedBy;
 
     protected $table = 'setup_lokasi';
-
+    protected $primaryKey = 'id_lokasi';
     protected $fillable = [
-        'kode',
-        'nama',
-        'alamat',
+        'kode_lokasi',
+        'nama_lokasi',
+        'alamat_lokasi',
         'uuid',
         'created_by',
         'updated_by',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($model) {
-            if (empty($model->uuid)) {
-                $model->uuid = (string) Str::uuid();
-            }
-        });
-    }
+    //     static::creating(function ($model) {
+    //         if (empty($model->uuid)) {
+    //             $model->uuid = (string) Str::uuid();
+    //         }
+    //     });
+    // }
 
     public function siklus()
     {

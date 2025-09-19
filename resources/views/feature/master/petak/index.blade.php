@@ -91,11 +91,11 @@
                     </div>
                     <div class="form-group">
                         <label>Nama Petak</label>
-                        <input type="text" class="form-control" id="nama" name="nama" required>
+                        <input type="text" class="form-control" id="nama_petak" name="nama_petak" required>
                     </div>
                     <div class="form-group">
                         <label>Luas (m<sup>2</sup>)</label>
-                        <input type="text" class="form-control" id="luas" name="luas">
+                        <input type="text" class="form-control" id="luas_petak" name="luas_petak">
                     </div>
                     <div class="form-group">
                         <label>Keterangan</label>

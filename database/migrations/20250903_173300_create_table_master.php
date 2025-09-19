@@ -10,11 +10,11 @@ return new class extends Migration
     {
         // Lokasi
         Schema::create('setup_lokasi', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_lokasi');
             $table->uuid('uuid')->unique();
-            $table->string('kode')->unique();
-            $table->string('nama');
-            $table->string('alamat')->nullable();
+            $table->string('kode_lokasi')->unique();
+            $table->string('nama_lokasi');
+            $table->string('alamat_lokasi')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();
@@ -23,10 +23,10 @@ return new class extends Migration
 
         // Blok/Area
         Schema::create('setup_blok', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_blok');
             $table->uuid('uuid')->unique();
             $table->foreignId('lokasi_id')->constrained('setup_lokasi')->onDelete('cascade');
-            $table->string('nama');
+            $table->string('nama_blok');
             $table->string('keterangan')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
@@ -36,12 +36,12 @@ return new class extends Migration
 
         // Petak/Kolam
         Schema::create('setup_petak', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_petak');
             $table->uuid('uuid')->unique();
             $table->foreignId('lokasi_id')->constrained('setup_lokasi')->onDelete('cascade');
             $table->foreignId('blok_id')->constrained('setup_blok')->onDelete('cascade');
-            $table->string('nama');
-            $table->double('luas')->nullable();
+            $table->string('nama_petak');
+            $table->double('luas_petak')->nullable();
             $table->string('keterangan')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
@@ -51,13 +51,13 @@ return new class extends Migration
 
         // Supplier
         Schema::create('setup_supplier', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_supplier');
             $table->uuid('uuid')->unique();
-            $table->string('kode')->unique();
-            $table->string('nama');
-            $table->string('alamat')->nullable();
-            $table->string('telepon')->nullable();
-            $table->string('email')->nullable();
+            $table->string('kode_supplier')->unique();
+            $table->string('nama_supplier');
+            $table->string('alamat_supplier')->nullable();
+            $table->string('telepon_supplier')->nullable();
+            $table->string('email_supplier')->nullable();
             $table->string('nama_perusahaan')->nullable();
             $table->string('catatan')->nullable();
             $table->integer('created_by');
@@ -68,14 +68,14 @@ return new class extends Migration
 
         // Master Pakan
         Schema::create('setup_pakan', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_pakan');
             $table->uuid('uuid')->unique();
-            $table->string('kode')->unique();
-            $table->string('nama');
-            $table->string('jenis')->nullable();
-            $table->string('merk')->nullable();
-            $table->string('satuan')->nullable();
-            $table->double('harga')->nullable();
+            $table->string('kode_pakan')->unique();
+            $table->string('nama_pakan');
+            $table->string('jenis_pakan')->nullable();
+            $table->string('merk_pakan')->nullable();
+            $table->string('satuan_pakan')->nullable();
+            $table->double('harga_pakan')->nullable();
             $table->string('keterangan')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
@@ -85,12 +85,12 @@ return new class extends Migration
 
         // Master Benur
         Schema::create('setup_benur', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_benur');
             $table->uuid('uuid')->unique();
-            $table->string('kode')->unique();
+            $table->string('kode_benur')->unique();
             $table->string('kode_supplier');
-            $table->string('jenis');
-            $table->double('harga')->nullable();
+            $table->string('jenis_benur');
+            $table->double('harga_benur')->nullable();
             $table->string('keterangan')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
@@ -100,13 +100,13 @@ return new class extends Migration
 
         // Master Customer
         Schema::create('setup_customer', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_customer');
             $table->uuid('uuid')->unique();
-            $table->string('kode')->unique();
-            $table->string('nama');
-            $table->string('alamat')->nullable();
-            $table->string('telepon')->nullable();
-            $table->string('email')->nullable();
+            $table->string('kode_customer')->unique();
+            $table->string('nama_customer');
+            $table->string('alamat_customer')->nullable();
+            $table->string('telepon_customer')->nullable();
+            $table->string('email_customer')->nullable();
             $table->string('catatan')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
@@ -116,11 +116,11 @@ return new class extends Migration
 
         // Master COA
         Schema::create('setup_coa', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_coa');
             $table->uuid('uuid')->unique();
-            $table->string('kode')->unique();
-            $table->string('nama');
-            $table->string('tipe');
+            $table->string('kode_coa')->unique();
+            $table->string('nama_coa');
+            $table->string('tipe_coa');
             $table->string('pos_laporan');
             $table->string('kode_parent')->nullable();
             $table->string('saldo_normal');

@@ -17,7 +17,7 @@ $(document).ready(function() {
     $.get('/petak/lokasi-list', function(res) {
         $('#lokasi_id').empty();
         res.forEach(function(lokasi) {
-            $('#lokasi_id').append('<option value="'+lokasi.id+'">'+lokasi.nama+'</option>');
+            $('#lokasi_id').append('<option value="'+lokasi.id_lokasi+'">'+lokasi.nama_lokasi+'</option>');
         });
         // Trigger blok load for first lokasi
         var firstLokasi = $('#lokasi_id').val();
@@ -34,7 +34,7 @@ $(document).ready(function() {
         $('#blok_id').empty();
         $.get('/petak/blok-list-by-lokasi/' + lokasiId, function(res) {
             res.forEach(function(blok) {
-                $('#blok_id').append('<option value="'+blok.id+'">'+blok.nama+'</option>');
+                $('#blok_id').append('<option value="'+blok.id_blok+'">'+blok.nama_blok+'</option>');
             });
         });
     }
@@ -46,10 +46,10 @@ $(document).ready(function() {
         columns: [
             { data: 'nama_lokasi', name: 'nama_lokasi' },
             { data: 'nama_blok', name: 'nama_blok' },
-            { data: 'nama', name: 'nama' },
+            { data: 'nama_petak', name: 'nama_petak' },
             { 
-                data: 'luas', 
-                name: 'luas',
+                data: 'luas_petak', 
+                name: 'luas_petak',
                 render: function(data, type, row) {
                     return  parseInt(data).toLocaleString('id-ID');
                 }
@@ -69,7 +69,7 @@ $(document).ready(function() {
         rules: {
             lokasi_id: { required: !0, },
             blok_id: { required: !0, },
-            nama: { required: !0, }
+            nama_petak: { required: !0, }
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formPetak", -200)
@@ -77,13 +77,11 @@ $(document).ready(function() {
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
             var url = uuid ? '/petak/update/' + uuid : '/petak/store';
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -112,8 +110,8 @@ function editPetak(uuid) {
         $('#uuid').val(res.uuid);
         $('#lokasi_id').val(res.lokasi_id);
         $('#blok_id').val(res.blok_id);
-        $('#nama').val(res.nama);
-        $('#luas').val(res.luas);
+        $('#nama_petak').val(res.nama_petak);
+        $('#luas_petak').val(res.luas_petak);
         $('#keterangan').val(res.keterangan);
         $('#m_create').modal('show');
     });
@@ -129,13 +127,11 @@ function deletePetak(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: '/petak/delete/' + uuid,
                 method: 'DELETE',

@@ -14,7 +14,9 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.lokasi = [];       // hasil akhir selalu array
     $scope.lokasiSingle = null;
 
-    $scope.$watch('kelompok', function (v) {
+    
+
+    $scope.$watch('kelompok_biaya', function (v) {
     if (v === 'Perlokasi') {
         // kalau sebelumnya ada data array, isi ulang ke single
         $scope.lokasiSingle = $scope.lokasi.length ? $scope.lokasi[0] : null;
@@ -34,7 +36,7 @@ app.controller("myCtrl", function($scope,$http) {
 });
 
 // app.controller("SetupBiayaCtrl", function($scope, $http) {
-//     $scope.kelompok = '';
+//     $scope.kelompok_biaya = '';
 //     $scope.lokasiList = [];
 //     $scope.lokasi = '';
 //     $scope.periode = false;
@@ -80,17 +82,17 @@ $(document).ready(function() {
     $.get('/setup-biaya/coa-list', function(res) {
         $('#coa_id').empty();
         res.forEach(function(coa) {
-            $('#coa_id').append('<option value="'+coa.id+'">'+coa.kode+' - '+coa.nama+'</option>');
+            $('#coa_id').append('<option value="'+coa.id_coa+'">'+coa.kode_coa+' - '+coa.nama_coa+'</option>');
         });
     });
     $.get('/setup-biaya/lokasi-list', function(res) {
         $('#lokasi_id_single').empty();
         res.forEach(function(lokasi) {
-            $('#lokasi_id_single').append('<option value="'+lokasi.id+'">'+lokasi.nama+'</option>');
+            $('#lokasi_id_single').append('<option value="'+lokasi.id_lokasi+'">'+lokasi.nama_lokasi+'</option>');
         });
         $('#lokasi_id_multi').empty();
         res.forEach(function(lokasi) {
-            $('#lokasi_id_multi').append('<option value="'+lokasi.id+'">'+lokasi.nama+'</option>');
+            $('#lokasi_id_multi').append('<option value="'+lokasi.id_lokasi+'">'+lokasi.nama_lokasi+'</option>');
         });
 
         // Panggil setelah $scope.lokasiList diisi
@@ -109,8 +111,8 @@ $(document).ready(function() {
     //     });
     // });
 
-    // Tampilkan/hidden lokasi sesuai kelompok
-    $('#kelompok').on('change', function() {
+    // Tampilkan/hidden lokasi sesuai kelompok_biaya
+    $('#kelompok_biaya').on('change', function() {
         var val = $(this).val();
         if(val === 'Gabungan' || val === 'Perlokasi') {
             $('#petak-group').hide();
@@ -131,15 +133,15 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/setup-biaya/data",
         columns: [
-            { data: 'kode', name: 'kode' },
-            { data: 'nama', name: 'nama' },
-            { data: 'kelompok', name: 'kelompok' },
+            { data: 'kode_biaya', name: 'kode_biaya' },
+            { data: 'nama_biaya', name: 'nama_biaya' },
+            { data: 'kelompok_biaya', name: 'kelompok_biaya' },
             // { data: 'nama_lokasi', name: 'nama_lokasi' },
-            { data: 'periode', name: 'periode' },
+            { data: 'periode_biaya', name: 'periode_biaya' },
             { data: 'coa', name: 'coa' },
             { 
-                data: 'nominal', 
-                name: 'nominal',
+                data: 'nominal_biaya', 
+                name: 'nominal_biaya',
                 render: function(data) {
                     return data ? 'Rp ' + parseInt(data).toLocaleString('id-ID') : '-';
                 }
@@ -159,9 +161,9 @@ $(document).ready(function() {
 
     $("#formSetupBiaya").validate({
         rules: {
-            kode: { required: !0, },
-            nama: { required: !0, },
-            kelompok: { required: !0, }
+            kode_biaya: { required: !0, },
+            nama_biaya: { required: !0, },
+            kelompok_biaya: { required: !0, }
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formSetupBiaya", -200)
@@ -169,11 +171,11 @@ $(document).ready(function() {
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
             var url = uuid ? '/setup-biaya/update/' + uuid : '/setup-biaya/store';
-            Swal.fire({
-                title: 'Menyimpan...',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
+                }
+            })
             $.ajax({
                 url: url,
                 method: 'POST',
@@ -202,23 +204,23 @@ function editBiaya(uuid) {
         var scope = angular.element($('#m_create')).scope();
         scope.$apply(function () {
             // isi field yang dihandle Angular
-            scope.kelompok = res.kelompok;
-            scope.periode = res.periode == 1;
-            scope.nominal = res.nominal;
+            scope.kelompok_biaya = res.kelompok_biaya;
+            scope.periode_biaya = res.periode_biaya == 1;
+            scope.nominal_biaya = res.nominal_biaya;
             scope.catatan = res.catatan;
 
             // lokasi
-            if (res.kelompok === 'Perlokasi') {
+            if (res.kelompok_biaya === 'Perlokasi') {
                 if (res.lokasi && res.lokasi.length > 0) {
                     scope.lokasiSingle = res.lokasi[0].id;
                     scope.lokasi = [res.lokasi[0].id];
                     $('#lokasi_id_single').val(scope.lokasiSingle).trigger('change');
                 }
-            } else if (res.kelompok === 'Gabungan') {
+            } else if (res.kelompok_biaya === 'Gabungan') {
                 var lokasiIds = res.lokasi.map(l => l.id);
                 scope.lokasi = lokasiIds;
                 $('#lokasi_id_multi').val(lokasiIds).trigger('change'); // sync select2
-            } else if (res.kelompok === 'Perpetak') {
+            } else if (res.kelompok_biaya === 'Perpetak') {
                 // scope.petak = res.petak_id;
                 // $('#petak_id').val(res.petak_id).trigger('change');
             }
@@ -226,13 +228,13 @@ function editBiaya(uuid) {
         
         // isi field biasa (jQuery langsung, karena tidak ada ng-model)
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
-        $('#nama').val(res.nama);
-        $('#nominal').val(res.nominal);
+        $('#kode_biaya').val(res.kode_biaya);
+        $('#nama_biaya').val(res.nama_biaya);
+        $('#nominal_biaya').val(res.nominal_biaya);
         $('#coa_id').val(res.coa_id).trigger('change');
         $('#catatan').val(res.catatan);
         // periode (checkbox)
-        $('input[name="periode"]').prop('checked', res.periode == 1);
+        $('input[name="periode_biaya"]').prop('checked', res.periode_biaya == 1);
 
         $('#m_create').modal('show');
     });
@@ -248,11 +250,11 @@ function deleteBiaya(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
+                }
+            })
             $.ajax({
                 url: '/setup-biaya/delete/' + uuid,
                 method: 'DELETE',

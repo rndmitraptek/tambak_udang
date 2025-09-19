@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SetupBiaya;
 use App\Models\SetupCoa;
+use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUuid;
 
 class TransaksiBiaya extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, CreatedUpdatedBy, HasUuid;
 
     protected $table = 'transaksi_biaya';
     protected $fillable = [

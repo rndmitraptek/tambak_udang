@@ -22,9 +22,9 @@ $(document).ready(function() {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
         columns: [
-            { data: 'kode', name: 'kode' },
-            { data: 'nama', name: 'nama' },
-            { data: 'alamat', name: 'alamat' },
+            { data: 'kode_lokasi', name: 'kode_lokasi' },
+            { data: 'nama_lokasi', name: 'nama_lokasi' },
+            { data: 'alamat_lokasi', name: 'alamat_lokasi' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });
@@ -37,8 +37,8 @@ $(document).ready(function() {
 
     $("#formLokasi").validate({
         rules: {
-            kode: { required: !0, },
-            nama: { required: !0, }
+            kode_lokasi: { required: !0, },
+            nama_lokasi: { required: !0, }
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formLokasi", -200)
@@ -87,9 +87,9 @@ function editLokasi(uuid) {
     var url = '{{ route("lokasi.show", ":uuid") }}'.replace(':uuid', uuid);
     $.get(url, function(res) {
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
-        $('#nama').val(res.nama);
-        $('#alamat').val(res.alamat);
+        $('#kode_lokasi').val(res.kode_lokasi);
+        $('#nama_lokasi').val(res.nama_lokasi);
+        $('#alamat_lokasi').val(res.alamat_lokasi);
         $('#m_create').modal('show');
     });
 }
@@ -105,13 +105,11 @@ function deleteLokasi(uuid) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.value) {
-            Swal.fire({
-                title: 'Menghapus...',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
+            swal({title: "Processing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
                 }
-            });
+            })
             $.ajax({
                 url: url,
                 method: 'DELETE',
