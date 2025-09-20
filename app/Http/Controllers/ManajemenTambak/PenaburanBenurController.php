@@ -41,7 +41,7 @@ class PenaburanBenurController extends Controller
 
     public function get_po(Request $request){
         $query = PoModel::query()
-            ->join('setup_lokasi', 'po_benur.id_lokasi', '=', 'setup_lokasi.id')
+            ->join('setup_lokasi', 'po_benur.id_lokasi', '=', 'setup_lokasi.id_lokasi')
             ->select([
                 'po_benur.uuid', 'po_benur.no_po', 'po_benur.tanggal_po','po_benur.supplier','po_benur.lokasi','po_benur.qty','po_benur.harga_satuan','po_benur.total','setup_lokasi.uuid as uuid_lokasi',
             ]);
@@ -56,7 +56,7 @@ class PenaburanBenurController extends Controller
     }
 
     public function get_benur(Request $request){
-        $query = SetupBenur::query()->select(['uuid','kode_supplier','jenis','harga']);
+        $query = SetupBenur::query()->select(['uuid','kode_supplier','jenis_benur as jenis','harga_benur as harga']);
         if ($request->has('textSearch') && $request->textSearch != '') {
             $text = strtoupper($request->textSearch);
             $query->where(DB::raw('UPPER(kode_supplier)'), 'like', "%{$text}%");
@@ -67,7 +67,7 @@ class PenaburanBenurController extends Controller
 
     public function get_petak($id_lokasi){
         $lokasi = SetupLokasi::where('uuid',$id_lokasi)->first();
-        $data = DB::select("SELECT false as checked, sp.uuid,sb.nama as blok, sp.nama as petak,sp.luas FROM setup_blok sb inner join setup_petak sp on sb.id=sp.blok_id WHERE sb.lokasi_id = ?",[$lokasi->id]);
+        $data = DB::select("SELECT false as checked, sp.uuid,sb.nama_blok as blok, sp.nama_petak as petak,sp.luas_petak as luas FROM setup_blok sb inner join setup_petak sp on sb.id_blok=sp.blok_id WHERE sb.lokasi_id = ?",[$lokasi->id_lokasi]);
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
 
@@ -88,9 +88,9 @@ class PenaburanBenurController extends Controller
             $petak = SetupPetak::where('uuid',$d['uuid_petak'])->first();
             unset($d['uuid_petak']);
             $data = $d;
-            $data['id_benur'] = $benur->id;
-            $data['id_petak'] = $petak->id;
-            $data['nama_petak'] = $petak->nama;
+            $data['id_benur'] = $benur->id_benur;
+            $data['id_petak'] = $petak->id_petak;
+            $data['nama_petak'] = $petak->nama_petak;
             $data['kode_supplier'] = $d['kode_benur'];
             $data['id_penaburan_benur'] = $insert->id_penaburan_benur;
             $insert = penaburanBenurDetailModel::create($data);
@@ -118,9 +118,9 @@ class PenaburanBenurController extends Controller
             $petak = SetupPetak::where('uuid',$d['uuid_petak'])->first();
             unset($d['uuid_petak']);
             $data = $d;
-            $data['id_benur'] = $benur->id;
-            $data['id_petak'] = $petak->id;
-            $data['nama_petak'] = $petak->nama;
+            $data['id_benur'] = $benur->id_benur;
+            $data['id_petak'] = $petak->id_petak;
+            $data['nama_petak'] = $petak->nama_petak;
             $data['kode_supplier'] = $d['kode_benur'];
             $data['id_penaburan_benur'] = $penaburanBenur->id_penaburan_benur;
             $insert = penaburanBenurDetailModel::create($data);
@@ -138,12 +138,12 @@ class PenaburanBenurController extends Controller
     public function get_detail($uuid){
         $penaburan = penaburanBenurModel::where('uuid',$uuid)->first();
         $detail = penaburanBenurDetailModel::where('id_penaburan_benur',$penaburan->id_penaburan_benur)
-            ->join('setup_benur','penaburan_benur_detail.id_benur','=','setup_benur.id')
-            ->join('setup_petak','penaburan_benur_detail.id_petak','=','setup_petak.id')
-            ->join('setup_blok','setup_petak.blok_id','=','setup_blok.id')
+            ->join('setup_benur','penaburan_benur_detail.id_benur','=','setup_benur.id_benur')
+            ->join('setup_petak','penaburan_benur_detail.id_petak','=','setup_petak.id_petak')
+            ->join('setup_blok','setup_petak.blok_id','=','setup_blok.id_blok')
             ->select([
-                'setup_blok.nama as blok','setup_petak.nama as petak','setup_petak.uuid as uuid_petak','setup_benur.uuid as uuid_benur',
-                'penaburan_benur_detail.kode_supplier as kode_benur','jenis_benur',
+                'setup_blok.nama_blok as blok','setup_petak.nama_petak as petak','setup_petak.uuid as uuid_petak','setup_benur.uuid as uuid_benur',
+                'penaburan_benur_detail.kode_supplier as kode_benur','penaburan_benur_detail.jenis_benur',
                 'harga_bruto','jumlah_bruto','subtotal_bruto',
                 'harga_neto','jumlah_neto','subtotal_neto',
                 'harga_actual','jumlah_actual','subtotal_actual',

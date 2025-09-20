@@ -25,3 +25,19 @@ Route::prefix('panen')->name('panen.')->group(function(){
     Route::get('/get_petak/{uuid_blok}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_petak'])->name('get_petak');
     Route::get('/get_detail/{uuid}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_detail'])->name('get_detail');
 });
+
+Route::prefix('simulasi')->name('simulasi.')->group(function(){
+    Route::get('/',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'index'])->name('index');
+    Route::post('/store',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'store'])->name('store');
+    Route::post('/update/{uuid}',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'update'])->name('update');
+    Route::get('/data',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'data'])->name('data');
+    Route::delete('/delete/{uuid}',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'destroy'])->name('delete');
+    Route::get('/lokasi',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'lokasi'])->name('lokasi');
+    Route::get('/siklus/{lokasiId}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'siklusByLokasi'])->name('siklusByLokasi');
+    Route::get('/petak/{siklusId}/{tanggalSimulasi}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'petakBySiklus'])->name('petakBySiklus');
+    Route::get('/show/{uuid}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'show'])->name('show');
+    Route::post('/pendapatan/save', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'pendapatan_save'])->name('pendapatan_save');
+    Route::get('/get_blok/{uuid_lokasi}',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'get_blok'])->name('get_blok');
+    Route::get('/get_petak/{uuid_blok}',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'get_petak'])->name('get_petak');
+    Route::get('/get_detail/{uuid}',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'get_detail'])->name('get_detail');
+});

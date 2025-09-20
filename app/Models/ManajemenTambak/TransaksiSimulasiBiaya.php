@@ -9,7 +9,7 @@ use App\Models\SetupBenur;
 
 class TransaksiSimulasiBiaya extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $table = 'transaksi_simulasi_biaya';
     protected $primaryKey = 'id_simulasi_biaya';
@@ -22,7 +22,8 @@ class TransaksiSimulasiBiaya extends Model
         'doc',
         'jenis_benur',
         'jumlah_benur',
-        'detail',
+        'detail_biaya_actual',
+        'detail_biaya_simulasi',
     ];
 
     public function simulasi()

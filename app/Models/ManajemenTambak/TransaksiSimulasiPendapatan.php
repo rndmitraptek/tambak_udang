@@ -8,7 +8,7 @@ use App\Models\SetupPetak;
 
 class TransaksiSimulasiPendapatan extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $table = 'transaksi_simulasi_pendapatan';
     protected $primaryKey = 'id_simulasi_pendapatan';
@@ -17,8 +17,9 @@ class TransaksiSimulasiPendapatan extends Model
         'petak_id',
         'harga_per_kg',
         'biomassa',
-        'pendapatan',
+        'pendapatan_simulasi',
         'pendapatan_actual_partial',
+        'pendapatan_subtotal',
     ];
 
     public function simulasi()

@@ -35,7 +35,8 @@ return new class extends Migration
             $table->float('doc')->nullable();
             $table->string('jenis_benur')->nullable();
             $table->float('jumlah_benur')->nullable();
-            $table->jsonb('detail')->nullable();
+            $table->jsonb('detail_biaya_actual')->nullable();
+            $table->jsonb('detail_biaya_simulasi')->nullable();
             $table->timestamps();
 
             // relasi ke tabel lain jika ada

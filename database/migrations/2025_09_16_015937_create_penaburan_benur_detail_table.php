@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('id_petak')->constrained('setup_petak');
             $table->string('nama_petak',100);
             $table->integer('id_benur')->constrained('setup_benur');
+            $table->integer('siklus_id')->constrained('setup_benur');
             $table->string('kode_supplier',100);
             $table->string('jenis_benur',100);
             $table->float('harga_bruto',8,2);
