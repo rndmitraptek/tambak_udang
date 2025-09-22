@@ -308,65 +308,65 @@ app.controller("myCtrl", function($scope,$http) {
 
 
     //get detail
-    // $scope.get_detail = function(item,index){
-    //     $scope.detail = angular.copy(item);
-    //     $scope.judul = angular.copy(item);
-    //     $scope.selected_index = index;
-    //     console.log($scope.judul);
+    $scope.get_detail = function(item,index){
+        $scope.detail = angular.copy(item);
+        $scope.judul = angular.copy(item);
+        $scope.selected_index = index;
+        console.log($scope.judul);
 
-    //     swal({title: "Processing...!",text: "Please Wait",
-    //         onOpen: function() {
-    //             swal.showLoading()
-    //         }
-    //     })
-    //     $http.get('/simulasi/show/' + $scope.detail.uuid)
-    //         .then(function (res) {
-    //             Swal.close();
-    //             $scope.detail = res.data;
-    //             $scope.simulasi.id_simulasi =res.data.id_simulasi;
-    //         })
-    //         .catch(function (err) {
-    //             Swal.close();
-    //             swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Oops...',
-    //                 text: 'Terjadi kesalahan mengambil data simulasi. Silakan coba lagi.'
-    //             });
-    //             console.error('Error getPetakData:', err);
-    //             $scope.detail = angular.copy(item);
-    //         });
-    // }
+        swal({title: "Processing...!",text: "Please Wait",
+            onOpen: function() {
+                swal.showLoading()
+            }
+        })
+        $http.get('/simulasi/show/' + $scope.detail.uuid)
+            .then(function (res) {
+                Swal.close();
+                $scope.detail = res.data;
+                $scope.simulasi.id_simulasi =res.data.id_simulasi;
+            })
+            .catch(function (err) {
+                Swal.close();
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan mengambil data simulasi. Silakan coba lagi.'
+                });
+                console.error('Error getPetakData:', err);
+                $scope.detail = angular.copy(item);
+            });
+    }
 
 
-    // //save pendapatan
-    // $scope.save_pendapatan = function() {
-    //     // data pendapatan bisa dari simulasi atau pendapatan tergantung kondisi
-    //     let payload = ($scope.detail.pendapatan && $scope.detail.pendapatan.length > 0)
-    //                     ? $scope.detail.pendapatan
-    //                     : $scope.detail.simulasi;
-    //     console.log($scope.simulasi.id_simulasi);
-    //     console.log(payload);
-    //     // kirim data ke backend
-    //     swal({title: "Processing...!",text: "Please Wait",
-    //         onOpen: function() {
-    //             swal.showLoading()
-    //         }
-    //     })
-    //     $http.post('/simulasi/pendapatan/save', {
-    //         trans_simulasi_id: $scope.simulasi.id_simulasi, // atau uuid yg dipakai
-    //         items: payload
-    //     }).then(function(res){
-    //         swal("Success!", "Data pendapatan berhasil disimpan!", "success");
+    //save pendapatan
+    $scope.save_pendapatan = function() {
+        // data pendapatan bisa dari simulasi atau pendapatan tergantung kondisi
+        let payload = ($scope.detail.pendapatan && $scope.detail.pendapatan.length > 0)
+                        ? $scope.detail.pendapatan
+                        : $scope.detail.simulasi;
+        console.log($scope.simulasi.id_simulasi);
+        console.log(payload);
+        // kirim data ke backend
+        swal({title: "Processing...!",text: "Please Wait",
+            onOpen: function() {
+                swal.showLoading()
+            }
+        })
+        $http.post('/simulasi/pendapatan/save', {
+            trans_simulasi_id: $scope.simulasi.id_simulasi, // atau uuid yg dipakai
+            items: payload
+        }).then(function(res){
+            swal("Success!", "Data pendapatan berhasil disimpan!", "success");
 
-    //         // panggil lagi get_detail untuk refresh
-    //         // gunakan data yg sedang aktif (judul atau detail)
-    //         if ($scope.detail && $scope.detail.uuid) {
-    //             $scope.get_detail($scope.detail, $scope.selected_index);
-    //         }
-    //     }).catch(function(err){
-    //         swal("Error!", "Gagal menyimpan pendapatan!", "error");
-    //     });
-    // };
+            // panggil lagi get_detail untuk refresh
+            // gunakan data yg sedang aktif (judul atau detail)
+            if ($scope.detail && $scope.detail.uuid) {
+                $scope.get_detail($scope.detail, $scope.selected_index);
+            }
+        }).catch(function(err){
+            swal("Error!", "Gagal menyimpan pendapatan!", "error");
+        });
+    };
     
 });
 
