@@ -1,0 +1,80 @@
+version: 2.1
+
+orbs:
+  docker: circleci/docker@2.2
+
+jobs:
+  build:
+    docker:
+      - image: cimg/php:8.3  # image PHP utk composer & test
+        environment:
+          APP_ENV: testing
+          DB_CONNECTION: sqlite
+    steps:
+      - checkout
+
+      # Cache dependencies
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+      - run:
+          name: Install Composer dependencies
+          command: composer install --no-interaction --prefer-dist --no-scripts
+      - save_cache:
+          paths:
+            - vendor
+          key: composer-v1-{{ checksum "composer.lock" }}
+
+      # Jalankan test
+      - run:
+          name: Run PHPUnit
+          command: php artisan test --env=testing
+
+  docker-build-push:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -f docker/Dockerfile -t $DOCKERHUB_USERNAME/tambah-udang:${CIRCLE_SHA1} .
+      - run:
+          name: Push image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $DOCKERHUB_USERNAME/tambah-udang:${CIRCLE_SHA1}
+            docker tag  $DOCKERHUB_USERNAME/tambah-udang:${CIRCLE_SHA1}  $DOCKERHUB_USERNAME/tambah-udang:latest
+            docker push $DOCKERHUB_USERNAME/tambah-udang:latest
+
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - add_ssh_keys
+      - run:
+          name: Deploy to Server
+          command: |
+            ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST \
+              "docker pull $DOCKERHUB_USERNAME/tambah-udang:latest &&
+               docker stop tambah_udang || true &&
+               docker rm tambah_udang || true &&
+               docker run -d --name tambah_udang -p 8080:8080 $DOCKERHUB_USERNAME/tambah-udang:latest"
+
+workflows:
+  build_test_deploy:
+    jobs:
+      - build
+      - docker-build-push:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+      - deploy:
+          requires:
+            - docker-build-push
+          filters:
+            branches:
+              only: main
