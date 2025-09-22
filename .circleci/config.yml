@@ -44,7 +44,7 @@ jobs:
       - run:
           name: Build dockerfile
           command: |
-            docker build --no-cache -t rndmitraptek/tambak-udang:$CIRCLE_SHA1 .
+            docker build -f docker/Dockerfile --no-cache -t rndmitraptek/tambak-udang:$CIRCLE_SHA1 .
       - run:
           name: Push Docker Image
           command: |
