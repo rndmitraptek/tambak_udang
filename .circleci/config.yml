@@ -26,8 +26,12 @@ jobs:
           name: Generate app key for testing
           command: php artisan key:generate --env=testing
       - run:
+          name: Prepare testing database
+          command: |
+            php artisan migrate --env=testing --force
+      - run:
           name: Run tests
-          command: php artisan test --env=testing
+          command: php artisan test --env=testing --refresh-database
 
   docker-build-push-dev:
     docker:
