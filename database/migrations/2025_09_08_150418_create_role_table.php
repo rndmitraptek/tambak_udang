@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('role', function (Blueprint $table) {
             $table->id('id_role');
-            $table->uuid('uuid')->default(DB::raw('gen_random_uuid()'))->unique();
+            $table->uuid('uuid');
             $table->string('role');
             $table->text('keterangan');
             $table->timestamps();

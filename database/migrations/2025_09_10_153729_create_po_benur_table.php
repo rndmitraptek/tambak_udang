@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('po_benur', function (Blueprint $table) {
             $table->id('id_po_benur');
-            $table->uuid('uuid')->default(DB::raw('gen_random_uuid()'))->unique();
+            $table->uuid('uuid');
             $table->string('no_po',100);
             $table->integer('id_supplier')->constrained('setup_supplier');
             $table->string('supplier',100);

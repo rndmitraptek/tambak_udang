@@ -14,7 +14,8 @@ return new class extends Migration
     {
         Schema::create('menu', function (Blueprint $table) {
             $table->id('id_menu');
-            $table->uuid('uuid')->default(DB::raw('gen_random_uuid()'))->unique();
+            // $table->uuid('uuid')->default(DB::raw('gen_random_uuid()'))->unique();
+            $table->uuid('uuid');
             $table->integer('urut');
             $table->string('label',100);
             $table->string('icon',100);
