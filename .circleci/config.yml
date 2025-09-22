@@ -52,7 +52,17 @@ jobs:
             docker push rndmitraptek/tambak-udang:$CIRCLE_SHA1
             docker tag rndmitraptek/tambak-udang:$CIRCLE_SHA1 rndmitraptek/tambak-udang:development-latest
             docker push rndmitraptek/tambak-udang:development-latest
-
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 'SHA256:q8SKv5JwNXWKo2bPR1RgdhyflZtN59wWpABbB3VB1zo'
+      - run:
+          name: Deploy app to server
+          command: |
+            ssh -o StrictHostKeyChecking=no satunafas-admin@68.183.185.76 "cd deployer/ && ./deploy-his-satunapas-backend.sh"
 workflows:
   build_and_push_dev:
     jobs:
@@ -62,4 +72,10 @@ workflows:
             - build
           filters:
             branches:
-              only: development   # <-- hanya jalan kalau branch development
+              only: development
+      - deploy:
+          requires:
+            - docker-build-push-dev
+          filters:
+            branches:
+              only: development

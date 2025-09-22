@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/master.php';
 require __DIR__.'/manajemen-tambak.php';
-
+Route::get('health',function(){
+    return response()->json(['success'=>true,'data'=>'health']);
+});
 Route::get('/', [App\Http\Controllers\Auth\UsersController::class,'login']);
 Route::get('login', [App\Http\Controllers\Auth\UsersController::class,'login'])->name('login');
 Route::get('/user',[App\Http\Controllers\Auth\UsersController::class, 'index']);
