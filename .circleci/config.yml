@@ -62,7 +62,7 @@ jobs:
       - run:
           name: Deploy app to server
           command: |
-            ssh -o StrictHostKeyChecking=no satunafas-admin@68.183.185.76 "cd deployer/ && ./deploy-his-satunapas-backend.sh"
+            ssh -o StrictHostKeyChecking=no satunafas-admin@68.183.185.76 "cd deployer/ && ./deploy-tambak-udang.sh"
 workflows:
   build_and_push_dev:
     jobs:
