@@ -52,7 +52,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah_simulasi()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button ng-click="tambah_simulasi()" class="btn btn-sm btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-bar-chart"></i>
                                         <span>Tambah Simulasi</span>
@@ -112,14 +112,14 @@
         <div class="col-lg-9">
             <div class="m-portlet m-portlet--tabs">
                 <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-caption col-sm-4">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
                                 <% judul.nama_lokasi %> - <% judul.nama_siklus %>, Tanggal Simulasi <% detail.tanggal_simulasi | date:'dd/MM/yyyy' %>
                             </h3>
                         </div>
                     </div>
-                    <div class="m-portlet__head-tools">
+                    <div class="m-portlet__head-tools col-sm-8">
                         <ul class="nav nav-tabs m-tabs-line m-tabs-line--right" role="tablist">
                             <li class="nav-item m-tabs__item">
                                 <a class="nav-link m-tabs__link active show" data-toggle="tab" href="#m_portlet_base_demo_1_tab_content" role="tab" aria-selected="false">
@@ -413,6 +413,7 @@
           <thead>
             <tr>
               <th>Nama Biaya</th>
+              <th>No Transaksi</th>
               <th>Tipe</th>
               <th>Biaya Petak</th>
               <th>Biaya / Hari</th>
@@ -423,6 +424,7 @@
           <tbody>
             <tr ng-repeat="b in selectedDetailBiaya">
               <td><% b.nama_biaya %></td>
+              <td><% b.no_transaksi || '-' %></td>
               <td><% b.tipe_perhitungan %></td>
               <td class="text-right">Rp <% b.nominal_petak | currency %></td>
               <td class="text-right">Rp <% b.biaya_per_hari | currency %></td>
@@ -431,7 +433,7 @@
             </tr>
             <!-- Total biaya_hitung -->
             <tr>
-              <td colspan="5" class="text-right font-weight-bold">Total Biaya Hitung</td>
+              <td colspan="6" class="text-right font-weight-bold">Total Biaya Hitung</td>
               <td class="text-right font-weight-bold">
                 Rp <% totalBiayaDetail() | currency %>
               </td>

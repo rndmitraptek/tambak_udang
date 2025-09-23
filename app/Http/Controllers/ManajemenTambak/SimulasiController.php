@@ -78,7 +78,8 @@ class SimulasiController extends Controller
             // Query 1: biaya selesai sebelum simulasi
             $biayaLaluRows = DB::table('transaksi_biaya_petak as tbp')
                 ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
-                ->select('tbp.*','sb.nama_biaya')
+                ->join('transaksi_biaya as tb','tbp.trans_biaya_id','=','tb.id')
+                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
                 ->where('tbp.petak_id', $petakId)
                 // mulai biaya >= mulai siklus
                 ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
@@ -93,7 +94,8 @@ class SimulasiController extends Controller
             // Query 2: biaya berjalan saat simulasi
             $biayaBerjalanRows = DB::table('transaksi_biaya_petak as tbp')
                 ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
-                ->select('tbp.*','sb.nama_biaya')
+                ->join('transaksi_biaya as tb','tbp.trans_biaya_id','=','tb.id')
+                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
                 ->where('tbp.petak_id', $petakId)
                 ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
                     $q->where('tbp.tanggal_mulai','>=',$tglMulaiSiklus);
@@ -109,6 +111,7 @@ class SimulasiController extends Controller
             foreach ($biayaLaluRows as $row) {
                 $detailAll[] = [
                     'id_transaksi_biaya_petak' => $row->id,
+                    'no_transaksi' => $row->no_transaksi,
                     'nama_biaya' => $row->nama_biaya,
                     'tanggal_mulai' => $row->tanggal_mulai,
                     'tanggal_selesai' => $row->tanggal_selesai,
@@ -132,6 +135,7 @@ class SimulasiController extends Controller
 
                 $detailAll[] = [
                     'id_transaksi_biaya_petak' => $row->id,
+                    'no_transaksi' => $row->no_transaksi,
                     'nama_biaya' => $row->nama_biaya,
                     'tanggal_mulai' => $row->tanggal_mulai,
                     'tanggal_selesai' => $row->tanggal_selesai,
