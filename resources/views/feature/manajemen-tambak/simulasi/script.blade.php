@@ -334,7 +334,8 @@ app.controller("myCtrl", function($scope,$http) {
         $http.get('/simulasi/show/' + $scope.detail.uuid)
             .then(function (res) {
                 $scope.simulasi.id_simulasi =res.data.id_simulasi;
-                $scope.getBiayaSimulasi($scope.simulasi.id_simulasi);
+                $scope.getBiayaSimulasi(res.data.id_simulasi);
+                console.log('get biaya simulasi');
                 Swal.close();
                 $scope.detail = res.data;
             })
