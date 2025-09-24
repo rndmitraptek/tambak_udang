@@ -396,7 +396,7 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.getBiayaSimulasi = function(simulasiId){
         $scope.loadingBiayaSimulasi = true;
 
-        $http.get('/simulasi/getBiayaSimulasi/' +simulasiId)
+        $http.get('/simulasi/get-biaya-simulasi/' +simulasiId)
             .then(function (res) {
                 Swal.close();
                 $scope.biayaSimulasiList = res.data; // tampilkan sesuai kebutuhan
