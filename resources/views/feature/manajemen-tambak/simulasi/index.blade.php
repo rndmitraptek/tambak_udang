@@ -228,7 +228,7 @@
                         {{-- TAB BIAYA SIMULASI--}}
                         <div class="tab-pane" id="m_portlet_base_demo_3_tab_content" role="tabpanel" ng-if="judul != null">
                             <button type="button" ng-click="add_biaya()" class="btn btn-primary btn-sm mb-2"><i class="la la-plus"></i> Tambah Biaya Simulasi</button>
-                            <h1>BIAYA SIMULASI</h1>
+                            <h1>BIAYA SIMULASI TES TRIGGER</h1>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel" >
                                 <thead>
                                     <tr>
