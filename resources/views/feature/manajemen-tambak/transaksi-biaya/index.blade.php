@@ -178,7 +178,7 @@
                                             <th>ID Petak</th>
                                             <th>Lokasi</th>
                                             <th>Petak</th>
-                                            <th>Status</th>
+                                            <th>Status (Panen)</th>
                                             <th>Luas</th>
                                             <th>Persen</th>
                                             <th>biaya perpetak</th>

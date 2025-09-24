@@ -199,7 +199,7 @@
                                         <th  style="width: 150px;">Harga /KG</th>
                                         <th  style="width: 150px;">Biomassa</th>
                                         <th>Pendapatan</th>
-                                        <th>Pendapatan Actual Partial (Panen)</th>
+                                        <th>Pendapatan Actual (Panen)</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-if="detail.pendapatan.length ==0">

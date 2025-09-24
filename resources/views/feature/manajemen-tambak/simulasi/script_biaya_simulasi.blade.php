@@ -249,6 +249,15 @@ app.controller("myCtrl", function($scope,$http) {
                     }
                 },
             ],
+            createdRow: function(row, data, dataIndex) {
+                if (data.status_panen === "FINAL") {
+                    $(row).css({
+                        "background-color": "#f8d7da", // merah muda
+                        "color": "#721c24",            // teks merah tua
+                        // "font-weight": "bold"
+                    });
+                }
+            },
             footerCallback: function(row, data, start, end, display) {
                 let api = this.api();
 
@@ -286,26 +295,33 @@ app.controller("myCtrl", function($scope,$http) {
         });
 
         function hitungBiayaPerPetak() {
-            //let nominal = parseFloat($("#nominal").val()) || 0;
             let nominal = $scope.nominal;
             console.log("Nominal:", nominal);
+
             // Ambil semua data petak dari DataTable
             let data = tablePetak.rows().data().toArray();
             console.log("Data Petak:", data);
 
-            // Hitung total luas
-            let totalLuas = data.reduce((sum, row) => sum + parseFloat(row.luas || 0), 0);
-            console.log("Total Luas:", totalLuas);
+            // Hitung total luas hanya untuk petak yang statusnya bukan FINAL
+            let totalLuas = data.reduce((sum, row) => {
+                if (row.status_panen !== "FINAL") {
+                    return sum + parseFloat(row.luas || 0);
+                }
+                return sum;
+            }, 0);
+            console.log("Total Luas (non-FINAL):", totalLuas);
 
             // Update data dengan persentase & biaya_perpetak
             data.forEach(function(row) {
                 let luas = parseFloat(row.luas || 0);
 
-                if (totalLuas > 0) {
+                if (row.status_panen === "FINAL") {
+                    // Petak FINAL biaya default 0
+                    row.persentase = 0;
+                    row.biaya_perpetak = 0;
+                } else if (totalLuas > 0) {
                     row.persentase = ((luas / totalLuas) * 100).toFixed(2); // %
-                    console.log("Luas:", luas, "Persentase:", row.persentase);
                     row.biaya_perpetak = ((luas / totalLuas) * nominal).toFixed(0); // Rp
-                    console.log("Biaya per Petak:", row.biaya_perpetak);
                 } else {
                     row.persentase = 0;
                     row.biaya_perpetak = 0;
@@ -315,6 +331,38 @@ app.controller("myCtrl", function($scope,$http) {
             // Reload DataTable dengan data baru
             tablePetak.clear().rows.add(data).draw();
         }
+
+
+        // function hitungBiayaPerPetak() {
+        //     //let nominal = parseFloat($("#nominal").val()) || 0;
+        //     let nominal = $scope.nominal;
+        //     console.log("Nominal:", nominal);
+        //     // Ambil semua data petak dari DataTable
+        //     let data = tablePetak.rows().data().toArray();
+        //     console.log("Data Petak:", data);
+
+        //     // Hitung total luas
+        //     let totalLuas = data.reduce((sum, row) => sum + parseFloat(row.luas || 0), 0);
+        //     console.log("Total Luas:", totalLuas);
+
+        //     // Update data dengan persentase & biaya_perpetak
+        //     data.forEach(function(row) {
+        //         let luas = parseFloat(row.luas || 0);
+
+        //         if (totalLuas > 0) {
+        //             row.persentase = ((luas / totalLuas) * 100).toFixed(2); // %
+        //             console.log("Luas:", luas, "Persentase:", row.persentase);
+        //             row.biaya_perpetak = ((luas / totalLuas) * nominal).toFixed(0); // Rp
+        //             console.log("Biaya per Petak:", row.biaya_perpetak);
+        //         } else {
+        //             row.persentase = 0;
+        //             row.biaya_perpetak = 0;
+        //         }
+        //     });
+
+        //     // Reload DataTable dengan data baru
+        //     tablePetak.clear().rows.add(data).draw();
+        // }
 
 
         var table = $('#viewtabel').DataTable({
