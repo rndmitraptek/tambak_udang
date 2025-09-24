@@ -4,16 +4,17 @@ namespace App\Http\Controllers\ManajemenTambak;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\ManajemenTambak\TransaksiBiaya;
-use App\Models\ManajemenTambak\TransaksiBiayaSiklus;
-use App\Models\ManajemenTambak\TransaksiBiayaPetak;
+use App\Models\ManajemenTambak\TransaksiBiayaSimulasi;
+use App\Models\ManajemenTambak\TransaksiBiayaSimulasiSiklus;
+use App\Models\ManajemenTambak\TransaksiBiayaSimulasiPetak;
+use App\Models\ManajemenTambak\TransaksiSimulasi;
 use App\Models\SetupBiaya;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class TransaksiBiayaController extends Controller
+class TransaksiBiayaSimulasiController extends Controller
 {
     //
     public function index()
@@ -65,8 +66,8 @@ class TransaksiBiayaController extends Controller
 
     public function data(Request $request)
     {
-        $query = TransaksiBiaya::with(['biaya','coa','siklus.siklus'])
-            ->select('transaksi_biaya.*')
+        $query = TransaksiBiayaSimulasi::with(['biaya','coa','siklus.siklus'])
+            ->select('transaksi_biaya_simulasi.*')
             ->orderBy('id', 'desc');
 
         return DataTables::of($query)
@@ -118,8 +119,9 @@ class TransaksiBiayaController extends Controller
         DB::beginTransaction();
         try {
             $validated = $request->validate([
-                'no_transaksi'  => 'required|unique:transaksi_biaya,no_transaksi',
+                'no_transaksi'  => 'required|unique:transaksi_biaya_simulasi,no_transaksi',
                 'tanggal_transaksi' => 'required|date',
+                'uuid_simulasi' => 'required',
                 'tanggal_mulai' => 'nullable|date',
                 'tanggal_selesai'=> 'nullable|date',
                 'biaya_id'      => 'required|exists:setup_biaya,id_biaya',
@@ -130,9 +132,13 @@ class TransaksiBiayaController extends Controller
                 'petak'         => 'array', // array per siklus
             ]);
 
-            // 1. simpan transaksi_biaya
-            $transBiaya = TransaksiBiaya::create([
+            //cek uuid_simulasi
+            $getSimulasi =TransaksiSimulasi::where('uuid',$validated['uuid_simulasi'])->firstOrFail();
+
+            // 1. simpan transaksi_biaya_simulasi
+            $transBiaya = TransaksiBiayaSimulasi::create([
                 'uuid'              => \Str::uuid(),
+                'id_simulasi'      => $getSimulasi->id_simulasi,
                 'no_transaksi'      => $validated['no_transaksi'],
                 'tanggal_transaksi' => $validated['tanggal_transaksi'],
                 'tanggal_mulai'     => $validated['tanggal_mulai'] ?? null,
@@ -143,19 +149,19 @@ class TransaksiBiayaController extends Controller
                 'keterangan'        => $validated['keterangan'] ?? null,
             ]);
 
-            // 2. simpan transaksi_biaya_siklus
+            // 2. simpan transaksi_biaya_simulasi_siklus
             $siklusMap = [];
             if (!empty($validated['siklus'])) {
                 foreach ($validated['siklus'] as $siklusId) {
-                    $tbSiklus = TransaksiBiayaSiklus::create([
-                        'trans_biaya_id' => $transBiaya->id,
+                    $tbSiklus = TransaksiBiayaSimulasiSiklus::create([
+                        'trans_biaya_simulasi_id' => $transBiaya->id,
                         'siklus_id'      => $siklusId,
                     ]);
                     $siklusMap[$siklusId] = $tbSiklus->id; // simpan map untuk petak
                 }
             }
 
-            // 3. simpan transaksi_biaya_petak
+            // 3. simpan transaksi_biaya_simulasi_petak
             if (!empty($validated['petak'])) {
                 foreach ($validated['petak'] as $siklusId => $petaks) {
                     if (!isset($siklusMap[$siklusId])) continue;
@@ -163,9 +169,9 @@ class TransaksiBiayaController extends Controller
                     $transSiklusId = $siklusMap[$siklusId];
 
                     foreach ($petaks as $p) {
-                        TransaksiBiayaPetak::create([
-                            'trans_biaya_id'        => $transBiaya->id,
-                            'trans_biaya_siklus_id' => $transSiklusId,
+                        TransaksiBiayaSimulasiPetak::create([
+                            'trans_biaya_simulasi_id'        => $transBiaya->id,
+                            'trans_biaya_simulasi_siklus_id' => $transSiklusId,
                             'petak_id'              => $p['petak_id'],
                             'biaya_id'              => $validated['biaya_id'],
                             'luas'                  => $p['luas'] ?? null,
@@ -189,7 +195,7 @@ class TransaksiBiayaController extends Controller
 
     public function show($uuid)
     {
-        $data = TransaksiBiaya::with(['biaya','coa','siklus.siklus','siklus.petak.petak'])
+        $data = TransaksiBiayaSimulasi::with(['biaya','coa','siklus.siklus','siklus.petak.petak'])
             ->where('uuid', $uuid)
             ->firstOrFail();
 
@@ -198,7 +204,7 @@ class TransaksiBiayaController extends Controller
 
     public function update(Request $request, $uuid)
     {
-        $trans = TransaksiBiaya::where('uuid', $uuid)->firstOrFail();
+        $trans = TransaksiBiayaSimulasi::where('uuid', $uuid)->firstOrFail();
 
         DB::beginTransaction();
         try {
@@ -224,23 +230,25 @@ class TransaksiBiayaController extends Controller
                 'nominal'           => $validated['nominal'],
                 'coa_id'            => $validated['coa_id'] ?? null,
                 'keterangan'        => $validated['keterangan'] ?? null,
+                'validated_by'      => 1,
+                'validated_at'      => now(),
             ]);
 
-            // 2. simpan transaksi_biaya_siklus
-            TransaksiBiayaSiklus::where('trans_biaya_id', $trans->id)->forceDelete();
+            // 2. simpan transaksi_biaya_simulasi_siklus
+            TransaksiBiayaSimulasiSiklus::where('trans_biaya_simulasi_id', $trans->id)->forceDelete();
             $siklusMap = [];
             if (!empty($validated['siklus'])) {
                 foreach ($validated['siklus'] as $siklusId) {
-                    $tbSiklus = TransaksiBiayaSiklus::create([
-                        'trans_biaya_id' => $trans->id,
+                    $tbSiklus = TransaksiBiayaSimulasiSiklus::create([
+                        'trans_biaya_simulasi_id' => $trans->id,
                         'siklus_id'      => $siklusId,
                     ]);
                     $siklusMap[$siklusId] = $tbSiklus->id; // simpan map untuk petak
                 }
             }
 
-            // 3. simpan transaksi_biaya_petak
-            TransaksiBiayaPetak::where('trans_biaya_id', $trans->id)->forceDelete();
+            // 3. simpan transaksi_biaya_simulasi_petak
+            TransaksiBiayaSimulasiPetak::where('trans_biaya_simulasi_id', $trans->id)->forceDelete();
             if (!empty($validated['petak'])) {
                 foreach ($validated['petak'] as $siklusId => $petaks) {
                     if (!isset($siklusMap[$siklusId])) continue;
@@ -248,9 +256,9 @@ class TransaksiBiayaController extends Controller
                     $transSiklusId = $siklusMap[$siklusId];
 
                     foreach ($petaks as $p) {
-                        TransaksiBiayaPetak::create([
-                            'trans_biaya_id'        => $trans->id,
-                            'trans_biaya_siklus_id' => $transSiklusId,
+                        TransaksiBiayaSimulasiPetak::create([
+                            'trans_biaya_simulasi_id'        => $trans->id,
+                            'trans_biaya_simulasi_siklus_id' => $transSiklusId,
                             'petak_id'              => $p['petak_id'],
                             'biaya_id'              => $validated['biaya_id'],
                             'luas'                  => $p['luas'] ?? null,
@@ -274,7 +282,7 @@ class TransaksiBiayaController extends Controller
 
     public function action_validasi($uuid)
     {
-        $trans = TransaksiBiaya::where('uuid', $uuid)->firstOrFail();
+        $trans = TransaksiBiayaSimulasi::where('uuid', $uuid)->firstOrFail();
         $trans->update([
             'validated_by'        => (Auth::user())?Auth::user()->id_user:1,
             'validated_at'        => now(),
@@ -284,14 +292,14 @@ class TransaksiBiayaController extends Controller
 
     public function destroy($uuid)
     {
-        $trans = TransaksiBiaya::where('uuid', $uuid)->firstOrFail();
+        $trans = TransaksiBiayaSimulasi::where('uuid', $uuid)->firstOrFail();
         $trans->delete();
         return response()->json(['success' => true]);
     }
 
     private function generateNoTransaksi()
     {
-        $last = TransaksiBiaya::latest('id')->first();
+        $last = TransaksiBiayaSimulasi::latest('id')->first();
         $num = $last ? $last->id+1 : 1;
         return "TR".date('Ymd').str_pad($num, 5, '0', STR_PAD_LEFT);
     }

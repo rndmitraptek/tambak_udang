@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManajemenTambak\TransaksiBiayaController;
+use App\Http\Controllers\ManajemenTambak\TransaksiBiayaSimulasiController;
 
 Route::prefix('transaksi-biaya')->group(function() {
     Route::get('/', [TransaksiBiayaController::class, 'index'])->name('transaksi-biaya.index');
@@ -36,8 +37,21 @@ Route::prefix('simulasi')->name('simulasi.')->group(function(){
     Route::get('/siklus/{lokasiId}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'siklusByLokasi'])->name('siklusByLokasi');
     Route::get('/petak/{siklusId}/{tanggalSimulasi}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'petakBySiklus'])->name('petakBySiklus');
     Route::get('/show/{uuid}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'show'])->name('show');
+    Route::get('/form_biaya_simulasi/{uuid_simulasi}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'form_biaya_simulasi'])->name('form_biaya_simulasi');
     Route::post('/pendapatan/save', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'pendapatan_save'])->name('pendapatan_save');
     Route::get('/get_blok/{uuid_lokasi}',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'get_blok'])->name('get_blok');
     Route::get('/get_petak/{uuid_blok}',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'get_petak'])->name('get_petak');
     Route::get('/get_detail/{uuid}',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'get_detail'])->name('get_detail');
+});
+
+Route::prefix('transaksi-biaya-simulasi')->group(function() {
+    Route::get('/', [TransaksiBiayaSimulasiController::class, 'index'])->name('transaksi-biaya-simulasi.index');
+    Route::get('/data', [TransaksiBiayaSimulasiController::class, 'data'])->name('transaksi-biaya-simulasi.data'); // datatables
+    Route::get('/biaya-list', [TransaksiBiayaSimulasiController::class, 'biayaList'])->name('transaksi-biaya-simulasi.biaya-list');
+    Route::get('/petak-list', [TransaksiBiayaSimulasiController::class, 'petakList'])->name('transaksi-biaya-simulasi.petak-list');
+    Route::post('/store', [TransaksiBiayaSimulasiController::class, 'store'])->name('transaksi-biaya-simulasi.store');
+    Route::get('/{uuid}', [TransaksiBiayaSimulasiController::class, 'show'])->name('transaksi-biaya-simulasi.show');
+    Route::post('/update/{uuid}', [TransaksiBiayaSimulasiController::class, 'update'])->name('transaksi-biaya-simulasi.update');
+    Route::post('/validasi/{uuid}', [TransaksiBiayaSimulasiController::class, 'action_validasi'])->name('transaksi-biaya-simulasi.validasi');
+    Route::delete('/{uuid}', [TransaksiBiayaSimulasiController::class, 'destroy'])->name('transaksi-biaya-simulasi.destroy');
 });

@@ -196,10 +196,10 @@
                                     <tr>
                                         <th>Blok</th>
                                         <th>Nama Petak</th>
-                                        <th  style="width: 150px;">harga_per_kg</th>
-                                        <th  style="width: 150px;">biomassa</th>
-                                        <th>pendapatan</th>
-                                        <th>pendapatan actual partial (Panen)</th>
+                                        <th  style="width: 150px;">Harga /KG</th>
+                                        <th  style="width: 150px;">Biomassa</th>
+                                        <th>Pendapatan</th>
+                                        <th>Pendapatan Actual Partial (Panen)</th>
                                     </tr>
                                 </thead>
                                 <tbody ng-if="detail.pendapatan.length ==0">
@@ -223,12 +223,14 @@
                                 </tbody>
                             </table>
                         </div>
+
+
                         {{-- TAB BIAYA SIMULASI--}}
                         <div class="tab-pane" id="m_portlet_base_demo_3_tab_content" role="tabpanel" ng-if="judul != null">
                             <button type="button" ng-click="add_biaya()" class="btn btn-primary btn-sm mb-2"><i class="la la-plus"></i> Tambah Biaya Simulasi</button>
                             <h1>BIAYA SIMULASI</h1>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                                <thead>
+                                {{-- <thead>
                                     <tr>
                                         <th>No Transaksi</th>
                                         <th>Tanggal Transaksi</th>
@@ -255,7 +257,7 @@
                                         <td>pembayaran gaji pegawai semarang bulan oktober </td>
                                         <td nowrap></td>
                                     </tr>
-                                </tbody>
+                                </tbody> --}}
                             </table>
                             </br>
 
@@ -264,15 +266,34 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabelactual">
                                 <thead>
                                     <tr>
-                                        <th>No Transaksi</th>
-                                        <th>Tanggal Transaksi</th>
+                                        <th>Blok</th>
+                                        <th>Nama Petak</th>
+                                        <th>Luas</th>
                                         <th>Biaya</th>
-                                        <th>Nominal Biaya</th>
-                                        <th>Keterangan</th>
-                                        <th>Actions</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody ng-if="simulasi.id_simulasi !=null">
+                                    <tr ng-repeat="item in detail.simulasi">
+                                        <td><% item.detail_biaya.petak.blok.nama_blok %></td>
+                                        <td><% item.detail_biaya.petak.nama_petak %></td>
+                                        <td class="text-right"><% item.detail_biaya.petak.luas_petak | currency %></td>
+                                        <td class="text-right">Rp <% item.total_biaya | currency %></td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-info" 
+                                                    ng-click="viewDetail(item.detail_biaya.detail_biaya_actual)">View Detail</button>
+                                        </td>
+                                    </tr>
+                                    <!-- Total biaya semua petak -->
+                                    <tr>
+                                        <td colspan="3" class="text-right font-weight-bold">Total Biaya</td>
+                                        <td class="text-right font-weight-bold">
+                                            Rp <% tabBiayaTotalBiayaActual() | currency %>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                                {{-- <tbody>
                                     <tr>
                                         <td>TR2025082900001</td>
                                         <td>2025-10-31</td>
@@ -289,7 +310,7 @@
                                         <td>pembayaran gaji pegawai semarang bulan oktober </td>
                                         <td nowrap></td>
                                     </tr>
-                                </tbody>
+                                </tbody> --}}
                             </table>
                         </div>
                     </div>

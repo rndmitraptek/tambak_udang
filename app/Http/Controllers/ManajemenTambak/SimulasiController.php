@@ -317,4 +317,9 @@ class SimulasiController extends Controller
             return response()->json(['status' => false, 'message' => $th->getMessage()], 500);
         }
     }
+
+    public function form_biaya_simulasi($uuid_simulasi)
+    {
+        return view('feature.manajemen-tambak.simulasi.form_biaya_simulasi',compact('uuid_simulasi'));
+    }
 }

@@ -150,6 +150,7 @@ app.controller("myCtrl", function($scope,$http) {
 
 
     $scope.detail = null;
+    $scope.simulasi.id_simulasi = null;
     $scope.judul = null;
     $scope.tambah_simulasi = function(){
         $scope.simulasi = {
@@ -179,7 +180,11 @@ app.controller("myCtrl", function($scope,$http) {
     //     $scope.list_simulasi[$scope.selected_index] = angular.copy($scope.detail);
     // }
     $scope.add_biaya = function(){
-        $('#m_create_biaya').modal('show');
+        var uuid_simulasi = $scope.detail.uuid;
+        var baseFormBiayaSimulasiUrl = "{{ url('/simulasi/form_biaya_simulasi') }}";
+        // $('#m_create_biaya').modal('show');
+        var formBiayaSimulasiUrl = baseFormBiayaSimulasiUrl + '/' + uuid_simulasi;
+        window.location.href = formBiayaSimulasiUrl;
     }
 
 
@@ -252,6 +257,10 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.selectedDetailBiaya = [];
 
     $scope.viewDetail = function(detailBiaya) {
+        if(typeof detailBiaya=='string'){
+            detailBiaya =JSON.parse(detailBiaya);
+        }
+        console.log('detailBiaya==>',detailBiaya);
         $scope.selectedDetailBiaya = detailBiaya; // JSON array detail
         $('#modalDetailBiaya').modal('show');
     };
@@ -339,35 +348,41 @@ app.controller("myCtrl", function($scope,$http) {
 
 
     //save pendapatan
-    // $scope.save_pendapatan = function() {
-    //     // data pendapatan bisa dari simulasi atau pendapatan tergantung kondisi
-    //     let payload = ($scope.detail.pendapatan && $scope.detail.pendapatan.length > 0)
-    //                     ? $scope.detail.pendapatan
-    //                     : $scope.detail.simulasi;
-    //     console.log($scope.simulasi.id_simulasi);
-    //     console.log(payload);
-    //     // kirim data ke backend
-    //     swal({title: "Processing...!",text: "Please Wait",
-    //         onOpen: function() {
-    //             swal.showLoading()
-    //         }
-    //     })
-    //     $http.post('/simulasi/pendapatan/save', {
-    //         trans_simulasi_id: $scope.simulasi.id_simulasi, // atau uuid yg dipakai
-    //         items: payload
-    //     }).then(function(res){
-    //         swal("Success!", "Data pendapatan berhasil disimpan!", "success");
+    $scope.save_pendapatan = function() {
+        // data pendapatan bisa dari simulasi atau pendapatan tergantung kondisi
+        let payload = ($scope.detail.pendapatan && $scope.detail.pendapatan.length > 0)
+                        ? $scope.detail.pendapatan
+                        : $scope.detail.simulasi;
+        console.log($scope.simulasi.id_simulasi);
+        console.log(payload);
+        // kirim data ke backend
+        swal({title: "Processing...!",text: "Please Wait",
+            onOpen: function() {
+                swal.showLoading()
+            }
+        })
+        $http.post('/simulasi/pendapatan/save', {
+            trans_simulasi_id: $scope.simulasi.id_simulasi, // atau uuid yg dipakai
+            items: payload
+        }).then(function(res){
+            swal("Success!", "Data pendapatan berhasil disimpan!", "success");
 
-    //         // panggil lagi get_detail untuk refresh
-    //         // gunakan data yg sedang aktif (judul atau detail)
-    //         if ($scope.detail && $scope.detail.uuid) {
-    //             $scope.get_detail($scope.detail, $scope.selected_index);
-    //         }
-    //     }).catch(function(err){
-    //         swal("Error!", "Gagal menyimpan pendapatan!", "error");
-    //     });
-    // };
+            // panggil lagi get_detail untuk refresh
+            // gunakan data yg sedang aktif (judul atau detail)
+            if ($scope.detail && $scope.detail.uuid) {
+                $scope.get_detail($scope.detail, $scope.selected_index);
+            }
+        }).catch(function(err){
+            swal("Error!", "Gagal menyimpan pendapatan!", "error");
+        });
+    };
     
+
+    $scope.tabBiayaTotalBiayaActual = function() {
+        return $scope.detail.simulasi.reduce(function(total, item){
+            return total + (item.total_biaya || 0);
+        }, 0);
+    };
 });
 
 </script>
