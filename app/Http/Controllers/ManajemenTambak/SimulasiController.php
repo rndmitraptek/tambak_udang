@@ -79,8 +79,10 @@ class SimulasiController extends Controller
             $biayaLaluRows = DB::table('transaksi_biaya_petak as tbp')
                 ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
                 ->join('transaksi_biaya as tb','tbp.trans_biaya_id','=','tb.id')
+                ->join('transaksi_biaya_siklus as tbs','tbp.trans_biaya_siklus_id','=','tbs.id')
                 ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
                 ->where('tbp.petak_id', $petakId)
+                ->where('tbs.siklus_id', $siklusId)
                 // mulai biaya >= mulai siklus
                 ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
                     $q->where('tbp.tanggal_mulai','>=',$tglMulaiSiklus);
@@ -95,8 +97,10 @@ class SimulasiController extends Controller
             $biayaBerjalanRows = DB::table('transaksi_biaya_petak as tbp')
                 ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
                 ->join('transaksi_biaya as tb','tbp.trans_biaya_id','=','tb.id')
+                ->join('transaksi_biaya_siklus as tbs','tbp.trans_biaya_siklus_id','=','tbs.id')
                 ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
                 ->where('tbp.petak_id', $petakId)
+                ->where('tbs.siklus_id', $siklusId)
                 ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
                     $q->where('tbp.tanggal_mulai','>=',$tglMulaiSiklus);
                 })
@@ -321,5 +325,123 @@ class SimulasiController extends Controller
     public function form_biaya_simulasi($uuid_simulasi)
     {
         return view('feature.manajemen-tambak.simulasi.form_biaya_simulasi',compact('uuid_simulasi'));
+    }
+
+    public function getBiayaSimulasi($simulasiId)
+    {
+        // get simulasi
+        $getSimulasi = DB::table('transaksi_simulasi')->where('id_simulasi', $simulasiId)->firstOrFail();
+        $tglSimulasi = Carbon::parse($getSimulasi->tanggal_simulasi);
+        $siklusId = $getSimulasi->siklus_id;
+
+        // Ambil tanggal mulai siklus
+        $siklus = DB::table('setup_siklus')->where('id_siklus', $siklusId)->first();
+        $tglMulaiSiklus = $siklus ? Carbon::parse($siklus->tanggal_mulai) : null;
+
+        $petakList = SetupSiklusPetak::with('petak.blok')
+            ->where('siklus_id', $siklusId)
+            ->orderBy('id_siklus_petak','asc')
+            ->get();
+
+        foreach ($petakList as $petakItem) {
+            $petakId = $petakItem->petak_id;
+
+            // ambil id benur dari penamburan benur per petak
+            // $penaburanBenurDetail = DB::table('penaburan_benur_detail')
+            //     ->join('penaburan_benur','penaburan_benur.id_penaburan_benur','penaburan_benur_detail.id_penaburan_benur')
+            //     ->where('penaburan_benur_detail.siklus_id', $siklusId)
+            //     ->where('penaburan_benur_detail.id_petak', $petakId)
+            //     ->orderBy('id_penaburan_benur_detail','desc')->first();
+            // $petakItem->benur_id =$penaburanBenurDetail ? $penaburanBenurDetail->id_benur :null;
+            // $petakItem->jenis_benur =$penaburanBenurDetail ? $penaburanBenurDetail->jenis_benur :null;
+            // $petakItem->jumlah_benur =$penaburanBenurDetail ? $penaburanBenurDetail->jumlah_neto :null;
+            // $petakItem->doc =$penaburanBenurDetail ?  Carbon::parse($penaburanBenurDetail->tanggal_penaburan)->diffInDays($tglSimulasi) + 1 :null;
+
+            // Query 1: biaya selesai sebelum simulasi
+            $biayaLaluRows = DB::table('transaksi_biaya_simulasi_petak as tbp')
+                ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
+                ->join('transaksi_biaya_simulasi as tb','tbp.trans_biaya_simulasi_id','=','tb.id')
+                ->join('transaksi_biaya_simulasi_siklus as tbs','tbp.trans_biaya_simulasi_siklus_id','=','tbs.id')
+                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
+                ->where('tbp.petak_id', $petakId)
+                ->where('tb.id_simulasi', $getSimulasi->id_simulasi)
+                ->where('tbs.siklus_id', $siklusId)
+                // mulai biaya >= mulai siklus
+                ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
+                    $q->where('tbp.tanggal_mulai','>=',$tglMulaiSiklus);
+                })
+                ->where('tbp.tanggal_mulai','<=',$tglSimulasi)
+                ->where('tbp.tanggal_selesai','<=',$tglSimulasi)
+                ->get();
+
+            $totalBiayaLalu = $biayaLaluRows->sum('nominal_petak');
+
+            // Query 2: biaya berjalan saat simulasi
+            $biayaBerjalanRows = DB::table('transaksi_biaya_simulasi_petak as tbp')
+                ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
+                ->join('transaksi_biaya_simulasi as tb','tbp.trans_biaya_simulasi_id','=','tb.id')
+                ->join('transaksi_biaya_simulasi_siklus as tbs','tbp.trans_biaya_simulasi_siklus_id','=','tbs.id')
+                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
+                ->where('tbp.petak_id', $petakId)
+                ->where('tb.id_simulasi', $getSimulasi->id_simulasi)
+                ->where('tbs.siklus_id', $siklusId)
+                ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
+                    $q->where('tbp.tanggal_mulai','>=',$tglMulaiSiklus);
+                })
+                ->where('tbp.tanggal_mulai','<',$tglSimulasi)
+                ->where('tbp.tanggal_selesai','>',$tglSimulasi)
+                ->get();
+
+            $totalProrata = 0;
+            $detailAll = [];
+
+            // biaya lalu
+            foreach ($biayaLaluRows as $row) {
+                $detailAll[] = [
+                    'id_transaksi_biaya_simulasi_petak' => $row->id,
+                    'no_transaksi' => $row->no_transaksi,
+                    'nama_biaya' => $row->nama_biaya,
+                    'tanggal_mulai' => $row->tanggal_mulai,
+                    'tanggal_selesai' => $row->tanggal_selesai,
+                    'nominal_petak' => (float)$row->nominal_petak,
+                    'tipe_perhitungan' => 'full',
+                    'biaya_hitung' => round($row->nominal_petak, 0)
+                ];
+            }
+
+            // biaya prorata
+            foreach ($biayaBerjalanRows as $row) {
+                $tglMulai = Carbon::parse($row->tanggal_mulai);
+                $tglSelesai = Carbon::parse($row->tanggal_selesai);
+
+                $totalHari = $tglMulai->diffInDays($tglSelesai) + 1;
+                $hariSampaiSimulasi = $tglMulai->diffInDays($tglSimulasi) + 1;
+                $biayaPerHari = $row->nominal_petak / $totalHari;
+                $biayaReal = $biayaPerHari * $hariSampaiSimulasi;
+
+                $totalProrata += $biayaReal;
+
+                $detailAll[] = [
+                    'id_transaksi_biaya_simulasi_petak' => $row->id,
+                    'no_transaksi' => $row->no_transaksi,
+                    'nama_biaya' => $row->nama_biaya,
+                    'tanggal_mulai' => $row->tanggal_mulai,
+                    'tanggal_selesai' => $row->tanggal_selesai,
+                    'nominal_petak' => (float)$row->nominal_petak,
+                    'tipe_perhitungan' => 'prorata',
+                    'total_hari' => $totalHari,
+                    'biaya_per_hari' => round($biayaPerHari,2),
+                    'hari_sampai_simulasi' => $hariSampaiSimulasi,
+                    'biaya_hitung' => round($biayaReal, 0)
+                ];
+            }
+
+            $totalBiayaSimulasi = $totalBiayaLalu + $totalProrata;
+
+            $petakItem->biaya_simulasi = round($totalBiayaSimulasi,0);
+            $petakItem->detail_biaya = $detailAll;
+        }
+
+        return response()->json($petakList);
     }
 }

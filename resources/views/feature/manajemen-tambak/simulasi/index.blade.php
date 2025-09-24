@@ -229,7 +229,44 @@
                         <div class="tab-pane" id="m_portlet_base_demo_3_tab_content" role="tabpanel" ng-if="judul != null">
                             <button type="button" ng-click="add_biaya()" class="btn btn-primary btn-sm mb-2"><i class="la la-plus"></i> Tambah Biaya Simulasi</button>
                             <h1>BIAYA SIMULASI</h1>
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel" >
+                                <thead>
+                                    <tr>
+                                        <th>Blok</th>
+                                        <th>Nama Petak</th>
+                                        <th>Status</th>
+                                        <th>Luas</th>
+                                        <th>Biaya</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Loading Row -->
+                                    <tr ng-if="loadingBiayaSimulasi">
+                                        <td colspan="6" class="text-center">
+                                            <i class="fa fa-spinner fa-spin"></i> Sedang memuat data...
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="item in biayaSimulasiList">
+                                        <td><% item.petak.blok.nama_blok %></td>
+                                        <td><% item.petak.nama_petak %></td>
+                                        <td><% item.status_panen %></td>
+                                        <td class="text-right"><% item.petak.luas_petak | currency %></td>
+                                        <td class="text-right">Rp <% item.biaya_simulasi | currency %></td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-info" 
+                                                    ng-click="viewDetail(item.detail_biaya)">View Detail</button>
+                                        </td>
+                                    </tr>
+                                    <!-- Total biaya semua petak -->
+                                    <tr>
+                                        <td colspan="4" class="text-right font-weight-bold">Total Biaya</td>
+                                        <td class="text-right font-weight-bold">
+                                            Rp <% tabBiayaTotalBiayaSimulasi() | currency %>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
                                 {{-- <thead>
                                     <tr>
                                         <th>No Transaksi</th>
@@ -470,7 +507,7 @@
 </div>
 
 <!--begin::Biaya-->
-<div class="modal fade" id="m_create_biaya" tabindex="-1" role="dialog"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="m_create_biaya" tabindex="-1" role="dialog"  aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document" style="max-width: 80vw;">
         <div class="modal-content">
             <form>
@@ -578,7 +615,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> --}}
 
 <!--end::Modal-->
 @endsection

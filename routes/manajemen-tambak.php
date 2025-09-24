@@ -36,6 +36,7 @@ Route::prefix('simulasi')->name('simulasi.')->group(function(){
     Route::get('/lokasi',[App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'lokasi'])->name('lokasi');
     Route::get('/siklus/{lokasiId}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'siklusByLokasi'])->name('siklusByLokasi');
     Route::get('/petak/{siklusId}/{tanggalSimulasi}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'petakBySiklus'])->name('petakBySiklus');
+    Route::get('/getBiayaSimulasi/{simulasiId}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'getBiayaSimulasi'])->name('getBiayaSimulasi');
     Route::get('/show/{uuid}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'show'])->name('show');
     Route::get('/form_biaya_simulasi/{uuid_simulasi}', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'form_biaya_simulasi'])->name('form_biaya_simulasi');
     Route::post('/pendapatan/save', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'pendapatan_save'])->name('pendapatan_save');

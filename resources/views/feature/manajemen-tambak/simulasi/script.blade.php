@@ -158,6 +158,9 @@ app.controller("myCtrl", function($scope,$http) {
             tanggal_simulasi: yyyy + '-' + mm + '-' + dd,
             catatan: ""
         };
+        $scope.detail = null;
+        $scope.simulasi.id_simulasi = null;
+        $scope.judul = null;
         $('#m_create_simulasi').modal('show');
     }
 
@@ -330,9 +333,10 @@ app.controller("myCtrl", function($scope,$http) {
         })
         $http.get('/simulasi/show/' + $scope.detail.uuid)
             .then(function (res) {
+                $scope.simulasi.id_simulasi =res.data.id_simulasi;
+                $scope.getBiayaSimulasi($scope.simulasi.id_simulasi);
                 Swal.close();
                 $scope.detail = res.data;
-                $scope.simulasi.id_simulasi =res.data.id_simulasi;
             })
             .catch(function (err) {
                 Swal.close();
@@ -382,6 +386,52 @@ app.controller("myCtrl", function($scope,$http) {
         return $scope.detail.simulasi.reduce(function(total, item){
             return total + (item.total_biaya || 0);
         }, 0);
+    };
+
+
+    // fungsi get biaya simulasi
+    $scope.biayaSimulasiList = []
+    $scope.loadingBiayaSimulasi = false;
+    $scope.getBiayaSimulasi = function(simulasiId){
+        $scope.loadingBiayaSimulasi = true;
+
+        $http.get('/simulasi/getBiayaSimulasi/' +simulasiId)
+            .then(function (res) {
+                Swal.close();
+                $scope.biayaSimulasiList = res.data; // tampilkan sesuai kebutuhan
+            })
+            .catch(function (err) {
+                Swal.close();
+                // tampilkan pesan error swal
+                swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan mengambil data biaya simulasi. Silakan coba lagi.'
+                });
+                console.error('Error getBiayaSimulasi:', err);
+                // kosongkan list bila perlu
+                $scope.biayaSimulasiList = [];
+            })
+            .finally(function () {
+                $scope.loadingBiayaSimulasi = false; // selesai loading
+            });
+    };
+
+    // $scope.tabBiayaTotalBiayaSimulasi = function() {
+    //     return $scope.biayaSimulasiList.reduce(function(total, item){
+    //         return total + (item.biaya_simulasi || 0);
+    //     }, 0);
+    // };
+    $scope.tabBiayaTotalBiayaSimulasi = function() {
+        let total = $scope.biayaSimulasiList.reduce(function(sum, item){
+            return sum + (item.biaya_simulasi || 0);
+        }, 0);
+
+        if (total === 0) {
+            $scope.biayaSimulasiList = [];
+        }
+
+        return total;
     };
 });
 
