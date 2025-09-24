@@ -267,34 +267,6 @@
                                         <td></td>
                                     </tr>
                                 </tbody>
-                                {{-- <thead>
-                                    <tr>
-                                        <th>No Transaksi</th>
-                                        <th>Tanggal Transaksi</th>
-                                        <th>Biaya</th>
-                                        <th>Nominal Biaya</th>
-                                        <th>Keterangan</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>TR2025082900001</td>
-                                        <td>2025-10-31</td>
-                                        <td>Biaya Gaji Pegawai Sekuro</td>
-                                        <td>25.000.000</td>
-                                        <td>pembayaran gaji pegawai sekuro bulan oktober </td>
-                                        <td nowrap></td>
-                                    </tr>
-                                    <tr>
-                                        <td>TR2025082900002</td>
-                                        <td>2025-10-31</td>
-                                        <td>Biaya Gaji Pegawai Semarang</td>
-                                        <td>30.000.000</td>
-                                        <td>pembayaran gaji pegawai semarang bulan oktober </td>
-                                        <td nowrap></td>
-                                    </tr>
-                                </tbody> --}}
                             </table>
                             </br>
 
