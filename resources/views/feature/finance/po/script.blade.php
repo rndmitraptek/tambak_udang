@@ -62,14 +62,14 @@ app.controller("myCtrl", function($scope,$http,API) {
                             swal({
                                 title: "Terhapus ",text: "Data PO berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                             }).then(function(){
-                                $('#m_create').modal('hide');
+                                
                                 table.draw();
                             })
                         }else{
                             swal({
                                 title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                             }).then(function(){
-                                $('#m_create').modal('hide');
+                                
                             })
                         }
                     }).catch(function(error) {
@@ -84,14 +84,16 @@ app.controller("myCtrl", function($scope,$http,API) {
     $scope.input = {};
 
     $scope.supplierColumns = [
-        { data: 'kode', title: 'Kode' },
-        { data: 'nama', title: 'Nama' }
+        { data: 'kode_supplier', title: 'Kode Supplier' },
+        { data: 'nama_supplier', title: 'Nama Supplier' },
+        { data: 'nama_perusahaan', title: 'Perusahaan' },
+        { data: 'telepon_supplier', title: 'Telepon' }
     ];
     $scope.id_lokasi = null;
     $scope.selectSupplier = function(row) {
         console.log(row);
         $scope.input.uuid_supplier = row.uuid;
-        $scope.input.nama_supplier = row.nama;
+        $scope.input.nama_supplier = row.nama_supplier;
         $scope.id_lokasi = row.id_lokasi;
         
         $scope.$apply();
@@ -101,6 +103,7 @@ app.controller("myCtrl", function($scope,$http,API) {
     $scope.form = "list";
     $scope.tambah = function(){
         $scope.form = "input";
+        $scope.edit = false;
         $scope.input = {
             qty:0,
             harga_satuan:0,
@@ -183,16 +186,18 @@ app.controller("myCtrl", function($scope,$http,API) {
             .then(function(res){
                 if(res.data.success){
                     swal({
-                        title: "Tersimpan ",text: "Data Menu berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                        title: "Tersimpan ",text: "Data PO berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
-                        $('#m_create').modal('hide');
                         table.draw();
+                        $scope.edit = true;
+                        $scope.form = "input";
+                        $scope.input.uuid = res.data.data.uuid;
                     })
                 }else{
                     swal({
                         title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
-                        $('#m_create').modal('hide');
+                        
                     })
                 }
             }).catch(function(error) {

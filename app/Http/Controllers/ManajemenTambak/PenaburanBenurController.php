@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Finance\PoModel;
 use App\Models\ManajemenTambak\penaburanBenurDetailModel;
 use App\Models\ManajemenTambak\penaburanBenurModel;
+use App\Models\ManajemenTambak\TransaksiBiaya;
 use App\Models\SetupBenur;
 use App\Models\SetupLokasi;
 use App\Models\SetupPetak;
@@ -93,13 +94,14 @@ class PenaburanBenurController extends Controller
             $data['nama_petak'] = $petak->nama_petak;
             $data['kode_supplier'] = $d['kode_benur'];
             $data['id_penaburan_benur'] = $insert->id_penaburan_benur;
-            $insert = penaburanBenurDetailModel::create($data);
+            $insert_detail = penaburanBenurDetailModel::create($data);
         }
         return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
     }
 
     public function update(Request $req, $uuid)
     {
+        
         $penaburanBenur = penaburanBenurModel::where('uuid', $uuid)->firstOrFail();
         $po = PoModel::where('uuid',$req->uuid_po)->first();
         $req->validate([
@@ -123,9 +125,23 @@ class PenaburanBenurController extends Controller
             $data['nama_petak'] = $petak->nama_petak;
             $data['kode_supplier'] = $d['kode_benur'];
             $data['id_penaburan_benur'] = $penaburanBenur->id_penaburan_benur;
-            $insert = penaburanBenurDetailModel::create($data);
+            $insert_detail = penaburanBenurDetailModel::create($data);
         }
-        return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
+        return response()->json(['success'=>true,'data'=>$penaburanBenur,'message'=>'lahhh...']);
+    }
+
+    public function trigger_transaksi_biaya($payload)
+    {
+        $transBiaya = TransaksiBiaya::create([
+            'no_transaksi'      => $payload->no_penaburan_benur,
+            'tanggal_transaksi' => $payload->tanggal_penaburan,
+            'tanggal_mulai'     => $payload->tanggal_penaburan,
+            'tanggal_selesai'   => $payload->tanggal_penaburan,
+            'biaya_id'          => 1,
+            'nominal'           => $payload->total_nominal_netto,
+            'coa_id'            => 5,
+            'keterangan'        => 'transaksi penaburan benur',
+        ]);
     }
 
     public function destroy($uuid)

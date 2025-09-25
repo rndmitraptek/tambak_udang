@@ -70,7 +70,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									</a>
 								</div>
 								<div class="m-login__title">
-									<h3>Aplikasi Pengelolaan Keuangan Tambak Udang</h3>
+									<h3>Aplikasi Pengelolaan Keuangan Tambak Udang v.1</h3>
 								</div>
 								<div class="m-login__desc">
 									Amazing Stuff is Lorem Here.Grownng Team
