@@ -221,6 +221,12 @@ class SimulasiController extends Controller
 
         $result = [];
 
+        // --- Ambil biaya simulasi dari function yang sudah ada ---
+        $biayaSimulasiList = $this->getBiayaSimulasiRaw($simulasi->id_simulasi); 
+        // -> kita buat versi raw supaya return array, bukan response()->json
+
+        $mapBiayaSimulasi = collect($biayaSimulasiList)->keyBy('petak_id'); 
+
         // karena biaya & pendapatan sudah total per petak, cukup pakai nilai langsung
         // misal di tabel transaksi_simulasi_biaya sudah ada kolom total per petak
         // misal di tabel transaksi_simulasi_pendapatan juga ada kolom total per petak
@@ -229,7 +235,7 @@ class SimulasiController extends Controller
             ->unique();
 
         foreach ($petakIds as $petakId) {
-            // total biaya & pendapatan sudah langsung
+            // total biaya & pendapatan actual sudah langsung
             $totalBiaya = $simulasi->biaya
                 ->where('petak_id', $petakId)
                 ->sum('nominal_biaya');
@@ -237,8 +243,16 @@ class SimulasiController extends Controller
             $totalPendapatan = $simulasi->pendapatan
                 ->where('petak_id', $petakId)
                 ->sum('pendapatan_subtotal');
+            
+            // biaya simulasi (jika ada)
+            $totalBiayaSimulasi = $mapBiayaSimulasi->has($petakId) 
+                ? $mapBiayaSimulasi[$petakId]['biaya_simulasi'] 
+                : 0;
 
-            $labaRugi = $totalPendapatan - $totalBiaya;
+            // laba rugi = pendapatan - biaya real - biaya simulasi
+            $labaRugi = $totalPendapatan - ($totalBiaya + $totalBiayaSimulasi);
+            // $labaRugi = $totalPendapatan - $totalBiaya;
+
 
             $detailBiaya = $simulasi->biaya
                 ->where('petak_id', $petakId)
@@ -256,7 +270,9 @@ class SimulasiController extends Controller
 
             $result[] = [
                 'petak_id' => $petakId,
-                'total_biaya' => round($totalBiaya,0),
+                'total_biaya_real' => round($totalBiaya,0),
+                'total_biaya_simulasi' => round($totalBiayaSimulasi,0),
+                'total_biaya_all' => round($totalBiaya + $totalBiayaSimulasi,0),
                 'total_pendapatan' => round($totalPendapatan,0),
                 'pendapatan_actual_partial' => round($totalPanen,0),
                 'laba_rugi' => round($labaRugi,0),
@@ -325,6 +341,120 @@ class SimulasiController extends Controller
     public function form_biaya_simulasi($uuid_simulasi)
     {
         return view('feature.manajemen-tambak.simulasi.form_biaya_simulasi',compact('uuid_simulasi'));
+    }
+
+    private function getBiayaSimulasiRaw($simulasiId)
+    {
+        $getSimulasi = DB::table('transaksi_simulasi')->where('id_simulasi', $simulasiId)->first();
+        if (!$getSimulasi) {
+            return [];
+        }
+
+        $tglSimulasi = Carbon::parse($getSimulasi->tanggal_simulasi);
+        $siklusId = $getSimulasi->siklus_id;
+
+        // Ambil tanggal mulai siklus
+        $siklus = DB::table('setup_siklus')->where('id_siklus', $siklusId)->first();
+        $tglMulaiSiklus = $siklus ? Carbon::parse($siklus->tanggal_mulai) : null;
+
+        $petakList = SetupSiklusPetak::with('petak.blok')
+            ->where('siklus_id', $siklusId)
+            ->orderBy('id_siklus_petak','asc')
+            ->get();
+
+        $result = [];
+
+        foreach ($petakList as $petakItem) {
+            $petakId = $petakItem->petak_id;
+
+            // --- Query 1: biaya selesai sebelum simulasi ---
+            $biayaLaluRows = DB::table('transaksi_biaya_simulasi_petak as tbp')
+                ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
+                ->join('transaksi_biaya_simulasi as tb','tbp.trans_biaya_simulasi_id','=','tb.id')
+                ->join('transaksi_biaya_simulasi_siklus as tbs','tbp.trans_biaya_simulasi_siklus_id','=','tbs.id')
+                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
+                ->where('tbp.petak_id', $petakId)
+                ->where('tb.id_simulasi', $getSimulasi->id_simulasi)
+                ->where('tbs.siklus_id', $siklusId)
+                ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
+                    $q->where('tbp.tanggal_mulai','>=',$tglMulaiSiklus);
+                })
+                ->where('tbp.tanggal_mulai','<=',$tglSimulasi)
+                ->where('tbp.tanggal_selesai','<=',$tglSimulasi)
+                ->get();
+
+            $totalBiayaLalu = $biayaLaluRows->sum('nominal_petak');
+
+            // --- Query 2: biaya berjalan (prorata) ---
+            $biayaBerjalanRows = DB::table('transaksi_biaya_simulasi_petak as tbp')
+                ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
+                ->join('transaksi_biaya_simulasi as tb','tbp.trans_biaya_simulasi_id','=','tb.id')
+                ->join('transaksi_biaya_simulasi_siklus as tbs','tbp.trans_biaya_simulasi_siklus_id','=','tbs.id')
+                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
+                ->where('tbp.petak_id', $petakId)
+                ->where('tb.id_simulasi', $getSimulasi->id_simulasi)
+                ->where('tbs.siklus_id', $siklusId)
+                ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
+                    $q->where('tbp.tanggal_mulai','>=',$tglMulaiSiklus);
+                })
+                ->where('tbp.tanggal_mulai','<',$tglSimulasi)
+                ->where('tbp.tanggal_selesai','>',$tglSimulasi)
+                ->get();
+
+            $totalProrata = 0;
+            $detailAll = [];
+
+            // biaya lalu
+            foreach ($biayaLaluRows as $row) {
+                $detailAll[] = [
+                    'id_transaksi_biaya_simulasi_petak' => $row->id,
+                    'no_transaksi' => $row->no_transaksi,
+                    'nama_biaya' => $row->nama_biaya,
+                    'tanggal_mulai' => $row->tanggal_mulai,
+                    'tanggal_selesai' => $row->tanggal_selesai,
+                    'nominal_petak' => (float)$row->nominal_petak,
+                    'tipe_perhitungan' => 'full',
+                    'biaya_hitung' => round($row->nominal_petak, 0)
+                ];
+            }
+
+            // biaya prorata
+            foreach ($biayaBerjalanRows as $row) {
+                $tglMulai = Carbon::parse($row->tanggal_mulai);
+                $tglSelesai = Carbon::parse($row->tanggal_selesai);
+
+                $totalHari = $tglMulai->diffInDays($tglSelesai) + 1;
+                $hariSampaiSimulasi = $tglMulai->diffInDays($tglSimulasi) + 1;
+                $biayaPerHari = $row->nominal_petak / $totalHari;
+                $biayaReal = $biayaPerHari * $hariSampaiSimulasi;
+
+                $totalProrata += $biayaReal;
+
+                $detailAll[] = [
+                    'id_transaksi_biaya_simulasi_petak' => $row->id,
+                    'no_transaksi' => $row->no_transaksi,
+                    'nama_biaya' => $row->nama_biaya,
+                    'tanggal_mulai' => $row->tanggal_mulai,
+                    'tanggal_selesai' => $row->tanggal_selesai,
+                    'nominal_petak' => (float)$row->nominal_petak,
+                    'tipe_perhitungan' => 'prorata',
+                    'total_hari' => $totalHari,
+                    'biaya_per_hari' => round($biayaPerHari,2),
+                    'hari_sampai_simulasi' => $hariSampaiSimulasi,
+                    'biaya_hitung' => round($biayaReal, 0)
+                ];
+            }
+
+            $totalBiayaSimulasi = $totalBiayaLalu + $totalProrata;
+
+            $result[] = [
+                'petak_id' => $petakId,
+                'biaya_simulasi' => round($totalBiayaSimulasi,0),
+                'detail_biaya' => $detailAll
+            ];
+        }
+
+        return $result;
     }
 
     public function getBiayaSimulasi($simulasiId)

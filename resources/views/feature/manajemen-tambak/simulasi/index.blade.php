@@ -166,7 +166,7 @@
                                         </div>
                                         <div class="col-lg-6 mb-2">
                                             <p style="margin-bottom:0px">BIAYA</P>
-                                            <p style="font-size: 1.2rem;font-weight: 500;margin-bottom:.25rem;"><% kolam.total_biaya | currency %></p>
+                                            <p style="font-size: 1.2rem;font-weight: 500;margin-bottom:.25rem;"><% kolam.total_biaya_all | currency %></p>
                                         </div>
                                         <div class="col-lg-6 mb-2">
                                             <p ng-class="{'m--font-success':kolam.laba_rugi > 0,'m--font-danger':kolam.laba_rugi < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="margin-bottom:0px">LABA</P>
@@ -287,7 +287,7 @@
                                         <td><% item.detail_biaya.petak.blok.nama_blok %></td>
                                         <td><% item.detail_biaya.petak.nama_petak %></td>
                                         <td class="text-right"><% item.detail_biaya.petak.luas_petak | currency %></td>
-                                        <td class="text-right">Rp <% item.total_biaya | currency %></td>
+                                        <td class="text-right">Rp <% item.total_biaya_real | currency %></td>
                                         <td class="text-center">
                                             <button class="btn btn-sm btn-info" 
                                                     ng-click="viewDetail(item.detail_biaya.detail_biaya_actual)">View Detail</button>

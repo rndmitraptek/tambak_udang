@@ -385,7 +385,7 @@ app.controller("myCtrl", function($scope,$http) {
 
     $scope.tabBiayaTotalBiayaActual = function() {
         return $scope.detail.simulasi.reduce(function(total, item){
-            return total + (item.total_biaya || 0);
+            return total + (item.total_biaya_real || 0);
         }, 0);
     };
 
