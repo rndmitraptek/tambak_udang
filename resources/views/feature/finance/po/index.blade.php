@@ -108,7 +108,7 @@
                                 <label for="uuid_lokasi">Lokasi</label>
                                 <select class="form-control" id="uuid_lokasi" ng-model="input.uuid_lokasi" name="uuid_lokasi">
                                     <option  value="" >Pillih Lokasi</option>
-                                    <option ng-repeat="x in lokasi" value="<% x.uuid %>" ><% x.nama %></option>
+                                    <option ng-repeat="x in lokasi" value="<% x.uuid %>" ><% x.nama_lokasi %></option>
                                 </select>
                             </div>
                         </div>

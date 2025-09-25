@@ -159,7 +159,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							</button>
 							<div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-light m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light ">
 								<h3 class="m--font-info">
-									Aplikasi Pengelolaan Keuangan Tambak Udang
+									Aplikasi Pengelolaan Keuangan Tambak Udang v.1
 								</h3>
 							</div>
 

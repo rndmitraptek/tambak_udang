@@ -75,14 +75,13 @@ app.controller("myCtrl", function($scope,$http) {
                             swal({
                                 title: "Terhapus ",text: "Data Penaburan Benur berhasil dihapus!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                             }).then(function(){
-                                $('#m_create').modal('hide');
                                 table.draw();
                             })
                         }else{
                             swal({
                                 title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                             }).then(function(){
-                                $('#m_create').modal('hide');
+
                             })
                         }
                     }).catch(function(error) {
@@ -136,6 +135,7 @@ app.controller("myCtrl", function($scope,$http) {
         $scope.input = {};
         $scope.detail = []
         $scope.form = "input";
+        $scope.edit = false;
     }
     $scope.kembali = function(){
         $scope.form = "list";
@@ -258,22 +258,30 @@ app.controller("myCtrl", function($scope,$http) {
             if ($scope.edit) {
                 url = url.replace(':uuid', $scope.input.uuid);
             }
-            $scope.input.tanggal_penaburan     = $('#tanggal_penaburan').val();
-            $scope.input.detail = $scope.detail;
+            $scope.input.tanggal_penaburan      = $('#tanggal_penaburan').val();
+            $scope.input.detail                 = $scope.detail;
+            $scope.input.jumlah_bruto           = $scope.total_jumlah_bruto
+            $scope.input.total_nominal_bruto    = $scope.total_harga_bruto
+            $scope.input.jumlah_netto           = $scope.total_jumlah_neto
+            $scope.input.total_nominal_netto    = $scope.total_harga_neto
+            $scope.input.jumlah_actual          = $scope.total_jumlah_actual
+            $scope.input.total_nominal_actual   = $scope.total_harga_actual
+
             $http.post(url,$scope.input)
             .then(function(res){
                 if(res.data.success){
                     swal({
                         title: "Tersimpan ",text: "Data Penaburan berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
-                        $('#m_create').modal('hide');
+                        $scope.edit = true;
+                        $scope.form = "input";
+                        $scope.input.uuid = res.data.data.uuid;
                         table.draw();
                     })
                 }else{
                     swal({
                         title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
-                        $('#m_create').modal('hide');
                     })
                 }
             }).catch(function(error) {

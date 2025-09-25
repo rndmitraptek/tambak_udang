@@ -22,6 +22,12 @@ return new class extends Migration
             $table->string('supplier',100);
             $table->string('lokasi',100);
             $table->text('keterangan')->nullable();
+            $table->float('jumlah_bruto',8,2);
+            $table->float('total_nominal_bruto',8,2);
+            $table->float('jumlah_netto',8,2);
+            $table->float('total_nominal_netto',8,2);
+            $table->float('jumlah_actual',8,2);
+            $table->float('total_nominal_actual',8,2);
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();
