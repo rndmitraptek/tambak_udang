@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SetupBiaya;
 use App\Models\SetupCoa;
+use App\Models\ManajemenTambak\TransaksiSimulasi;
 use App\Traits\CreatedUpdatedBy;
 use App\Traits\HasUuid;
 
@@ -27,6 +28,11 @@ class TransaksiBiayaSimulasi extends Model
     public function coa()
     {
         return $this->belongsTo(SetupCoa::class, 'coa_id');
+    }
+
+    public function simulasi()
+    {
+        return $this->belongsTo(TransaksiSimulasi::class, 'id_simulasi');
     }
 
     public function siklus()

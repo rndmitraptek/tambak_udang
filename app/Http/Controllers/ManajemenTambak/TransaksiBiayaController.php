@@ -28,7 +28,7 @@ class TransaksiBiayaController extends Controller
 
     public function biayaList()
     {
-        $biaya = SetupBiaya::with(['petak', 'lokasi.siklus'])->get();
+        $biaya = SetupBiaya::with(['petak', 'lokasi.siklus'])->orderBy('nama_biaya','asc')->get();
         return response()->json($biaya);
     }
 

@@ -46,6 +46,14 @@
                                     </span>
                                 </button>
                             </li>
+                            <li class="m-portlet__nav-item">
+                                <button ng-click="kembali_simulasi()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-arrow-left"></i>
+                                        <span>Kembali ke Simulasi</span>
+                                    </span>
+                                </button>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -55,6 +63,7 @@
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
                         <thead>
                             <tr>
+                                <th>Tanggal Simulasi</th>
                                 <th>No Transaksi</th>
                                 <th>Siklus</th>
                                 <th>Tanggal Transaksi</th>
@@ -96,6 +105,14 @@
                                     <span>
                                         <i class="la la-arrow-left"></i>
                                         <span>Kembali ke List</span>
+                                    </span>
+                                </button>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <button ng-click="kembali_simulasi()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-arrow-left"></i>
+                                        <span>Kembali ke Simulasi</span>
                                     </span>
                                 </button>
                             </li>

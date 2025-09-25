@@ -76,7 +76,7 @@ app.controller("myCtrl", function($scope,$http) {
                 let html = `<div class="biaya-item">`;
 
                 //jika biaya periode
-                if(biaya.periode){
+                if(biaya.periode_biaya){
                     $('#periode-biaya').show();
                 } else {
                     $('#periode-biaya').hide();

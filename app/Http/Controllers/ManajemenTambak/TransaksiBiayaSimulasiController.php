@@ -29,7 +29,7 @@ class TransaksiBiayaSimulasiController extends Controller
 
     public function biayaList()
     {
-        $biaya = SetupBiaya::with(['petak', 'lokasi.siklus'])->get();
+        $biaya = SetupBiaya::with(['petak', 'lokasi.siklus'])->orderBy('nama_biaya','asc')->get();
         return response()->json($biaya);
     }
 
@@ -66,7 +66,7 @@ class TransaksiBiayaSimulasiController extends Controller
 
     public function data(Request $request)
     {
-        $query = TransaksiBiayaSimulasi::with(['biaya','coa','siklus.siklus'])
+        $query = TransaksiBiayaSimulasi::with(['biaya','coa','siklus.siklus','simulasi'])
             ->select('transaksi_biaya_simulasi.*')
             ->orderBy('id', 'desc');
 

@@ -16,6 +16,10 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.kembali = function(){
         $scope.form = "list";
     }
+    $scope.kembali_simulasi = function(){
+        var baseFormBiayaSimulasiUrl = "{{ url('/simulasi') }}";
+        window.location.href = baseFormBiayaSimulasiUrl;
+    }
     $scope.cari_supplier = function(){
         $('#m_supplier').modal('show');
     }
@@ -78,7 +82,7 @@ app.controller("myCtrl", function($scope,$http) {
                 let html = `<div class="biaya-item">`;
 
                 //jika biaya periode
-                if(biaya.periode){
+                if(biaya.periode_biaya){
                     $('#periode-biaya').show();
                 } else {
                     $('#periode-biaya').hide();
@@ -370,6 +374,7 @@ app.controller("myCtrl", function($scope,$http) {
             serverSide: true,
             ajax: "/transaksi-biaya-simulasi/data",
             columns: [
+                { data: 'simulasi.tanggal_simulasi', name: 'simulasi.tanggal_simulasi' },
                 { data: 'no_transaksi', name: 'no_transaksi' },
                 { data: 'siklus', name: 'siklus' },
                 { 
