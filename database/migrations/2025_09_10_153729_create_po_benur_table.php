@@ -14,14 +14,16 @@ return new class extends Migration
     {
         Schema::create('po_benur', function (Blueprint $table) {
             $table->id('id_po_benur');
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->string('no_po',100);
-            $table->integer('id_supplier')->constrained('setup_supplier');
-            $table->string('supplier',100);
+            $table->unsignedBigInteger('id_supplier');
+            $table->foreign('id_supplier')->references('id_supplier')->on('setup_supplier')->onDelete('restrict');
             $table->date('tanggal_po');
             $table->date('tanggal_kirim')->nullable();
-            $table->integer('id_lokasi')->constrained('setup_lokasi');
-            $table->string('lokasi',100);
+            $table->unsignedBigInteger('id_siklus');
+            $table->foreign('id_siklus')->references('id_siklus')->on('setup_siklus')->onDelete('restrict');
+            $table->unsignedBigInteger('id_lokasi');
+            $table->foreign('id_lokasi')->references('id_lokasi')->on('setup_lokasi')->onDelete('restrict');
             $table->float('qty',8,2);
             $table->float('harga_satuan',8,2);
             $table->float('total',8,2);

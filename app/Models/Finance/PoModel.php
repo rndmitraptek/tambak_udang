@@ -13,5 +13,5 @@ class PoModel extends Model
 
     protected $table = 'po_benur';
     protected $primaryKey = 'id_po_benur';
-    protected $fillable = ['uuid','no_po','id_supplier','supplier','tanggal_po','tanggal_kirim','id_lokasi','lokasi','qty','harga_satuan','total','keterangan'];
+    protected $fillable = ['uuid','no_po','id_supplier','id_lokasi','id_siklus','tanggal_po','tanggal_kirim','qty','harga_satuan','total','keterangan'];
 }

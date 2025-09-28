@@ -17,10 +17,12 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->date('tanggal_penaburan');
             $table->string('no_penaburan_benur',100)->unique();
-            $table->integer('id_po_benur')->constrained('po_benur');
-            $table->string('no_po',100);
-            $table->string('supplier',100);
-            $table->string('lokasi',100);
+            $table->unsignedBigInteger('id_po_benur');
+            $table->foreign('id_po_benur')->references('id_po_benur')->on('po_benur')->onDelete('restrict');
+            $table->unsignedBigInteger('id_lokasi');
+            $table->foreign('id_lokasi')->references('id_lokasi')->on('setup_lokasi')->onDelete('restrict');
+            $table->unsignedBigInteger('id_siklus');
+            $table->foreign('id_siklus')->references('id_siklus')->on('setup_siklus')->onDelete('restrict');
             $table->text('keterangan')->nullable();
             $table->float('jumlah_bruto',8,2);
             $table->float('total_nominal_bruto',8,2);

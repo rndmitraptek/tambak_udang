@@ -394,9 +394,9 @@ app.component('lookUpTable', {
         $("#" + ctrl.lookupId).on('shown.bs.modal', function() {
           // console.log(ctrl.dt)
           ctrl.dt.columns.adjust().draw();
-          setTimeout(() => {
-            $("#" + ctrl.lookupId + " input[data-role='lookup-search']").focus();
-          },10);
+          // setTimeout(() => {
+          //   $("#" + ctrl.lookupId + " input[data-role='lookup-search']").focus();
+          // },10);
         });
 
         // key navigation
@@ -448,10 +448,10 @@ app.component('lookUpTable', {
 
     // fungsi pencarian
     ctrl.searchData = function() {
-      ctrl.dt.draw();
-      setTimeout(function(){
-        tableElem.find('tbody tr:first td:first').trigger('click');
-      },500);
+        ctrl.dt.draw();
+        setTimeout(function(){
+          tableElem.find('tbody tr:first td:first').trigger('click');
+        },500);
     };
 
     // pilih row dan trigger callback

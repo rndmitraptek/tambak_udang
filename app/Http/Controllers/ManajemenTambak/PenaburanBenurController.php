@@ -7,9 +7,12 @@ use App\Models\Finance\PoModel;
 use App\Models\ManajemenTambak\penaburanBenurDetailModel;
 use App\Models\ManajemenTambak\penaburanBenurModel;
 use App\Models\ManajemenTambak\TransaksiBiaya;
+use App\Models\ManajemenTambak\TransaksiBiayaPetak;
+use App\Models\ManajemenTambak\TransaksiBiayaSiklus;
 use App\Models\SetupBenur;
 use App\Models\SetupLokasi;
 use App\Models\SetupPetak;
+use App\Models\SetupSiklus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -26,10 +29,13 @@ class PenaburanBenurController extends Controller
     {
         $query = penaburanBenurModel::query()
             ->join('po_benur', 'po_benur.id_po_benur', '=', 'penaburan_benur.id_po_benur')
+            ->join('setup_siklus', 'po_benur.id_siklus', '=', 'setup_siklus.id_siklus')
+            ->join('setup_supplier','setup_supplier.id_supplier','=','po_benur.id_supplier')
+            ->join('setup_lokasi','setup_lokasi.id_lokasi','=','penaburan_benur.id_lokasi')
             ->select([
-                'penaburan_benur.uuid', 'penaburan_benur.no_penaburan_benur', 'po_benur.uuid as uuid_po', 
-                'penaburan_benur.tanggal_penaburan','penaburan_benur.no_po','penaburan_benur.supplier','penaburan_benur.lokasi',
-                'penaburan_benur.keterangan',
+                'penaburan_benur.uuid', 'penaburan_benur.no_penaburan_benur', 'po_benur.uuid as uuid_po', 'penaburan_benur.keterangan','penaburan_benur.tanggal_penaburan'
+                ,'po_benur.no_po','setup_supplier.nama_supplier','setup_supplier.uuid as uuid_supplier','setup_lokasi.uuid as uuid_lokasi','setup_lokasi.nama_lokasi','setup_siklus.uuid as uuid_siklus','setup_siklus.nama_siklus',
+                
             ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {
@@ -40,13 +46,25 @@ class PenaburanBenurController extends Controller
             ->make(true);
     }
 
+    public function get_siklus()
+    {
+        $data = SetupSiklus::where('status','OPEN')
+        ->join('setup_lokasi','setup_siklus.id_lokasi','=','setup_lokasi.id')
+        ->select(['setup_lokasi.nama as lokasi','setup_siklus.uuid','setup_siklus.nama'])->get();
+        return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
+    }
+
     public function get_po(Request $request){
         $query = PoModel::query()
             ->join('setup_lokasi', 'po_benur.id_lokasi', '=', 'setup_lokasi.id_lokasi')
+            ->join('setup_supplier', 'setup_supplier.id_supplier', '=', 'po_benur.id_supplier')
+            ->join('setup_siklus', 'setup_siklus.id_siklus', '=', 'po_benur.id_siklus')
             ->select([
-                'po_benur.uuid', 'po_benur.no_po', 'po_benur.tanggal_po','po_benur.supplier','po_benur.lokasi','po_benur.qty','po_benur.harga_satuan','po_benur.total','setup_lokasi.uuid as uuid_lokasi',
+                'po_benur.uuid', 'po_benur.no_po', 'po_benur.tanggal_po','po_benur.qty','po_benur.harga_satuan','po_benur.total',
+                'setup_supplier.nama_supplier','setup_supplier.uuid as uuid_supplier',
+                'setup_lokasi.uuid as uuid_lokasi','setup_lokasi.nama_lokasi',
+                'setup_siklus.uuid as uuid_siklus','setup_siklus.nama_siklus',
             ]);
-        
         if ($request->has('textSearch') && $request->textSearch != '') {
             $text = strtoupper($request->textSearch);
             $query->where(DB::raw('UPPER(no_po)'), 'like', "%{$text}%");
@@ -66,82 +84,164 @@ class PenaburanBenurController extends Controller
         return DataTables::of($query)->make(true);
     }
 
-    public function get_petak($id_lokasi){
-        $lokasi = SetupLokasi::where('uuid',$id_lokasi)->first();
-        $data = DB::select("SELECT false as checked, sp.uuid,sb.nama_blok as blok, sp.nama_petak as petak,sp.luas_petak as luas FROM setup_blok sb inner join setup_petak sp on sb.id_blok=sp.blok_id WHERE sb.lokasi_id = ?",[$lokasi->id_lokasi]);
+    public function get_petak($id_siklus){
+        $siklus = SetupSiklus::where('uuid',$id_siklus)->first();
+        $data = DB::select("SELECT false as checked, sp.uuid,sb.nama_blok as blok, sp.nama_petak as petak,sp.luas_petak as luas FROM setup_blok sb 
+                    inner join setup_petak sp on sb.id_blok=sp.blok_id
+                    inner join setup_siklus_petak ssp on sp.id_petak=ssp.petak_id
+                    where ssp.siklus_id = ? and sp.deleted_at is null",[$siklus->id_siklus]);
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
 
     public function insert(Request $req){
-        $po = PoModel::where('uuid',$req->uuid_po)->first();
-        $req->validate([
-            'uuid_po' => 'required',
-            'no_penaburan_benur'    => 'required',
-            'tanggal_penaburan'   => 'required',
-        ]);
-        $data = $req->all();
-        unset($data['uuid_po']);
-        $data['id_po_benur'] = $po->id_po_benur;
-        $insert = penaburanBenurModel::create($data);
-        foreach($req->detail as $d){
-            $benur = SetupBenur::where('uuid',$d['uuid_benur'])->first();
-            unset($d['uuid_benur']);
-            $petak = SetupPetak::where('uuid',$d['uuid_petak'])->first();
-            unset($d['uuid_petak']);
-            $data = $d;
-            $data['id_benur'] = $benur->id_benur;
-            $data['id_petak'] = $petak->id_petak;
-            $data['nama_petak'] = $petak->nama_petak;
-            $data['kode_supplier'] = $d['kode_benur'];
-            $data['id_penaburan_benur'] = $insert->id_penaburan_benur;
-            $insert_detail = penaburanBenurDetailModel::create($data);
+        DB::beginTransaction();
+        try {
+            $po = PoModel::where('uuid',$req->uuid_po)->first();
+            $lokasi = SetupLokasi::where('uuid',$req->uuid_lokasi)->first();
+            $siklus = SetupSiklus::where('uuid',$req->uuid_siklus)->first();
+            $req->validate([
+                'uuid_po' => 'required',
+                'no_penaburan_benur'    => 'required',
+                'tanggal_penaburan'   => 'required',
+            ]);
+            $data = $req->all();
+            unset($data['uuid_po']);
+            unset($data['uuid_supplier']);
+            unset($data['uuid_lokasi']);
+            unset($data['uuid_siklus']);
+            $data['id_po_benur']    = $po->id_po_benur;
+            $data['id_lokasi']      = $lokasi->id_lokasi;
+            $data['id_siklus']      = $siklus->id_siklus;
+            $insert = penaburanBenurModel::create($data);
+            // insert biaya
+            $transBiaya = TransaksiBiaya::create([
+                'no_transaksi'      => $data['no_penaburan_benur'],
+                'tanggal_transaksi' => $data['tanggal_penaburan'],
+                'tanggal_mulai'     => $data['tanggal_penaburan'],
+                'tanggal_selesai'   => $data['tanggal_penaburan'],
+                'biaya_id'          => 1,
+                'nominal'           => $data['total_nominal_netto'],
+                'coa_id'            => 2,
+                'keterangan'        => 'transaksi penaburan benur',
+                'reff_id'           => $insert->id_penaburan_benur,
+                'reff_trans'        => 'penaburan_benur'
+            ]);
+            $transSiklus = TransaksiBiayaSiklus::create([
+                'trans_biaya_id'=>$transBiaya->id,
+                'siklus_id'     =>$siklus->id_siklus,
+            ]);
+            foreach($req->detail as $d){
+                $benur = SetupBenur::where('uuid',$d['uuid_benur'])->first();
+                $petak = SetupPetak::where('uuid',$d['uuid_petak'])->first();
+                $detail = $d;
+                $detail['id_po_benur']    = $po->id_po_benur;
+                $detail['id_benur'] = $benur->id_benur;
+                $detail['id_petak'] = $petak->id_petak;
+                $detail['kode_supplier'] = $d['kode_benur'];
+                $detail['id_penaburan_benur'] = $insert->id_penaburan_benur;
+                unset($d['uuid_petak']);
+                unset($d['uuid_benur']);
+                $insert_detail = penaburanBenurDetailModel::create($detail);
+                $transPetak = TransaksiBiayaPetak::create([
+                    'trans_biaya_id'        =>$transBiaya->id,
+                    'trans_biaya_siklus_id' =>$transSiklus->id,
+                    'petak_id'              =>$petak->id_petak,
+                    'biaya_id'              =>1,
+                    'luas'                  =>$petak->luas_petak,
+                    'persentase'            =>100,
+                    'nominal_petak'         =>$detail['subtotal_neto'],
+                    'tanggal_mulai'         =>$data['tanggal_penaburan'],
+                    'tanggal_selesai'       =>$data['tanggal_penaburan'],
+                ]);
+            }
+            DB::commit();
+            return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
+        }catch(\Exception $err) {
+            DB::rollBack();
+            return response()->json(['success'=>false,'message'=>$err->getMessage()]);
         }
-        return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
     }
 
     public function update(Request $req, $uuid)
     {
-        
-        $penaburanBenur = penaburanBenurModel::where('uuid', $uuid)->firstOrFail();
-        $po = PoModel::where('uuid',$req->uuid_po)->first();
-        $req->validate([
-            'uuid_po' => 'required',
-            'no_penaburan_benur'    => 'required',
-            'tanggal_penaburan'   => 'required',
-        ]);
-        $data = $req->all();
-        unset($data['uuid_po']);
-        $data['id_po_benur'] = $po->id_po_benur;
-        $penaburanBenur->update($data);
-        $delete_detail = penaburanBenurDetailModel::where('id_penaburan_benur',$penaburanBenur->id_penaburan_benur)->delete();
-        foreach($req->detail as $d){
-            $benur = SetupBenur::where('uuid',$d['uuid_benur'])->first();
-            unset($d['uuid_benur']);
-            $petak = SetupPetak::where('uuid',$d['uuid_petak'])->first();
-            unset($d['uuid_petak']);
-            $data = $d;
-            $data['id_benur'] = $benur->id_benur;
-            $data['id_petak'] = $petak->id_petak;
-            $data['nama_petak'] = $petak->nama_petak;
-            $data['kode_supplier'] = $d['kode_benur'];
-            $data['id_penaburan_benur'] = $penaburanBenur->id_penaburan_benur;
-            $insert_detail = penaburanBenurDetailModel::create($data);
+        DB::beginTransaction();
+        try {
+            $penaburanBenur = penaburanBenurModel::where('uuid', $uuid)->firstOrFail();
+            $po = PoModel::where('uuid',$req->uuid_po)->first();
+            $lokasi = SetupLokasi::where('uuid',$req->uuid_lokasi)->first();
+            $siklus = SetupSiklus::where('uuid',$req->uuid_siklus)->first();
+            $req->validate([
+                'uuid_po' => 'required',
+                'no_penaburan_benur'    => 'required',
+                'tanggal_penaburan'   => 'required',
+            ]);
+            $data = $req->all();
+            unset($data['uuid_po']);
+            unset($data['uuid_supplier']);
+            unset($data['uuid_lokasi']);
+            unset($data['uuid_siklus']);
+            $data['id_po_benur']    = $po->id_po_benur;
+            $data['id_lokasi']      = $lokasi->id_lokasi;
+            $data['id_siklus']      = $siklus->id_siklus;
+            $penaburanBenur->update($data);
+            $delete_detail = penaburanBenurDetailModel::where('id_penaburan_benur',$penaburanBenur->id_penaburan_benur)->delete();
+            // update transaksi biaya
+            $transBiaya = TransaksiBiaya::where('reff_id', $penaburanBenur->id_penaburan_benur)->firstOrFail();
+            // if($transBiaya->validated_at != null){
+            //     throw new \Exception('Transaksi Biaya benur sudah di validasi, data tidak bisa di ubah');
+            // }
+            $transBiaya->update([
+                'no_transaksi'      => $data['no_penaburan_benur'],
+                'tanggal_transaksi' => $data['tanggal_penaburan'],
+                'tanggal_mulai'     => $data['tanggal_penaburan'],
+                'tanggal_selesai'   => $data['tanggal_penaburan'],
+                'biaya_id'          => 1,
+                'nominal'           => $data['total_nominal_netto'],
+                'coa_id'            => 2,
+                'keterangan'        => 'transaksi penaburan benur'
+            ]);
+
+            $transSiklus = TransaksiBiayaSiklus::where('trans_biaya_id',$transBiaya->id)->firstOrFail();
+            $transSiklus->update([
+                'siklus_id'     =>$siklus->id_siklus
+            ]);
+            $deleteBiayaPetak = TransaksiBiayaPetak::where('trans_biaya_id',$transBiaya->id)->delete();
+            foreach($req->detail as $d){
+                $benur = SetupBenur::where('uuid',$d['uuid_benur'])->first();
+                $petak = SetupPetak::where('uuid',$d['uuid_petak'])->first();
+                $detail = $d;
+                $detail['id_po_benur']    = $po->id_po_benur;
+                $detail['id_benur'] = $benur->id_benur;
+                $detail['id_petak'] = $petak->id_petak;
+                $detail['kode_supplier'] = $d['kode_benur'];
+                $detail['id_penaburan_benur'] = $penaburanBenur->id_penaburan_benur;
+                unset($d['uuid_benur']);
+                unset($d['uuid_petak']);
+                $insert_detail = penaburanBenurDetailModel::create($detail);
+                $transPetak = TransaksiBiayaPetak::create([
+                    'trans_biaya_id'        =>$transBiaya->id,
+                    'trans_biaya_siklus_id' =>$transSiklus->id,
+                    'petak_id'              =>$petak->id_petak,
+                    'biaya_id'              =>1,
+                    'luas'                  =>$petak->luas_petak,
+                    'persentase'            =>100,
+                    'nominal_petak'         =>$detail['subtotal_neto'],
+                    'tanggal_mulai'         =>$data['tanggal_penaburan'],
+                    'tanggal_selesai'       =>$data['tanggal_penaburan'],
+                ]);
+            }
+            DB::commit();
+            return response()->json(['success'=>true,'data'=>$penaburanBenur,'message'=>'']);
+        }catch(\Exception $err) {
+            DB::rollBack();
+            // throw $err;
+            return response()->json(['success'=>false,'message'=>$err->getMessage()]);
         }
-        return response()->json(['success'=>true,'data'=>$penaburanBenur,'message'=>'lahhh...']);
     }
 
     public function trigger_transaksi_biaya($payload)
     {
-        $transBiaya = TransaksiBiaya::create([
-            'no_transaksi'      => $payload->no_penaburan_benur,
-            'tanggal_transaksi' => $payload->tanggal_penaburan,
-            'tanggal_mulai'     => $payload->tanggal_penaburan,
-            'tanggal_selesai'   => $payload->tanggal_penaburan,
-            'biaya_id'          => 1,
-            'nominal'           => $payload->total_nominal_netto,
-            'coa_id'            => 5,
-            'keterangan'        => 'transaksi penaburan benur',
-        ]);
+        
     }
 
     public function destroy($uuid)

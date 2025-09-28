@@ -13,6 +13,6 @@ class penaburanBenurModel extends Model
     use SoftDeletes,HasUuid,CreatedUpdatedBy;
     protected $table = 'penaburan_benur';
     protected $primaryKey = 'id_penaburan_benur';
-    protected $fillable = ['uuid','tanggal_penaburan','no_penaburan_benur','id_po_benur','no_po','supplier','lokasi','keterangan',
+    protected $fillable = ['uuid','tanggal_penaburan','no_penaburan_benur','id_po_benur','id_lokasi','id_supplier','id_siklus','keterangan',
     'jumlah_bruto','total_nominal_bruto','jumlah_netto','total_nominal_netto','jumlah_actual','total_nominal_actual'];
 }

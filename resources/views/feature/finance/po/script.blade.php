@@ -15,8 +15,9 @@ app.controller("myCtrl", function($scope,$http,API) {
                 { data: 'no_po', title: 'No PO' },
                 { data: 'tanggal_po', title: 'Tanggal PO' },
                 { data: 'tanggal_kirim', title: 'Tanggal Kirim' },
-                { data: 'supplier', title: 'Supplier' },
-                { data: 'lokasi', title: 'Lokasi' },
+                { data: 'nama_supplier', title: 'Nama Supplier' },
+                { data: 'nama_lokasi', title: 'Nama Lokasi' },
+                { data: 'nama_siklus', title: 'Nama Siklus' },
                 { data: 'qty', title: 'Qty' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'harga_satuan', title: 'Harga Satuan' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'total', title: 'Total' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
@@ -130,6 +131,27 @@ app.controller("myCtrl", function($scope,$http,API) {
     }).catch(function(error) {
         swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
     });
+
+    $scope.siklus = [];
+    $scope.get_siklus = function(){
+        swal({title: "Presesing...!",text: "Please Wait Load Data Siklus",
+            onOpen: function() {
+                swal.showLoading()
+            }
+        })
+        url = "{{ route('finance.po.siklus',':uuid_lokasi') }}";
+        url = url.replace(':uuid_lokasi', $scope.input.uuid_lokasi);
+        $http.get(url)
+        .then(function(res){
+            if(res.data.success){
+                $scope.siklus = res.data.data;
+                Swal.close();
+            }
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+    }
+    
     $scope.input = {};
     $scope.edit = false;
 

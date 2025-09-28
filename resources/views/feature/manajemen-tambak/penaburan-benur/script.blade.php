@@ -14,8 +14,9 @@ app.controller("myCtrl", function($scope,$http) {
                 { data: 'no_penaburan_benur', title: 'No Penaburan benur' },
                 { data: 'tanggal_penaburan', title: 'Tanggal Penaburan' },
                 { data: 'no_po', title: 'No PO' },
-                { data: 'supplier', title: 'Supplier' },
-                { data: 'lokasi', title: 'Lokasi' },
+                { data: 'nama_supplier', title: 'Supplier' },
+                { data: 'nama_lokasi', title: 'Lokasi' },
+                { data: 'nama_siklus', title: 'Siklus' },
                 { data: 'keterangan', title: 'keterangan' },
                 { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
             ]
@@ -25,7 +26,6 @@ app.controller("myCtrl", function($scope,$http) {
             var tr = $(this).closest('tr');
             var x = table.row(tr).data();
             $scope.input = x;
-            $scope.input.nama_supplier = x.supplier;
             url = "{{ route('finance.penaburan.get_detail',':uuid') }}"
             url = url.replace(':uuid', x.uuid)
             swal({title: "Presesing...!",text: "Please Wait",
@@ -98,8 +98,9 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.poColumns = [
         { data: 'no_po', title: 'No PO' },
         { data: 'tanggal_po', title: 'Tanggal PO' },
-        { data: 'supplier', title: 'Supplier' },
-        { data: 'lokasi', title: 'Lokasi' },
+        { data: 'nama_supplier', title: 'Supplier' },
+        { data: 'nama_lokasi', title: 'Lokasi' },
+        { data: 'nama_siklus', title: 'Siklus'},
         { data: 'qty', title: 'Qty' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
         { data: 'harga_satuan', title: 'Harga Satuan' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
         { data: 'total', title: 'Total' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
@@ -109,10 +110,14 @@ app.controller("myCtrl", function($scope,$http) {
         console.log(x);
         $scope.input.no_po = x.no_po;
         $scope.input.uuid_po = x.uuid;
-        $scope.input.supplier = x.supplier;
-        $scope.input.lokasi = x.lokasi;
+        $scope.input.nama_supplier = x.nama_supplier;
+        $scope.input.uuid_supplier = x.uuid_supplier;
+        $scope.input.nama_lokasi = x.nama_lokasi;
+        $scope.input.uuid_lokasi = x.uuid_lokasi;
+        $scope.input.nama_siklus = x.nama_siklus;
+        $scope.input.uuid_siklus = x.uuid_siklus;
         url = "{{ route('finance.penaburan.get_petak',':uuid') }}"
-        url = url.replace(':uuid', x.uuid_lokasi)
+        url = url.replace(':uuid', x.uuid_siklus)
         swal({title: "Presesing...!",text: "Please Wait",
             onOpen: function() {
                 swal.showLoading()
@@ -238,9 +243,6 @@ app.controller("myCtrl", function($scope,$http) {
             no_po: {
                 required: true
             }
-        },
-        messages: {
-            
         },
         invalidHandler: function(e, r) {
             mUtil.scrollTo("formInput", -200)

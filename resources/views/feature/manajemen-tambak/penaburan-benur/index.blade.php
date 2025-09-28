@@ -94,11 +94,11 @@
                     <form id="formInput">
                         <div class="row">
                             <div class="col-lg-4">
-                                <div class="form-group">
+                                <div class="form-group m-form__group">
                                     <label for="recipient-name" class="form-control-label">No Penaburan Benur</label>
                                     <input type="text" class="form-control" id="no_penaburan_benur" nama="no_penaburan_benur" ng-model="input.no_penaburan_benur">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group m-form__group">
                                     <label for="recipient-name" class="form-control-label">Tanggal Penaburan</label>
                                     <input type="text" class="form-control general_datepicker" id="tanggal_penaburan" name="tanggal_penaburan" ng-model="input.tanggal_penaburan" >
                                 </div>
@@ -115,13 +115,17 @@
                                 </div>
                                 <div class="form-group m-form__group">
                                     <label for="exampleSelect1">supplier</label>
-                                    <input type="text" class="form-control" ng-model="input.supplier" readonly>
+                                    <input type="text" class="form-control" ng-model="input.nama_supplier" readonly>
+                                </div>
+                                <div class="form-group m-form__group">
+                                    <label for="exampleSelect1">Lokasi</label>
+                                    <input type="text" class="form-control" ng-model="input.nama_lokasi" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">
-                                    <label for="exampleSelect1">Lokasi</label>
-                                    <input type="text" class="form-control" ng-model="input.lokasi" readonly>
+                                    <label for="exampleSelect1">Siklus</label>
+                                    <input type="text" class="form-control" ng-model="input.nama_siklus" readonly>
                                 </div>
                                 <div class="form-group m-form__group">
                                     <label for="exampleTextarea">Keterangan</label>

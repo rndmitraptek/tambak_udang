@@ -106,9 +106,16 @@
                             </div>
                             <div class="form-group m-form__group">
                                 <label for="uuid_lokasi">Lokasi</label>
-                                <select class="form-control" id="uuid_lokasi" ng-model="input.uuid_lokasi" name="uuid_lokasi">
+                                <select class="form-control" id="uuid_lokasi" ng-change="get_siklus()" ng-model="input.uuid_lokasi" name="uuid_lokasi">
                                     <option  value="" >Pillih Lokasi</option>
                                     <option ng-repeat="x in lokasi" value="<% x.uuid %>" ><% x.nama_lokasi %></option>
+                                </select>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label for="uuid_lokasi">Siklus</label>
+                                <select class="form-control" id="uuid_siklus" ng-model="input.uuid_siklus" name="uuid_siklus">
+                                    <option  value="" >Pillih Siklus</option>
+                                    <option ng-repeat="x in siklus" value="<% x.uuid %>" ><% x.nama_siklus %></option>
                                 </select>
                             </div>
                         </div>

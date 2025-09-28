@@ -16,10 +16,12 @@ return new class extends Migration
             $table->id('id_penaburan_benur_detail');
             $table->uuid('uuid');
             $table->integer('id_penaburan_benur')->constrained('penaburan_benur');
-            $table->integer('id_petak')->constrained('setup_petak');
-            $table->string('nama_petak',100);
-            $table->integer('id_benur')->constrained('setup_benur');
-            $table->integer('siklus_id')->constrained('setup_benur');
+            $table->unsignedBigInteger('id_po_benur');
+            $table->foreign('id_po_benur')->references('id_po_benur')->on('po_benur')->onDelete('restrict');
+            $table->unsignedBigInteger('id_petak');
+            $table->foreign('id_petak')->references('id_petak')->on('setup_petak')->onDelete('restrict');
+            $table->unsignedBigInteger('id_benur');
+            $table->foreign('id_benur')->references('id_benur')->on('setup_benur')->onDelete('restrict');
             $table->string('kode_supplier',100);
             $table->string('jenis_benur',100);
             $table->float('harga_bruto',8,2);

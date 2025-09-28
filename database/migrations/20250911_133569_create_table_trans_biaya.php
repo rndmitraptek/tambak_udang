@@ -29,6 +29,9 @@ return new class extends Migration
             // relasi ke tabel lain jika ada
             $table->foreign('coa_id')->references('id_coa')->on('setup_coa')->onDelete('cascade');
             $table->foreign('biaya_id')->references('id_biaya')->on('setup_biaya')->onDelete('cascade');
+            // relasi tabel refrensi 
+            $table->bigInteger('reff_id')->nullable();
+            $table->string('reff_trans')->nullable();
         });
 
         Schema::create('transaksi_biaya_siklus', function (Blueprint $table) {
