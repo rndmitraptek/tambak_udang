@@ -178,7 +178,7 @@ app.controller("myCtrl", function($scope,$http) {
                 $scope.data_petak[index].is_add = false;
             }
         });
-         $('#m_petak').modal('hide');
+        $('#m_petak').modal('hide');
     }
 
     $scope.benurColumns = [

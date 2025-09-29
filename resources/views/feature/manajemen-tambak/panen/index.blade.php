@@ -72,7 +72,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button ng-click="simpan()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-save"></i>
                                         <span>Simpan Transaksi</span>
@@ -91,42 +91,39 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <form>
+                    <form id="formInput">
                         <div class="row">
                             <div class="col-lg-4">
-                                <div class="form-group">
+                                <div class="form-group m-form__group">
                                     <label for="recipient-name" class="form-control-label">No Panen</label>
                                     <input type="text" class="form-control" id="no_panen" name="no_panen" ng-model="input.no_panen">
                                 </div>
-                                <div class="form-group">
-                                    <label for="recipient-name" class="form-control-label">Tanggal Panen</label>
-                                    <input type="date" class="form-control" id="tanggal_panen" name="tanggal_panen" ng-model="input.tanggal_panen">
-                                </div>
                                 <div class="form-group m-form__group">
-                                    <label for="exampleSelect1">Siklus</label>
-                                    <select class="form-control" id="uuid_siklus" name="uuid_siklus" ng-model="input.uuid_siklus">
-                                        <option value="">Pillih Siklus</option>
-                                        <option ng-repeat="x in data_siklus" value="<% x.uuid %>"><% x.nama %></option>
-                                    </select>
+                                    <label for="recipient-name" class="form-control-label">Tanggal Panen</label>
+                                    <input type="text" class="form-control general_datepicker" id="tanggal_panen" name="tanggal_panen" ng-model="input.tanggal_panen">
                                 </div>
+                                
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">
-                                    <label for="exampleSelect1">Lokasi</label>
-                                    <input type="text" class="form-control" id="lokasi" name="lokasi" ng-model="input.lokasi">
+                                    <label for="exampleSelect1">Siklus</label>
+                                    <select class="form-control" id="uuid_siklus" name="uuid_siklus" ng-change="get_blok()" ng-model="input.uuid_siklus">
+                                        <option value="">Pillih Siklus</option>
+                                        <option ng-repeat="x in siklus" value="<% x.uuid %>"><% x.nama_siklus %></option>
+                                    </select>
                                 </div>
                                 <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Blok</label>
-                                    <select class="form-control" id="uuid_blok" name="uuid_blok" ng-model="uuid_blok">
-                                        <option value="">Pillih Blok</option>
-                                        <option ng-repeat="x in data_blok" value="<% x.uuid %>"><% x.nama %></option>
+                                    <select class="form-control" id="uuid_blok" name="uuid_blok" ng-change="get_petak()" ng-model="input.uuid_blok">
+                                        <option value="">Pillih Siklus</option>
+                                        <option ng-repeat="x in blok" value="<% x.uuid %>"><% x.nama_blok %></option>
                                     </select>
                                 </div>
                                 <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Petak</label>
-                                    <select class="form-control" id="uuid_petak" name="uuid_petak" ng-model="uuid_petak">
+                                    <select class="form-control" id="uuid_petak" name="uuid_petak" ng-model="input.uuid_petak">
                                         <option value="">Pillih Petak</option>
-                                        <option ng-repeat="x in data_petak" value="<% x.uuid %>"><% x.nama %></option>
+                                        <option ng-repeat="x in petak" value="<% x.uuid %>"><% x.nama_petak %></option>
                                     </select>
                                 </div>
                             </div>
@@ -138,87 +135,65 @@
                                         <option value="FINAL">FINAL</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-12">
-                                <div class="form-group">
+                                <div class="form-group -form__group">
                                     <label for="message-text" class="form-control-label" >Keterangan</label>
                                     <textarea class="form-control" id="keterangan" nama="keterangan" ng-model="input.keterangan"></textarea>
-                                </div>
                                 </div>
                             </div>
                         </div>
                         <hr/>
                         <div class="row">
                             <div class="col-lg-12">
-                                <a href="#" class="btn btn-outline-primary btn-sm m-btn m-btn--icon mb-2">
+                                <button type="button" ng-click="handleClickPenjualan()" class="btn btn-outline-primary btn-sm m-btn m-btn--icon mb-2">
                                     <span>
                                         <i class="la la-plus"></i>
                                         <span>Penjualan</span>
                                     </span>
-                                </a>
-                                <table class="table table-striped- table-bordered table-hover table-checkable">
+                                </button>
+                                <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
                                     <thead>
                                         <tr>
-                                            <th>Tanggal</th>
-                                            <th>Nama Customer</th>
-                                            <th>Metode Pembayaran</th>
-                                            <th>Item</th>
-                                            <th>Harga</th>
-                                            <th>Jumlah</th>
-                                            <th>Subtotal</th>
+                                            <th style="width: 400px">Nama Customer</th>
+                                            <th style="width: 200px">Metode Pembayaran</th>
+                                            <th style="width: 200px">Item</th>
+                                            <th style="width: 200px">Harga</th>
+                                            <th style="width: 200px">Jumlah</th>
+                                            <th style="width: 200px">Subtotal</th>
                                             <th style="width:40px"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>2025-11-01</td>
-                                            <td>Sudirman</td>
-                                            <td>Piutang</td>
-                                            <td>Udang Sehat isi 9</td>
-                                            <td class="text-right">150.000</td>
-                                            <td class="text-right">100</td>
-                                            <td class="text-right">15.000.000</td>
-                                            <td ><a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove m--font-danger"></i></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2025-11-01</td>
-                                            <td>Baharudin</td>
-                                            <td>Piutang</td>
-                                            <td>Udang Sehat isi 20</td>
-                                            <td class="text-right">100.000</td>
-                                            <td class="text-right">100</td>
-                                            <td class="text-right">10.000.000</td>
-                                            <td ><a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove m--font-danger"></i></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2025-11-01</td>
-                                            <td>Komarudin</td>
-                                            <td>Tunai</td>
-                                            <td>Udang Sehat isi 5</td>
-                                            <td class="text-right">300.000</td>
-                                            <td class="text-right">100</td>
-                                            <td class="text-right">30.000.000</td>
-                                            <td ><a href="#" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="la la-remove m--font-danger"></i></a></td>
+                                        <tr ng-repeat="i in detail">
+                                            <td><% i.nama_customer %></td>
+                                            <td>
+                                                <select style="width: 200px" id="uuid_payment_method" name="uuid_payment_method" ng-model="i.uuid_payment_method">
+                                                    <option value="">Pillih Payment</option>
+                                                    <option ng-repeat="x in payment_method" value="<% x.uuid %>"><% x.payment_method %></option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select style="width: 200px" id="uuid_item" name="uuid_item" ng-model="i.uuid_item">
+                                                    <option value="">Pillih Item</option>
+                                                    <option ng-repeat="x in item" value="<% x.uuid %>"><% x.nama_item %></option>
+                                                </select>
+                                            </td>
+                                            <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-model="i.harga" ng-change="hitung()"></td>
+                                            <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-model="i.jumlah" ng-change="hitung()"></td>
+                                            <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-model="i.subtotal" readonly></td>
+                                            <td ><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="5" class="text-right">Total</th>
-                                            <th class="text-right">4</th>
-                                            <th class="text-right">55.000.000</th> 
+                                            <th colspan="4" class="text-right">Total</th>
+                                            <th class="text-right"><% jumlah | currency:'' %></th>
+                                            <th class="text-right"><% total | currency:'' %></th> 
                                             <th></th>
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
                         </div>
-                        {{-- <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="message-text" class="form-control-label" >Keterangan</label>
-                                    <textarea class="form-control" id="alamat"></textarea>
-                                </div>
-                            </div>
-                        </div> --}}
                     </form>
                 </div>
             </div>
@@ -226,62 +201,13 @@
     </div>
 </div>
 
-<!--begin::Modal-->
-<div class="modal fade" id="m_supplier" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Data Supplier</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group m-form__group">
-                    <label>Cari Supplier</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for...">
-                        <div class="input-group-append">
-                            <button class="btn btn-info" type="button"><i class="la la-search"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <table class="table table-striped- table-bordered table-hover table-checkable">
-                    <thead>
-                        <tr>
-                            <th>Kode</th>
-                            <th>Nama</th>
-                            <th>Alamat</th>
-                            <th>Nomor Telepon</th>
-                            <th>Email</th>
-                            <th>Nama Perusahaan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>SUP0001</td>
-                            <td>Supriyadi</td>
-                            <td>Jalan soekarno hatta, semarang</td>
-                            <td>+62 3456 3453 2343 3453, 024 3456 3456</td>
-                            <td>supriyadi@gmail.com</td>
-                            <td>PT. BENUR JAYA</td>
-                        </tr>
-                        <tr>
-                            <td>SUP0001</td>
-                            <td>Sudarsono</td>
-                            <td>bukit mutiara jaya, semarang</td>
-                            <td>+62 8264 9782 6786, 024 5082 3347</td>
-                            <td>supriyadi@gmail.com</td>
-                            <td>PT. NUSANTARA UDANG</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--end::Modal-->
+<look-up-table
+      lookup-id="lookup_customer"
+      ajax-url="{{ route('panen.get_customer') }}"
+      columns="customerColumns"
+      page-length="8"
+      on-select="selectCustomer(row)">
+</look-up-table>
 @endsection
 
 @section('js')

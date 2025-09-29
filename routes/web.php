@@ -12,6 +12,8 @@ Route::get('login', [App\Http\Controllers\Auth\UsersController::class,'login'])-
 Route::get('/user',[App\Http\Controllers\Auth\UsersController::class, 'index']);
 Route::middleware('auth')->group(function () {
     Route::get('/lokasi', [App\Http\Controllers\Master\LokasiController::class, 'index']);
+    Route::get('/item', [App\Http\Controllers\Master\ItemController::class, 'index']);
+    Route::get('/payment_method', [App\Http\Controllers\Master\PaymentMethodController::class, 'index']);
     Route::get('/blok', [App\Http\Controllers\Master\BlokController::class, 'index']);
     Route::get('/petak', [App\Http\Controllers\Master\PetakController::class, 'index']);
     Route::get('/benur', [App\Http\Controllers\Master\BenurController::class, 'index']);

@@ -17,14 +17,10 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->string('no_panen',100);
             $table->date('tanggal_panen');
-            $table->integer('id_siklus')->constrained('setup_siklus');
-            $table->string('siklus',100);
-            $table->integer('id_lokas')->constrained('setup_lokasi');
-            $table->string('lokasi',100);
-            $table->integer('id_blok')->constrained('setup_blok');
-            $table->string('blok',100);
-            $table->integer('id_petak')->constrained('setup_petak');
-            $table->string('petak',100);
+            $table->unsignedBigInteger('id_siklus');
+            $table->foreign('id_siklus')->references('id_siklus')->on('setup_siklus')->onDelete('restrict');
+            $table->unsignedBigInteger('id_petak');
+            $table->foreign('id_petak')->references('id_petak')->on('setup_petak')->onDelete('restrict');
             $table->string('jenis_panen',20);
             $table->text('keterangan')->nullable();
             $table->float('jumlah',8,2);

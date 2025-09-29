@@ -13,5 +13,5 @@ class PanenModel extends Model
     use SoftDeletes,HasUuid,CreatedUpdatedBy;
     protected $table = 'panen';
     protected $primaryKey = 'id_panen';
-    protected $fillable = ['uuid','no_panen','tanggal_panen','id_siklus','siklus','id_lokas','lokasi','id_blok','blok','id_petak','petak','jenis_panen','keterangan','jumlah','total'];
+    protected $fillable = ['uuid','no_panen','tanggal_panen','id_siklus','id_petak','jenis_panen','keterangan','jumlah','total'];
 }

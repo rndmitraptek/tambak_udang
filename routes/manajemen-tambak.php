@@ -22,9 +22,12 @@ Route::prefix('panen')->name('panen.')->group(function(){
     Route::get('/datatable',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'datatable'])->name('datatable');
     Route::delete('/delete/{uuid}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'destroy'])->name('delete');
     Route::get('/get_siklus',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_siklus'])->name('get_siklus');
-    Route::get('/get_blok/{uuid_lokasi}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_blok'])->name('get_blok');
-    Route::get('/get_petak/{uuid_blok}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_petak'])->name('get_petak');
+    Route::get('/get_blok/{uuid_siklus}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_blok'])->name('get_blok');
+    Route::post('/get_petak',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_petak'])->name('get_petak');
     Route::get('/get_detail/{uuid}',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_detail'])->name('get_detail');
+    Route::get('/get_customer',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_customer'])->name('get_customer');
+    Route::get('/get_item',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_item'])->name('get_item');
+    Route::get('/get_payment_method',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_payment_method'])->name('get_payment_method');
 });
 
 Route::prefix('simulasi')->name('simulasi.')->group(function(){

@@ -115,3 +115,17 @@ Route::prefix('setup-siklus')->group(function () {
     Route::post('/update/{uuid}', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'update'])->name('siklus.update');
     Route::delete('/delete/{uuid}', [App\Http\Controllers\ManajemenTambak\SiklusController::class, 'destroy'])->name('siklus.delete');
 });
+
+Route::prefix('item')->name('item.')->group(function(){
+    Route::post('/insert',[App\Http\Controllers\Master\ItemController::class, 'insert'])->name('insert');
+    Route::post('/update/{id}',[App\Http\Controllers\Master\ItemController::class, 'update'])->name('update');
+    Route::get('/datatable',[App\Http\Controllers\Master\ItemController::class, 'datatable'])->name('datatable');
+    Route::delete('/delete/{id}',[App\Http\Controllers\Master\ItemController::class, 'destroy'])->name('delete');
+});
+
+Route::prefix('payment_method')->name('payment_method.')->group(function(){
+    Route::post('/insert',[App\Http\Controllers\Master\PaymentMethodController::class, 'insert'])->name('insert');
+    Route::post('/update/{id}',[App\Http\Controllers\Master\PaymentMethodController::class, 'update'])->name('update');
+    Route::get('/datatable',[App\Http\Controllers\Master\PaymentMethodController::class, 'datatable'])->name('datatable');
+    Route::delete('/delete/{id}',[App\Http\Controllers\Master\PaymentMethodController::class, 'destroy'])->name('delete');
+});

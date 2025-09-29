@@ -17,11 +17,12 @@ return new class extends Migration
             $table->integer('id_panen');
             $table->uuid('uuid');
             $table->date('tanggal_panen');
-            $table->integer('id_customer')->constrained('setup_customer');
-            $table->string('customer',100);
-            $table->integer('id_metode_pembayaran')->constrained('setup_metode_pembayaran');
-            $table->string('metode_pembayaran',50);
-            $table->string('item',100);
+            $table->unsignedBigInteger('id_customer');
+            $table->foreign('id_customer')->references('id_customer')->on('setup_customer')->onDelete('restrict');
+            $table->unsignedBigInteger('id_payment_method');
+            $table->foreign('id_payment_method')->references('id_payment_method')->on('setup_payment_method')->onDelete('restrict');
+            $table->unsignedBigInteger('id_item');
+            $table->foreign('id_item')->references('id_item')->on('setup_item')->onDelete('restrict');
             $table->float('harga',8,2);
             $table->float('jumlah',8,2);
             $table->float('subtotal',8,2);
