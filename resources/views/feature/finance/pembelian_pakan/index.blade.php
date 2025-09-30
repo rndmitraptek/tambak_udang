@@ -1,6 +1,7 @@
 @extends('layout')
 @section('css')
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{ url('/') }}/template/assets/src/select2.min.css" rel="stylesheet" type="text/css"/>
 @endsection
 @section('ctrl')
 @include('feature.finance.pembelian_pakan.script')
@@ -18,6 +19,11 @@
         </div>
     </div>
 </div> --}}
+<style>
+    .select2-search__field {
+        display: block !important;
+    }
+</style>
 
 <!-- END: Subheader -->
 <div class="m-content">
@@ -52,7 +58,7 @@
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        <thead>
+                        {{-- <thead>
                             <tr>
                                 <th>No Pembelian</th>
                                 <th>Tanggal Pembelian</th>
@@ -63,8 +69,8 @@
                                 <th>Keterangan</th>
                                 <th>Actions</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                        </thead> --}}
+                        {{-- <tbody>
                             <tr>
                                 <td>PP202508002</td>
                                 <td>2025-08-26</td>
@@ -85,13 +91,14 @@
                                 <td>pakan yang kualitas tinggi</td>
                                 <td nowrap></td>
                             </tr>
-                        </tbody>
+                        </tbody> --}}
                     </table>
                 </div>
             </div>
         </div>
         <div class="col-lg-12" ng-show="form == 'input'">
             <div class="m-portlet m-portlet--tab">
+                <form id="formInput">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -106,7 +113,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="tambah()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button type="submit" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-save"></i>
                                         <span>Simpan Transaksi</span>
@@ -125,47 +132,54 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <form>
+                    
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">No Pembelian</label>
-                                    <input type="text" class="form-control" id="recipient-name" value="PO202508003" readonly>
+                                    <input type="text" class="form-control" name="no_pembelian" id="recipient-name" ng-model="input.no_pembelian" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="recipient-name" class="form-control-label">Tanggal Pembelian</label>
-                                    <input type="date" class="form-control" id="recipient-name" value="2025-08-26">
+                                    <input type="text" class="form-control general_datepicker" id="tanggal_pembelian" name="tanggal_pembelian" ng-model="input.tanggal_pembelian" required>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">
-                                    <label>Supplier</label>
+                                    <label>Pillih Supplier</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search for...">
+                                        <input type="text" class="form-control" ng-model="input.nama_supplier" id="nama_supplier" name="nama_supplier" placeholder="Search for..." required>
                                         <div class="input-group-append">
                                             <button ng-click="cari_supplier()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group m-form__group">
-                                    <label for="exampleSelect1">Lokasi</label>
-                                    <select class="form-control" id="exampleSelect1">
-                                        <option>Sekuro</option>
-                                        <option>Bandengan</option>
+                                    <label for="uuid_lokasi">Lokasi</label>
+                                    <select class="form-control" id="uuid_lokasi" ng-change="get_siklus()" ng-model="input.uuid_lokasi" name="uuid_lokasi" required>
+                                        <option  value="" >Pillih Lokasi</option>
+                                        <option ng-repeat="x in lokasi" value="<% x.uuid %>" ><% x.nama_lokasi %></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">
+                                    <label for="uuid_lokasi">Siklus</label>
+                                    <select class="form-control" id="uuid_siklus" ng-model="input.uuid_siklus" name="uuid_siklus" required>
+                                        <option  value="" >Pillih Siklus</option>
+                                        <option ng-repeat="x in siklus" value="<% x.uuid %>" ><% x.nama_siklus %></option>
+                                    </select>
+                                </div>
+                                <div class="form-group m-form__group">
                                     <label for="exampleTextarea">Keterangan</label>
-                                    <textarea class="form-control" rows="4"></textarea>
+                                    <textarea class="form-control" name="keterangan" ng-model="input.keterangan" rows="4"></textarea>
                                 </div>
                             </div>
                         </div>
                         <hr/>
                         <div class="row">
                             <div class="col-lg-12">
-                                <a href="#" class="btn btn-outline-primary btn-sm m-btn m-btn--icon mb-2">
+                                <a ng-click="add_pakan()" class="btn btn-outline-primary btn-sm m-btn m-btn--icon mb-2">
                                     <span>
                                         <i class="la la-plus"></i>
                                         <span>Pakan</span>
@@ -175,14 +189,34 @@
                                     <thead>
                                         <tr>
                                             <th>Kode Pakan</th>
-                                            <th>Jenis Pakan</th>
+                                            <th>Nama Pakan</th>
                                             <th>Harga</th>
                                             <th>Jumlah</th>
                                             <th>Subtotal</th>
-                                            <th style="width:40px"></th>
+                                            <th style="width:40px">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <tr ng-repeat="item in daftarPakan">
+                                            <td><% item.kode_pakan %></td>
+                                            <td><% item.nama_pakan %></td>
+                                            <td class="text-right"><% item.harga | number:0 %></td>
+                                            <td class="text-right"><% item.jumlah %></td>
+                                            <td class="text-right"><% item.subtotal | number:0 %></td>
+                                            <td>
+                                            <button class="btn btn-sm" ng-click="hapusPakan($index)">
+                                                <i class="m--font-danger la la-remove"></i>
+                                            </button>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="4" class="text-right font-weight-bold">TOTAL</td>
+                                            <td class="text-right font-weight-bold"><% getTotal() | number:0 %></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                    {{-- <tbody>
                                         <tr>
                                             <td>PAK001</td>
                                             <td>Pakan Super</td>
@@ -215,12 +249,62 @@
                                             <th class="text-right">30.000.000</th> 
                                             <th></th>
                                         </tr>
-                                    </tfoot>
+                                    </tfoot> --}}
                                 </table>
                             </div>
                         </div>
-                    </form>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<look-up-table
+      lookup-id="lookup_supplier"
+      ajax-url="{{ route('finance.pembelian-pakan.get_supplier') }}"
+      columns="supplierColumns"
+      page-length="8"
+      on-select="selectSupplier(row)">
+</look-up-table>
+
+<!--begin::Modal-->
+<div class="modal fade" id="m_pakan" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Pilih Pakan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group m-form__group">
+                    <label for="id_pakan">Pakan</label>
+                    <select class="form-control"
+                            id="id_pakan"
+                            ng-model="input.id_pakan"
+                            name="id_pakan"
+                            ng-options="x.id_pakan as (x.kode_pakan + ' - ' + x.nama_pakan) for x in pakan">
+                        <option value="">--Pilih pakan--</option>
+                    </select>
                 </div>
+                <div class="form-group m-form__group">
+                    <label for="harga">Harga</label>
+                    <input type="text" class="form-control text-right" input-currency name="harga" id="harga" ng-model="harga" ng-change="hitungSubtotal()">
+                </div>
+                <div class="form-group m-form__group">
+                    <label for="jumlah">Jumlah</label>
+                    <input type="text" class="form-control text-right" input-currency name="jumlah" id="jumlah" ng-model="jumlah" value=1 ng-change="hitungSubtotal()">
+                </div>
+                <div class="form-group m-form__group">
+                    <label for="subtotal">Subtotal</label>
+                    <input type="text" class="form-control text-right" input-currency name="subtotal" id="subtotal" ng-model="subtotal" readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" ng-click="simpanPakan()">Simpan</button>
             </div>
         </div>
     </div>
@@ -287,7 +371,8 @@
 @section('js')
 <!--begin::Page Vendors -->
 <script src="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
-
+<script src="{{ url('/') }}/template/assets/src/select2.min.js"></script>
+<script src="{{ url('/') }}/template/assets/src/jquery.validate.min.js"></script>
 <!--end::Page Vendors -->
 
 <!--begin::Page Resources -->
