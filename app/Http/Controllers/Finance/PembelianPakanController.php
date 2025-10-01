@@ -37,9 +37,24 @@ class PembelianPakanController extends Controller
             ->addColumn('siklus', fn($row) => $row->siklus->nama_siklus ?? '-')
             ->addColumn('actions', function ($row) use ($request) {
                 if ($row->deleted_at) {
-                    return '<span class="text-muted font-italic">Batal</span>';
+                    return '
+                    <a href="javascript:void(0)" 
+                        class="btn btn-info btn-sm btn-detail" 
+                        data-uuid="'.$row->uuid.'"
+                        title="Detail">
+                        <i class="la la-eye"></i>
+                    </a>
+                    <span class="text-muted font-italic">Batal</span>';
                 } else {
-                    return '<a href="javascript:void(0)" 
+                    return '
+                    <a href="javascript:void(0)" 
+                        class="btn btn-info btn-sm btn-detail" 
+                        data-uuid="'.$row->uuid.'"
+                        title="Detail">
+                        <i class="la la-eye"></i>
+                    </a>
+                    
+                    <a href="javascript:void(0)" 
                         class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill btn-batal" data-uuid="'.$row->uuid.'" 
                         title="Hapus">
                         <i class="m--font-danger la la-remove"></i>
@@ -215,5 +230,19 @@ class PembelianPakanController extends Controller
                 'message' => 'Gagal membatalkan transaksi: ' . $e->getMessage()
             ]);
         }
+    }
+
+    public function detail($uuid)
+    {
+        // Ambil transaksi termasuk soft deleted
+        $transaksi = PembelianPakan::withTrashed()
+            ->with(['detail.pakan', 'supplier', 'lokasi', 'siklus'])
+            ->where('uuid', $uuid)
+            ->firstOrFail();
+
+        return response()->json([
+            'success' => true,
+            'data' => $transaksi
+        ]);
     }
 }
