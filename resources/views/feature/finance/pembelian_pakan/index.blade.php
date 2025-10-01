@@ -121,7 +121,7 @@
                                 </button>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <button ng-click="kembali()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button type="button" ng-click="kembali()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-arrow-left"></i>
                                         <span>Kembali ke List Pembelian</span>
