@@ -294,7 +294,7 @@
                     <input type="text" class="form-control text-right" input-currency name="harga" id="harga" ng-model="harga" ng-change="hitungSubtotal()">
                 </div>
                 <div class="form-group m-form__group">
-                    <label for="jumlah">Jumlah</label>
+                    <label for="jumlah">Jumlah (Kg)</label>
                     <input type="text" class="form-control text-right" input-currency name="jumlah" id="jumlah" ng-model="jumlah" value=1 ng-change="hitungSubtotal()">
                 </div>
                 <div class="form-group m-form__group">

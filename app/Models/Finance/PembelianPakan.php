@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SetupSupplier;
 use App\Models\SetupLokasi;
 use App\Models\SetupSiklus;
+use App\Models\Finance\PembelianPakanDetail;
 use App\Traits\CreatedUpdatedBy;
 use App\Traits\HasUuid;
 
@@ -27,6 +28,11 @@ class PembelianPakan extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function detail()
+    {
+        return $this->hasMany(PembelianPakanDetail::class, 'id_pembelian', 'id_pembelian');
+    }
 
     public function supplier()
     {

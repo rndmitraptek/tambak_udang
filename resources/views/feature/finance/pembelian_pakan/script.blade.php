@@ -16,36 +16,12 @@ app.controller("myCtrl", function($scope,$http) {
                 { data: 'supplier', title: 'Supplier' },
                 { data: 'lokasi', title: 'Lokasi' },
                 { data: 'siklus', title: 'Siklus' },
-                { data: 'keterangan', title: 'keterangan' },
-                { data: 'actions', title: 'action', orderable: false, searchable: false,width:'80px' },
+                { data: 'keterangan', title: 'Keterangan' },
+                { data: 'actions', title: 'Action', orderable: false, searchable: false,width:'80px' },
             ]
         })
 
-        $('#viewtabel tbody').on('click', '#edit', function () {
-            var tr = $(this).closest('tr');
-            var x = table.row(tr).data();
-            $scope.input = x;
-            url = "{{ route('finance.pembelian-pakan.get_detail',':uuid') }}"
-            url = url.replace(':uuid', x.uuid)
-            swal({title: "Presesing...!",text: "Please Wait",
-                onOpen: function() {
-                    swal.showLoading()
-                }
-            })
-            $http.get(url)
-            .then(function(res){
-                if(res.data.success){
-                    $scope.detail = res.data.data;
-                    $scope.hitung();
-                }
-                Swal.close();
-            }).catch(function(error) {
-                swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
-            });
-            $scope.edit = true;
-            $scope.form = "input";
-            $scope.$apply();
-        });
+        
 
         $('#viewtabel tbody').on('click', '#hapus', function () {
             var tr = $(this).closest('tr');
@@ -310,5 +286,58 @@ app.controller("myCtrl", function($scope,$http) {
                 });
             });
     };
+
+
+    $('#viewtabel').on('click', '.btn-batal', function() {
+        var uuid = $(this).data('uuid');
+        $scope.batalTransaksi(uuid);
+    });
+
+    $scope.batalTransaksi = function(uuid) {
+        Swal.fire({
+            title: 'Yakin ingin membatalkan transaksi?',
+            text: "Stok pakan akan dikurangi sesuai transaksi ini.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, batal!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.value) {
+                swal({title: "Processing...!",text: "Please Wait",
+                    onOpen: function() {
+                        swal.showLoading()
+                    }
+                })
+
+                $http.get(`/finance/pembelian-pakan/batal/${uuid}`)
+                    .then(function(res) {
+                        if(res.data.success){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Transaksi berhasil dibatalkan!'
+                            });
+                            // reload datatable
+                            $('#viewtabel').DataTable().ajax.reload(null, false);
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: res.data.message
+                            });
+                        }
+                    })
+                    .catch(function(err) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: err.data?.message || err.statusText
+                        });
+                    });
+            }
+        });
+    }
 });
 </script>

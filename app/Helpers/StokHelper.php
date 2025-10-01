@@ -57,4 +57,45 @@ class StokHelper
             'referensi_id'  => $referensiId,
         ]);
     }
+
+
+    /**
+     * Batalkan transaksi pakan
+     *
+     * @param int $pakanId
+     * @param float $jumlah
+     * @param string $referensiNo
+     * @param int|null $lokasiId
+     * @param int|null $referensiId
+     * @param string|null $tanggal
+     */
+    public static function batalTransaksi($pakanId, $jumlah, $referensiNo, $lokasiId = null, $referensiId = null, $tanggal = null)
+    {
+        $tanggal = $tanggal ? Carbon::parse($tanggal) : Carbon::now();
+        $tahun   = $tanggal->year;
+
+        $stok = StokPakan::where('pakan_id', $pakanId)
+            ->where('lokasi_id', $lokasiId)
+            ->firstOrFail();
+
+        $saldo_awal = floatval($stok->stok);
+        $stok->stok = $saldo_awal - floatval($jumlah); // kurangi stok
+        $stok->save();
+
+        $saldo = floatval($stok->stok);
+
+        HistoryKartuStok::create([
+            'tanggal'       => $tanggal,
+            'tahun'         => $tahun,
+            'id_pakan'      => $pakanId,
+            'id_lokasi'     => $lokasiId,
+            'transaksi'     => 'Batal ' . $referensiNo,
+            'masuk'         => 0,
+            'keluar'        => floatval($jumlah),
+            'awal'          => $saldo_awal,
+            'saldo'         => $saldo,
+            'referensi_no'  => $referensiNo,
+            'referensi_id'  => $referensiId,
+        ]);
+    }
 }

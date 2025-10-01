@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/siklus/{id_lokasi}',[App\Http\Controllers\Finance\PembelianPakanController::class, 'get_siklus'])->name('siklus');
         Route::get('/get_petak/{uuid_siklus}',[App\Http\Controllers\Finance\PembelianPakanController::class, 'get_petak'])->name('get_petak');
         Route::get('/get_benur',[App\Http\Controllers\Finance\PembelianPakanController::class, 'get_benur'])->name('get_benur');
-        Route::get('/get_detail/{uuid}',[App\Http\Controllers\Finance\PembelianPakanController::class, 'get_detail'])->name('get_detail');
+        Route::get('/batal/{uuid}',[App\Http\Controllers\Finance\PembelianPakanController::class, 'batal'])->name('batal');
         
     });
 });

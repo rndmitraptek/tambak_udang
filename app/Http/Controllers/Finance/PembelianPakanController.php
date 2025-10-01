@@ -28,7 +28,7 @@ class PembelianPakanController extends Controller
 
     public function datatable(Request $request)
     {
-        $query = PembelianPakan::with(['supplier','lokasi'])
+        $query = PembelianPakan::withTrashed()->with(['supplier','lokasi'])
             ->orderBy('id_pembelian', 'desc');
 
         return DataTables::of($query)
@@ -36,19 +36,15 @@ class PembelianPakanController extends Controller
             ->addColumn('lokasi', fn($row) => $row->lokasi->nama_lokasi ?? '-')
             ->addColumn('siklus', fn($row) => $row->siklus->nama_siklus ?? '-')
             ->addColumn('actions', function ($row) use ($request) {
-                
-                return '
-                    <a href="javascript:void(0)" onclick="angular.element(this).scope().editTransaksi(\''.$row->uuid.'\')" 
-                        class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" 
-                        title="Edit">
-                        <i class="m--font-warning la la-edit"></i>
-                    </a>
-                    <a href="javascript:void(0)" onclick="deleteTransaksi(\''.$row->uuid.'\')" 
-                        class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" 
+                if ($row->deleted_at) {
+                    return '<span class="text-muted font-italic">Batal</span>';
+                } else {
+                    return '<a href="javascript:void(0)" 
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill btn-batal" data-uuid="'.$row->uuid.'" 
                         title="Hapus">
                         <i class="m--font-danger la la-remove"></i>
-                    </a>
-                ';
+                    </a>';
+                }
             })
             ->rawColumns(['siklus','actions'])
             ->make(true);
@@ -187,108 +183,37 @@ class PembelianPakanController extends Controller
         }
     }
 
-    public function update(Request $req, $uuid)
+    public function batal($uuid)
     {
         DB::beginTransaction();
         try {
-            $penaburanBenur = penaburanBenurModel::where('uuid', $uuid)->firstOrFail();
-            $po = PoModel::where('uuid',$req->uuid_po)->first();
-            $lokasi = SetupLokasi::where('uuid',$req->uuid_lokasi)->first();
-            $siklus = SetupSiklus::where('uuid',$req->uuid_siklus)->first();
-            $req->validate([
-                'uuid_po' => 'required',
-                'no_pembelian'    => 'required',
-                'tanggal_pembelian'   => 'required',
-            ]);
-            $data = $req->all();
-            unset($data['uuid_po']);
-            unset($data['uuid_supplier']);
-            unset($data['uuid_lokasi']);
-            unset($data['uuid_siklus']);
-            $data['id_po_benur']    = $po->id_po_benur;
-            $data['id_lokasi']      = $lokasi->id_lokasi;
-            $data['id_siklus']      = $siklus->id_siklus;
-            $penaburanBenur->update($data);
-            $delete_detail = penaburanBenurDetailModel::where('id_pembelian',$penaburanBenur->id_pembelian)->delete();
-            // update transaksi biaya
-            $transBiaya = TransaksiBiaya::where('reff_id', $penaburanBenur->id_pembelian)->firstOrFail();
-            // if($transBiaya->validated_at != null){
-            //     throw new \Exception('Transaksi Biaya benur sudah di validasi, data tidak bisa di ubah');
-            // }
-            $transBiaya->update([
-                'no_transaksi'      => $data['no_pembelian'],
-                'tanggal_transaksi' => $data['tanggal_pembelian'],
-                'tanggal_mulai'     => $data['tanggal_pembelian'],
-                'tanggal_selesai'   => $data['tanggal_pembelian'],
-                'biaya_id'          => 1,
-                'nominal'           => $data['total_nominal_netto'],
-                'coa_id'            => 2,
-                'keterangan'        => 'transaksi penaburan benur'
-            ]);
+            $pembelian = PembelianPakan::with('detail')->where('uuid',$uuid)->firstOrFail();
 
-            $transSiklus = TransaksiBiayaSiklus::where('trans_biaya_id',$transBiaya->id)->firstOrFail();
-            $transSiklus->update([
-                'siklus_id'     =>$siklus->id_siklus
-            ]);
-            $deleteBiayaPetak = TransaksiBiayaPetak::where('trans_biaya_id',$transBiaya->id)->delete();
-            foreach($req->detail as $d){
-                $benur = SetupBenur::where('uuid',$d['uuid_benur'])->first();
-                $petak = SetupPetak::where('uuid',$d['uuid_petak'])->first();
-                $detail = $d;
-                $detail['id_po_benur']    = $po->id_po_benur;
-                $detail['id_benur'] = $benur->id_benur;
-                $detail['id_petak'] = $petak->id_petak;
-                $detail['kode_supplier'] = $d['kode_benur'];
-                $detail['id_pembelian'] = $penaburanBenur->id_pembelian;
-                unset($d['uuid_benur']);
-                unset($d['uuid_petak']);
-                $insert_detail = penaburanBenurDetailModel::create($detail);
-                $transPetak = TransaksiBiayaPetak::create([
-                    'trans_biaya_id'        =>$transBiaya->id,
-                    'trans_biaya_siklus_id' =>$transSiklus->id,
-                    'petak_id'              =>$petak->id_petak,
-                    'biaya_id'              =>1,
-                    'luas'                  =>$petak->luas_petak,
-                    'persentase'            =>100,
-                    'nominal_petak'         =>$detail['subtotal_neto'],
-                    'tanggal_mulai'         =>$data['tanggal_pembelian'],
-                    'tanggal_selesai'       =>$data['tanggal_pembelian'],
-                ]);
+            foreach($pembelian->detail as $item) {
+                StokHelper::batalTransaksi(
+                    $item->id_pakan,
+                    $item->jumlah,
+                    $pembelian->no_pembelian,
+                    $pembelian->lokasi_id,
+                    $item->id_pembelian
+                );
             }
+
+            $pembelian->delete(); // jika ingin hapus record pembelian
+
             DB::commit();
-            return response()->json(['success'=>true,'data'=>$penaburanBenur,'message'=>'']);
-        }catch(\Exception $err) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Transaksi berhasil dibatalkan dan stok dikembalikan.'
+            ]);
+        } catch (\Exception $e) {
             DB::rollBack();
-            // throw $err;
-            return response()->json(['success'=>false,'message'=>$err->getMessage()]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membatalkan transaksi: ' . $e->getMessage()
+            ]);
         }
-    }
-
-    public function trigger_transaksi_biaya($payload)
-    {
-        
-    }
-
-    public function destroy($uuid)
-    {
-        $benur = penaburanBenurModel::where('uuid', $uuid)->firstOrFail();
-        $benur->delete();
-        return response()->json(['success' => true]);
-    }
-
-    public function get_detail($uuid){
-        $penaburan = penaburanBenurModel::where('uuid',$uuid)->first();
-        $detail = penaburanBenurDetailModel::where('id_pembelian',$penaburan->id_pembelian)
-            ->join('setup_benur','penaburan_benur_detail.id_benur','=','setup_benur.id_benur')
-            ->join('setup_petak','penaburan_benur_detail.id_petak','=','setup_petak.id_petak')
-            ->join('setup_blok','setup_petak.blok_id','=','setup_blok.id_blok')
-            ->select([
-                'setup_blok.nama_blok as blok','setup_petak.nama_petak as petak','setup_petak.uuid as uuid_petak','setup_benur.uuid as uuid_benur',
-                'penaburan_benur_detail.kode_supplier as kode_benur','penaburan_benur_detail.jenis_benur',
-                'harga_bruto','jumlah_bruto','subtotal_bruto',
-                'harga_neto','jumlah_neto','subtotal_neto',
-                'harga_actual','jumlah_actual','subtotal_actual',
-            ])->get();
-        return response()->json(['success'=>true,'data'=>$detail,'message'=>'']);
     }
 }
