@@ -290,7 +290,7 @@
                     </select>
                 </div>
                 <div class="form-group m-form__group">
-                    <label for="harga">Harga</label>
+                    <label for="harga">Harga Per Kg</label>
                     <input type="text" class="form-control text-right" input-currency name="harga" id="harga" ng-model="harga" ng-change="hitungSubtotal()">
                 </div>
                 <div class="form-group m-form__group">
