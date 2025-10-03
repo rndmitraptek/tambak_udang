@@ -11,12 +11,29 @@ app.controller("myCtrl", function($scope,$http) {
             scrollX: !0,
             scrollCollapse: !0,
             columns: [
-                { data: 'no_pembelian', title: 'No Pembelian Pakan' },
-                { data: 'tanggal_pembelian', title: 'Tanggal Pembelian' },
+                { data: 'no_pembelian', title: 'No Pembelian' },
+                { data: 'tanggal_pembelian', title: 'Tanggal' },
                 { data: 'supplier', title: 'Supplier' },
                 { data: 'lokasi', title: 'Lokasi' },
                 { data: 'siklus', title: 'Siklus' },
+                { data: 'jumlah_item', title: 'Jumlah Item', className: 'text-center' },
+                { 
+                    data: 'total', 
+                    name: 'total',
+                    title: 'Total',
+                    className: 'text-right',
+                    render: function(data) {
+                        return data ? 'Rp ' + parseInt(data).toLocaleString('id-ID') : '-';
+                    }
+                },
                 { data: 'keterangan', title: 'Keterangan' },
+                { 
+                    data: 'status', 
+                    title: 'Status',
+                    render: function(data, type, row) {
+                        return '<span class="badge badge-danger">'+data+'</span>';
+                    }
+                },
                 { data: 'actions', title: 'Action', orderable: false, searchable: false,width:'80px' },
             ]
         })
@@ -349,7 +366,7 @@ app.controller("myCtrl", function($scope,$http) {
             if(res.data.success){
                 let transaksi = res.data.data;
                 let html = '<table class="table table-bordered">';
-                html += '<tr><th>Kode Pakan</th><th>Nama Pakan</th><th>Harga</th><th>Jumlah</th><th>Subtotal</th></tr>';
+                html += '<tr><th>Kode Pakan</th><th>Nama Pakan</th><th>Harga Per Kg</th><th>Jumlah (Kg)</th><th>Subtotal</th></tr>';
 
                 transaksi.detail.forEach(function(item){
                     html += `<tr>

@@ -49,10 +49,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_pakan')->nullable();
             $table->unsignedBigInteger('id_lokasi')->nullable();
             $table->string('transaksi'); // pembelian / pemakaian dll
-            $table->integer('awal')->default(0);
-            $table->integer('masuk')->default(0);
-            $table->integer('keluar')->default(0);
-            $table->integer('saldo')->default(0);
+            $table->decimal('awal', 30,2)->default(0);
+            $table->decimal('masuk', 30,2)->default(0);
+            $table->decimal('keluar', 30,2)->default(0);
+            $table->decimal('saldo', 30,2)->default(0);
             $table->string('referensi_no')->nullable(); // no pembelian dll
             $table->unsignedBigInteger('referensi_id')->nullable(); // id pembelian dll
             $table->timestamps();

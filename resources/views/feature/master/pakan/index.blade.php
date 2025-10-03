@@ -59,7 +59,7 @@
                                 <th>Jenis Pakan</th>
                                 <th>Merk</th>
                                 <th>Satuan</th>
-                                <th>Harga</th>
+                                <th>Harga Per Kg</th>
                                 <th>Keterangan</th>
                                 <th>Actions</th>
                             </tr>
@@ -104,8 +104,8 @@
                         <input type="text" class="form-control" id="satuan_pakan" name="satuan_pakan" required>
                     </div>
                     <div class="form-group">
-                        <label>Harga</label>
-                        <input type="number" class="form-control" id="harga_pakan" name="harga_pakan" required>
+                        <label>Harga Per Kg</label>
+                        <input type="text" class="form-control" id="harga_pakan" name="harga_pakan" ng-model="harga_pakan" input-currency required>
                     </div>
                     <div class="form-group">
                         <label>Keterangan</label>

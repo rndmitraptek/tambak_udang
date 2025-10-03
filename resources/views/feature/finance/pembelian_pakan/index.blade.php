@@ -23,6 +23,12 @@
     .select2-search__field {
         display: block !important;
     }
+    .text-right {
+        text-align: right !important;
+    }
+    .text-center {
+        text-align: center !important;
+    }
 </style>
 
 <!-- END: Subheader -->
@@ -58,40 +64,7 @@
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        {{-- <thead>
-                            <tr>
-                                <th>No Pembelian</th>
-                                <th>Tanggal Pembelian</th>
-                                <th>Supplier</th>
-                                <th>Lokasi</th>
-                                <th>Jumlah Item</th>
-                                <th>Total</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead> --}}
-                        {{-- <tbody>
-                            <tr>
-                                <td>PP202508002</td>
-                                <td>2025-08-26</td>
-                                <td>Supriyadi - PT. PAKAN JAYA</td>
-                                <td>Sekuro</td>
-                                <td>3</td>
-                                <td>30.000.000</td>
-                                <td>Pakan untuk di kirim ke sekuro </td>
-                                <td nowrap></td>
-                            </tr>
-                            <tr>
-                                <td>PP202508001</td>
-                                <td>2025-08-26</td>
-                                <td>Sudarsono - PT. NUSANTARA PAKAN</td>
-                                <td>Bandengan</td>
-                                <td>4</td>
-                                <td>35.000.000</td>
-                                <td>pakan yang kualitas tinggi</td>
-                                <td nowrap></td>
-                            </tr>
-                        </tbody> --}}
+                        
                     </table>
                 </div>
             </div>
@@ -190,8 +163,8 @@
                                         <tr>
                                             <th>Kode Pakan</th>
                                             <th>Nama Pakan</th>
-                                            <th>Harga</th>
-                                            <th>Jumlah</th>
+                                            <th>Harga Per Kg</th>
+                                            <th>Jumlah (Kg)</th>
                                             <th>Subtotal</th>
                                             <th style="width:40px">Aksi</th>
                                         </tr>

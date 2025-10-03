@@ -77,6 +77,14 @@ $(document).ready(function() {
         submitHandler: function(form) {
             var uuid = $('#uuid').val();
             var url = uuid ? '/pakan/update/' + uuid : '/pakan/store';
+
+            // ✅ Bersihkan angka ribuan sebelum serialize
+            let hargaInput = $('#harga_pakan');
+            let rawHarga = hargaInput.val()
+                .replace(/\./g, '')   // hapus titik ribuan
+                .replace(/,/g, '.');  // ubah koma jadi titik desimal
+            hargaInput.val(rawHarga);
+            
             swal({title: "Processing...!",text: "Please Wait",
                 onOpen: function() {
                     swal.showLoading()

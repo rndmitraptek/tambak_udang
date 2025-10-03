@@ -35,20 +35,20 @@ class PembelianPakanController extends Controller
             ->addColumn('supplier', fn($row) => $row->supplier->nama_supplier ?? '-')
             ->addColumn('lokasi', fn($row) => $row->lokasi->nama_lokasi ?? '-')
             ->addColumn('siklus', fn($row) => $row->siklus->nama_siklus ?? '-')
+            ->addColumn('status', fn($row) => $row->deleted_at!=null ?'Batal':'')
             ->addColumn('actions', function ($row) use ($request) {
                 if ($row->deleted_at) {
                     return '
                     <a href="javascript:void(0)" 
-                        class="btn btn-info btn-sm btn-detail" 
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill btn-detail" 
                         data-uuid="'.$row->uuid.'"
                         title="Detail">
                         <i class="la la-eye"></i>
-                    </a>
-                    <span class="text-muted font-italic">Batal</span>';
+                    </a>';
                 } else {
                     return '
                     <a href="javascript:void(0)" 
-                        class="btn btn-info btn-sm btn-detail" 
+                        class="m-portlet__nav-link btn m-btn m-btn--hover-info m-btn--icon m-btn--icon-only m-btn--pill btn-detail" 
                         data-uuid="'.$row->uuid.'"
                         title="Detail">
                         <i class="la la-eye"></i>
@@ -157,27 +157,17 @@ class PembelianPakanController extends Controller
             $data['lokasi_id']   = $lokasi->id_lokasi;
             $data['siklus_id']   = $siklus->id_siklus;
             $insert = PembelianPakan::create($data);
-            // insert biaya
-            // $transBiaya = TransaksiBiaya::create([
-            //     'no_transaksi'      => $data['no_pembelian'],
-            //     'tanggal_transaksi' => $data['tanggal_pembelian'],
-            //     'tanggal_mulai'     => $data['tanggal_pembelian'],
-            //     'tanggal_selesai'   => $data['tanggal_pembelian'],
-            //     'biaya_id'          => 1,
-            //     'nominal'           => $data['total_nominal_netto'],
-            //     'coa_id'            => 2,
-            //     'keterangan'        => 'transaksi penaburan benur',
-            //     'reff_id'           => $insert->id_pembelian,
-            //     'reff_trans'        => 'penaburan_benur'
-            // ]);
-            // $transSiklus = TransaksiBiayaSiklus::create([
-            //     'trans_biaya_id'=>$transBiaya->id,
-            //     'siklus_id'     =>$siklus->id_siklus,
-            // ]);
+
             foreach($req->detail as $d){
                 $d['id_pembelian'] = $insert->id_pembelian;
                 unset($d['kode_pakan'], $d['nama_pakan']);
                 PembelianPakanDetail::create($d);
+
+                //update harga pakan terbaru
+                $pakan = SetupPakan::where('id_pakan', $d['id_pakan'])->firstOrFail();
+                $pakan->update([
+                    'harga_pakan' => $d['harga']
+                ]);
 
                 // Tambahkan stok masuk
                 StokHelper::updateStok(

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Models\SetupPakan;
 
 class StokPakan extends Model
 {
@@ -18,4 +19,8 @@ class StokPakan extends Model
         'uuid',
     ];
 
+    public function pakan()
+    {
+        return $this->belongsTo(SetupPakan::class,'pakan_id', 'id_pakan');
+    }
 }
