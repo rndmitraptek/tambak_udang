@@ -67,7 +67,7 @@ class SimulasiController extends Controller
             // ambil id benur dari penamburan benur per petak
             $penaburanBenurDetail = DB::table('penaburan_benur_detail')
                 ->join('penaburan_benur','penaburan_benur.id_penaburan_benur','penaburan_benur_detail.id_penaburan_benur')
-                ->where('penaburan_benur_detail.siklus_id', $siklusId)
+                ->where('penaburan_benur.id_siklus', $siklusId)
                 ->where('penaburan_benur_detail.id_petak', $petakId)
                 ->orderBy('id_penaburan_benur_detail','desc')->first();
             $petakItem->benur_id =$penaburanBenurDetail ? $penaburanBenurDetail->id_benur :null;
@@ -83,6 +83,7 @@ class SimulasiController extends Controller
                 ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
                 ->where('tbp.petak_id', $petakId)
                 ->where('tbs.siklus_id', $siklusId)
+                ->whereNull('tb.deleted_at')
                 // mulai biaya >= mulai siklus
                 ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
                     $q->where('tbp.tanggal_mulai','>=',$tglMulaiSiklus);

@@ -40,4 +40,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/detail/{uuid}',[App\Http\Controllers\Finance\PembelianPakanController::class, 'detail'])->name('detail');
         
     });
+    Route::prefix('penggunaan_pakan')->name('penggunaan_pakan.')->group(function(){
+        Route::post('/insert',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'insert'])->name('insert');
+        Route::post('/update/{uuid}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'update'])->name('update');
+        Route::get('/datatable',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'datatable'])->name('datatable');
+        Route::delete('/delete/{uuid}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'destroy'])->name('delete');
+        Route::get('/get_po',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'get_po'])->name('get_po');
+        Route::get('/get_petak/{uuid_siklus}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'get_petak'])->name('get_petak');
+        Route::get('/get_benur',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'get_benur'])->name('get_benur');
+        Route::get('/get_detail/{uuid}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'get_detail'])->name('get_detail');
+        Route::get('/lokasi',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'lokasi'])->name('lokasi');
+        Route::get('/siklus/{id_lokasi}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'get_siklus'])->name('siklus');
+        Route::get('/pakan/{id_lokasi}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'get_pakan'])->name('pakan');
+        Route::get('/batal/{uuid}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'batal'])->name('batal');
+    });
 });

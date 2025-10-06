@@ -13,7 +13,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('no_penggunaan')->unique();
             $table->date('tanggal_penggunaan');
-            $table->string('waktu');
+            $table->time('waktu');
             $table->unsignedBigInteger('lokasi_id');
             $table->unsignedBigInteger('siklus_id');
             $table->integer('jumlah_petak');
