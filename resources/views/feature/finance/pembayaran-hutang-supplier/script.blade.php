@@ -97,22 +97,35 @@ app.controller("myCtrl", function($scope,$http,API) {
     });
 
     $scope.input = {};
-    $scope.input.hutang = [];
-    $scope.input.piutang = [];
+    $scope.form_transfer = {};
     $scope.input.transfer = [];
     $scope.input.tunai = [];
     $scope.input.giro = [];
+    $scope.input = {};
+    $scope.edit = false;
+    $scope.input.hutang = [];
+    $scope.input.piutang = [];
+    $scope.total_hutang = 0;
+    $scope.total_piutang = 0;
+    $scope.total_bayar = 0;
     $scope.supplierColumns = [
         { data: 'kode_supplier', title: 'Kode Supplier' },
         { data: 'nama_supplier', title: 'Nama Supplier' },
         { data: 'nama_perusahaan', title: 'Perusahaan' },
         { data: 'telepon_supplier', title: 'Telepon' }
     ];
+    $scope.rekeningColumns = [
+        { data: 'nama_bank', title: 'Nama Bank' },
+        { data: 'atas_nama', title: 'Atas Nama' },
+        { data: 'no_rekening', title: 'No Rekening' }
+    ]
     $scope.id_lokasi = null;
     $scope.selectSupplier = function(row) {
         console.log(row);
         $scope.input.uuid_supplier = row.uuid;
         $scope.input.nama_supplier = row.nama_supplier;
+        $scope.input.kode_supplier = row.kode_supplier;
+        $scope.input.alamat_supplier = row.alamat_supplier;
         $scope.id_lokasi = row.id_lokasi;
         url = "{{ route('finance.pembayaran_hutang_supplier.get_hutang_piutang',':uuid') }}"
         url = url.replace(':uuid', row.uuid)
@@ -134,6 +147,12 @@ app.controller("myCtrl", function($scope,$http,API) {
         });
     };
 
+    $scope.selectRekening = function(row){
+        $scope.form_transfer.uuid_rekeing = row.uuid;
+        $scope.form_transfer.rekening = row.nama_bank;
+        $scope.$apply();
+    }
+
     $scope.tes = "tes";
     $scope.form = "list";
     $scope.tambah = function(){
@@ -146,14 +165,35 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.form = "list";
         table.draw();
     }
+
     $scope.cari_supplier = function(){
         $('#lookup_supplier').modal('show');
     }
+    $scope.cari_rekening = function(){
+        $('#lookup_rekening').modal('show');
+    }
+
+    $scope.hitung = function(){
+        $scope.total_hutang = 0;
+        $scope.input.hutang.forEach(function(hutang, index) {
+            if(hutang.checked){
+                $scope.total_hutang = $scope.total_hutang + hutang.bayar;
+            }
+        });
+        $scope.total_piutang = 0;
+        $scope.input.piutang.forEach(function(piutang, index) {
+            if(piutang.checked){
+                $scope.total_piutang = $scope.total_piutang + piutang.jumlah_piutang;
+            }
+        });
+        $scope.total_bayar = $scope.total_hutang - $scope.total_piutang;
+    }
+
+    $scope.handleClickProsesPayment = function(){
+        $('#m_proses_bayar').modal('show');
+    }
+
     
-    $scope.input = {};
-    $scope.edit = false;
-
-
     $("#formInput").validate({
         rules: {
             no_po: {

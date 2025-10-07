@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/insert',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'insert'])->name('insert');
         Route::post('/update/{uuid}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'update'])->name('update');
         Route::get('/supplier',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'supplier'])->name('supplier');
+        Route::get('/rekening',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'rekening'])->name('rekening');
         Route::get('/get_hutang_piutang/{id_supplier}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'get_hutang_piutang'])->name('get_hutang_piutang');
         Route::get('/get_detail/{uuid}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'detail'])->name('get_detail');
         Route::delete('/delete/{uuid}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'destroy'])->name('delete');

@@ -52,10 +52,21 @@ class PembayaranHutangSupplierController extends Controller
         return DataTables::of($query)->make(true);
     }
 
+    public function rekening(Request $request){
+        $query = SetupRekeningBankModel::select(['uuid','nama_bank','atas_nama','no_rekening']);
+        if ($request->has('textSearch') && $request->textSearch != '') {
+            $text = strtoupper($request->textSearch);
+            $query->where(DB::raw('UPPER(nama_bank)'), 'like', "%{$text}%");
+            $query->orWhere(DB::raw('UPPER(atas_nama)'), 'like', "%{$text}%");
+        }
+        return DataTables::of($query)->make(true);
+    }
+
     public function get_hutang_piutang($uuid_supplier){
         $supplier = SetupSupplier::where('uuid',$uuid_supplier)->first();
         $hutang = HutangSupplierModel::where('id_supplier',$supplier->id_supplier)->where('sisa','<>',0)->get()->makeHidden(['id_hutang_supplier'])->map(function ($item) {
             $item->checked = false;
+            $item->bayar = $item->sisa;
             return $item;
         });
         $piutang = PiutangSupplierModel::where('id_supplier',$supplier->id_supplier)->where('sisa','<>',0)->get()->makeHidden(['id_hutang_supplier'])->map(function ($item) {
