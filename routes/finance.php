@@ -22,6 +22,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/get_petak/{uuid_siklus}',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_petak'])->name('get_petak');
         Route::get('/get_benur',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_benur'])->name('get_benur');
         Route::get('/get_detail/{uuid}',[App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'get_detail'])->name('get_detail');
-        
+    });
+    Route::prefix('pembayaran_hutang_supplier')->name('pembayaran_hutang_supplier.')->group(function(){
+        Route::get('/datatable',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'datatable'])->name('datatable');
+        Route::post('/insert',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'insert'])->name('insert');
+        Route::post('/update/{uuid}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'update'])->name('update');
+        Route::get('/supplier',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'supplier'])->name('supplier');
+        Route::get('/get_hutang_piutang/{id_supplier}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'get_hutang_piutang'])->name('get_hutang_piutang');
+        Route::get('/get_detail/{uuid}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'detail'])->name('get_detail');
+        Route::delete('/delete/{uuid}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'destroy'])->name('delete');
     });
 });

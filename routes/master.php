@@ -123,6 +123,13 @@ Route::prefix('item')->name('item.')->group(function(){
     Route::delete('/delete/{id}',[App\Http\Controllers\Master\ItemController::class, 'destroy'])->name('delete');
 });
 
+Route::prefix('rekening_bank')->name('rekening_bank.')->group(function(){
+    Route::post('/insert',[App\Http\Controllers\Master\SetupRekeningBankController::class, 'insert'])->name('insert');
+    Route::post('/update/{id}',[App\Http\Controllers\Master\SetupRekeningBankController::class, 'update'])->name('update');
+    Route::get('/datatable',[App\Http\Controllers\Master\SetupRekeningBankController::class, 'datatable'])->name('datatable');
+    Route::delete('/delete/{id}',[App\Http\Controllers\Master\SetupRekeningBankController::class, 'destroy'])->name('delete');
+});
+
 Route::prefix('payment_method')->name('payment_method.')->group(function(){
     Route::post('/insert',[App\Http\Controllers\Master\PaymentMethodController::class, 'insert'])->name('insert');
     Route::post('/update/{id}',[App\Http\Controllers\Master\PaymentMethodController::class, 'update'])->name('update');
