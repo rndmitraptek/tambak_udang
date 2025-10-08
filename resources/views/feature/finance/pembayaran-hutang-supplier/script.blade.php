@@ -3,7 +3,17 @@ app.controller("myCtrl", function($scope,$http,API) {
     var table;
     angular.element(document).ready(function () {
         autosize($("#alamat"));
-
+        $("#waktu_transfer").inputmask("9999-99-99 99:99:99", {
+            placeholder: "yyyy-mm-dd hh:mm:ss",
+            autoUnmask: false,
+            oncomplete: function() {
+                var val = $(this).val();
+                var scope = angular.element(this).scope();
+                scope.$apply(function(){
+                    scope.form_transfer.waktu_transfer = val;
+                });
+            }
+        });
         table = $("#viewtabel").DataTable({
             processing: true,
             serverSide: true,
@@ -39,12 +49,10 @@ app.controller("myCtrl", function($scope,$http,API) {
             .then(function(res){
                 if(res.data.success){
                     $scope.detail = res.data.data;
-                    $scope.hitung();
-                    $scope.edit = true;
-                    $scope.form = "input";
+                    $scope.form = "detail";
+                    Swal.close();
                     $scope.$apply();
                 }
-                Swal.close();
             }).catch(function(error) {
                 swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
             });
@@ -96,18 +104,15 @@ app.controller("myCtrl", function($scope,$http,API) {
         
     });
 
-    $scope.input = {};
-    $scope.form_transfer = {};
-    $scope.input.transfer = [];
-    $scope.input.tunai = [];
-    $scope.input.giro = [];
-    $scope.input = {};
-    $scope.edit = false;
-    $scope.input.hutang = [];
-    $scope.input.piutang = [];
-    $scope.total_hutang = 0;
-    $scope.total_piutang = 0;
-    $scope.total_bayar = 0;
+    $scope.default_value = function(){
+        $scope.input = {};
+        $scope.edit = false;
+        $scope.input.hutang = [];
+        $scope.input.piutang = [];
+        $scope.total_hutang = 0;
+        $scope.total_piutang = 0;
+        $scope.total_bayar = 0;
+    }
     $scope.supplierColumns = [
         { data: 'kode_supplier', title: 'Kode Supplier' },
         { data: 'nama_supplier', title: 'Nama Supplier' },
@@ -153,12 +158,20 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.$apply();
     }
 
+    $scope.selectRekeningGiro = function(row){
+
+        $scope.form_giro.uuid_rekeing = row.uuid;
+        $scope.form_giro.rekening = row.nama_bank;
+        console.log($scope.form_giro);
+        $scope.$apply();
+    }
+
     $scope.tes = "tes";
     $scope.form = "list";
     $scope.tambah = function(){
         $scope.form = "input";
         $scope.edit = false;
-        $scope.input = {}
+        $scope.default_value();
     }
 
     $scope.kembali = function(){
@@ -171,6 +184,9 @@ app.controller("myCtrl", function($scope,$http,API) {
     }
     $scope.cari_rekening = function(){
         $('#lookup_rekening').modal('show');
+    }
+    $scope.cari_rekening_giro = function(){
+        $('#lookup_rekening_giro').modal('show');
     }
 
     $scope.hitung = function(){
@@ -191,80 +207,110 @@ app.controller("myCtrl", function($scope,$http,API) {
 
     $scope.handleClickProsesPayment = function(){
         $('#m_proses_bayar').modal('show');
+        $scope.form_transfer = {};
+        $scope.form_transfer.nominal = $scope.total_bayar;
+        $scope.form_giro = {};
+        $scope.form_giro.nominal = $scope.total_bayar;
+        $scope.form_giro.biaya_materai = 10000;
+        $scope.form_giro.is_biaya_materai = false;
+        $scope.form_giro.nominal_materai = 0;
+        $scope.form_giro.selisih_bayar = 0;
+        $scope.form_tunai = {};
+        $scope.form_tunai.nominal = $scope.total_bayar;
+        $scope.input.transfer = [];
+        $scope.input.tunai = [];
+        $scope.input.giro = [];
+
+    }
+
+    $scope.handleClickTambahPembayaran = function(){
+        transfer = angular.copy($scope.form_transfer);
+        $scope.input.transfer.push(transfer);
+        $scope.form_transfer = {};
+        $scope.form_transfer.nominal = $scope.total_bayar;
+    }
+
+    $scope.handleClickTambahPembayaranGiro = function(){
+        giro = angular.copy($scope.form_giro);
+        giro.terima_giro = $('#terima_giro').val();
+        giro.jatuh_tempo = $('#jatuh_tempo').val();
+        $scope.input.giro.push(giro);
+        $scope.form_giro = {};
+        $scope.form_giro.nominal = $scope.total_bayar;
+        $scope.form_giro.biaya_materai = 10000;
+        $scope.form_giro.is_biaya_materai = false;
+        $scope.form_giro.nominal_materai = 0;
+        $scope.form_giro.selisih_bayar = 0;
+        console.log($scope.input.giro);
     }
 
     
-    $("#formInput").validate({
-        rules: {
-            no_po: {
-                required: true,
-                digits: true
-            },
-            nama_supplier: {
-                required: true
-            },
-            uuid_lokasi: {
-                required: true
-            },
-            tanggal_po: {
-                required: true
-            },
-            qty: {
-                required: true
-            },
-            harga_satuan: {
-                required: true
-            },
-            total: {
-                required: true
-            }
-        },
-        messages: {
-            nama_supplier: {
-                digits: "Kolom urut harus berupa angka saja"
-            }
-        },
-        invalidHandler: function(e, r) {
-            mUtil.scrollTo("formInput", -200)
-        },
-        submitHandler: function(e) {
-            swal({title: "Presesing...!",text: "Please Wait",
-                onOpen: function() {
-                    swal.showLoading()
-                }
-            })
-            let url = ($scope.edit)
-                ? "{{ route('finance.pembayaran_hutang_supplier.update', ':uuid') }}"
-                : "{{ route('finance.pembayaran_hutang_supplier.insert') }}";
 
-            if ($scope.edit) {
-                url = url.replace(':uuid', $scope.input.uuid);
+    $scope.getTotalTransfer = function() {
+        var total = 0;
+        angular.forEach($scope.input.transfer, function(item) {
+            total += parseFloat(item.nominal) || 0;
+        });
+        return total;
+    };
+
+    $scope.getTotalGiro = function() {
+        var total = 0;
+        angular.forEach($scope.input.giro, function(item) {
+            total += parseFloat(item.nominal) || 0;
+        });
+        return total;
+    };
+
+    $scope.hitung_biaya_materai = function() {
+        materai = ($scope.form_giro.is_biaya_materai)?$scope.form_giro.biaya_materai:0;
+        $scope.form_giro.nominal_materai = $scope.form_giro.nominal + materai;
+        $scope.form_giro.selisih_bayar = $scope.form_giro.nominal_materai - $scope.total_bayar;
+    }
+
+    $scope.simpan_pembayaran_hutang = function(){
+        swal({title: "Presesing...!",text: "Please Wait",
+            onOpen: function() {
+                swal.showLoading()
             }
-            $scope.input.tanggal_po     = $('#tanggal_po').val();
-            $scope.input.tanggal_kirim  = $('#tanggal_kirim').val();
-            $http.post(url,$scope.input)
-            .then(function(res){
-                if(res.data.success){
-                    swal({
-                        title: "Tersimpan ",text: "Data PO berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                    }).then(function(){
-                        table.draw();
-                        $scope.edit = true;
-                        $scope.form = "input";
-                        $scope.input.uuid = res.data.data.uuid;
-                    })
-                }else{
-                    swal({
-                        title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
-                    }).then(function(){
-                        
-                    })
-                }
-            }).catch(function(error) {
-                swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
-            });
-            return false;
+        })
+        let url = ($scope.edit)
+            ? "{{ route('finance.pembayaran_hutang_supplier.update', ':uuid') }}"
+            : "{{ route('finance.pembayaran_hutang_supplier.insert') }}";
+
+        if ($scope.edit) {
+            url = url.replace(':uuid', $scope.input.uuid);
         }
-    });
+        $scope.input.tanggal_bayar     = $('#tanggal_bayar').val();
+        $scope.input.total_bayar = $scope.total_bayar;
+        $scope.input.total_hutang = $scope.total_hutang;
+        $scope.input.total_piutang = $scope.total_piutang;
+        if($scope.input.metode_bayar=='TUNAI'){
+            $scope.form_tunai.tanggal_bayar = $('#waktu_bayar_tunai').val()
+            $scope.input.tunai.push($scope.form_tunai);
+        }
+        console.log($scope.input);
+        $http.post(url,$scope.input)
+        .then(function(res){
+            if(res.data.success){
+                swal({
+                    title: "Tersimpan ",text: "Data PO berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                }).then(function(){
+                    table.draw();
+                    $scope.edit = true;
+                    $scope.form = "input";
+                    $scope.input.uuid = res.data.data.uuid;
+                })
+            }else{
+                swal({
+                    title: "Gagal ",text: res.data.message,type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                }).then(function(){
+                    
+                })
+            }
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+    }
 });
 </script>

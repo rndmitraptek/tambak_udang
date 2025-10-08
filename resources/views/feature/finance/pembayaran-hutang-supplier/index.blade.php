@@ -54,7 +54,6 @@
             </div>
         </div>
         <div class="col-lg-12" ng-show="form == 'input'">
-        <form id="formInput">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -121,7 +120,7 @@
                                         <th style="width: 200px">Belum di Bayar</th>
                                         <th style="width: 200px">Jumlah Bayar</th>
                                         <th style="width: 200px">Tanggal Nota</th>
-                                        <th style="width: 40px">Created By</th>
+                                        <th style="width: 100px">Created By</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -206,7 +205,233 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
+        <div class="col-lg-12" ng-show="form == 'detail'">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Transaksi Pembayaran Hutang Supplier
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="m-portlet__head-tools">
+                        <ul class="m-portlet__nav">
+                            <li class="m-portlet__nav-item">
+                                <button type="button" ng-click="kembali()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-arrow-left"></i>
+                                        <span>Kembali ke List Pembayaran</span>
+                                    </span>
+                                </button>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <button ng-click="batal()" class="btn btn-danger m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-close"></i>
+                                        <span>Batal Transaksi Pembayaran Piutang</span>
+                                    </span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group m-form__group">
+                                <label for="recipient-name" class="form-control-label">Nomor Faktur</label>
+                                <input type="text" class="form-control"  ng-model="detail.no_faktur" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group m-form__group">
+                                <label for="recipient-name" class="form-control-label">Tanggal Faktur</label>
+                                <input type="text" class="form-control" ng-model="detail.tanggal_bayar" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group m-form__group">
+                                <label for="recipient-name" class="form-control-label">Supplier</label>
+                                <input type="text" class="form-control" ng-model="detail.supplier.nama_supplier" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5>Hutang Supplier</h5>
+                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px">#</th>
+                                        <th style="width: 200px">Faktur</th>
+                                        <th style="width: 200px">Nomor Faktur</th>
+                                        <th style="width: 200px">Tanggal Nota</th>
+                                        <th style="width: 200px">Nominal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="i in detail.detail_hutang">
+                                        <td><% $index + 1 %></td>
+                                        <td><% i.hutang_supplier.reff_trans %></td>
+                                        <td><% i.hutang_supplier.no_faktur %></td>
+                                        <td><% i.hutang_supplier.tanggal_hutang %></td>
+                                        <td class="text-right"><% i.nominal_hutang | currency:'' %></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-right">Total Hutang</th>
+                                        <th class="text-right"><% detail.total_hutang | currency:'' %></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5>Piutang Supplier</h5>
+                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px">#</th>
+                                        <th style="width: 200px">Faktur</th>
+                                        <th style="width: 200px">Nomor Faktur</th>
+                                        <th style="width: 200px">Tanggal Nota</th>
+                                        <th style="width: 200px">Nominal Piutang</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="i in detail.detail_piutang">
+                                        <td><% $index + 1 %></td>
+                                        <td><% i.piutang_supplier.reff_trans %></td>
+                                        <td><% i.piutang_supplier.reff_trans %></td>
+                                        <td><% i.piutang_supplier.tanggal_piutang %></td>
+                                        <td class="text-right"><% i.nominal_piutang | currency:'' %></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-right">Total Piutang</th>
+                                        <th class="text-right"><% detail.total_piutang | currency:'' %></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group m-form__group row">
+                                <label for="example-email-input" class="col-4 col-form-label m--font-boldest">Total Bayar</label>
+                                <div class="col-8">
+                                    <input class="form-control m-input m--font-boldest text-right" type="text" input-currency ng-model="detail.total_bayar" readonly="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Proses Payment
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <div class="row" ng-show="detail.transfer.length !=0">
+                        <div class="col-lg-12">
+                            <h5>Transfer</h5>
+                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px">#</th>
+                                        <th style="width: 200px">Rekening</th>
+                                        <th style="width: 200px">Waktu Transfer</th>
+                                        <th style="width: 200px">Nominal Transfer</th>
+                                        <th style="width: 200px">Biaya Transfer</th>
+                                        <th style="width: 200px">Bank Tujuan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="i in detail.transfer">
+                                        <td><% $index + 1 %></td>
+                                        <td><% i.bank_pengirim %> <% i.atas_nama_pengirim %> <% i.no_rekening_pengirim %></td>
+                                        <td><% i.waktu_transfer %></td>
+                                        <td class="text-right"><% i.nominal | currency:'' %></td>
+                                        <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
+                                        <td><% i.rekening_bank.nama_bank %> <% i.rekening_bank.no_rekening %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="detail.giro.length !=0">
+                        <div class="col-lg-12">
+                            <h5>Giro</h5>
+                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px">#</th>
+                                        <th style="width: 200px">Rekening</th>
+                                        <th style="width: 200px">Nomor Giro</th>
+                                        <th style="width: 200px">Jatuh Tempo</th>
+                                        <th style="width: 200px">Nominal Giro</th>
+                                        <th style="width: 200px">Bea Materai</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="i in detail.giro">
+                                        <td><% $index + 1 %></td>
+                                        <td><% i.rekening_bank.nama_bank %> <% i.rekening_bank.no_rekening %></td>
+                                        <td><% i.no_giro %></td>
+                                        <td><% i.jatuh_tempo%></td>
+                                        <td class="text-right"><% i.nominal | currency:'' %></td>
+                                        <td><% i.is_biaya_materai %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="detail.tunai.length !=0">
+                        <div class="col-lg-12">
+                            <h5>Tunai</h5>
+                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px">#</th>
+                                        <th style="width: 200px">Nama Pemberi</th>
+                                        <th style="width: 200px">Nama Penerima</th>
+                                        <th style="width: 200px">Waktu Bayar</th>
+                                        <th style="width: 200px">Nominal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="i in detail.tunai">
+                                        <td><% $index + 1 %></td>
+                                        <td><% i.nama_pemberi %></td>
+                                        <td><% i.nama_penerima %></td>
+                                        <td><% i.tanggal_bayar %></td>
+                                        <td class="text-right"><% i.nominal | currency:'' %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -268,7 +493,7 @@
                     </div>
                 </div>
                 <hr/>
-                <div class="row">
+                <div class="row" ng-show="input.metode_bayar=='TRANSFER'">
                     <div class="col-lg-6">
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label class="col-4 col-form-label">Dari Rekening</label>
@@ -284,7 +509,7 @@
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Waktu Transfer</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="form_transfer.waktu_transfer" >
+                                <input type="text" class="form-control" id='waktu_transfer' name='waktu_transfer' ng-model="form_transfer.waktu_transfer" >
                             </div>
                         </div>
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
@@ -320,12 +545,205 @@
                                 <input type="text" class="form-control" ng-model="form_transfer.no_rekening_pengirim" >
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12 " style="text-align: right;">
+                                <button type="button" ng-click="handleClickTambahPembayaran()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-angle-double-down"></i>
+                                        <span>Tambah Pembayaran</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <h5>Transfer</h5>
+                        <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px">#</th>
+                                    <th style="width: 200px">Rekening</th>
+                                    <th style="width: 200px">Waktu Transfer</th>
+                                    <th style="width: 200px">Nominal Transfer</th>
+                                    <th style="width: 200px">Biaya Transfer</th>
+                                    <th style="width: 200px">Bank Tujuan</th>
+                                    <th style="width:40px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="i in input.transfer" ng-init="total_transfer = (total_transfer || 0) + i.nominal">
+                                    <td><% $index + 1 %></td>
+                                    <td><% i.bank_pengirim %> <% i.atas_nama_pengirim %> <% i.no_rekening_pengirim %></td>
+                                    <td><% i.waktu_transfer %></td>
+                                    <td class="text-right"><% i.nominal | currency:'' %></td>
+                                    <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
+                                    <td><% i.rekening %></td>
+                                    <td><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-right">Total Transfer</th>
+                                    <th class="text-right"><% getTotalTransfer() | currency:'' %></th>
+                                    <th colspan="3"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" ng-show="input.metode_bayar=='GIRO'">
+                    <div class="col-lg-4">
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label class="col-4 col-form-label">Rekening</label>
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control"  placeholder="Search for..." ng-model="form_giro.rekening">
+                                    <div class="input-group-append">
+                                        <button ng-click="cari_rekening_giro()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">No Giro</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" id='no_giro' name='no_giro' ng-model="form_giro.no_giro" >
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Terima Giro</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control general_datepicker" id="terima_giro" ng-model="form_giro.terima_giro" >
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Jatuh Tempo</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control general_datepicker" id="jatuh_tempo" ng-model="form_giro.jatuh_tempo" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Nominal</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control text-right" ng-change="hitung_biaya_materai()" input-currency ng-model="form_giro.nominal" >
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">+ Materai</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control text-right" input-currency ng-model="form_giro.nominal_materai" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Selisih Bayar</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control text-right" input-currency ng-model="form_giro.selisih_bayar" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="m-checkbox" style="margin-top: 10px;">
+                                <input name="is_biaya_materai" ng-change="hitung_biaya_materai()" ng-model="form_giro.is_biaya_materai" type="checkbox"> Bea Materai
+                                <span></span>
+                            </label>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Biaya Materai</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control text-right" ng-change="hitung_biaya_materai()" input-currency ng-model="form_giro.biaya_materai" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 " style="text-align: right;">
+                                <button type="button" ng-click="handleClickTambahPembayaranGiro()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-angle-double-down"></i>
+                                        <span>Tambah Pembayaran</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <h5>Giro</h5>
+                        <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px">#</th>
+                                    <th style="width: 200px">Rekening</th>
+                                    <th style="width: 200px">Nomor Giro</th>
+                                    <th style="width: 200px">Jatuh Tempo</th>
+                                    <th style="width: 200px">Nominal Giro</th>
+                                    <th style="width: 200px">Bea Materai</th>
+                                    <th style="width:40px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="i in input.giro">
+                                    <td><% $index + 1 %></td>
+                                    <td><% i.rekening %></td>
+                                    <td><% i.no_giro %></td>
+                                    <td><% i.jatuh_tempo%></td>
+                                    <td class="text-right"><% i.nominal | currency:'' %></td>
+                                    <td><% i.is_biaya_materai %></td>
+                                    <td><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-right">Total Giro</th>
+                                    <th class="text-right"><% getTotalGiro() | currency:'' %></th>
+                                    <th colspan="3"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" ng-show="input.metode_bayar=='TUNAI'">
+                    <div class="col-lg-12">
+                        <h5>Tunai</h5>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Nama Pemberi</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" ng-model="form_tunai.nama_pemberi" >
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Nama Penerima</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control" ng-model="form_tunai.nama_penerima" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Waktu Bayar</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control general_datepicker" id='waktu_bayar_tunai' name='waktu_bayar_tunai' ng-model="form_tunai.waktu_bayar" >
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Nominal</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control text-right" input-currency ng-model="form_tunai.nominal" >
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="submit" class="btn btn-primary">Simpan Pembayaran Piutang</button>
+                <button type="button" class="btn btn-secondary " data-dismiss="modal">Keluar</button>
+                <button type="button" ng-click="simpan_pembayaran_hutang()" class="btn btn-primary m-btn--icon">
+                    <span>
+                        <i class="la la-save"></i>
+                        <span>Simpan Pembayaran Hutang</span>
+                    </span>
+                </button>
             </div>
         </div>
     </div>
@@ -346,6 +764,13 @@
       columns="rekeningColumns"
       page-length="8"
       on-select="selectRekening(row)">
+</look-up-table>
+<look-up-table
+      lookup-id="lookup_rekening_giro"
+      ajax-url="{{ route('finance.pembayaran_hutang_supplier.rekening') }}"
+      columns="rekeningColumns"
+      page-length="8"
+      on-select="selectRekeningGiro(row)">
 </look-up-table>
 <!--end::Modal-->
 @endsection

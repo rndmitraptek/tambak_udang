@@ -22,8 +22,10 @@ return new class extends Migration
             $table->float('total_piutang',18,2);
             $table->float('total_bayar',18,2);
             $table->text('keterangan')->nullable();
-             $table->string('status',10)->default('DRAFT');
-            $table->string('file',200);
+            $table->string('status',10)->default('DRAFT');
+            $table->string('file',200)->nullable();
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
