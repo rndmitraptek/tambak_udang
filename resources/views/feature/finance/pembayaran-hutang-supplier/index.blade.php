@@ -368,7 +368,7 @@
                                 <tbody>
                                     <tr ng-repeat="i in detail.transfer">
                                         <td><% $index + 1 %></td>
-                                        <td><% i.bank_pengirim %> <% i.atas_nama_pengirim %> <% i.no_rekening_pengirim %></td>
+                                        <td><% i.bank_penerima %> <% i.atas_nama_penerima %> <% i.no_rekening_penerima %></td>
                                         <td><% i.waktu_transfer %></td>
                                         <td class="text-right"><% i.nominal | currency:'' %></td>
                                         <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
@@ -530,19 +530,19 @@
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Nama Bank</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="form_transfer.bank_pengirim" >
+                                <input type="text" class="form-control" ng-model="form_transfer.bank_penerima" >
                             </div>
                         </div>
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Pemilik Rekening</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="form_transfer.atas_nama_pengirim" >
+                                <input type="text" class="form-control" ng-model="form_transfer.atas_nama_penerima" >
                             </div>
                         </div>
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Nomor Rekening</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="form_transfer.no_rekening_pengirim" >
+                                <input type="text" class="form-control" ng-model="form_transfer.no_rekening_penerima" >
                             </div>
                         </div>
                         <div class="row">
@@ -573,7 +573,7 @@
                             <tbody>
                                 <tr ng-repeat="i in input.transfer" ng-init="total_transfer = (total_transfer || 0) + i.nominal">
                                     <td><% $index + 1 %></td>
-                                    <td><% i.bank_pengirim %> <% i.atas_nama_pengirim %> <% i.no_rekening_pengirim %></td>
+                                    <td><% i.bank_penerima %> <% i.atas_nama_penerima %> <% i.no_rekening_penerima %></td>
                                     <td><% i.waktu_transfer %></td>
                                     <td class="text-right"><% i.nominal | currency:'' %></td>
                                     <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
