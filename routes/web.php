@@ -13,6 +13,7 @@ Route::get('/user',[App\Http\Controllers\Auth\UsersController::class, 'index']);
 Route::middleware('auth')->group(function () {
     Route::get('/lokasi', [App\Http\Controllers\Master\LokasiController::class, 'index']);
     Route::get('/item', [App\Http\Controllers\Master\ItemController::class, 'index']);
+    Route::get('/rekening_bank', [App\Http\Controllers\Master\SetupRekeningBankController::class, 'index']);
     Route::get('/payment_method', [App\Http\Controllers\Master\PaymentMethodController::class, 'index']);
     Route::get('/blok', [App\Http\Controllers\Master\BlokController::class, 'index']);
     Route::get('/petak', [App\Http\Controllers\Master\PetakController::class, 'index']);
@@ -36,5 +37,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/menu',[App\Http\Controllers\Auth\MenuController::class, 'index']);
     Route::get('/role',[App\Http\Controllers\Auth\RoleController::class, 'index']);
     Route::get('/logout', [App\Http\Controllers\Auth\UsersController::class,'logout']);
+    Route::get('/pembayaran_hutang_supplier',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class,'index']);
 });
 
