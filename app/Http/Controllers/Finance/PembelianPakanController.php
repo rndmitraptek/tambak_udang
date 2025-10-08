@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PembelianPakan;
 use App\Models\Finance\PembelianPakanDetail;
+use App\Models\Finance\HutangSupplier;
 use App\Models\HistoryKartuStok;
 use App\Models\SetupBenur;
 use App\Models\SetupLokasi;
@@ -158,6 +159,19 @@ class PembelianPakanController extends Controller
             $data['siklus_id']   = $siklus->id_siklus;
             $insert = PembelianPakan::create($data);
 
+            //insert hutang supplier (kredit)
+            HutangSupplier::create([
+                'no_faktur' => $data['no_pembelian'],
+                'tanggal_hutang' => $data['tanggal_pembelian'],
+                'tanggal_jatuh_tempo' => $data['tanggal_pembelian'],
+                'id_supplier' => $supplier->id_supplier,
+                'reff_id' => $insert->id_pembelian,
+                'reff_trans' => 'PEMBELIAN_PAKAN',
+                'jumlah_hutang' => $data['total'],
+                'dibayar' => 0,
+                'sisa' => $data['total'],
+            ]);
+
             foreach($req->detail as $d){
                 $d['id_pembelian'] = $insert->id_pembelian;
                 unset($d['kode_pakan'], $d['nama_pakan']);
@@ -200,9 +214,13 @@ class PembelianPakanController extends Controller
                     $item->jumlah,
                     $pembelian->no_pembelian,
                     $pembelian->lokasi_id,
-                    $item->id_pembelian
+                    $item->id_pembelian,
+                    'keluar'
                 );
             }
+
+            // Hapus hutang supplier terkait pembelian ini
+            HutangSupplier::where('reff_id', $pembelian->id_pembelian)->where('reff_trans', 'PEMBELIAN_PAKAN')->delete();
 
             $pembelian->delete(); // jika ingin hapus record pembelian
 

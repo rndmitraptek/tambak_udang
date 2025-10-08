@@ -312,7 +312,7 @@ Feedback 1 Sep 2025 (Cedea)
 - Simulasi :
   - biaya beban bisa di update
   - add umur hari di card tiap petak (DOC) hitung dr penaburan benur (tiap petak bisa berbeda umur)✅
-  - FCR (total pakan / total udang)✅
+  - FCR (total pakan / total udang (biomassa))✅
   - jika sudah ada panen partial akan otomatis masuk ke pendapatan
 - Panen :
   - bisa panen partial (akan mempengaruhi ke stok benur dipetak) ✅

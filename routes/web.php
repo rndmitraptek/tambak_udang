@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/panen', [App\Http\Controllers\ManajemenTambak\PanenController::class, 'index']);
     // Route::get('/tumbang', [App\Http\Controllers\ManajemenTambak\PanenController::class, 'tumbang']);
     Route::get('/penaburan_benur', [App\Http\Controllers\ManajemenTambak\PenaburanBenurController::class, 'index']);
+    Route::get('/retur_pakan', [App\Http\Controllers\Finance\ReturPakanController::class, 'index']);
     Route::get('/penggunaan_pakan', [App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'index']);
     Route::get('/simulasi', [App\Http\Controllers\ManajemenTambak\SimulasiController::class, 'index']);
     Route::get('/transaksi_biaya_validasi', [App\Http\Controllers\ManajemenTambak\TransaksiBiayaController::class, 'validasi']);

@@ -54,4 +54,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/pakan/{id_lokasi}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'get_pakan'])->name('pakan');
         Route::get('/batal/{uuid}',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'batal'])->name('batal');
     });
+
+    Route::prefix('retur_pakan')->name('retur_pakan.')->group(function(){
+        Route::post('/insert',[App\Http\Controllers\Finance\ReturPakanController::class, 'insert'])->name('insert');
+        Route::post('/update/{uuid}',[App\Http\Controllers\Finance\ReturPakanController::class, 'update'])->name('update');
+        Route::get('/datatable',[App\Http\Controllers\Finance\ReturPakanController::class, 'datatable'])->name('datatable');
+        Route::delete('/delete/{uuid}',[App\Http\Controllers\Finance\ReturPakanController::class, 'destroy'])->name('delete');
+        Route::get('/get_pembelian',[App\Http\Controllers\Finance\ReturPakanController::class, 'get_pembelian'])->name('get_pembelian');
+        Route::get('/get_pembelian_detail/{uuid}',[App\Http\Controllers\Finance\ReturPakanController::class, 'get_pembelian_detail'])->name('get_pembelian_detail');
+        Route::get('/get_benur',[App\Http\Controllers\Finance\ReturPakanController::class, 'get_benur'])->name('get_benur');
+        Route::get('/get_detail/{uuid}',[App\Http\Controllers\Finance\ReturPakanController::class, 'get_detail'])->name('get_detail');
+        Route::get('/lokasi',[App\Http\Controllers\Finance\ReturPakanController::class, 'lokasi'])->name('lokasi');
+        Route::get('/batal/{uuid}',[App\Http\Controllers\Finance\ReturPakanController::class, 'batal'])->name('batal');
+    });
 });

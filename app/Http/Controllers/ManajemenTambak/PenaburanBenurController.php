@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ManajemenTambak;
 
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PoModel;
+use App\Models\Finance\HutangSupplier;
 use App\Models\ManajemenTambak\penaburanBenurDetailModel;
 use App\Models\ManajemenTambak\penaburanBenurModel;
 use App\Models\ManajemenTambak\TransaksiBiaya;

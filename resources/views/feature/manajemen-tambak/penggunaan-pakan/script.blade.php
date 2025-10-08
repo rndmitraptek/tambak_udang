@@ -76,16 +76,19 @@ app.controller("myCtrl", function($scope,$http) {
 
 
     $scope.get_petak = function(){
-        url = "{{ route('finance.penggunaan_pakan.get_petak',':uuid_siklus') }}";
-        url = url.replace(':uuid_siklus', $scope.input.uuid_siklus);
-        $http.get(url)
-        .then(function(res){
-            if(res.data.success){
-                $scope.petak = res.data.data;
-            }
-        }).catch(function(error) {
-            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
-        });
+        $scope.detail = [];
+        if($scope.input.uuid_siklus){
+            url = "{{ route('finance.penggunaan_pakan.get_petak',':uuid_siklus') }}";
+            url = url.replace(':uuid_siklus', $scope.input.uuid_siklus);
+            $http.get(url)
+            .then(function(res){
+                if(res.data.success){
+                    $scope.petak = res.data.data;
+                }
+            }).catch(function(error) {
+                swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+            });
+        }
     }
 
 

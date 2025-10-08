@@ -210,7 +210,8 @@ class PenggunaanPakanController extends Controller
                     $item->jumlah,
                     $pembelian->no_penggunaan,
                     $pembelian->lokasi_id,
-                    $item->id_penggunaan
+                    $item->id_penggunaan,
+                    'masuk'
                 );
             }
 

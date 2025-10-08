@@ -69,7 +69,7 @@ class StokHelper
      * @param int|null $referensiId
      * @param string|null $tanggal
      */
-    public static function batalTransaksi($pakanId, $jumlah, $referensiNo, $lokasiId = null, $referensiId = null, $tanggal = null)
+    public static function batalTransaksi($pakanId, $jumlah, $referensiNo, $lokasiId = null, $referensiId = null, $type=null, $tanggal = null)
     {
         $tanggal = $tanggal ? Carbon::parse($tanggal) : Carbon::now();
         $tahun   = $tanggal->year;
@@ -79,7 +79,11 @@ class StokHelper
             ->firstOrFail();
 
         $saldo_awal = floatval($stok->stok);
-        $stok->stok = $saldo_awal - floatval($jumlah); // kurangi stok
+        if($type=='masuk'){
+            $stok->stok = $saldo_awal + floatval($jumlah);
+        }else{
+            $stok->stok = $saldo_awal - floatval($jumlah);
+        }
         $stok->save();
 
         $saldo = floatval($stok->stok);
@@ -90,8 +94,8 @@ class StokHelper
             'id_pakan'      => $pakanId,
             'id_lokasi'     => $lokasiId,
             'transaksi'     => 'Batal ' . $referensiNo,
-            'masuk'         => 0,
-            'keluar'        => floatval($jumlah),
+            'masuk'         => $type=='masuk' ? floatval($jumlah) : 0,
+            'keluar'        => $type=='keluar' ? floatval($jumlah) : 0,
             'awal'          => $saldo_awal,
             'saldo'         => $saldo,
             'referensi_no'  => $referensiNo,
