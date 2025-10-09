@@ -43,6 +43,7 @@ class TransaksiBiayaSimulasiController extends Controller
             ->join('setup_siklus', 'setup_siklus.id_siklus', '=', 'setup_siklus_petak.siklus_id')
             ->join('setup_petak', 'setup_petak.id_petak', '=', 'setup_siklus_petak.petak_id')
             ->join('setup_lokasi', 'setup_lokasi.id_lokasi', '=', 'setup_siklus.lokasi_id')
+            ->whereNull('setup_petak.deleted_at')
             ->select([
                 'setup_lokasi.nama_lokasi as nama_lokasi',
                 'setup_siklus.id_siklus as siklus_id',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ManajemenTambak\TransaksiSimulasi;
 use App\Models\ManajemenTambak\TransaksiSimulasiBiaya;
+use App\Models\ManajemenTambak\TransaksiSimulasiDetail;
 use App\Models\ManajemenTambak\PanenModel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
@@ -56,9 +57,14 @@ class SimulasiController extends Controller
         $siklus = DB::table('setup_siklus')->where('id_siklus', $siklusId)->first();
         $tglMulaiSiklus = $siklus ? Carbon::parse($siklus->tanggal_mulai) : null;
 
-        $petakList = SetupSiklusPetak::with('petak.blok')
+        $petakList = SetupSiklusPetak::with(['petak' => function($q) {
+                $q->whereNull('deleted_at');
+            }, 'petak.blok'])
             ->where('siklus_id', $siklusId)
-            ->orderBy('id_siklus_petak','asc')
+            ->whereHas('petak', function($q) {
+                $q->whereNull('deleted_at');
+            })
+            ->orderBy('id_siklus_petak', 'asc')
             ->get();
 
         foreach ($petakList as $petakItem) {
@@ -300,7 +306,37 @@ class SimulasiController extends Controller
         $simulasi->total_pendapatan_semua_petak = round(collect($result)->sum('total_pendapatan'),0);
         $simulasi->total_laba_rugi_semua_petak = round(collect($result)->sum('laba_rugi'),0);
 
+        // Simpan ke tabel transaksi_simulasi_detail
+        $this->saveSimulasiDetail($simulasi, $result);
+
         return response()->json($simulasi);
+    }
+
+
+    protected function saveSimulasiDetail($simulasi, $result)
+    {
+        foreach ($result as $row) {
+            TransaksiSimulasiDetail::updateOrCreate(
+                [
+                    'id_simulasi' => $simulasi->id_simulasi,
+                    'petak_id' => $row['petak_id'],
+                ],
+                [
+                    'tanggal_simulasi' => $simulasi->tanggal_simulasi,
+                    'lokasi_id' => $simulasi->siklus->lokasi_id ?? null,
+                    'siklus_id' => $simulasi->siklus_id,
+                    'biomassa' => $row['detail_pendapatan']['biomassa'] ?? 0,
+                    'harga_per_kg' => $row['detail_pendapatan']['harga_per_kg'] ?? 0,
+                    'total_pendapatan' => $row['total_pendapatan'] ?? 0,
+                    'total_biaya' => $row['total_biaya_all'] ?? 0,
+                    'laba_rugi' => $row['laba_rugi'] ?? 0,
+                    'hpp_per_kg' => $row['hpp_per_kg'] ?? 0,
+                    'fcr' => $row['detail_biaya']['fcr'] ?? 0,
+                    'doc' => $row['detail_biaya']['doc'] ?? 0,
+                    'keterangan' => null,
+                ]
+            );
+        }
     }
 
 
