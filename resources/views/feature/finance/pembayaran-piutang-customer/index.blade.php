@@ -659,7 +659,6 @@
     </div>
 </div>
 
-
 <!--end::Modal-->
 <look-up-table
       lookup-id="lookup_customer"

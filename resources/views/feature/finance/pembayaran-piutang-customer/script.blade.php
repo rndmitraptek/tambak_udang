@@ -35,24 +35,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             var tr = $(this).closest('tr');
             var x = table.row(tr).data();
             $scope.input = x;
-            url = "{{ route('finance.pembayaran_piutang_customer.get_detail',':uuid') }}"
-            url = url.replace(':uuid', x.uuid)
-            swal({title: "Presesing...!",text: "Please Wait",
-                onOpen: function() {
-                    swal.showLoading()
-                }
-            })
-            $http.get(url)
-            .then(function(res){
-                if(res.data.success){
-                    $scope.detail = res.data.data;
-                    $scope.form = "detail";
-                    Swal.close();
-                    $scope.$apply();
-                }
-            }).catch(function(error) {
-                swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
-            });
+            $scope.get_detail(x.uuid);
         });
 
         $('#viewtabel tbody').on('click', '#hapus', function () {
@@ -100,6 +83,27 @@ app.controller("myCtrl", function($scope,$http,API) {
         });
         
     });
+
+    $scope.get_detail = function(uuid){
+        url = "{{ route('finance.pembayaran_piutang_customer.get_detail',':uuid') }}"
+        url = url.replace(':uuid', uuid)
+        swal({title: "Presesing...!",text: "Please Wait",
+            onOpen: function() {
+                swal.showLoading()
+            }
+        })
+        $http.get(url)
+        .then(function(res){
+            if(res.data.success){
+                $scope.detail = res.data.data;
+                $scope.form = "detail";
+                Swal.close();
+                $scope.$apply();
+            }
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+    }
 
     $scope.default_value = function(){
         $scope.input = {};
@@ -286,10 +290,10 @@ app.controller("myCtrl", function($scope,$http,API) {
                 swal({
                     title: "Tersimpan ",text: "Data PO berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                 }).then(function(){
+                    $('#m_proses_bayar').modal('hide');
                     table.draw();
-                    $scope.edit = true;
-                    $scope.form = "input";
                     $scope.input.uuid = res.data.data.uuid;
+                    $scope.get_detail(res.data.data.uuid);
                 })
             }else{
                 swal({
