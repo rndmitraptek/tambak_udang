@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pembayaran_hutang_supplier', function (Blueprint $table) {
-            $table->id('id_pembayaran_hutang_supplier');
+        Schema::create('pembayaran_piutang_customer', function (Blueprint $table) {
+            $table->id('id_pembayaran_piutang_customer');
             $table->uuid('uuid');
             $table->string('no_faktur',100);
-            $table->unsignedBigInteger('id_supplier');
-            $table->foreign('id_supplier')->references('id_supplier')->on('setup_supplier')->onDelete('restrict');
+             $table->unsignedBigInteger('id_customer');
+            $table->foreign('id_customer')->references('id_customer')->on('setup_customer')->onDelete('restrict');
             $table->date('tanggal_bayar');
-            $table->float('total_hutang',18,2);
-            $table->float('total_piutang',18,2);
             $table->float('total_bayar',18,2);
             $table->text('keterangan')->nullable();
             $table->string('status',10)->default('DRAFT');
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pembayaran_hutang_supplier');
+        Schema::dropIfExists('pembayaran_piutang_customer');
     }
 };

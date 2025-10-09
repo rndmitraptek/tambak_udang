@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pembayaran_hutang_supplier_giro', function (Blueprint $table) {
-            $table->id('id_pembayaran_hutang_supplier_giro');
-            $table->unsignedBigInteger('id_pembayaran_hutang_supplier');
-            $table->foreign('id_pembayaran_hutang_supplier')->references('id_pembayaran_hutang_supplier')->on('pembayaran_hutang_supplier')->onDelete('restrict');
+        Schema::create('pembayaran_piutang_customer_giro', function (Blueprint $table) {
+            $table->id('id_pembayaran_piutang_customer_giro');
+            $table->unsignedBigInteger('id_pembayaran_piutang_customer');
+            $table->foreign('id_pembayaran_piutang_customer')->references('id_pembayaran_piutang_customer')->on('pembayaran_piutang_customer')->onDelete('restrict');
             $table->unsignedBigInteger('id_rekening_bank');
             $table->foreign('id_rekening_bank')->references('id_rekening_bank')->on('setup_rekening_bank')->onDelete('restrict');
             $table->string('no_giro',100);
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pembayaran_hutang_supplier_giro');
+        Schema::dropIfExists('pembayaran_piutang_customer_giro');
     }
 };

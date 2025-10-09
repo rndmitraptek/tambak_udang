@@ -2,27 +2,26 @@
 
 namespace App\Models\Finance;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\SetupSupplier;
+use App\Models\SetupCustomer;
 use App\Traits\CreatedUpdatedBy;
 use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Model;
 
-class HutangSupplier extends Model
+class PiutangCustomer extends Model
 {
+    //
     use CreatedUpdatedBy, HasUuid;
-
-    protected $table = 'hutang_supplier';
-    protected $primaryKey = 'id_hutang_supplier';
+    protected $table = 'piutang_customer';
+    protected $primaryKey = 'id_piutang_customer';
     protected $fillable = [
         'uuid',
-        'id_supplier',
+        'id_customer',
         'no_faktur',
         'reff_id',
         'reff_trans',
-        'tanggal_hutang',
+        'tanggal_piutang',
         'tanggal_jatuh_tempo',
-        'jumlah_hutang',
+        'jumlah_piutang',
         'dibayar',
         'sisa',
         'created_by',
@@ -32,7 +31,6 @@ class HutangSupplier extends Model
 
     public function supplier()
     {
-        return $this->belongsTo(SetupSupplier::class, 'id_supplier');
+        return $this->belongsTo(SetupCustomer::class, 'id_customer');
     }
-
 }

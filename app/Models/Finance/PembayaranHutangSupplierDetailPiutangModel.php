@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PembayaranHutangSupplierDetailPiutangModel extends Model
 {
     //
-    use CreatedUpdatedBy;
 
     protected $table = 'pembayaran_hutang_supplier_detail_piutang';
     protected $primaryKey = 'id_pembayaran_hutang_supplier_detail_piutang';

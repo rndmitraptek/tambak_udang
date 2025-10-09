@@ -3,7 +3,7 @@
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('ctrl')
-@include('feature.finance.pembayaran-hutang-supplier.script')
+@include('feature.finance.pembayaran-piutang-customer.script')
 @endsection
 
 @section('content')
@@ -31,7 +31,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Transaksi Pembayaran Hutang Supplier
+                                Transaksi Pembayaran Piutang Customer
                             </h3>
                         </div>
                     </div>
@@ -95,11 +95,11 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group m-form__group">
-                                <label>Supplier</label>
+                                <label>Customer</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="nama_supplier" name="nama_supplier" placeholder="Search for..." ng-model="input.nama_supplier">
+                                    <input type="text" class="form-control" id="nama_customer" name="nama_customer" placeholder="Search for..." ng-model="input.nama_customer">
                                     <div class="input-group-append">
-                                        <button ng-click="cari_supplier()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
+                                        <button ng-click="cari_customer()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                     <hr/>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h5>Hutang Supplier</h5>
+                            <h5>Piutang Customer</h5>
                             <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
                                 <thead>
                                     <tr>
@@ -124,73 +124,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="i in input.hutang">
-                                        <td><input type="checkbox" ng-model="i.checked" ng-change="hitung()"></td>
-                                        <td><% i.reff_trans %></td>
-                                        <td><% i.no_faktur %></td>
-                                        <td class="text-right"><% i.jumlah_hutang | currency:'' %></td>
-                                        <td class="text-right"><% i.dibayar | currency:'' %></td>
-                                        <td class="text-right"><% i.sisa | currency:'' %></td>
-                                        <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-change="hitung()" ng-model="i.bayar" ng-change="hitung_hutang()"></td>
-                                        <td><% i.tanggal_hutang %></td>
-                                        <td><% i.created_by %></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="6" class="text-right">Total Hutang</th>
-                                        <th class="text-right"><% total_hutang | currency:'' %></th>
-                                        <th colspan="2"></th> 
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <hr/>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h5>Piutang Supplier</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 50px">#</th>
-                                        <th style="width: 200px">Faktur</th>
-                                        <th style="width: 200px">Nomor Faktur</th>
-                                        <th style="width: 200px">Nominal Piutang</th>
-                                        <th style="width: 200px">Tanggal Nota</th>
-                                        <th style="width: 40px">Created By</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
                                     <tr ng-repeat="i in input.piutang">
                                         <td><input type="checkbox" ng-model="i.checked" ng-change="hitung()"></td>
                                         <td><% i.reff_trans %></td>
                                         <td><% i.no_faktur %></td>
                                         <td class="text-right"><% i.jumlah_piutang | currency:'' %></td>
+                                        <td class="text-right"><% i.dibayar | currency:'' %></td>
+                                        <td class="text-right"><% i.sisa | currency:'' %></td>
+                                        <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-change="hitung()" ng-model="i.bayar"></td>
                                         <td><% i.tanggal_piutang %></td>
                                         <td><% i.created_by %></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="3" class="text-right">Total Piutang</th>
-                                        <th class="text-right"><% total_piutang | currency:'' %></th>
-                                        <th colspan="2"></th>
+                                        <th colspan="6" class="text-right">Total Bayar</th>
+                                        <th class="text-right"><% total_bayar | currency:'' %></th>
+                                        <th colspan="2"></th> 
                                     </tr>
                                 </tfoot>
                             </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-8">
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group m-form__group row">
-                                <label for="example-email-input" class="col-4 col-form-label m--font-boldest">Total Bayar</label>
-                                <div class="col-8">
-                                    <input class="form-control m-input m--font-boldest text-right" type="text" input-currency ng-model="total_bayar" readonly="true">
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -215,7 +168,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Transaksi Pembayaran Hutang Supplier
+                                Transaksi Pembayaran Piutang Customer
                             </h3>
                         </div>
                     </div>
@@ -256,14 +209,14 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group m-form__group">
-                                <label for="recipient-name" class="form-control-label">Supplier</label>
-                                <input type="text" class="form-control" ng-model="detail.supplier.nama_supplier" readonly>
+                                <label for="recipient-name" class="form-control-label">Customer</label>
+                                <input type="text" class="form-control" ng-model="detail.customer.nama_customer" readonly>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <h5>Hutang Supplier</h5>
+                            <h5>Piutang Customer</h5>
                             <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
                                 <thead>
                                     <tr>
@@ -271,68 +224,25 @@
                                         <th style="width: 200px">Faktur</th>
                                         <th style="width: 200px">Nomor Faktur</th>
                                         <th style="width: 200px">Tanggal Nota</th>
-                                        <th style="width: 200px">Nominal</th>
+                                        <th style="width: 200px">Nominal Bayar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="i in detail.detail_hutang">
+                                    <tr ng-repeat="i in detail.detail">
                                         <td><% $index + 1 %></td>
-                                        <td><% i.hutang_supplier.reff_trans %></td>
-                                        <td><% i.hutang_supplier.no_faktur %></td>
-                                        <td><% i.hutang_supplier.tanggal_hutang %></td>
-                                        <td class="text-right"><% i.nominal_hutang | currency:'' %></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="4" class="text-right">Total Hutang</th>
-                                        <th class="text-right"><% detail.total_hutang | currency:'' %></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h5>Piutang Supplier</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 50px">#</th>
-                                        <th style="width: 200px">Faktur</th>
-                                        <th style="width: 200px">Nomor Faktur</th>
-                                        <th style="width: 200px">Tanggal Nota</th>
-                                        <th style="width: 200px">Nominal Piutang</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="i in detail.detail_piutang">
-                                        <td><% $index + 1 %></td>
-                                        <td><% i.piutang_supplier.reff_trans %></td>
-                                        <td><% i.piutang_supplier.reff_trans %></td>
-                                        <td><% i.piutang_supplier.tanggal_piutang %></td>
+                                        <td><% i.piutang_customer.reff_trans %></td>
+                                        <td><% i.piutang_customer.reff_trans %></td>
+                                        <td><% i.piutang_customer.tanggal_piutang %></td>
                                         <td class="text-right"><% i.nominal_piutang | currency:'' %></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th colspan="4" class="text-right">Total Piutang</th>
-                                        <th class="text-right"><% detail.total_piutang | currency:'' %></th>
+                                        <th class="text-right"><% detail.total_bayar | currency:'' %></th>
                                     </tr>
                                 </tfoot>
                             </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-8">
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group m-form__group row">
-                                <label for="example-email-input" class="col-4 col-form-label m--font-boldest">Total Bayar</label>
-                                <div class="col-8">
-                                    <input class="form-control m-input m--font-boldest text-right" type="text" input-currency ng-model="detail.total_bayar" readonly="true">
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -368,7 +278,7 @@
                                 <tbody>
                                     <tr ng-repeat="i in detail.transfer">
                                         <td><% $index + 1 %></td>
-                                        <td><% i.bank_penerima %> <% i.atas_nama_penerima %> <% i.no_rekening_penerima %></td>
+                                        <td><% i.bank_pengirim %> <% i.atas_nama_pengirim %> <% i.no_rekening_pengirim %></td>
                                         <td><% i.waktu_transfer %></td>
                                         <td class="text-right"><% i.nominal | currency:'' %></td>
                                         <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
@@ -449,21 +359,21 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
-                            <label for="recipient-name" class="col-4 col-form-label">Kode Supplier</label>
+                            <label for="recipient-name" class="col-4 col-form-label">Kode Customer</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="input.kode_supplier" readonly>
+                                <input type="text" class="form-control" ng-model="input.kode_customer" readonly>
                             </div>
                         </div>
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
-                            <label for="recipient-name" class="col-4 col-form-label">Supplier</label>
+                            <label for="recipient-name" class="col-4 col-form-label">Customer</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="input.nama_supplier" readonly>
+                                <input type="text" class="form-control" ng-model="input.nama_customer" readonly>
                             </div>
                         </div>
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
-                            <label for="exampleTextarea" class="col-4 col-form-label">Alamat Supplier</label>
+                            <label for="exampleTextarea" class="col-4 col-form-label">Alamat Customer</label>
                             <div class="col-8">
-                                <textarea class="form-control" ng-model="input.alamat_supplier" rows="4" readonly></textarea>
+                                <textarea class="form-control" ng-model="input.alamat_customer" rows="4" readonly></textarea>
                             </div>
                         </div>
                     </div>
@@ -526,23 +436,23 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <label class="m--font-boldest">Transfer Ke</label>
+                        <label class="m--font-boldest">Transfer Dari</label>
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Nama Bank</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="form_transfer.bank_penerima" >
+                                <input type="text" class="form-control" ng-model="form_transfer.bank_pengirim" >
                             </div>
                         </div>
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Pemilik Rekening</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="form_transfer.atas_nama_penerima" >
+                                <input type="text" class="form-control" ng-model="form_transfer.atas_nama_pengirim" >
                             </div>
                         </div>
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Nomor Rekening</label>
                             <div class="col-8">
-                                <input type="text" class="form-control" ng-model="form_transfer.no_rekening_penerima" >
+                                <input type="text" class="form-control" ng-model="form_transfer.no_rekening_pengirim" >
                             </div>
                         </div>
                         <div class="row">
@@ -573,7 +483,7 @@
                             <tbody>
                                 <tr ng-repeat="i in input.transfer" ng-init="total_transfer = (total_transfer || 0) + i.nominal">
                                     <td><% $index + 1 %></td>
-                                    <td><% i.bank_penerima %> <% i.atas_nama_penerima %> <% i.no_rekening_penerima %></td>
+                                    <td><% i.bank_pengirim %> <% i.atas_nama_pengirim %> <% i.no_rekening_pengirim %></td>
                                     <td><% i.waktu_transfer %></td>
                                     <td class="text-right"><% i.nominal | currency:'' %></td>
                                     <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
@@ -749,25 +659,24 @@
     </div>
 </div>
 
-
 <!--end::Modal-->
 <look-up-table
-      lookup-id="lookup_supplier"
-      ajax-url="{{ route('finance.pembayaran_hutang_supplier.supplier') }}"
-      columns="supplierColumns"
+      lookup-id="lookup_customer"
+      ajax-url="{{ route('finance.pembayaran_piutang_customer.customer') }}"
+      columns="customerColumns"
       page-length="8"
-      on-select="selectSupplier(row)">
+      on-select="selectCustomer(row)">
 </look-up-table>
 <look-up-table
       lookup-id="lookup_rekening"
-      ajax-url="{{ route('finance.pembayaran_hutang_supplier.rekening') }}"
+      ajax-url="{{ route('finance.pembayaran_piutang_customer.rekening') }}"
       columns="rekeningColumns"
       page-length="8"
       on-select="selectRekening(row)">
 </look-up-table>
 <look-up-table
       lookup-id="lookup_rekening_giro"
-      ajax-url="{{ route('finance.pembayaran_hutang_supplier.rekening') }}"
+      ajax-url="{{ route('finance.pembayaran_piutang_customer.rekening') }}"
       columns="rekeningColumns"
       page-length="8"
       on-select="selectRekeningGiro(row)">

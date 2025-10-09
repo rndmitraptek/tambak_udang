@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pembayaran_hutang_supplier_tunai', function (Blueprint $table) {
-            $table->id('id_pembayaran_hutang_supplier_tunai');
-            $table->unsignedBigInteger('id_pembayaran_hutang_supplier');
-            $table->foreign('id_pembayaran_hutang_supplier')->references('id_pembayaran_hutang_supplier')->on('pembayaran_hutang_supplier')->onDelete('restrict');
+        Schema::create('pembayaran_piutang_customer_tunai', function (Blueprint $table) {
+            $table->id('id_pembayaran_piutang_customer_tunai');
+            $table->unsignedBigInteger('id_pembayaran_piutang_customer');
+            $table->foreign('id_pembayaran_piutang_customer')->references('id_pembayaran_piutang_customer')->on('pembayaran_piutang_customer')->onDelete('restrict');
             $table->date('tanggal_bayar');
             $table->string('nama_penerima');
             $table->string('nama_pemberi');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pembayaran_hutang_supplier_tunai');
+        Schema::dropIfExists('pembayaran_piutang_customer_tunai');
     }
 };

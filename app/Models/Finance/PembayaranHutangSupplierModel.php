@@ -14,7 +14,7 @@ class PembayaranHutangSupplierModel extends Model
 
     protected $table = 'pembayaran_hutang_supplier';
     protected $primaryKey = 'id_pembayaran_hutang_supplier';
-    protected $fillable = ['uuid','no_faktur','id_supplier','total_hutang','total_piutang','total_bayar','keterangan','file'];
+    protected $fillable = ['uuid','no_faktur','id_supplier','tanggal_bayar','total_hutang','total_piutang','total_bayar','keterangan','file'];
 
     public function Supplier(){
         return $this->belongsTo(SetupSupplier::class, 'id_supplier','id_supplier');

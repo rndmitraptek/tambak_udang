@@ -17,17 +17,14 @@ app.controller("myCtrl", function($scope,$http,API) {
         table = $("#viewtabel").DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route("finance.pembayaran_hutang_supplier.datatable") }}',
+            ajax: '{{ route("finance.pembayaran_piutang_customer.datatable") }}',
             scrollY: "50vh",
             scrollX: !0,
             scrollCollapse: !0,
             columns: [
                 { data: 'no_faktur', title: 'No Faktur' },
                 { data: 'tanggal_bayar', title: 'Tanggal Bayar' },
-                { data: 'nama_supplier', title: 'Supplier' },
-                { data: 'nama_supplier', title: 'Nama Supplier' },
-                { data: 'total_hutang', title: 'Total Hutang' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
-                { data: 'total_piutang', title: 'Total Piutang' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
+                { data: 'nama_customer', title: 'Customer' },
                 { data: 'total_bayar', title: 'Total Bayar' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'keterangan', title: 'keterangan' },
                 { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
@@ -88,7 +85,7 @@ app.controller("myCtrl", function($scope,$http,API) {
     });
 
     $scope.get_detail = function(uuid){
-        url = "{{ route('finance.pembayaran_hutang_supplier.get_detail',':uuid') }}"
+        url = "{{ route('finance.pembayaran_piutang_customer.get_detail',':uuid') }}"
         url = url.replace(':uuid', uuid)
         swal({title: "Presesing...!",text: "Please Wait",
             onOpen: function() {
@@ -117,11 +114,11 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.total_piutang = 0;
         $scope.total_bayar = 0;
     }
-    $scope.supplierColumns = [
-        { data: 'kode_supplier', title: 'Kode Supplier' },
-        { data: 'nama_supplier', title: 'Nama Supplier' },
-        { data: 'nama_perusahaan', title: 'Perusahaan' },
-        { data: 'telepon_supplier', title: 'Telepon' }
+    $scope.customerColumns = [
+        { data: 'kode_customer', title: 'Kode Customer' },
+        { data: 'nama_customer', title: 'Nama Customer' },
+        { data: 'alamat_customer', title: 'Alamat' },
+        { data: 'telepon_customer', title: 'Telepon' }
     ];
     $scope.rekeningColumns = [
         { data: 'nama_bank', title: 'Nama Bank' },
@@ -129,14 +126,14 @@ app.controller("myCtrl", function($scope,$http,API) {
         { data: 'no_rekening', title: 'No Rekening' }
     ]
     $scope.id_lokasi = null;
-    $scope.selectSupplier = function(row) {
+    $scope.selectCustomer = function(row) {
         console.log(row);
-        $scope.input.uuid_supplier = row.uuid;
-        $scope.input.nama_supplier = row.nama_supplier;
-        $scope.input.kode_supplier = row.kode_supplier;
-        $scope.input.alamat_supplier = row.alamat_supplier;
+        $scope.input.uuid_customer = row.uuid;
+        $scope.input.nama_customer = row.nama_customer;
+        $scope.input.kode_customer = row.kode_customer;
+        $scope.input.alamat_customer = row.alamat_customer;
         $scope.id_lokasi = row.id_lokasi;
-        url = "{{ route('finance.pembayaran_hutang_supplier.get_hutang_piutang',':uuid') }}"
+        url = "{{ route('finance.pembayaran_piutang_customer.get_piutang',':uuid') }}"
         url = url.replace(':uuid', row.uuid)
         swal({title: "Presesing...!",text: "Please Wait",
             onOpen: function() {
@@ -146,7 +143,6 @@ app.controller("myCtrl", function($scope,$http,API) {
         $http.get(url)
         .then(function(res){
             if(res.data.success){
-                $scope.input.hutang = res.data.data.hutang;
                 $scope.input.piutang = res.data.data.piutang;
                 Swal.close();
                 //$scope.$apply();
@@ -183,8 +179,8 @@ app.controller("myCtrl", function($scope,$http,API) {
         table.draw();
     }
 
-    $scope.cari_supplier = function(){
-        $('#lookup_supplier').modal('show');
+    $scope.cari_customer = function(){
+        $('#lookup_customer').modal('show');
     }
     $scope.cari_rekening = function(){
         $('#lookup_rekening').modal('show');
@@ -194,19 +190,13 @@ app.controller("myCtrl", function($scope,$http,API) {
     }
 
     $scope.hitung = function(){
-        $scope.total_hutang = 0;
-        $scope.input.hutang.forEach(function(hutang, index) {
-            if(hutang.checked){
-                $scope.total_hutang = $scope.total_hutang + hutang.bayar;
-            }
-        });
-        $scope.total_piutang = 0;
+        $scope.total_bayar = 0;
         $scope.input.piutang.forEach(function(piutang, index) {
             if(piutang.checked){
-                $scope.total_piutang = $scope.total_piutang + piutang.jumlah_piutang;
+                console.log(piutang.bayar);
+                $scope.total_bayar = $scope.total_bayar + parseFloat(piutang.bayar);
             }
         });
-        $scope.total_bayar = $scope.total_hutang - $scope.total_piutang;
     }
 
     $scope.handleClickProsesPayment = function(){
@@ -279,8 +269,8 @@ app.controller("myCtrl", function($scope,$http,API) {
             }
         })
         let url = ($scope.edit)
-            ? "{{ route('finance.pembayaran_hutang_supplier.update', ':uuid') }}"
-            : "{{ route('finance.pembayaran_hutang_supplier.insert') }}";
+            ? ""
+            : "{{ route('finance.pembayaran_piutang_customer.insert') }}";
 
         if ($scope.edit) {
             url = url.replace(':uuid', $scope.input.uuid);
@@ -300,8 +290,8 @@ app.controller("myCtrl", function($scope,$http,API) {
                 swal({
                     title: "Tersimpan ",text: "Data PO berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                 }).then(function(){
-                    table.draw();
                     $('#m_proses_bayar').modal('hide');
+                    table.draw();
                     $scope.input.uuid = res.data.data.uuid;
                     $scope.get_detail(res.data.data.uuid);
                 })

@@ -38,5 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/role',[App\Http\Controllers\Auth\RoleController::class, 'index']);
     Route::get('/logout', [App\Http\Controllers\Auth\UsersController::class,'logout']);
     Route::get('/pembayaran_hutang_supplier',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class,'index']);
+    Route::get('/pembayaran_piutang_customer',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class,'index']);
 });
 

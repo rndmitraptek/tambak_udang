@@ -35,8 +35,7 @@ class PembayaranHutangSupplierController extends Controller
             ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {
-                return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>
-                <a href="javascript:void(0)" id="hapus" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-danger la la-remove"></i></a>';
+                return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>';
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -84,47 +83,47 @@ class PembayaranHutangSupplierController extends Controller
         try {
             $supplier = SetupSupplier::where('uuid',$req->uuid_supplier)->first();
             $req->validate([
-                'uuid_supplier' => 'required',
-                'no_faktur'    => 'required',
-                'tanggal_bayar'   => 'required',
+                'uuid_supplier'     => 'required',
+                'no_faktur'         => 'required',
+                'tanggal_bayar'     => 'required',
             ]);
             $data = $req->all();
             unset($data['uuid_supplier']);
             $data['id_supplier']    = $supplier->id_supplier;
             $insert = PembayaranHutangSupplierModel::create($data);
             foreach($req->hutang as $d){
-                $hutangSupplier = HutangSupplierModel::where('uuid',$d['uuid_hutang'])->first();
+                $hutangSupplier = HutangSupplierModel::where('uuid',$d['uuid'])->first();
                 $detail = $d;
                 $detail['id_pembayaran_hutang_supplier']    = $insert->id_pembayaran_hutang_supplier;
                 $detail['id_hutang_supplier']               = $hutangSupplier->id_hutang_supplier;
-                unset($detail['uuid_hutang']);
+                $detail['nominal_hutang']                   = $d['bayar'];
                 $insert_detail = PembayaranHutangSupplierDetailHutangModel::create($detail);
                 $hutangSupplier->update([
-                    'sisa'=>$detail['sisa'] - $detail['bayar'],
-                    'dibayar'=>$hutangSupplier['dibayar'] + $detail['dibayar']
+                    'sisa'=>$hutangSupplier['sisa'] - $detail['nominal_hutang'],
+                    'dibayar'=>$hutangSupplier['dibayar'] + $detail['nominal_hutang']
                 ]);
             }
             foreach($req->piutang as $d){
-                $piutangSupplier = PiutangSupplierModel::where('uuid',$d['uuid_piutang'])->first();
+                $piutangSupplier = PiutangSupplierModel::where('uuid',$d['uuid'])->first();
                 $detail = $d;
                 $detail['id_pembayaran_hutang_supplier']    = $insert->id_pembayaran_hutang_supplier;
                 $detail['id_piutang_supplier']              = $piutangSupplier->id_piutang_supplier;
-                unset($detail['uuid_piutang']);
+                $detail['nominal_piutang']                  = $d['jumlah_piutang'];
                 $insert_detail = PembayaranHutangSupplierDetailPiutangModel::create($detail);
-                $hutangSupplier->update([
-                    'sisa'=>$detail['sisa'] - $detail['bayar'],
-                    'dibayar'=>$hutangSupplier['dibayar'] + $detail['dibayar']
+                $piutangSupplier->update([
+                    'sisa'=>$piutangSupplier['sisa'] - $detail['nominal_piutang'],
+                    'dibayar'=>$piutangSupplier['dibayar'] + $detail['nominal_piutang']
                 ]);
             }
             foreach($req->transfer as $d){
-                $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekening_bank'])->first();
+                $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekeing'])->first();
                 $detail = $d;
                 $detail['id_pembayaran_hutang_supplier'] = $insert->id_pembayaran_hutang_supplier;
                 $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
                 $insert_transfer = PembayaranHutangSupplierTransferModel::create($detail);
             }
             foreach($req->giro as $d){
-                $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekening_bank'])->first();
+                $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekeing'])->first();
                 $detail = $d;
                 $detail['id_pembayaran_hutang_supplier'] = $insert->id_pembayaran_hutang_supplier;
                 $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
@@ -214,8 +213,8 @@ class PembayaranHutangSupplierController extends Controller
     }
 
     public function detail($uuid){
-        $data = PembayaranHutangSupplierModel::with(['Supplier','DetailHutang.HutangSupplier','DetailPiutang.PiutangSupplier'])
-        ->where('uuid',$uuid)->get();
+        $data = PembayaranHutangSupplierModel::with(['Supplier','DetailHutang.HutangSupplier','DetailPiutang.PiutangSupplier','Transfer.rekening_bank','Tunai','Giro.rekening_bank'])
+        ->where('uuid',$uuid)->first();
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
 
