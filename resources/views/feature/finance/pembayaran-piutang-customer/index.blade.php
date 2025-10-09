@@ -406,7 +406,7 @@
                 <div class="row" ng-show="input.metode_bayar=='TRANSFER'">
                     <div class="col-lg-6">
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
-                            <label class="col-4 col-form-label">Dari Rekening</label>
+                            <label class="col-4 col-form-label">Masuk Ke Rekening</label>
                             <div class="col-8">
                                 <div class="input-group">
                                     <input type="text" class="form-control"  placeholder="Search for..." ng-model="form_transfer.rekening">

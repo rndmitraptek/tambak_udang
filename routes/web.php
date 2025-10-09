@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/master.php';
 require __DIR__.'/manajemen-tambak.php';
+require __DIR__.'/dashboard.php';
 Route::get('health',function(){
     return response()->json(['success'=>true,'data'=>'health']);
 });
@@ -39,5 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [App\Http\Controllers\Auth\UsersController::class,'logout']);
     Route::get('/pembayaran_hutang_supplier',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class,'index']);
     Route::get('/pembayaran_piutang_customer',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class,'index']);
+    Route::get('/dashboard',[App\Http\Controllers\DashboardController::class,'index']);
+    Route::get('/dashboard_petak/{uuid_siklus}',[App\Http\Controllers\DashboardController::class,'dashboard_petak']);
 });
 
