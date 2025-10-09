@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('reff_trans');
             $table->date('tanggal_piutang');
             $table->date('tanggal_jatuh_tempo')->nullable();;
-            $table->float('jumlah_hutang',18,2);
+            $table->float('jumlah_piutang',18,2);
             $table->float('dibayar',18,2);
             $table->float('sisa',18,2);
             $table->integer('created_by');

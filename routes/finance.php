@@ -33,6 +33,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/get_detail/{uuid}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'detail'])->name('get_detail');
         Route::delete('/delete/{uuid}',[App\Http\Controllers\Finance\PembayaranHutangSupplierController::class, 'destroy'])->name('delete');
     });
+    Route::prefix('pembayaran_piutang_customer')->name('pembayaran_piutang_customer.')->group(function(){
+        Route::get('/datatable',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class, 'datatable'])->name('datatable');
+        Route::post('/insert',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class, 'insert'])->name('insert');
+        Route::get('/customer',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class, 'customer'])->name('customer');
+        Route::get('/rekening',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class, 'rekening'])->name('rekening');
+        Route::get('/get_piutang/{id_customer}',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class, 'get_piutang'])->name('get_piutang');
+        Route::get('/get_detail/{uuid}',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class, 'detail'])->name('get_detail');
+    });
     Route::prefix('pembelian-pakan')->name('pembelian-pakan.')->group(function(){
         Route::post('/insert',[App\Http\Controllers\Finance\PembelianPakanController::class, 'insert'])->name('insert');
         Route::post('/update/{uuid}',[App\Http\Controllers\Finance\PembelianPakanController::class, 'update'])->name('update');
