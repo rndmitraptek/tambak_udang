@@ -174,7 +174,9 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <p style="margin-bottom:0px">HPP /KG</P>
-                                            <span ng-class="{'m-badge m-badge--success m-badge--wide':kolam.laba_rugi > 0,'m-badge m-badge--danger m-badge--wide':kolam.laba_rugi < 0}" style="font-size:15px;font-weight:bold"><% kolam.hpp_per_kg | currency %></span>
+                                            <span ng-class="{'m-badge m-badge--success m-badge--wide':kolam.laba_rugi > 0,'m-badge m-badge--danger m-badge--wide':kolam.laba_rugi < 0}" style="font-size:15px;font-weight:bold">
+                                                <% kolam.hpp_per_kg | currency %>
+                                            </span>
                                         </div>
                                         <div class="col-lg-6 mb-2">
                                             <p ng-class="{'m--font-success':kolam.laba_rugi > 0,'m--font-danger':kolam.laba_rugi < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="margin-bottom:0px">DOC</P>

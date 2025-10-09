@@ -269,6 +269,14 @@ class SimulasiController extends Controller
                 $detailPendapatan->pendapatan_actual_partial =round($totalPanen,0);
             }
 
+            // hitung hpp per kg
+            $biomassa = isset($detailPendapatan['biomassa']) ? (float)$detailPendapatan['biomassa'] : 0;
+            $totalBiayaAll = (float)$totalBiaya + (float)$totalBiayaSimulasi;
+            $hppPerKg = 0;
+            if ($biomassa > 0) {
+                $hppPerKg = round($totalBiayaAll / $biomassa);
+            }
+
             $result[] = [
                 'petak_id' => $petakId,
                 'total_biaya_real' => round($totalBiaya,0),
@@ -277,6 +285,7 @@ class SimulasiController extends Controller
                 'total_pendapatan' => round($totalPendapatan,0),
                 'pendapatan_actual_partial' => round($totalPanen,0),
                 'laba_rugi' => round($labaRugi,0),
+                'hpp_per_kg' => $hppPerKg,
                 // jika mau sertakan detail json biaya:
                 'detail_biaya' => $detailBiaya,
                 'detail_pendapatan' => $detailPendapatan,
