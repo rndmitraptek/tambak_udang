@@ -184,7 +184,7 @@
                                         </div>
                                         <div class="col-lg-6 mb-2">
                                             <p ng-class="{'m--font-success':kolam.laba_rugi > 0,'m--font-danger':kolam.laba_rugi < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="margin-bottom:0px">FCR</P>
-                                            <p ng-class="{'m--font-success':kolam.laba_rugi > 0,'m--font-danger':kolam.laba_rugi < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="font-size: 1.2rem;font-weight: 500;margin-bottom:.25rem;">-</p>
+                                            <p ng-class="{'m--font-success':kolam.laba_rugi > 0,'m--font-danger':kolam.laba_rugi < 0}" ng-style="{'color': isWarning ? 'red' : 'black'}" style="font-size: 1.2rem;font-weight: 500;margin-bottom:.25rem;"><% kolam.fcr %></p>
                                         </div>
                                     </div>
                                 </div>

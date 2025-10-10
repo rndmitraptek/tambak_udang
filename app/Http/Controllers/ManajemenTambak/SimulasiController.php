@@ -8,6 +8,8 @@ use App\Models\ManajemenTambak\TransaksiSimulasi;
 use App\Models\ManajemenTambak\TransaksiSimulasiBiaya;
 use App\Models\ManajemenTambak\TransaksiSimulasiDetail;
 use App\Models\ManajemenTambak\PanenModel;
+use App\Models\ManajemenTambak\PenggunaanPakan;
+use App\Models\ManajemenTambak\PenggunaanPakanDetail;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -241,6 +243,16 @@ class SimulasiController extends Controller
             ->merge(collect($simulasi->pendapatan)->pluck('petak_id'))
             ->unique();
 
+        // get total pakan per petak
+        $pakanTotals = DB::table('penggunaan_pakan_detail as d')
+            ->join('penggunaan_pakan as p', 'p.id_penggunaan', '=', 'd.id_penggunaan')
+            ->whereNull('p.deleted_at')
+            ->where('p.lokasi_id', $simulasi->lokasi_id)
+            ->where('p.siklus_id', $simulasi->siklus_id)
+            ->select('d.petak_id', DB::raw('SUM(d.jumlah) as total_jumlah'))
+            ->groupBy('d.petak_id')
+            ->pluck('total_jumlah', 'd.petak_id'); 
+
         foreach ($petakIds as $petakId) {
             // total biaya & pendapatan actual sudah langsung
             $totalBiaya = $simulasi->biaya
@@ -283,6 +295,12 @@ class SimulasiController extends Controller
                 $hppPerKg = round($totalBiayaAll / $biomassa);
             }
 
+            // ambil total pakan berdasarkan petak_id
+            $totalPakanPetak = isset($pakanTotals[$petakId]) ? (float)$pakanTotals[$petakId] : 0;
+
+            // hitung FCR, total pakan / biomassa (hindari pembagian 0)
+            $fcr = $biomassa > 0 ? round($totalPakanPetak / $biomassa, 2) : 0;
+
             $result[] = [
                 'petak_id' => $petakId,
                 'total_biaya_real' => round($totalBiaya,0),
@@ -292,6 +310,9 @@ class SimulasiController extends Controller
                 'pendapatan_actual_partial' => round($totalPanen,0),
                 'laba_rugi' => round($labaRugi,0),
                 'hpp_per_kg' => $hppPerKg,
+                'total_pakan' => $totalPakanPetak,
+                'biomassa' => $biomassa,
+                'fcr' => $fcr,
                 // jika mau sertakan detail json biaya:
                 'detail_biaya' => $detailBiaya,
                 'detail_pendapatan' => $detailPendapatan,
@@ -331,7 +352,7 @@ class SimulasiController extends Controller
                     'total_biaya' => $row['total_biaya_all'] ?? 0,
                     'laba_rugi' => $row['laba_rugi'] ?? 0,
                     'hpp_per_kg' => $row['hpp_per_kg'] ?? 0,
-                    'fcr' => $row['detail_biaya']['fcr'] ?? 0,
+                    'fcr' => $row['fcr'] ?? 0,
                     'doc' => $row['detail_biaya']['doc'] ?? 0,
                     'keterangan' => null,
                 ]
