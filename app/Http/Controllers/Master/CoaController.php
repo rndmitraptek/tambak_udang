@@ -38,26 +38,30 @@ class CoaController extends Controller
             ->make(true);
     }
 
+    public function parentList()
+    {
+        $coas = SetupCoa::whereNull('kode_parent')->get();
+        return response()->json(['success' => true, 'data' => $coas]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:setup_coa,kode',
-            'nama' => 'required',
-            'tipe' => 'required',
+            'kode_coa' => 'required|unique:setup_coa,kode_coa',
+            'nama_coa' => 'required',
+            'tipe_coa' => 'required',
             'pos_laporan' => 'required',
             'kode_parent' => 'nullable',
             'saldo_normal' => 'nullable',
         ]);
 
         $coa = SetupCoa::create([
-            'kode' => $request->kode,
-            'nama' => $request->nama,
-            'tipe' => $request->tipe,
+            'kode_coa' => $request->kode_coa,
+            'nama_coa' => $request->nama_coa,
+            'tipe_coa' => $request->tipe_coa,
             'pos_laporan' => $request->pos_laporan,
             'kode_parent' => $request->kode_parent,
             'saldo_normal' => $request->saldo_normal,
-            'created_by' => 1,
-            'updated_by' => 1,
         ]);
 
         return response()->json(['success' => true, 'data' => $coa]);
@@ -74,18 +78,18 @@ class CoaController extends Controller
         $coa = SetupCoa::where('uuid', $uuid)->firstOrFail();
 
         $request->validate([
-            'kode' => 'required|unique:setup_benur,kode,' . $coa->id,
-            'nama' => 'required',
-            'tipe' => 'required',
+            'kode_coa' => 'required|unique:setup_coa,kode_coa,' . $coa->id_coa . ',id_coa',
+            'nama_coa' => 'required',
+            'tipe_coa' => 'required',
             'pos_laporan' => 'required',
             'kode_parent' => 'nullable',
             'saldo_normal' => 'nullable',
         ]);
 
         $coa->update([
-            'kode' => $request->kode,
-            'nama' => $request->nama,
-            'tipe' => $request->tipe,
+            'kode_coa' => $request->kode_coa,
+            'nama_coa' => $request->nama_coa,
+            'tipe_coa' => $request->tipe_coa,
             'pos_laporan' => $request->pos_laporan,
             'kode_parent' => $request->kode_parent,
             'saldo_normal' => $request->saldo_normal,

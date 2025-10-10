@@ -42,9 +42,9 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/coa/data",
         columns: [
-            { data: 'kode', name: 'kode' },
-            { data: 'nama', name: 'nama' },
-            { data: 'tipe', name: 'tipe' },
+            { data: 'kode_coa', name: 'kode_coa' },
+            { data: 'nama_coa', name: 'nama_coa' },
+            { data: 'tipe_coa', name: 'tipe_coa' },
             { data: 'pos_laporan', name: 'pos_laporan' },
             { data: 'saldo_normal', name: 'saldo_normal' },
             { data: 'kode_parent', name: 'kode_parent' },
@@ -55,14 +55,36 @@ $(document).ready(function() {
     $('#btnTambah').click(function() {
         $('#formCoa')[0].reset();
         $('#uuid').val('');
+        $('#modalCoaLabel').text('Tambah Data COA');
+        loadParentCoa();
         $('#m_create').modal('show');
     });
 
+    // 🧩 Load Parent COA dari API
+    function loadParentCoa(selected = '') {
+        $('#kode_parent').html('<option value="">-- Memuat data... --</option>');
+
+        $.get('/coa/parent-list', function(res) {
+            if (res.success) {
+                let options = '<option value="">-- Pilih Parent --</option>';
+                res.data.forEach(function(item) {
+                    const selectedAttr = item.kode_coa === selected ? 'selected' : '';
+                    options += `<option value="${item.kode_coa}" ${selectedAttr}>${item.kode_coa} - ${item.nama_coa}</option>`;
+                });
+                $('#kode_parent').html(options);
+            } else {
+                $('#kode_parent').html('<option value="">(Tidak ada data parent)</option>');
+            }
+        }).fail(function() {
+            $('#kode_parent').html('<option value="">(Gagal memuat data)</option>');
+        });
+    }
+
     $("#formCoa").validate({
         rules: {
-            kode: { required: !0, },
-            nama: { required: !0, },
-            tipe: { required: !0, },
+            kode_coa: { required: !0, },
+            nama_coa: { required: !0, },
+            tipe_coa: { required: !0, },
             pos_laporan: { required: !0, },
             saldo_normal: { required: !0, },
             kode_parent: { required: !0, }
@@ -104,12 +126,13 @@ $(document).ready(function() {
 function editCoa(uuid) {
     $.get('/coa/show/' + uuid, function(res) {
         $('#uuid').val(res.uuid);
-        $('#kode').val(res.kode);
-        $('#nama').val(res.nama);
-        $('#tipe').val(res.tipe);
+        $('#kode_coa').val(res.kode_coa);
+        $('#nama_coa').val(res.nama_coa);
+        $('#tipe_coa').val(res.tipe_coa);
         $('#pos_laporan').val(res.pos_laporan);
         $('#saldo_normal').val(res.saldo_normal);
         $('#kode_parent').val(res.kode_parent);
+        $('#modalCoaLabel').text('Edit Data COA');
         $('#m_create').modal('show');
     });
 }

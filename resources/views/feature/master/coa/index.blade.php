@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <table class="table m-table m-table--head-bg-brand" id="viewtabel">
+                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
                         <thead>
                         <tr>
                             <th>Kode Akun</th>
@@ -73,63 +73,90 @@
     </div>
 </div>
 <!--begin::Modal-->
-<div class="modal fade" id="m_create" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="formCoa">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">COA</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div> 
-                <div class="modal-body">
-                    <input type="hidden" id="uuid" name="uuid">
-                    <h5>Akun Parent</h5>
-                    <div class="row">
-                        <div class="col-lg-6 mb-2">
-                            <p class="mb-1">Kode Parent</p>
-                            <h6>11</h6>
-                        </div>
-                        <div class="col-lg-6 mb-2">
-                            <p class="mb-1">Nama Parent</p>
-                            <h6>Aset Lancar</h6>
-                        </div>
-                        <div class="col-lg-6 mb-2">
-                            <p class="mb-1">Tipe Akun</p>
-                            <h6>Asset</h6>
-                        </div>
-                        <div class="col-lg-6 mb-2">
-                            <p class="mb-1">POS Laporan</p>
-                            <h6>Neraca</h6>
-                        </div>
-                        <div class="col-lg-6 mb-2">
-                            <p class="mb-1">Saldo</p>
-                            <h6>Neraca</h6>
-                        </div>
-                    </div>
-                    <hr/>
-                    <div class="form-group m-form__group">
-                        <label for="exampleInputEmail1">Kode Akun</label>
-                        <div class="input-group m-input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">11</span>
-                            </div>
-                            <input type="text" class="form-control" aria-describedby="basic-addon1">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="form-control-label">Nama Akun</label>
-                        <input type="text" class="form-control" id="recipient-name">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
+<div class="modal fade" id="m_create" tabindex="-1" role="dialog" aria-labelledby="modalCoaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="modalCoaLabel">Tambah / Edit Data COA</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <form id="formCoa" autocomplete="off">
+        <div class="modal-body">
+          
+          <!-- hidden id -->
+          <input type="hidden" id="uuid" name="uuid">
+
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label">Kode COA <span class="text-danger">*</span></label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" id="kode_coa" name="kode_coa" placeholder="Masukkan kode COA">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label">Nama COA <span class="text-danger">*</span></label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" id="nama_coa" name="nama_coa" placeholder="Masukkan nama COA">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label">Tipe COA <span class="text-danger">*</span></label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" id="tipe_coa" name="tipe_coa" placeholder="Masukkan tipe COA">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label">Pos Laporan <span class="text-danger">*</span></label>
+            <div class="col-md-8">
+              <select class="form-control" id="pos_laporan" name="pos_laporan">
+                <option value="">-- Pilih Pos Laporan --</option>
+                <option value="Neraca">Neraca</option>
+                <option value="Laba Rugi">Laba Rugi</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label">Saldo Normal <span class="text-danger">*</span></label>
+            <div class="col-md-8">
+              <select class="form-control" id="saldo_normal" name="saldo_normal">
+                <option value="">-- Pilih Saldo Normal --</option>
+                <option value="Debit">Debit</option>
+                <option value="Kredit">Kredit</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label">Kode Parent <span class="text-danger">*</span></label>
+            <div class="col-md-8">
+              <select class="form-control" id="kode_parent" name="kode_parent">
+                <option value="">-- Pilih Parent --</option>
+                <!-- Data parent COA diisi via AJAX -->
+              </select>
+            </div>
+          </div>
+
         </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="la la-times"></i> Tutup
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="la la-save"></i> Simpan
+          </button>
+        </div>
+      </form>
+
     </div>
+  </div>
 </div>
 
 <!--end::Modal-->
