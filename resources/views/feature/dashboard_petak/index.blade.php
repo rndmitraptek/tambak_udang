@@ -35,7 +35,7 @@
                             </h3>
                         </div>
                     </div>
-                    <div class="m-portlet__head-tools">
+                    {{-- <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <button id="btnTambah" class="btn m-btn m-btn--gradient-from-focus m-btn--gradient-to-danger">
@@ -46,7 +46,7 @@
                                 </button>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="m-portlet__body">
                     <canvas id="myChart_<% i.petak_id %>"></canvas>
