@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id('id_role');
             $table->uuid('uuid');
             $table->string('role');
+            $table->boolean('dashboard')->default(false);
             $table->text('keterangan');
             $table->timestamps();
         });

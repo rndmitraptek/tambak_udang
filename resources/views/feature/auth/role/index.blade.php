@@ -158,6 +158,12 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <ul class="menu-tree">
+                                    <li>
+                                        <label class="m-checkbox m-checkbox--success">
+                                            <input type="checkbox" ng-model="input.dashboard"> <i class=""></i> Dashboard Grafik Simulasi
+                                            <span></span>
+                                        </label>
+                                    </li>
                                     <li ng-repeat="menu in menu">
                                         <label class="m-checkbox m-checkbox--success">
                                             <input type="checkbox" ng-model="menu.checked"> <i class="<%menu.icon%>"></i> <%menu.label%>

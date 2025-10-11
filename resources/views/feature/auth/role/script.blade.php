@@ -12,6 +12,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             scrollCollapse: !0,
             columns: [
                 { data: 'role', title: 'role' },
+                { data: 'dashboard', title: 'dashboard' },
                 { data: 'keterangan', title: 'keterangan' },
                 { data: 'created_at', title: 'created_at' },
                 { data: 'updated_at', title: 'updated_at' },
@@ -261,7 +262,8 @@ app.controller("myCtrl", function($scope,$http,API) {
         })
         $http.post("{{ route('auth.role.update_menu') }}",{
             data    : $scope.menu,
-            id_role : $scope.id_role
+            id_role : $scope.id_role,
+            dashboard : $scope.input.dashboard
         })
         .then(function(res){
             if(res.data.success){

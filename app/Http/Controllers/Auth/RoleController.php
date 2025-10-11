@@ -156,6 +156,9 @@ class RoleController extends Controller
 
     function update_menu(Request $req){
         RoleMenuModel::where('id_role',$req->id_role)->delete();
+        RoleModel::where('id_role',$req->id_role)->update([
+            'dashboard'=>$req->dashboard
+        ]);
         foreach($req->data as $menu){
             if($menu['checked']){
                 RoleMenuModel::create([
