@@ -38,7 +38,7 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button id="btnTambah" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button id="btnTambah" ng-click="generade_nomor()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-map-marker"></i>
                                         <span>Tambah Lokasi</span>
@@ -81,7 +81,7 @@
                     <input type="hidden" id="uuid" name="uuid">
                     <div class="form-group">
                         <label>Kode Lokasi</label>
-                        <input type="text" class="form-control" id="kode_lokasi" name="kode_lokasi" required>
+                        <input type="text" class="form-control" ng-model='kode_lokasi' id="kode_lokasi" name="kode_lokasi" required readonly>
                     </div>
                     <div class="form-group">
                         <label>Nama Lokasi</label>

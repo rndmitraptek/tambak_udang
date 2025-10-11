@@ -32,6 +32,7 @@ $(document).ready(function() {
     $('#btnTambah').click(function() {
         $('#formLokasi')[0].reset();
         $('#uuid').val('');
+        $('#kode_lokasi').val("{{ \App\Helpers\GeneradeNomorHelper::sort('lokasi'); }}");
         $('#m_create').modal('show');
     });
 

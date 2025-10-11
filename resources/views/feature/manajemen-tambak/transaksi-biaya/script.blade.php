@@ -11,6 +11,7 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.tambah = function(){
         $scope.form = "input";
         formTransaksi.reset();
+        $('#no_transaksi').val("{{ \App\Helpers\GeneradeNomorHelper::long('transaksi biaya'); }}");
     }
     $scope.kembali = function(){
         $scope.form = "list";

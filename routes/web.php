@@ -42,5 +42,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/pembayaran_piutang_customer',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class,'index']);
     Route::get('/dashboard',[App\Http\Controllers\DashboardController::class,'index']);
     Route::get('/dashboard_petak/{uuid_siklus}',[App\Http\Controllers\DashboardController::class,'dashboard_petak']);
+    Route::get('/generate-nomor-long/{keterangan}', function ($keterangan) {
+        return response()->json([
+            'nomor' => \App\Helpers\GeneradeNomorHelper::long($keterangan)
+        ]);
+    })->name('generate.nomor.long');
+    Route::get('/generate-nomor-sort/{keterangan}', function ($keterangan) {
+        return response()->json([
+            'nomor' => \App\Helpers\GeneradeNomorHelper::sort($keterangan)
+        ]);
+    })->name('generate.nomor.sort');
 });
 

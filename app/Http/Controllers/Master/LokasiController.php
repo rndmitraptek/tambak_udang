@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SetupLokasi;
@@ -48,7 +49,7 @@ class LokasiController extends Controller
         ]);
 
         $lokasi = SetupLokasi::create([
-            'kode_lokasi' => $request->kode_lokasi,
+            'kode_lokasi' => GeneradeNomorHelper::sort_update('lokasi'),
             'nama_lokasi' => $request->nama_lokasi,
             'alamat_lokasi' => $request->alamat_lokasi,
         ]);

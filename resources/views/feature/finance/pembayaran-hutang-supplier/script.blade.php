@@ -300,7 +300,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                 break;
             default:
                 console.log("Nilai tidak diketahui");
-            }
+        }
         swal({title: "Presesing...!",text: "Please Wait",
             onOpen: function() {
                 swal.showLoading()
