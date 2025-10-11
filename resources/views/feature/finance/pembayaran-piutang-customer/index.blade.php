@@ -175,18 +175,18 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button type="button" ng-click="kembali()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
-                                    <span>
-                                        <i class="la la-arrow-left"></i>
-                                        <span>Kembali ke List Pembayaran</span>
-                                    </span>
-                                </button>
-                            </li>
-                            <li class="m-portlet__nav-item">
                                 <button ng-click="batal()" class="btn btn-danger m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-close"></i>
                                         <span>Batal Transaksi Pembayaran Piutang</span>
+                                    </span>
+                                </button>
+                            </li>
+                            <li class="m-portlet__nav-item">
+                                <button type="button" ng-click="kembali()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-arrow-left"></i>
+                                        <span>Kembali ke List Pembayaran</span>
                                     </span>
                                 </button>
                             </li>
@@ -271,7 +271,6 @@
                                         <th style="width: 200px">Rekening</th>
                                         <th style="width: 200px">Waktu Transfer</th>
                                         <th style="width: 200px">Nominal Transfer</th>
-                                        <th style="width: 200px">Biaya Transfer</th>
                                         <th style="width: 200px">Bank Tujuan</th>
                                     </tr>
                                 </thead>
@@ -281,7 +280,6 @@
                                         <td><% i.bank_pengirim %> <% i.atas_nama_pengirim %> <% i.no_rekening_pengirim %></td>
                                         <td><% i.waktu_transfer %></td>
                                         <td class="text-right"><% i.nominal | currency:'' %></td>
-                                        <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
                                         <td><% i.rekening_bank.nama_bank %> <% i.rekening_bank.no_rekening %></td>
                                     </tr>
                                 </tbody>
@@ -295,7 +293,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 50px">#</th>
-                                        <th style="width: 200px">Rekening</th>
+                                        {{-- <th style="width: 200px">Rekening</th> --}}
                                         <th style="width: 200px">Nomor Giro</th>
                                         <th style="width: 200px">Jatuh Tempo</th>
                                         <th style="width: 200px">Nominal Giro</th>
@@ -305,7 +303,7 @@
                                 <tbody>
                                     <tr ng-repeat="i in detail.giro">
                                         <td><% $index + 1 %></td>
-                                        <td><% i.rekening_bank.nama_bank %> <% i.rekening_bank.no_rekening %></td>
+                                        {{-- <td><% i.rekening_bank.nama_bank %> <% i.rekening_bank.no_rekening %></td> --}}
                                         <td><% i.no_giro %></td>
                                         <td><% i.jatuh_tempo%></td>
                                         <td class="text-right"><% i.nominal | currency:'' %></td>
@@ -428,7 +426,7 @@
                                 <input type="text" class="form-control text-right" input-currency ng-model="form_transfer.nominal" >
                             </div>
                         </div>
-                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important;display:none">
                             <label for="recipient-name" class="col-4 col-form-label">Biaya Transfer</label>
                             <div class="col-8">
                                 <input type="text" class="form-control text-right" input-currency ng-model="form_transfer.biaya_transfer" >
@@ -475,7 +473,6 @@
                                     <th style="width: 200px">Rekening</th>
                                     <th style="width: 200px">Waktu Transfer</th>
                                     <th style="width: 200px">Nominal Transfer</th>
-                                    <th style="width: 200px">Biaya Transfer</th>
                                     <th style="width: 200px">Bank Tujuan</th>
                                     <th style="width:40px"></th>
                                 </tr>
@@ -486,7 +483,6 @@
                                     <td><% i.bank_pengirim %> <% i.atas_nama_pengirim %> <% i.no_rekening_pengirim %></td>
                                     <td><% i.waktu_transfer %></td>
                                     <td class="text-right"><% i.nominal | currency:'' %></td>
-                                    <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
                                     <td><% i.rekening %></td>
                                     <td><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
                                 </tr>
@@ -503,7 +499,7 @@
                 </div>
                 <div class="row" ng-show="input.metode_bayar=='GIRO'">
                     <div class="col-lg-4">
-                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important;display:none">
                             <label class="col-4 col-form-label">Rekening</label>
                             <div class="col-8">
                                 <div class="input-group">
@@ -583,7 +579,7 @@
                             <thead>
                                 <tr>
                                     <th style="width: 50px">#</th>
-                                    <th style="width: 200px">Rekening</th>
+                                    {{-- <th style="width: 200px">Rekening</th> --}}
                                     <th style="width: 200px">Nomor Giro</th>
                                     <th style="width: 200px">Jatuh Tempo</th>
                                     <th style="width: 200px">Nominal Giro</th>
@@ -594,7 +590,7 @@
                             <tbody>
                                 <tr ng-repeat="i in input.giro">
                                     <td><% $index + 1 %></td>
-                                    <td><% i.rekening %></td>
+                                    {{-- <td><% i.rekening %></td> --}}
                                     <td><% i.no_giro %></td>
                                     <td><% i.jatuh_tempo%></td>
                                     <td class="text-right"><% i.nominal | currency:'' %></td>

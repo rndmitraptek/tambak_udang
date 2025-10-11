@@ -103,10 +103,11 @@ class PembayaranPiutangCustomerController extends Controller
                 $insert_transfer = PembayaranPiutangCustomerTransferModel::create($detail);
             }
             foreach($req->giro as $d){
-                $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekeing'])->first();
+                // $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekeing'])->first();
                 $detail = $d;
                 $detail['id_pembayaran_piutang_customer']   = $insert->id_pembayaran_piutang_customer;
-                $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
+                // $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
+                $detail['id_rekening_bank']                 = null;
                 $insert_giro = PembayaranPiutangCustomerGiroModel::create($detail);
             }
             foreach($req->tunai as $d){

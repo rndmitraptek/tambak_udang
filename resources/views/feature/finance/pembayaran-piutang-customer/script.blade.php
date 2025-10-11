@@ -200,21 +200,24 @@ app.controller("myCtrl", function($scope,$http,API) {
     }
 
     $scope.handleClickProsesPayment = function(){
-        $('#m_proses_bayar').modal('show');
-        $scope.form_transfer = {};
-        $scope.form_transfer.nominal = $scope.total_bayar;
-        $scope.form_giro = {};
-        $scope.form_giro.nominal = $scope.total_bayar;
-        $scope.form_giro.biaya_materai = 10000;
-        $scope.form_giro.is_biaya_materai = false;
-        $scope.form_giro.nominal_materai = 0;
-        $scope.form_giro.selisih_bayar = 0;
-        $scope.form_tunai = {};
-        $scope.form_tunai.nominal = $scope.total_bayar;
-        $scope.input.transfer = [];
-        $scope.input.tunai = [];
-        $scope.input.giro = [];
-
+        if($scope.total_bayar <=0){
+            swal({title: "Total Bayar Tidak boleh kurang dari 0 ",text:'',type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        }else{
+            $('#m_proses_bayar').modal('show');
+            $scope.form_transfer = {};
+            $scope.form_transfer.nominal = $scope.total_bayar;
+            $scope.form_giro = {};
+            $scope.form_giro.nominal = $scope.total_bayar;
+            $scope.form_giro.biaya_materai = 10000;
+            $scope.form_giro.is_biaya_materai = false;
+            $scope.form_giro.nominal_materai = 0;
+            $scope.form_giro.selisih_bayar = 0;
+            $scope.form_tunai = {};
+            $scope.form_tunai.nominal = $scope.total_bayar;
+            $scope.input.transfer = [];
+            $scope.input.tunai = [];
+            $scope.input.giro = [];
+        }
     }
 
     $scope.handleClickTambahPembayaran = function(){

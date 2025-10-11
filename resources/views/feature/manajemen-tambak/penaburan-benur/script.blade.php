@@ -151,12 +151,22 @@ app.controller("myCtrl", function($scope,$http) {
     }
     $scope.add_petak = function(){
         $('#m_petak').modal('show');
+        $scope.data_petak.forEach(function(item, index) {
+            cek = $scope.detail.find(function(detail){
+                return detail.uuid_petak == item.uuid
+            })
+            if(cek){
+                item.is_add = true;
+            }else{
+                item.is_add = false;
+            }
+        })
+        console.log($scope.data_petak);
     }
     $scope.add_detail = function(){
         console.log($scope.data_petak);
         $scope.data_petak.forEach(function(item, index) {
             if(item.checked){
-                $scope.data_petak[index].is_add = true;
                 $scope.detail.push({
                     blok            : item.blok,
                     petak           : item.petak,
@@ -174,15 +184,15 @@ app.controller("myCtrl", function($scope,$http) {
                     jumlah_actual   : 0,
                     subtotal_actual : 0
                 })
-            }else{
-                $scope.data_petak[index].is_add = false;
+                item.checked = false;
             }
         });
         $('#m_petak').modal('hide');
     }
 
     $scope.benurColumns = [
-        { data: 'kode_supplier', title: 'Kode Benur' },
+        { data: 'kode_benur', title: 'Kode Benur' },
+        { data: 'kode_supplier', title: 'Kode supplier' },
         { data: 'jenis', title: 'Jenis Benur' },
         { data: 'harga', title: 'Harga' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
     ];
@@ -200,6 +210,11 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.change_benur = function(index){
         $scope.index_detail = index;
         $('#lookup_benur').modal('show');
+    }
+    $scope.remove_detail = function(index,item){
+        $scope.detail.splice(index, 1);
+        $scope.hitung();
+
     }
     $scope.total_harga_bruto = 0;
     $scope.total_harga_neto = 0;

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_pembayaran_piutang_customer_giro');
             $table->unsignedBigInteger('id_pembayaran_piutang_customer');
             $table->foreign('id_pembayaran_piutang_customer')->references('id_pembayaran_piutang_customer')->on('pembayaran_piutang_customer')->onDelete('restrict');
-            $table->unsignedBigInteger('id_rekening_bank');
+            $table->unsignedBigInteger('id_rekening_bank')->nullable();
             $table->foreign('id_rekening_bank')->references('id_rekening_bank')->on('setup_rekening_bank')->onDelete('restrict');
             $table->string('no_giro',100);
             $table->date('terima_giro');

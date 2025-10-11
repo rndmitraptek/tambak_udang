@@ -76,9 +76,10 @@ class PenaburanBenurController extends Controller
     }
 
     public function get_benur(Request $request){
-        $query = SetupBenur::query()->select(['uuid','kode_supplier','jenis_benur as jenis','harga_benur as harga']);
+        $query = SetupBenur::query()->select(['uuid','kode_benur','kode_supplier','jenis_benur as jenis','harga_benur as harga']);
         if ($request->has('textSearch') && $request->textSearch != '') {
             $text = strtoupper($request->textSearch);
+            $query->where(DB::raw('UPPER(kode_benur)'), 'like', "%{$text}%");
             $query->where(DB::raw('UPPER(kode_supplier)'), 'like', "%{$text}%");
             $query->orWhere(DB::raw('UPPER(jenis)'), 'like', "%{$text}%");
         }

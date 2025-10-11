@@ -107,9 +107,9 @@
                                 <div class="form-group m-form__group">
                                     <label>Pillih PO</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" ng-model="input.no_po" name="no_po" placeholder="Search for...">
+                                        <input type="text" class="form-control" ng-model="input.no_po" name="no_po" placeholder="Search for..." readonly>
                                         <div class="input-group-append">
-                                            <button ng-click="cari_po()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
+                                            <button ng-disabled="detail.length!=0" ng-click="cari_po()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -173,7 +173,7 @@
                                             <td><% item.blok %></td>
                                             <td><% item.petak %></td>
                                             <td>
-                                            <button type="button" ng-class="{'btn btn-outline-brand btn-sm':item.kode_benur != '','btn btn-outline-danger btn-sm':item.kode_benur == ''}" class="btn btn-outline-brand btn-sm" style="padding: 3px;" ng-click="change_benur($index)"><% item.kode_benur=='' ? 'pillih kode benur' : item.kode_benur%></button>
+                                                <button type="button" ng-class="{'btn btn-outline-brand btn-sm':item.kode_benur != '','btn btn-outline-danger btn-sm':item.kode_benur == ''}" class="btn btn-outline-brand btn-sm" style="padding: 3px;" ng-click="change_benur($index)"><% item.kode_benur=='' ? 'pillih kode benur' : item.kode_benur%></button>
                                             </td>
                                             <td><% item.jenis_benur %></td>
                                             <td class="text-right"><input style="width: 60px" class="text-right" type="text" input-currency ng-model="item.harga_bruto" ng-change="hitung()"></td>
@@ -185,7 +185,7 @@
                                             <td class="text-right"><input style="width: 60px" class="text-right" type="text" input-currency ng-model="item.harga_actual" ng-change="hitung()"></td>
                                             <td class="text-right"><input style="width: 90px;"  class="text-right" type="text" input-currency ng-model="item.jumlah_actual" ng-change="hitung()"></td>
                                             <td class="text-right"><input style="width: 120px;" class="text-right" type="text" input-currency ng-model="item.subtotal_actual" readonly></td>
-                                            <td ><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="remove" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
+                                            <td ><button ng-click="remove_detail($index,item)" type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="remove" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
@@ -233,7 +233,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat='item in data_petak'>
+                        <tr ng-repeat='item in data_petak | filter:{is_add:false}' >
                             <td><input ng-model="item.checked" type="checkbox"></td>
                             <td><% item.blok %></td>
                             <td><% item.petak %></td>

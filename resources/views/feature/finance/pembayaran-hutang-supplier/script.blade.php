@@ -197,34 +197,37 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.total_hutang = 0;
         $scope.input.hutang.forEach(function(hutang, index) {
             if(hutang.checked){
-                $scope.total_hutang = $scope.total_hutang + hutang.bayar;
+                $scope.total_hutang = $scope.total_hutang + parseFloat(hutang.bayar);
             }
         });
         $scope.total_piutang = 0;
         $scope.input.piutang.forEach(function(piutang, index) {
             if(piutang.checked){
-                $scope.total_piutang = $scope.total_piutang + piutang.jumlah_piutang;
+                $scope.total_piutang = $scope.total_piutang + parseFloat(piutang.jumlah_piutang);
             }
         });
         $scope.total_bayar = $scope.total_hutang - $scope.total_piutang;
     }
 
     $scope.handleClickProsesPayment = function(){
-        $('#m_proses_bayar').modal('show');
-        $scope.form_transfer = {};
-        $scope.form_transfer.nominal = $scope.total_bayar;
-        $scope.form_giro = {};
-        $scope.form_giro.nominal = $scope.total_bayar;
-        $scope.form_giro.biaya_materai = 10000;
-        $scope.form_giro.is_biaya_materai = false;
-        $scope.form_giro.nominal_materai = 0;
-        $scope.form_giro.selisih_bayar = 0;
-        $scope.form_tunai = {};
-        $scope.form_tunai.nominal = $scope.total_bayar;
-        $scope.input.transfer = [];
-        $scope.input.tunai = [];
-        $scope.input.giro = [];
-
+        if($scope.total_bayar <=0){
+            swal({title: "Total Bayar Tidak boleh kurang dari 0 ",text:'',type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        }else{
+            $('#m_proses_bayar').modal('show');
+            $scope.form_transfer = {};
+            $scope.form_transfer.nominal = $scope.total_bayar;
+            $scope.form_giro = {};
+            $scope.form_giro.nominal = $scope.total_bayar;
+            $scope.form_giro.biaya_materai = 10000;
+            $scope.form_giro.is_biaya_materai = false;
+            $scope.form_giro.nominal_materai = 0;
+            $scope.form_giro.selisih_bayar = 0;
+            $scope.form_tunai = {};
+            $scope.form_tunai.nominal = $scope.total_bayar;
+            $scope.input.transfer = [];
+            $scope.input.tunai = [];
+            $scope.input.giro = [];
+        }
     }
 
     $scope.handleClickTambahPembayaran = function(){
@@ -249,20 +252,23 @@ app.controller("myCtrl", function($scope,$http,API) {
     }
 
     
-
+    $scope.total_transfer = 0;
     $scope.getTotalTransfer = function() {
         var total = 0;
         angular.forEach($scope.input.transfer, function(item) {
             total += parseFloat(item.nominal) || 0;
         });
+        $scope.total_transfer = total;
         return total;
     };
 
+    $scope.total_giro = 0;
     $scope.getTotalGiro = function() {
         var total = 0;
         angular.forEach($scope.input.giro, function(item) {
             total += parseFloat(item.nominal) || 0;
         });
+        $scope.total_giro = total;
         return total;
     };
 
@@ -273,6 +279,28 @@ app.controller("myCtrl", function($scope,$http,API) {
     }
 
     $scope.simpan_pembayaran_hutang = function(){
+        switch ($scope.input.metode_bayar) {
+            case 'TRANSFER':
+                if($scope.total_bayar !=$scope.total_transfer){
+                    swal({title: "Total Transfer tidak sama dengan total bayar ",text:'',type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+                    return false;
+                }
+                break;
+            case 'GIRO':
+                if($scope.total_bayar !=$scope.total_giro){
+                    swal({title: "Total Giro tidak sama dengan total bayar  ",text:'',type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+                    return false;
+                }
+                break;
+            case 'TUNAI':
+                if($scope.total_bayar !=$scope.form_tunai.nominal){
+                    swal({title: "Total Pembayaran tidak sama dengan total tagihan  ",text:'',type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+                    return false;
+                }
+                break;
+            default:
+                console.log("Nilai tidak diketahui");
+            }
         swal({title: "Presesing...!",text: "Please Wait",
             onOpen: function() {
                 swal.showLoading()

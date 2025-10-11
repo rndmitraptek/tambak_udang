@@ -115,12 +115,12 @@
                                         <th style="width: 50px">#</th>
                                         <th style="width: 200px">Faktur</th>
                                         <th style="width: 200px">Nomor Faktur</th>
+                                        <th style="width: 200px">Tanggal Nota</th>
                                         <th style="width: 200px">Nominal</th>
                                         <th style="width: 200px">Sudah di Bayar</th>
                                         <th style="width: 200px">Belum di Bayar</th>
                                         <th style="width: 200px">Jumlah Bayar</th>
-                                        <th style="width: 200px">Tanggal Nota</th>
-                                        <th style="width: 100px">Created By</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -128,19 +128,17 @@
                                         <td><input type="checkbox" ng-model="i.checked" ng-change="hitung()"></td>
                                         <td><% i.reff_trans %></td>
                                         <td><% i.no_faktur %></td>
+                                        <td><% i.tanggal_hutang %></td>
                                         <td class="text-right"><% i.jumlah_hutang | currency:'' %></td>
                                         <td class="text-right"><% i.dibayar | currency:'' %></td>
                                         <td class="text-right"><% i.sisa | currency:'' %></td>
                                         <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-change="hitung()" ng-model="i.bayar" ng-change="hitung_hutang()"></td>
-                                        <td><% i.tanggal_hutang %></td>
-                                        <td><% i.created_by %></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="6" class="text-right">Total Hutang</th>
+                                        <th colspan="7" class="text-right">Total Hutang</th>
                                         <th class="text-right"><% total_hutang | currency:'' %></th>
-                                        <th colspan="2"></th> 
                                     </tr>
                                 </tfoot>
                             </table>
@@ -156,9 +154,8 @@
                                         <th style="width: 50px">#</th>
                                         <th style="width: 200px">Faktur</th>
                                         <th style="width: 200px">Nomor Faktur</th>
-                                        <th style="width: 200px">Nominal Piutang</th>
                                         <th style="width: 200px">Tanggal Nota</th>
-                                        <th style="width: 40px">Created By</th>
+                                        <th style="width: 200px">Nominal Piutang</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -166,16 +163,14 @@
                                         <td><input type="checkbox" ng-model="i.checked" ng-change="hitung()"></td>
                                         <td><% i.reff_trans %></td>
                                         <td><% i.no_faktur %></td>
-                                        <td class="text-right"><% i.jumlah_piutang | currency:'' %></td>
                                         <td><% i.tanggal_piutang %></td>
-                                        <td><% i.created_by %></td>
+                                        <td class="text-right"><% i.jumlah_piutang | currency:'' %></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="3" class="text-right">Total Piutang</th>
+                                        <th colspan="4" class="text-right">Total Piutang</th>
                                         <th class="text-right"><% total_piutang | currency:'' %></th>
-                                        <th colspan="2"></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -222,14 +217,6 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button type="button" ng-click="kembali()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
-                                    <span>
-                                        <i class="la la-arrow-left"></i>
-                                        <span>Kembali ke List Pembayaran</span>
-                                    </span>
-                                </button>
-                            </li>
-                            <li class="m-portlet__nav-item">
                                 <button ng-click="batal()" class="btn btn-danger m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-close"></i>
@@ -237,6 +224,15 @@
                                     </span>
                                 </button>
                             </li>
+                            <li class="m-portlet__nav-item">
+                                <button type="button" ng-click="kembali()" class="btn btn-secondary m-btn m-btn--custom m-btn--icon m-btn--air">
+                                    <span>
+                                        <i class="la la-arrow-left"></i>
+                                        <span>Kembali ke List Pembayaran</span>
+                                    </span>
+                                </button>
+                            </li>
+                            
                         </ul>
                     </div>
                 </div>

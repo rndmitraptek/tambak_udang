@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PembelianPakan;
 use App\Models\Finance\PembelianPakanDetail;
-use App\Models\Finance\HutangSupplier;
 use App\Models\HistoryKartuStok;
 use App\Models\SetupBenur;
 use App\Models\SetupLokasi;
@@ -18,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\StokHelper;
+use App\Models\Finance\HutangSupplierModel;
+use App\Models\Finance\PoModel;
 
 class PembelianPakanController extends Controller
 {
@@ -160,7 +161,7 @@ class PembelianPakanController extends Controller
             $insert = PembelianPakan::create($data);
 
             //insert hutang supplier (kredit)
-            HutangSupplier::create([
+            HutangSupplierModel::create([
                 'no_faktur' => $data['no_pembelian'],
                 'tanggal_hutang' => $data['tanggal_pembelian'],
                 'tanggal_jatuh_tempo' => $data['tanggal_pembelian'],
@@ -220,7 +221,7 @@ class PembelianPakanController extends Controller
             }
 
             // Hapus hutang supplier terkait pembelian ini
-            HutangSupplier::where('reff_id', $pembelian->id_pembelian)->where('reff_trans', 'PEMBELIAN_PAKAN')->delete();
+            HutangSupplierModel::where('reff_id', $pembelian->id_pembelian)->where('reff_trans', 'PEMBELIAN_PAKAN')->delete();
 
             $pembelian->delete(); // jika ingin hapus record pembelian
 
