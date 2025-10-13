@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Traits\CreatedUpdatedBy;
 use App\Traits\HasUuid;
+use App\Traits\LogActivity;
 
 class SetupLokasi extends Model
 {
-    use SoftDeletes,HasUuid,CreatedUpdatedBy;
+    use SoftDeletes,HasUuid,CreatedUpdatedBy,LogActivity;
 
     protected $table = 'setup_lokasi';
     protected $primaryKey = 'id_lokasi';

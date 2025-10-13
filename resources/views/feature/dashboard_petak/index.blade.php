@@ -30,9 +30,11 @@
                             <span class="m-portlet__head-icon m--hide">
                                 <i class="la la-gear"></i>
                             </span>
-                            <h3 class="m-portlet__head-text">
+                            <h3 class="m-portlet__head-text mr-3">
                                <% i.petak.blok.nama_blok %>, <% i.petak.nama_petak %>
                             </h3>
+                            <span ng-show="i.status_panen=='AKTIF'" class="m-badge m-badge--wide m-badge--warning"><% i.status_panen %></span>
+                            <span ng-show="i.status_panen=='FINAL'" class="m-badge m-badge--wide m-badge--info"><% i.status_panen %></span>
                         </div>
                     </div>
                     {{-- <div class="m-portlet__head-tools">
