@@ -192,7 +192,8 @@ class PembelianPakanController extends Controller
                     $data['no_pembelian'],
                     $data['lokasi_id'],
                     $insert->id_pembelian,
-                    $data['tanggal_pembelian']
+                    $data['tanggal_pembelian'],
+                    $d['harga']
                 );
             }
             DB::commit();
@@ -216,7 +217,8 @@ class PembelianPakanController extends Controller
                     $pembelian->no_pembelian,
                     $pembelian->lokasi_id,
                     $item->id_pembelian,
-                    'keluar'
+                    'keluar',
+                    $item->harga
                 );
             }
 

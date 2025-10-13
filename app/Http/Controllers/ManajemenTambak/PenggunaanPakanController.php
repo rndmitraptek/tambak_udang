@@ -182,7 +182,8 @@ class PenggunaanPakanController extends Controller
                     $data['no_penggunaan'],
                     $lokasi->id_lokasi,
                     $insert->id_penggunaan,
-                    $data['tanggal_penggunaan']
+                    $data['tanggal_penggunaan'],
+                    $d['harga_per_kg']
                 );
             }
             DB::commit();
@@ -211,7 +212,8 @@ class PenggunaanPakanController extends Controller
                     $pembelian->no_penggunaan,
                     $pembelian->lokasi_id,
                     $item->id_penggunaan,
-                    'masuk'
+                    'masuk',
+                    $item->harga_per_kg
                 );
             }
 

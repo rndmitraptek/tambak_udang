@@ -172,7 +172,8 @@ class ReturPakanController extends Controller
                     $data['no_retur'],
                     $lokasi->id_lokasi,
                     $insert->id_retur,
-                    $data['tanggal_retur']
+                    $data['tanggal_retur'],
+                    $d['harga_per_kg']
                 );
             }
             DB::commit();
@@ -197,7 +198,8 @@ class ReturPakanController extends Controller
                     $retur->no_retur,
                     $retur->lokasi_id,
                     $item->id_retur,
-                    'masuk'
+                    'masuk',
+                    $item->harga_per_kg
                 );
             }
 

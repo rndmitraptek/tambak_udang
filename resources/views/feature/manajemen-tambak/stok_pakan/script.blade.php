@@ -24,14 +24,15 @@ app.controller("myCtrl", function($scope,$http) {
             serverSide: true,
             ajax: '/stok_pakan/show/' + uuid,
             columns: [
-                { data: 'tanggal', name: 'tanggal' },
-                { data: 'pakan', name: 'pakan.nama_pakan' },
-                { data: 'lokasi', name: 'lokasi.nama_lokasi' },
-                { data: 'transaksi', name: 'transaksi' },
-                { data: 'referensi_no', name: 'referensi_no' },
+                { data: 'tanggal', name: 'tanggal', sortable: false },
+                { data: 'pakan', name: 'pakan.nama_pakan', sortable: false },
+                { data: 'lokasi', name: 'lokasi.nama_lokasi', sortable: false },
+                { data: 'transaksi', name: 'transaksi', sortable: false },
+                { data: 'referensi_no', name: 'referensi_no', sortable: false },
                 { 
                     data: 'awal', 
                     name: 'awal',
+                    sortable: false,
                     className: 'text-right',
                     render: function(data) {
                         return data ? parseInt(data).toLocaleString('id-ID') : '-';
@@ -40,6 +41,7 @@ app.controller("myCtrl", function($scope,$http) {
                 { 
                     data: 'masuk', 
                     name: 'masuk',
+                    sortable: false,
                     className: 'text-right',
                     render: function(data) {
                         return data ? parseInt(data).toLocaleString('id-ID') : '-';
@@ -48,6 +50,7 @@ app.controller("myCtrl", function($scope,$http) {
                 { 
                     data: 'keluar', 
                     name: 'keluar',
+                    sortable: false,
                     className: 'text-right',
                     render: function(data) {
                         return data ? parseInt(data).toLocaleString('id-ID') : '-';
@@ -56,9 +59,46 @@ app.controller("myCtrl", function($scope,$http) {
                 { 
                     data: 'saldo', 
                     name: 'saldo',
+                    sortable: false,
                     className: 'text-right',
                     render: function(data) {
                         return data ? parseInt(data).toLocaleString('id-ID') : '-';
+                    }
+                },
+                { 
+                    data: 'nominal_awal', 
+                    name: 'nominal_awal',
+                    sortable: false,
+                    className: 'text-right',
+                    render: function(data) {
+                        return data ? 'Rp ' + parseInt(data).toLocaleString('id-ID') : '-';
+                    }
+                },
+                { 
+                    data: 'nominal_masuk', 
+                    name: 'nominal_masuk',
+                    sortable: false,
+                    className: 'text-right',
+                    render: function(data) {
+                        return data ? 'Rp ' + parseInt(data).toLocaleString('id-ID') : '-';
+                    }
+                },
+                { 
+                    data: 'nominal_keluar', 
+                    name: 'nominal_keluar',
+                    sortable: false,
+                    className: 'text-right',
+                    render: function(data) {
+                        return data ? 'Rp ' + parseInt(data).toLocaleString('id-ID') : '-';
+                    }
+                },
+                { 
+                    data: 'nominal_akhir', 
+                    name: 'nominal_akhir',
+                    sortable: false,
+                    className: 'text-right',
+                    render: function(data) {
+                        return data ? 'Rp ' + parseInt(data).toLocaleString('id-ID') : '-';
                     }
                 },
             ],
