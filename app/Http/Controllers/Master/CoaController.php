@@ -40,7 +40,7 @@ class CoaController extends Controller
 
     public function parentList()
     {
-        $coas = SetupCoa::whereNull('kode_parent')->get();
+        $coas = SetupCoa::get();
         return response()->json(['success' => true, 'data' => $coas]);
     }
 
