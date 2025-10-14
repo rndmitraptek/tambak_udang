@@ -208,8 +208,8 @@
                                     <tr ng-repeat="detail in detail.simulasi" >
                                         <td class="align-middle"><% detail.detail_biaya.petak.blok.nama_blok %></td>
                                         <td class="align-middle"><% detail.detail_biaya.petak.nama_petak %></td>
-                                        <td><input type="text" ng-model="detail.harga_per_kg" input-currency class="form-control text-right"></td>
-                                        <td><input type="text" ng-model="detail.biomassa" input-currency class="form-control text-right" ></td>
+                                        <td><input type="text" ng-model="detail.harga_per_kg" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right"></td>
+                                        <td><input type="text" ng-model="detail.biomassa" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right" ></td>
                                         <td><input type="text" ng-model="detail.pendapatan_simulasi" input-currency class="form-control text-right" ></td>
                                         <td><input type="text" ng-model="detail.pendapatan_actual_partial" input-currency class="form-control text-right" readonly value="<% detail.pendapatan_actual_partial %>" style="background-color: rgb(225, 213, 213);"></td>
                                     </tr>
@@ -217,9 +217,9 @@
                                     <tr ng-repeat="detail in detail.pendapatan">
                                         <td class="align-middle"><% detail.petak.blok.nama_blok %></td>
                                         <td class="align-middle"><% detail.petak.nama_petak %></td>
-                                        <td><input type="text" ng-model="detail.harga_per_kg" input-currency class="form-control text-right" value="<% detail.harga_per_kg %>"></td>
-                                        <td><input type="text" ng-model="detail.biomassa" input-currency class="form-control text-right" value="<% detail.biomassa %>"></td>
-                                        <td><input type="text" ng-model="detail.pendapatan_simulasi" input-currency class="form-control text-right" value="<% detail.pendapatan_simulasi %>"></td>
+                                        <td><input type="text" ng-model="detail.harga_per_kg" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right" value="<% detail.harga_per_kg %>"></td>
+                                        <td><input type="text" ng-model="detail.biomassa" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right" value="<% detail.biomassa %>"></td>
+                                        <td><input type="text" ng-model="detail.pendapatan_simulasi" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right" value="<% detail.pendapatan_simulasi %>"></td>
                                         <td><input type="text" ng-model="detail.pendapatan_actual_partial" input-currency class="form-control text-right" readonly value="<% detail.pendapatan_actual_partial %>" style="background-color: rgb(225, 213, 213);"></td>
                                     </tr>
                                 </tbody>

@@ -352,6 +352,13 @@ app.controller("myCtrl", function($scope,$http) {
     }
 
 
+    $scope.hitungPendapatanSimulasi = function(detail) {
+        const harga = parseFloat((detail.harga_per_kg || '0').toString().replace(/[^0-9.-]+/g,""));
+        const biomassa = parseFloat((detail.biomassa || '0').toString().replace(/[^0-9.-]+/g,""));
+        detail.pendapatan_simulasi = harga * biomassa;
+    };
+
+
     //save pendapatan
     $scope.save_pendapatan = function() {
         // data pendapatan bisa dari simulasi atau pendapatan tergantung kondisi
