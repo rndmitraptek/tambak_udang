@@ -66,7 +66,17 @@ app.controller("myCtrl", function($scope,$http) {
         $http.get(url)
         .then(function(res){
             if(res.data.success){
-                $scope.data_pakan = res.data.data;
+                let dataList = res.data.data || [];
+                // mapping ulang untuk hitung subtotal
+                $scope.data_pakan = dataList.map(item => {
+                    const jumlah = parseFloat(item.jumlah) || 0;
+                    const harga = parseFloat(item.harga) || 0;
+                    item.subtotal = jumlah * harga;
+
+                    return {
+                        ...item
+                    };
+                });
             }
             Swal.close();
         }).catch(function(error) {

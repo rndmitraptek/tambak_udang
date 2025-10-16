@@ -301,6 +301,26 @@ app.controller("myCtrl", function($scope,$http) {
             let data = tablePetak.rows().data().toArray();
             console.log("Data Petak:", data);
 
+            // jika penaburan benur / pembelian pakan
+            if($('#biaya-dropdown').val() ==1 || $('#biaya-dropdown').val() ==2){
+                const petakList =  $scope.detailPetakList || [];
+                console.log("Detail petak list:", petakList);
+                
+                // mapping ulang: isi biaya_perpetak berdasarkan petak_id
+                const mappedData = data.map(item => {
+                    const match = petakList.find(p => p.petak_id == item.petak_id);
+                    console.log("Mapping item:", item, "Match:", match);
+                    return {
+                        ...item,
+                        biaya_perpetak: match ? parseFloat(match.nominal_petak) : 0
+                    };
+                });
+
+                // timpa hasil aslinya
+                data = mappedData;
+                console.log("data after:", data);
+            }
+
             // Hitung total luas hanya untuk petak yang statusnya bukan FINAL
             let totalLuas = data.reduce((sum, row) => {
                 if (row.status_panen !== "FINAL") {
@@ -320,7 +340,9 @@ app.controller("myCtrl", function($scope,$http) {
                     row.biaya_perpetak = 0;
                 } else if (totalLuas > 0) {
                     row.persentase = ((luas / totalLuas) * 100).toFixed(2); // %
-                    row.biaya_perpetak = ((luas / totalLuas) * nominal).toFixed(0); // Rp
+                    if($('#biaya-dropdown').val() !=1 && $('#biaya-dropdown').val() !=2){
+                        row.biaya_perpetak = ((luas / totalLuas) * nominal).toFixed(0); // Rp
+                    }
                 } else {
                     row.persentase = 0;
                     row.biaya_perpetak = 0;
@@ -499,7 +521,7 @@ app.controller("myCtrl", function($scope,$http) {
         });
     });
 
-
+    $scope.detailPetakList = [];
     $scope.editTransaksi = function(uuid) {
         $.get('/transaksi-biaya/' + uuid, function(res) {
             $('#uuid').val(res.uuid);
@@ -512,6 +534,9 @@ app.controller("myCtrl", function($scope,$http) {
             
             $('#biaya-dropdown').val(res.biaya_id).trigger("change");
 
+            if(res.biaya_id==1 || res.biaya_id==2){
+                $scope.detailPetakList =res.siklus[0].petak;
+            }
             setTimeout(function () {
                 // kelompok biaya dari relasi biaya
                 let kelompok = res.biaya.kelompok;

@@ -19,6 +19,42 @@
     </div>
 </div> --}}
 
+<style>
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    }
+    .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+    }
+    .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .3s;
+    border-radius: 26px;
+    }
+    .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px; width: 20px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    }
+    input:checked + .slider {
+    background-color: #4caf50;
+    }
+    input:checked + .slider:before {
+    transform: translateX(24px);
+    }
+</style>
 <!-- END: Subheader -->
 <div class="m-content">
     <div class="row">
@@ -101,6 +137,13 @@
                                 <div class="form-group m-form__group">
                                     <label for="recipient-name" class="form-control-label">Tanggal Penaburan</label>
                                     <input type="text" class="form-control general_datepicker" id="tanggal_penaburan" name="tanggal_penaburan" ng-model="input.tanggal_penaburan" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="is_hutang" class="form-control-label d-block mb-2">Catat Hutang?</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="is_hutang" name="is_hutang" ng-model="input.is_hutang">
+                                        <span class="slider round"></span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-lg-4">

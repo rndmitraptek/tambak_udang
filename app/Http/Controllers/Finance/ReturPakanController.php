@@ -115,10 +115,11 @@ class ReturPakanController extends Controller
     public function get_pembelian_detail($uuid_pembelian){
         $pembelian = PembelianPakan::where('uuid',$uuid_pembelian)->firstOrFail();
         $data = DB::select("SELECT false as checked, sp.uuid as uuid_pakan,sp.nama_pakan,
-            sp.jenis_pakan,sp.kode_pakan, ppd.jumlah, ppd.harga, ppd.subtotal
+            sp.jenis_pakan,sp.kode_pakan, s.stok as jumlah, ppd.harga, ppd.subtotal
                     FROM pembelian_pakan_detail ppd
                     inner join setup_pakan sp on ppd.id_pakan=sp.id_pakan
-                    where ppd.id_pembelian = ? and sp.deleted_at is null",[$pembelian->id_pembelian]);
+                    inner join stok_pakan s on ppd.id_pakan=s.pakan_id AND s.lokasi_id=?
+                    where ppd.id_pembelian = ? and sp.deleted_at is null",[$pembelian->lokasi_id, $pembelian->id_pembelian]);
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
 

@@ -276,6 +276,7 @@ app.controller("myCtrl", function($scope,$http) {
                 url = url.replace(':uuid', $scope.input.uuid);
             }
             $scope.input.tanggal_penaburan      = $('#tanggal_penaburan').val();
+            $scope.input.is_hutang              = $('#is_hutang').is(':checked') ? 1 : 0;
             $scope.input.detail                 = $scope.detail;
             $scope.input.jumlah_bruto           = $scope.total_jumlah_bruto
             $scope.input.total_nominal_bruto    = $scope.total_harga_bruto

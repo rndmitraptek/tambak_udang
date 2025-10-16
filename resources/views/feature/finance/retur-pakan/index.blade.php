@@ -190,7 +190,7 @@
                             <th>#</th>
                             <th>Kode Pakan</th>
                             <th>Nama Pakan</th>
-                            <th>Jumlah (Kg)</th>
+                            <th>Sisa Stok (Kg)</th>
                             <th>Harga Per Kg</th>
                             <th>Subtotal</th>
                         </tr>

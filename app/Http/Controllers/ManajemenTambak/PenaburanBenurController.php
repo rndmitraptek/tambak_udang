@@ -157,17 +157,19 @@ class PenaburanBenurController extends Controller
                 ]);
             }
             // insert hutang supplier
-            $insert_hutang_supplier = HutangSupplierModel::create([
-                'id_supplier'           =>$po->id_supplier,
-                'no_faktur'             =>$data['no_penaburan_benur'],
-                'reff_id'               =>$insert->id_penaburan_benur,
-                'reff_trans'            =>'PENABURAN BENUR',
-                'tanggal_hutang'        =>$data['tanggal_penaburan'],
-                'tanggal_jatuh_tempo'   =>$data['tanggal_penaburan'],
-                'jumlah_hutang'         =>$data['total_nominal_bruto'],
-                'dibayar'               =>0,
-                'sisa'                  =>$data['total_nominal_bruto']
-            ]);
+            if (!empty($data['is_hutang']) && $data['is_hutang'] == 1) {
+                $insert_hutang_supplier = HutangSupplierModel::create([
+                    'id_supplier'           =>$po->id_supplier,
+                    'no_faktur'             =>$data['no_penaburan_benur'],
+                    'reff_id'               =>$insert->id_penaburan_benur,
+                    'reff_trans'            =>'PENABURAN BENUR',
+                    'tanggal_hutang'        =>$data['tanggal_penaburan'],
+                    'tanggal_jatuh_tempo'   =>$data['tanggal_penaburan'],
+                    'jumlah_hutang'         =>$data['total_nominal_bruto'],
+                    'dibayar'               =>0,
+                    'sisa'                  =>$data['total_nominal_bruto']
+                ]);
+            }
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
         }catch(\Exception $err) {
