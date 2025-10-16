@@ -161,17 +161,19 @@ class PembelianPakanController extends Controller
             $insert = PembelianPakan::create($data);
 
             //insert hutang supplier (kredit)
-            HutangSupplierModel::create([
-                'no_faktur' => $data['no_pembelian'],
-                'tanggal_hutang' => $data['tanggal_pembelian'],
-                'tanggal_jatuh_tempo' => $data['tanggal_pembelian'],
-                'id_supplier' => $supplier->id_supplier,
-                'reff_id' => $insert->id_pembelian,
-                'reff_trans' => 'PEMBELIAN_PAKAN',
-                'jumlah_hutang' => $data['total'],
-                'dibayar' => 0,
-                'sisa' => $data['total'],
-            ]);
+            if (!empty($data['is_hutang']) && $data['is_hutang'] == 1) {
+                HutangSupplierModel::create([
+                    'no_faktur' => $data['no_pembelian'],
+                    'tanggal_hutang' => $data['tanggal_pembelian'],
+                    'tanggal_jatuh_tempo' => $data['tanggal_pembelian'],
+                    'id_supplier' => $supplier->id_supplier,
+                    'reff_id' => $insert->id_pembelian,
+                    'reff_trans' => 'PEMBELIAN_PAKAN',
+                    'jumlah_hutang' => $data['total'],
+                    'dibayar' => 0,
+                    'sisa' => $data['total'],
+                ]);
+            }
 
             foreach($req->detail as $d){
                 $d['id_pembelian'] = $insert->id_pembelian;

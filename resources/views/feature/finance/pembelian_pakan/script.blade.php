@@ -154,6 +154,17 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.jumlah = 1;
     $scope.subtotal = 0;
 
+    $scope.selectedPakan = function() {
+        const selected = $scope.pakan.find(p => p.id_pakan == $scope.input.id_pakan);
+
+        if (selected) {
+            $scope.harga = selected.harga_pakan || 0;
+            $scope.hitungSubtotal();
+        } else {
+            $scope.harga = 0;
+        }
+    };
+
     $scope.hitungSubtotal = function() {
         let harga = parseFloat($scope.harga) || 0;
         let jumlah = parseInt($scope.jumlah) || 0;
@@ -260,7 +271,13 @@ app.controller("myCtrl", function($scope,$http) {
         }
 
         let dataPost = {
-            header: {...$scope.input, tanggal_pembelian:$('#tanggal_pembelian').val(), jumlah_item:$scope.daftarPakan.length, total:$scope.grand_total},
+            header: {
+                ...$scope.input,
+                is_hutang: $scope.input.is_hutang ? 1 : 0, 
+                tanggal_pembelian:$('#tanggal_pembelian').val(), 
+                jumlah_item:$scope.daftarPakan.length, 
+                total:$scope.grand_total
+            },
             detail: $scope.daftarPakan
         };
         console.log('dataPost==>>',dataPost);
