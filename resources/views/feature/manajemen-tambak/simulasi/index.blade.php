@@ -110,7 +110,7 @@
             </div>
         </div>
         <div class="col-lg-9">
-            <div class="m-portlet m-portlet--tabs">
+            <div class="m-portlet m-portlet--tabs" ng-init="isDashboard={{ $isDashboard ? 'true' : 'false' }}">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption col-sm-4">
                         <div class="m-portlet__head-title">
@@ -121,13 +121,13 @@
                     </div>
                     <div class="m-portlet__head-tools col-sm-8">
                         <ul class="nav nav-tabs m-tabs-line m-tabs-line--right" role="tablist">
-                            <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link active show" data-toggle="tab" href="#m_portlet_base_demo_1_tab_content" role="tab" aria-selected="false">
+                            <li class="nav-item m-tabs__item" ng-if="isDashboard">
+                                <a class="nav-link m-tabs__link" ng-class="{'active show': isDashboard}" data-toggle="tab" href="#m_portlet_base_demo_1_tab_content" role="tab" aria-selected="false">
                                     <i class="flaticon-line-graph"></i> Simulasi Petak
                                 </a>
                             </li>
                             <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link" data-toggle="tab" href="#m_portlet_base_demo_2_tab_content" role="tab" aria-selected="false">
+                                <a class="nav-link m-tabs__link" ng-class="{'active show': !isDashboard}" data-toggle="tab" href="#m_portlet_base_demo_2_tab_content" role="tab" aria-selected="false">
                                     <i class="flaticon-list-3"></i> Pendapatan Petak
                                 </a>
                             </li>
@@ -142,7 +142,7 @@
                 <div class="m-portlet__body">
                     <div class="tab-content">
                         {{-- TAB SIMULASI --}}
-                        <div class="tab-pane active show" id="m_portlet_base_demo_1_tab_content" role="tabpanel">
+                        <div class="tab-pane" ng-class="{'active show': isDashboard}" id="m_portlet_base_demo_1_tab_content" role="tabpanel" ng-if="isDashboard">
                             <div class="row">
                                 <div ng-repeat="kolam in detail.simulasi" class="col-lg-4 p-4">
                                     <div ng-class="{'row py-2 box-laba':kolam.laba_rugi > 0,'row py-2 box-rugi':kolam.laba_rugi < 0}">
@@ -216,7 +216,7 @@
                             </div>
                         </div>
                         {{-- TAB PENDAPATAN --}}
-                        <div class="tab-pane" id="m_portlet_base_demo_2_tab_content" role="tabpanel" ng-if="judul != null">
+                        <div class="tab-pane" ng-class="{'active show': !isDashboard}" id="m_portlet_base_demo_2_tab_content" role="tabpanel" ng-if="judul != null">
                             <button type="button" ng-click="save_pendapatan()" class="btn btn-primary btn-sm mb-2"><i class="la la-save"></i> Save</button>
                             <table class="table table-striped- table-bordered table-hover table-checkable" >
                                 <thead>

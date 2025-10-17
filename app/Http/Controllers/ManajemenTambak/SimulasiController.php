@@ -17,13 +17,28 @@ use Carbon\Carbon;
 use App\Models\SetupLokasi;
 use App\Models\SetupSiklus;
 use App\Models\SetupSiklusPetak;
+use Illuminate\Support\Facades\Auth;
 
 class SimulasiController extends Controller
 {
     //
     public function index()
     {
-        return view('feature.manajemen-tambak.simulasi.index');
+        $isDashboard=false;
+        $user = Auth::user();
+        $getRoles = DB::table('role_user')
+                ->join('role','role.id_role','role_user.id_role')
+                ->select('role.*')
+                ->where('role_user.id_user', $user->id_user)->get();
+
+        foreach ($getRoles as $role) {
+            if (!empty($role->dashboard) && $role->dashboard == true) {
+                $isDashboard = true;
+                break; // cukup satu yang true sudah cukup
+            }
+        }
+
+        return view('feature.manajemen-tambak.simulasi.index', compact('isDashboard'));
     }
 
     public function lokasi()
