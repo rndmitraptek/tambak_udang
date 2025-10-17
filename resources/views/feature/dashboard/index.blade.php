@@ -21,8 +21,8 @@
 
 <!-- END: Subheader -->
 <div class="m-content">
-    <div class="row">
-        <div class="col-lg-6" ng-repeat="i in siklus">
+    <div class="row" ng-init="isDashboard={{ $isDashboard ? 'true' : 'false' }}">
+        <div class="col-lg-6" ng-repeat="i in siklus" ng-if="isDashboard">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">

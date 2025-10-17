@@ -6,13 +6,28 @@ use App\Models\SetupSiklus;
 use App\Models\SetupSiklusPetak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     //
     public function index()
     {
-        return view('feature.dashboard.index');
+        $isDashboard=false;
+        $user = Auth::user();
+        $getRoles = DB::table('role_user')
+                ->join('role','role.id_role','role_user.id_role')
+                ->select('role.*')
+                ->where('role_user.id_user', $user->id_user)->get();
+
+        foreach ($getRoles as $role) {
+            if (!empty($role->dashboard) && $role->dashboard == true) {
+                $isDashboard = true;
+                break; // cukup satu yang true sudah cukup
+            }
+        }
+
+        return view('feature.dashboard.index', compact('isDashboard'));
     }
 
     public function siklus(){
