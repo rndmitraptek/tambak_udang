@@ -189,6 +189,31 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {{-- SUMMARY --}}
+                            <div class="row mt-4 p-4 bg-light rounded">
+                                <div class="col-lg-12">
+                                    <h5 style="font-weight:600;margin-bottom:1rem;">SUMMARY SIMULASI</h5>
+                                </div>
+                                <div class="col-lg-3">
+                                    <p class="mb-0">Total Biomassa</p>
+                                    <h5><% getSummary('biomassa') | currency %></h5>
+                                </div>
+                                <div class="col-lg-3">
+                                    <p class="mb-0">Total Pendapatan</p>
+                                    <h5><% getSummary('pendapatan') | currency %></h5>
+                                </div>
+                                <div class="col-lg-3">
+                                    <p class="mb-0">Total Biaya</p>
+                                    <h5><% getSummary('biaya') | currency %></h5>
+                                </div>
+                                <div class="col-lg-3">
+                                    <p class="mb-0">Total Laba/Rugi</p>
+                                    <h5 ng-class="{'text-success': getSummary('laba') > 0,'text-danger': getSummary('laba') < 0}">
+                                        <% getSummary('laba') | currency %>
+                                    </h5>
+                                </div>
+                            </div>
                         </div>
                         {{-- TAB PENDAPATAN --}}
                         <div class="tab-pane" id="m_portlet_base_demo_2_tab_content" role="tabpanel" ng-if="judul != null">

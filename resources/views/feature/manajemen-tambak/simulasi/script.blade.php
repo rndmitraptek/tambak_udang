@@ -351,6 +351,25 @@ app.controller("myCtrl", function($scope,$http) {
             });
     }
 
+    $scope.getSummary = function(type) {
+        if (!$scope.detail || !$scope.detail.simulasi) return 0;
+
+        return $scope.detail.simulasi.reduce(function(total, kolam) {
+            switch (type) {
+                case 'biomassa':
+                    return total + (Number(kolam.detail_pendapatan?.biomassa) || 0);
+                case 'pendapatan':
+                    return total + (kolam.total_pendapatan || 0);
+                case 'biaya':
+                    return total + (kolam.total_biaya_all || 0);
+                case 'laba':
+                    return total + (kolam.laba_rugi || 0);
+                default:
+                    return total;
+            }
+        }, 0);
+    };
+
 
     $scope.hitungPendapatanSimulasi = function(detail) {
         const harga = parseFloat((detail.harga_per_kg || '0').toString().replace(/[^0-9.-]+/g,""));
