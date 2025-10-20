@@ -173,6 +173,7 @@ class PanenController extends Controller
             $data['id_petak'] = $petak->id_petak;
             $panen->update($data);
             $delete_detail = PanenDetailModel::where('id_panen',$panen->id_panen)->delete();
+            $delete_piutang = PiutangCustomer::where('no_faktur',$panen->no_panen)->delete();
             foreach($req->detail as $d){
                 $customer = SetupCustomer::where('uuid',$d['uuid_customer'])->first();
                 $item = SetupItem::where('uuid',$d['uuid_item'])->first();
@@ -186,6 +187,20 @@ class PanenController extends Controller
                 $detail['id_item'] = $item->id_item;
                 $detail['id_payment_method']=$paymentMethod->id_payment_method;
                 $insert = PanenDetailModel::create($detail);
+                if($paymentMethod->id_payment_method==4){
+                    // insert piutang Customer
+                    $insert_piutang_customer = PiutangCustomer::create([
+                        'id_customer'           =>$customer->id_customer,
+                        'no_faktur'             =>$data['no_panen'],
+                        'reff_id'               =>$insert->id_panen_detail,
+                        'reff_trans'            =>'PENJUALAN PANEN',
+                        'tanggal_piutang'       =>$data['tanggal_panen'],
+                        'tanggal_jatuh_tempo'   =>$data['tanggal_panen'],
+                        'jumlah_piutang'        =>$detail['subtotal'],
+                        'dibayar'               =>0,
+                        'sisa'                  =>$detail['subtotal']
+                    ]);
+                }
             }
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);

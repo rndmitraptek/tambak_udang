@@ -84,4 +84,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/lokasi',[App\Http\Controllers\Finance\ReturPakanController::class, 'lokasi'])->name('lokasi');
         Route::get('/batal/{uuid}',[App\Http\Controllers\Finance\ReturPakanController::class, 'batal'])->name('batal');
     });
+
+    Route::prefix('pembelian_barang')->name('pembelian_barang.')->group(function(){
+        Route::post('/insert',[App\Http\Controllers\Finance\PembelianBarangController::class, 'insert'])->name('insert');
+        Route::post('/update/{uuid}',[App\Http\Controllers\Finance\PembelianBarangController::class, 'update'])->name('update');
+        Route::get('/datatable',[App\Http\Controllers\Finance\PembelianBarangController::class, 'datatable'])->name('datatable');
+        Route::delete('/delete/{uuid}',[App\Http\Controllers\Finance\PembelianBarangController::class, 'destroy'])->name('delete');
+        Route::get('/get_lokasi',[App\Http\Controllers\Finance\PembelianBarangController::class, 'lokasi'])->name('get_lokasi');
+        Route::get('/get_supplier',[App\Http\Controllers\Finance\PembelianBarangController::class, 'supplier'])->name('get_supplier');
+        Route::get('/get_barang',[App\Http\Controllers\Finance\PembelianBarangController::class, 'barang'])->name('get_barang');
+        Route::get('/get_detail/{uuid}',[App\Http\Controllers\Finance\PembelianBarangController::class, 'get_detail'])->name('get_detail');
+    });
 });

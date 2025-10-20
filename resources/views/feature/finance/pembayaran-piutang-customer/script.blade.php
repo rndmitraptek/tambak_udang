@@ -312,6 +312,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             $scope.input.tunai.push($scope.form_tunai);
         }
         console.log($scope.input);
+        $scope.input.piutang = $scope.input.piutang.filter(e => e.checked == true);
         $http.post(url,$scope.input)
         .then(function(res){
             if(res.data.success){

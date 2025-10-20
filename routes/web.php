@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/pembayaran_piutang_customer',[App\Http\Controllers\Finance\PembayaranPiutangCustomerController::class,'index']);
     Route::get('/dashboard',[App\Http\Controllers\DashboardController::class,'index']);
     Route::get('/dashboard_petak/{uuid_siklus}',[App\Http\Controllers\DashboardController::class,'dashboard_petak']);
+    Route::get('/pembelian_barang', [App\Http\Controllers\Finance\PembelianBarangController::class, 'index']);
+    Route::get('/barang', [App\Http\Controllers\Master\SetupBarangContoller::class, 'index']);
     Route::get('/generate-nomor-long/{keterangan}', function ($keterangan) {
         return response()->json([
             'nomor' => \App\Helpers\GeneradeNomorHelper::long($keterangan)

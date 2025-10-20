@@ -11,13 +11,13 @@ class GeneradeNomorHelper
     {
         $pecah = explode('-', date('Y-m-d'));
         $master_counter = nomorCounter::where('keterangan',$keterangan)->first();
-        if($master_counter->tanggal != date('Y-m-d')){
+        if (date('Y-m', strtotime($master_counter->tanggal)) != date('Y-m')) {
             $master_counter->counter = 1;
         }else{
             $master_counter->counter = $master_counter->counter + 1;
         }
         $master_counter->tanggal = date('Y-m-d');
-        $nomor = $master_counter->prefix . substr($pecah[0], -2) .$pecah[1] .$pecah[2] .sprintf('%04s', $master_counter->counter);
+        $nomor = $master_counter->prefix . substr($pecah[0], -2) .$pecah[1] .sprintf('%04s', $master_counter->counter);
         return $nomor;
     }
     
@@ -25,14 +25,14 @@ class GeneradeNomorHelper
     {
         $pecah = explode('-', date('Y-m-d'));
         $master_counter_forupdate = nomorCounter::where('keterangan',$keterangan)->lockForUpdate()->first();
-        if($master_counter_forupdate->tanggal != date('Y-m-d')){
+        if (date('Y-m', strtotime($master_counter_forupdate->tanggal)) != date('Y-m')) {
             $master_counter_forupdate->counter = 1;
         }else{
             $master_counter_forupdate->counter = $master_counter_forupdate->counter + 1;
         }
         $master_counter_forupdate->tanggal = date('Y-m-d');
         $master_counter_forupdate->save();
-        $nomor = $master_counter_forupdate->prefix . substr($pecah[0], -2) .$pecah[1] .$pecah[2] .sprintf('%04s', $master_counter_forupdate->counter);
+        $nomor = $master_counter_forupdate->prefix . substr($pecah[0], -2) .$pecah[1] .sprintf('%04s', $master_counter_forupdate->counter);
         return $nomor;
     }
 
