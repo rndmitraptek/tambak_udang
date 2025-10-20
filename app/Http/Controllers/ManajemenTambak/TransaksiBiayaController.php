@@ -135,7 +135,7 @@ class TransaksiBiayaController extends Controller
             // 1. simpan transaksi_biaya
             $transBiaya = TransaksiBiaya::create([
                 'uuid'              => \Str::uuid(),
-                'no_transaksi'      => GeneradeNomorHelper::long_update('transaksi biaya'),
+                'no_transaksi'      => GeneradeNomorHelper::long_update('transaksi_biaya'),
                 'tanggal_transaksi' => $validated['tanggal_transaksi'],
                 'tanggal_mulai'     => $validated['tanggal_mulai'] ?? null,
                 'tanggal_selesai'   => $validated['tanggal_selesai'] ?? null,

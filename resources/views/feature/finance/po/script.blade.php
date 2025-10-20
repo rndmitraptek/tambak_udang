@@ -105,6 +105,13 @@ app.controller("myCtrl", function($scope,$http,API) {
     $scope.tambah = function(){
         $scope.form = "input";
         $scope.edit = false;
+        //nomor
+        $http.get("{{ route('long','po_benur') }}")
+        .then(function(res){
+            $scope.input.no_po = res.data.nomor;
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
         $scope.input = {
             qty:0,
             harga_satuan:0,
@@ -160,7 +167,6 @@ app.controller("myCtrl", function($scope,$http,API) {
         rules: {
             no_po: {
                 required: true,
-                digits: true
             },
             nama_supplier: {
                 required: true

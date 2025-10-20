@@ -18,8 +18,8 @@ app.controller("myCtrl", function($scope,$http) {
                 { data: 'nama_siklus', title: 'Siklus' },
                 { data: 'total', title: 'Total' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'keterangan', title: 'Keterangan' },
-                { 
-                    data: 'status', 
+                {
+                    data: 'status',
                     title: 'Status',
                     render: function(data, type, row) {
                         return '<span class="badge badge-danger">'+data+'</span>';
@@ -91,6 +91,18 @@ app.controller("myCtrl", function($scope,$http) {
         $scope.detail = []
         $scope.form = "input";
         $scope.edit = false;
+        //nomor
+        $http.get("{{ route('long','retur_pakan') }}")
+        .then(function(res){
+            $scope.input.no_retur = res.data.nomor;
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
+        $scope.input = {
+            qty:0,
+            harga_satuan:0,
+            total:0
+        }
     }
     $scope.kembali = function(){
         $scope.form = "list";

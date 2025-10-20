@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Finance;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PoModel;
 use App\Models\SetupLokasi;
@@ -81,6 +82,7 @@ class PoController extends Controller
             'total'         => 'required',
         ]);
         $data = $req->all();
+        $data['no_po'] = GeneradeNomorHelper::long_update('po_benur');
         unset($data['uuid_supplier']);
         unset($data['uuid_lokasi']);
         unset($data['siklus']);

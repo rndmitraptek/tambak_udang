@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Finance;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\HutangSupplierModel;
 use App\Models\Finance\PembayaranHutangSupplierDetailHutangModel;
@@ -88,6 +89,7 @@ class PembayaranHutangSupplierController extends Controller
                 'tanggal_bayar'     => 'required',
             ]);
             $data = $req->all();
+            $data['no_faktur'] = GeneradeNomorHelper::long_update('pembayaran_hutang_supplier');
             unset($data['uuid_supplier']);
             $data['id_supplier']    = $supplier->id_supplier;
             $insert = PembayaranHutangSupplierModel::create($data);

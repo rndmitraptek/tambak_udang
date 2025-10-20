@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Finance;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PembelianPakan;
 use App\Models\Finance\ReturPakanDetail;
@@ -135,6 +136,7 @@ class ReturPakanController extends Controller
                 'tanggal_retur'   => 'required',
             ]);
             $data = $req->all();
+            $data['no_retur'] = GeneradeNomorHelper::long_update('retur_pakan');
             unset($data['uuid_pembelian']);
             unset($data['uuid_supplier']);
             unset($data['uuid_lokasi']);

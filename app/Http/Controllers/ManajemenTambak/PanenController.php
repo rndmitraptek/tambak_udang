@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ManajemenTambak;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PiutangCustomer;
 use App\Models\ManajemenTambak\PanenDetailModel;
@@ -109,6 +110,7 @@ class PanenController extends Controller
                 'jenis_panen'   => 'required',
             ]);
             $data = $req->all();
+            $data['no_panen'] = GeneradeNomorHelper::long_update('panen');
             unset($data['uuid_siklus']);
             $data['id_siklus'] = $siklus->id_siklus;
             unset($data['uuid_petak']);

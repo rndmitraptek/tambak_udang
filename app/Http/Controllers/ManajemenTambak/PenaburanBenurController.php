@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ManajemenTambak;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\HutangSupplierModel;
 use App\Models\Finance\PoModel;
@@ -36,7 +37,6 @@ class PenaburanBenurController extends Controller
             ->select([
                 'penaburan_benur.uuid', 'penaburan_benur.no_penaburan_benur', 'po_benur.uuid as uuid_po', 'penaburan_benur.keterangan','penaburan_benur.tanggal_penaburan'
                 ,'po_benur.no_po','setup_supplier.nama_supplier','setup_supplier.uuid as uuid_supplier','setup_lokasi.uuid as uuid_lokasi','setup_lokasi.nama_lokasi','setup_siklus.uuid as uuid_siklus','setup_siklus.nama_siklus',
-                
             ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {
@@ -107,6 +107,7 @@ class PenaburanBenurController extends Controller
                 'tanggal_penaburan'   => 'required',
             ]);
             $data = $req->all();
+            $data['no_penaburan_benur'] = GeneradeNomorHelper::long_update('penaburan_benur');
             unset($data['uuid_po']);
             unset($data['uuid_supplier']);
             unset($data['uuid_lokasi']);

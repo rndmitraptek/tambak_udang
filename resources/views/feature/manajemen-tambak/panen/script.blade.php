@@ -211,6 +211,13 @@ app.controller("myCtrl", function($scope,$http) {
         $scope.detail = []
         $scope.form = "input";
         $scope.edit = false;
+        //nomor
+        $http.get("{{ route('long','panen') }}")
+        .then(function(res){
+            $scope.input.no_po = res.data.nomor;
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
     }
     $scope.kembali = function(){
         $scope.form = "list";
@@ -222,8 +229,7 @@ app.controller("myCtrl", function($scope,$http) {
     $("#formInput").validate({
         rules: {
             no_panen: {
-                required: true,
-                digits: true
+                required: true
             },
             tanggal_panen: {
                 required: true

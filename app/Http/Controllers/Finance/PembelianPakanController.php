@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Finance;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PembelianPakan;
 use App\Models\Finance\PembelianPakanDetail;
@@ -154,6 +155,7 @@ class PembelianPakanController extends Controller
                 return response()->json(['success'=>false,'errors'=>$validator->errors()]);
             }
             $data = $req->header;
+            $data['no_pembelian'] = GeneradeNomorHelper::long_update('pembelian_pakan');
             unset($data['uuid_supplier'], $data['uuid_lokasi'], $data['uuid_siklus'], $data['id_pakan']);
             $data['supplier_id'] = $supplier->id_supplier;
             $data['lokasi_id']   = $lokasi->id_lokasi;

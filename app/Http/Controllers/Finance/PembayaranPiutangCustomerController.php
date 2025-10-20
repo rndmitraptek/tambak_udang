@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Finance;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PembayaranPiutangCustomerDetailModel;
 use App\Models\Finance\PembayaranPiutangCustomerGiroModel;
@@ -81,6 +82,7 @@ class PembayaranPiutangCustomerController extends Controller
                 'tanggal_bayar'     => 'required',
             ]);
             $data = $req->all();
+            $data['no_faktur'] = GeneradeNomorHelper::long_update('pembayaran_hutang_customer');
             $data['id_customer']    = $customer->id_customer;
             $insert = PembayaranPiutangCustomerModel::create($data);
             foreach($req->piutang as $d){

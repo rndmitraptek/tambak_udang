@@ -116,6 +116,13 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.total_hutang = 0;
         $scope.total_piutang = 0;
         $scope.total_bayar = 0;
+        //nomor
+        $http.get("{{ route('long','pembayaran_hutang_supplier') }}")
+        .then(function(res){
+            $scope.input.no_faktur = res.data.nomor;
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
     }
     $scope.supplierColumns = [
         { data: 'kode_supplier', title: 'Kode Supplier' },

@@ -141,6 +141,13 @@ app.controller("myCtrl", function($scope,$http) {
         $scope.detail = []
         $scope.form = "input";
         $scope.edit = false;
+        //nomor
+        $http.get("{{ route('long','penaburan_benur') }}")
+        .then(function(res){
+            $scope.input.no_penaburan_benur = res.data.nomor;
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
     }
     $scope.kembali = function(){
         $scope.form = "list";
@@ -250,7 +257,6 @@ app.controller("myCtrl", function($scope,$http) {
         rules: {
             no_penaburan_benur: {
                 required: true,
-                digits: true
             },
             tanggal_penaburan: {
                 required: true

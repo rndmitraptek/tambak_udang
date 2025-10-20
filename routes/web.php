@@ -44,15 +44,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard_petak/{uuid_siklus}',[App\Http\Controllers\DashboardController::class,'dashboard_petak']);
     Route::get('/pembelian_barang', [App\Http\Controllers\Finance\PembelianBarangController::class, 'index']);
     Route::get('/barang', [App\Http\Controllers\Master\SetupBarangContoller::class, 'index']);
-    Route::get('/generate-nomor-long/{keterangan}', function ($keterangan) {
+    Route::get('/number_long/{keterangan}', function ($keterangan) {
         return response()->json([
             'nomor' => \App\Helpers\GeneradeNomorHelper::long($keterangan)
         ]);
-    })->name('generate.nomor.long');
-    Route::get('/generate-nomor-sort/{keterangan}', function ($keterangan) {
+    })->name('long');
+    Route::get('/number_sort/{keterangan}', function ($keterangan) {
         return response()->json([
             'nomor' => \App\Helpers\GeneradeNomorHelper::sort($keterangan)
         ]);
-    })->name('generate.nomor.sort');
+    })->name('sort');
 });
 
