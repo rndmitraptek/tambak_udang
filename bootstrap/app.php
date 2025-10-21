@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('finance')
                 ->name('finance.')
                 ->group(base_path('routes/finance.php'));
+            Route::middleware('web')
+                ->prefix('akuntansi')
+                ->name('akuntansi.')
+                ->group(base_path('routes/akuntansi.php'));
         },
         health: '/up',
     )

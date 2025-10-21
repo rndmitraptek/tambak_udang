@@ -54,5 +54,7 @@ Route::middleware('auth')->group(function () {
             'nomor' => \App\Helpers\GeneradeNomorHelper::sort($keterangan)
         ]);
     })->name('sort');
+    Route::get('/jurnal', [App\Http\Controllers\Akuntansi\JurnalController::class, 'index']);
+    Route::get('/buku_besar', [App\Http\Controllers\Akuntansi\JurnalController::class, 'buku_besar']);
 });
 
