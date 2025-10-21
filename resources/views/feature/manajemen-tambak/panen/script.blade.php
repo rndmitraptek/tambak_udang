@@ -192,6 +192,11 @@ app.controller("myCtrl", function($scope,$http) {
         });
         $scope.$apply();
     }
+    
+    $scope.remove_detail = function(index,item){
+        $scope.detail.splice(index, 1);
+        $scope.hitung();
+    }
 
     $scope.jumlah = 0;
     $scope.total = 0;

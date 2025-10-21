@@ -227,6 +227,14 @@ app.controller("myCtrl", function($scope,$http,API) {
         }
     }
 
+    $scope.remove_transfer = function(index,item){
+        $scope.input.transfer.splice(index, 1);
+    }
+
+    $scope.remove_giro = function(index,item){
+        $scope.input.giro.splice(index, 1);
+    }
+
     $scope.handleClickTambahPembayaran = function(){
         transfer = angular.copy($scope.form_transfer);
         $scope.input.transfer.push(transfer);

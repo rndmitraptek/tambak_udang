@@ -31,7 +31,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Jural Umum
+                                Jurnal Umum
                             </h3>
                         </div>
                     </div>

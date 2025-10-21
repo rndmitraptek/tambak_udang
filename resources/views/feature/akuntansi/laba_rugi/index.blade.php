@@ -3,7 +3,7 @@
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('ctrl')
-@include('feature.akuntansi.buku_besar.script')
+@include('feature.akuntansi.laba_rugi.script')
 @endsection
 
 @section('content')
@@ -31,7 +31,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Buku Besar
+                                Laba Rugi
                             </h3>
                         </div>
                     </div>
@@ -52,40 +52,19 @@
                     <div class="form-row align-items-end">
                         <!-- Start Date -->
                         <div class="col-md-2 mb-3">
-                            <label for="startDate">Start Date</label>
+                            <label for="startDate">Tanggal</label>
                             <div class="input-group date">
-                                <input type="text" id="startDate" name="start_date" class="form-control" placeholder="yyyy-mm-dd" autocomplete="off"/>
+                                <input type="text" id="tanggal" name="tanggal" class="form-control general_datepicker" placeholder="yyyy-mm-dd" autocomplete="off"/>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="la la-calendar"></i>
                                     </span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Date -->
-                        <div class="col-md-2 mb-3">
-                            <label for="endDate">End Date</label>
-                            <div class="input-group date">
-                                <input type="text" id="endDate" name="end_date" class="form-control" placeholder="yyyy-mm-dd" autocomplete="off"/>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 form-group m-form__group">
-                            <label>Kode Akun</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="akun" name="akun" placeholder="Search for..." ng-model="nama_coa">
-                                <div class="input-group-append">
-                                    <button ng-click="handleClickCoa()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
                                 </div>
                             </div>
                         </div>
                         <!-- Tombol Search -->
                         <div class="col-md-2 mb-3">
-                            <button type="button" ng-click="get_buku_besar()" class="btn btn-primary btn-block">
+                            <button type="button" ng-click="get_laba_rugi()" class="btn btn-primary btn-block">
                                 <i class="la la-search"></i> Search
                             </button>
                         </div>
@@ -93,9 +72,8 @@
                     <hr/>
                     <div class="row">
                         <div class="col-lg-12 text-center">
-                            <h2>Buku Besar</h2>
-                            <h3><% kode_coa %> - <% nama_coa %></h3>
-                            <h4>Periode <% start_date %> S/D <% end_date %></h4>
+                            <h2>Laba Rugi</h2>
+                            <h4>Periode S/D <% tanggal %></h4>
                         </div>
                     </div>
                     <div class="row">
@@ -103,24 +81,18 @@
                             <table class="table table-sm m-table m-table--head-bg-brand">
                                 <thead>
                                     <tr>
-                                        <th style="width: 150px">Tanggal</th>
-                                        <th style="width: 200px">Nomor Bukti</th>
-                                        <th style="width: 150px">Kode COA</th>
-                                        <th >Keterangan</th>
-                                        <th style="width: 200px" class="text-center">debit</th>
-                                        <th style="width: 200px" class="text-center">Kredit</th>
-                                        <th style="width: 250px" class="text-center">Saldo</th>
+                                        <th style="width: 150px">COA</th>
+                                        <th>Keterangan</th>
+                                        <th style="width: 250px" class="text-center"></th>
+                                        <th style="width: 250px" class="text-center"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="i in buku_besar">
-                                        <td><% i.tanggal %></td>
-                                        <td><% i.no_bukti %></td>
-                                        <td><% i.kode_coa %></td>
-                                        <td><% i.keterangan %></td>
-                                        <td class="text-right"><a ng-show="i.debit!=0"><% i.debit | currency:'' %></a></td>
-                                        <td class="text-right"><a ng-show="i.kredit!=0"><% i.kredit | currency:'' %></a></td>
-                                        <td class="text-right"><a><% i.saldo | currency:'' %></a></td>
+                                    <tr ng-repeat="i in laba_rugi">
+                                        <td class="m--font-bold" ng-class="{'m--font-boldest': i.tipe_coa=='header'}"><% i.kode_coa %></td>
+                                        <td class="m--font-bold" ng-class="{'m--font-boldest': i.tipe_coa=='header'}"><% i.nama_coa %></td>
+                                        <td class="text-right"><a class="m--font-bold" ng-show="i.tipe_coa!='header' && i.saldo !=0"><% i.saldo | currency:'' %></a></td>
+                                        <td class="text-right "><a class="m--font-boldest" ng-show="i.tipe_coa=='header' && i.saldo !=0"><% i.saldo | currency:'' %></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -131,14 +103,6 @@
         </div>
     </div>
 </div>
-
-<look-up-table
-      lookup-id="lookup_coa"
-      ajax-url="{{ route('akuntansi.jurnal.get_coa') }}"
-      columns="coaColumns"
-      page-length="8"
-      on-select="selectCoa(row)">
-</look-up-table>
 
 @endsection
 

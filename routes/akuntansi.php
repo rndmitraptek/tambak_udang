@@ -10,5 +10,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/get_coa',[App\Http\Controllers\Akuntansi\JurnalController::class, 'get_coa'])->name('get_coa');
         Route::post('/jurnal_umum',[App\Http\Controllers\Akuntansi\JurnalController::class, 'jurnal_umum'])->name('jurnal_umum');
         Route::post('/get_buku_besar',[App\Http\Controllers\Akuntansi\JurnalController::class, 'get_buku_besar'])->name('get_buku_besar');
+        Route::post('/get_laba_rugi',[App\Http\Controllers\Akuntansi\JurnalController::class, 'get_laba_rugi'])->name('get_laba_rugi');
+        Route::post('/get_neraca',[App\Http\Controllers\Akuntansi\JurnalController::class, 'get_neraca'])->name('get_neraca');
     });
 });

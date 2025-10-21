@@ -180,7 +180,7 @@
                                             <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-model="i.harga" ng-change="hitung()"></td>
                                             <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-model="i.jumlah" ng-change="hitung()"></td>
                                             <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-model="i.subtotal" readonly></td>
-                                            <td ><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
+                                            <td ><button ng-click="remove_detail($index,item)" type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
                                         </tr>
                                     </tbody>
                                     <tfoot>

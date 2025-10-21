@@ -574,7 +574,7 @@
                                     <td class="text-right"><% i.nominal | currency:'' %></td>
                                     <td class="text-right"><% i.biaya_transfer | currency:'' %></td>
                                     <td><% i.rekening %></td>
-                                    <td><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
+                                    <td><button ng-click="remove_transfer($index,i)" type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -685,7 +685,7 @@
                                     <td><% i.jatuh_tempo%></td>
                                     <td class="text-right"><% i.nominal | currency:'' %></td>
                                     <td><% i.is_biaya_materai %></td>
-                                    <td><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
+                                    <td><button ng-click="remove_giro($index,i)" type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
                                 </tr>
                             </tbody>
                             <tfoot>
