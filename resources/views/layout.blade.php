@@ -327,8 +327,8 @@ License: You must have a valid license purchased only from themeforest(the above
 																-->
 															</div>
 															<div class="m-card-user__details">
-																<span class="m-card-user__name m--font-weight-500">Mark Andre</span>
-																<a href="" class="m-card-user__email m--font-weight-300 m-link">mark.andre@gmail.com</a>
+																<span class="m-card-user__name m--font-weight-500">{{ Illuminate\Support\Facades\Auth::user()->nama; }}</span>
+																{{-- <a href="" class="m-card-user__email m--font-weight-300 m-link">mark.andre@gmail.com</a> --}}
 															</div>
 														</div>
 													</div>
@@ -344,14 +344,14 @@ License: You must have a valid license purchased only from themeforest(the above
 																		<span class="m-nav__link-title">
 																			<span class="m-nav__link-wrap">
 																				<span class="m-nav__link-text">My Profile</span>
-																				<span class="m-nav__link-badge">
+																				{{-- <span class="m-nav__link-badge">
 																					<span class="m-badge m-badge--success">2</span>
-																				</span>
+																				</span> --}}
 																			</span>
 																		</span>
 																	</a>
 																</li>
-																<li class="m-nav__item">
+																{{-- <li class="m-nav__item">
 																	<a href="header/profile.html" class="m-nav__link">
 																		<i class="m-nav__link-icon flaticon-layers"></i>
 																		<span class="m-nav__link-text">Activity</span>
@@ -362,7 +362,7 @@ License: You must have a valid license purchased only from themeforest(the above
 																		<i class="m-nav__link-icon flaticon-chat-1"></i>
 																		<span class="m-nav__link-text">Messages</span>
 																	</a>
-																</li>
+																</li> --}}
 																<li class="m-nav__separator m-nav__separator--fit">
 																</li>
 																<li class="m-nav__item">

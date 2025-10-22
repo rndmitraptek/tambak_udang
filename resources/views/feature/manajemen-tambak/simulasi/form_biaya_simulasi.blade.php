@@ -41,7 +41,7 @@
                             <li class="m-portlet__nav-item">
                                 <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
-                                        <i class="la la-map-marker"></i>
+                                        <i class="la la-plus"></i>
                                         <span>Buat Transaksi Biaya Simulasi</span>
                                     </span>
                                 </button>

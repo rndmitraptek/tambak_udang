@@ -40,7 +40,7 @@
                             <li class="m-portlet__nav-item">
                                 <button id="btnTambah" ng-click="generade_nomor()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
-                                        <i class="la la-map-marker"></i>
+                                        <i class="la la-plus"></i>
                                         <span>Tambah Lokasi</span>
                                     </span>
                                 </button>

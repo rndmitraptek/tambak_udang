@@ -40,7 +40,7 @@
                             <li class="m-portlet__nav-item">
                                 <button id="btnTambah" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
-                                        <i class="la la-map-marker"></i>
+                                        <i class="la la-plus"></i>
                                         <span>Tambah Siklus</span>
                                     </span>
                                 </button>

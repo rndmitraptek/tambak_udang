@@ -40,11 +40,11 @@ class BenurController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode_benur' => 'required|unique:setup_benur,kode_benur',
+            'kode_benur'    => 'required|unique:setup_benur,kode_benur',
             'kode_supplier' => 'required',
-            'jenis_benur' => 'required',
-            'harga_benur' => 'required|numeric',
-            'keterangan' => 'nullable',
+            'jenis_benur'   => 'required',
+            'harga_benur'   => 'required|numeric',
+            'keterangan'    => 'nullable',
         ]);
 
         $benur = SetupBenur::create([
