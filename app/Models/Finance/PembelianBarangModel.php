@@ -21,6 +21,7 @@ class PembelianBarangModel extends Model
         'no_pembelian_barang',
         'id_lokasi',
         'tanggal_pembelian_barang',
+        'tanggal_jatuh_tempo',
         'id_supplier',
         'pembayaran',
         'keterangan',

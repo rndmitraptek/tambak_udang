@@ -98,11 +98,16 @@
                                     <label for="recipient-name" class="form-control-label">No Pembelian</label>
                                     <input type="text" class="form-control" id="no_pembelian_barang" name="no_pembelian_barang" ng-model="input.no_pembelian_barang">
                                 </div>
-                                <div class="form-group m-form__group">
-                                    <label for="recipient-name" class="form-control-label">Tanggal Pembelian</label>
-                                    <input type="text" class="form-control general_datepicker" id="tanggal_pembelian_barang" name="tanggal_pembelian_barang" ng-model="input.tanggal_pembelian_barang">
+                                <div class="row">
+                                    <div class="form-group m-form__group col-lg-6">
+                                        <label for="recipient-name" class="form-control-label">Tanggal Pembelian</label>
+                                        <input type="text" class="form-control general_datepicker" id="tanggal_pembelian_barang" name="tanggal_pembelian_barang" ng-model="input.tanggal_pembelian_barang">
+                                    </div>
+                                    <div class="form-group m-form__group col-lg-6">
+                                        <label for="recipient-name" class="form-control-label">Tanggal Jatuh Tempo</label>
+                                        <input type="text" class="form-control general_datepicker" id="tanggal_jatuh_tempo" name="tanggal_jatuh_tempo" ng-model="input.tanggal_jatuh_tempo">
+                                    </div>
                                 </div>
-                                
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">

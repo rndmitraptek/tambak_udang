@@ -116,6 +116,7 @@
                                         <th style="width: 200px">Faktur</th>
                                         <th style="width: 200px">Nomor Faktur</th>
                                         <th style="width: 200px">Tanggal Nota</th>
+                                        <th style="width: 200px">Tanggal Jatuh Tempo</th>
                                         <th style="width: 200px">Nominal</th>
                                         <th style="width: 200px">Sudah di Bayar</th>
                                         <th style="width: 200px">Belum di Bayar</th>
@@ -129,6 +130,7 @@
                                         <td><% i.reff_trans %></td>
                                         <td><% i.no_faktur %></td>
                                         <td><% i.tanggal_hutang %></td>
+                                        <td><% i.tanggal_jatuh_tempo %></td>
                                         <td class="text-right"><% i.jumlah_hutang | currency:'' %></td>
                                         <td class="text-right"><% i.dibayar | currency:'' %></td>
                                         <td class="text-right"><% i.sisa | currency:'' %></td>
@@ -137,7 +139,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="7" class="text-right">Total Hutang</th>
+                                        <th colspan="8" class="text-right">Total Hutang</th>
                                         <th class="text-right"><% total_hutang | currency:'' %></th>
                                     </tr>
                                 </tfoot>

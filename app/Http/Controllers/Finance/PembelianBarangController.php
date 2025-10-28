@@ -26,7 +26,7 @@ class PembelianBarangController extends Controller
         $query = PembelianBarangModel::query()
         ->join('setup_lokasi', 'pembelian_barang.id_lokasi', '=', 'setup_lokasi.id_lokasi')
         ->join('setup_supplier', 'pembelian_barang.id_supplier', '=', 'setup_supplier.id_supplier')
-        ->select(['pembelian_barang.uuid','pembelian_barang.no_pembelian_barang','pembelian_barang.tanggal_pembelian_barang','pembelian_barang.id_lokasi','pembelian_barang.id_supplier','pembelian_barang.jumlah','pembelian_barang.total','pembelian_barang.pembayaran','pembelian_barang.keterangan',
+        ->select(['pembelian_barang.uuid','pembelian_barang.no_pembelian_barang','pembelian_barang.tanggal_pembelian_barang','pembelian_barang.tanggal_jatuh_tempo','pembelian_barang.id_lokasi','pembelian_barang.id_supplier','pembelian_barang.jumlah','pembelian_barang.total','pembelian_barang.pembayaran','pembelian_barang.keterangan',
             'setup_lokasi.nama_lokasi', 'setup_lokasi.uuid as uuid_lokasi',
             'setup_supplier.uuid as uuid_supplier','setup_supplier.nama_supplier',
             'pembelian_barang.created_by','pembelian_barang.updated_by','pembelian_barang.created_at','pembelian_barang.updated_at'
@@ -92,7 +92,7 @@ class PembelianBarangController extends Controller
                 'reff_id'               =>$insert->id_pembelian_barang,
                 'reff_trans'            =>'PEMBELIAN BARANG',
                 'tanggal_hutang'        =>$data['tanggal_pembelian_barang'],
-                'tanggal_jatuh_tempo'   =>$data['tanggal_pembelian_barang'],
+                'tanggal_jatuh_tempo'   =>$data['tanggal_jatuh_tempo'],
                 'jumlah_hutang'         =>$data['total'],
                 'dibayar'               =>0,
                 'sisa'                  =>$data['total']
@@ -139,7 +139,7 @@ class PembelianBarangController extends Controller
                 'reff_id'               =>$pembelianBarang->id_pembelian_barang,
                 'reff_trans'            =>'PEMBELIAN BARANG',
                 'tanggal_hutang'        =>$data['tanggal_pembelian_barang'],
-                'tanggal_jatuh_tempo'   =>$data['tanggal_pembelian_barang'],
+                'tanggal_jatuh_tempo'   =>$data['tanggal_jatuh_tempo'],
                 'jumlah_hutang'         =>$data['total'],
                 'dibayar'               =>0,
                 'sisa'                  =>$data['total']

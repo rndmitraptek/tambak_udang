@@ -14,6 +14,7 @@ app.controller("myCtrl", function($scope,$http) {
                 { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
                 { data: 'no_pembelian_barang', title: 'No Pembelian Barang' },
                 { data: 'tanggal_pembelian_barang', title: 'Tanggal Pembelian' },
+                { data: 'tanggal_jatuh_tempo', title: 'Tanggal Pembelian' },
                 { data: 'nama_lokasi', title: 'Lokasi' },
                 { data: 'nama_supplier', title: 'Supplier' },
                 { data: 'jumlah', title: 'Jumlah' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
@@ -133,6 +134,7 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.selectSupplier = function(param){
         $scope.input.nama_supplier = param.nama_supplier;
         $scope.input.uuid_supplier = param.uuid;
+        $scope.$apply();
     }
 
     $scope.handleClickBarang = function(){
@@ -221,6 +223,7 @@ app.controller("myCtrl", function($scope,$http) {
                 url = url.replace(':uuid', $scope.input.uuid);
             }
             $scope.input.tanggal_pembelian_barang   = $('#tanggal_pembelian_barang').val();
+            $scope.input.tanggal_jatuh_tempo        = $('#tanggal_jatuh_tempo').val();
             $scope.input.detail                     = $scope.detail;
             $scope.input.total                      = $scope.total
             $scope.input.jumlah                     = $scope.jumlah
