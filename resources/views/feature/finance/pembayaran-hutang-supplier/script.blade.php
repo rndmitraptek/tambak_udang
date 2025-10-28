@@ -19,9 +19,11 @@ app.controller("myCtrl", function($scope,$http,API) {
             serverSide: true,
             ajax: '{{ route("finance.pembayaran_hutang_supplier.datatable") }}',
             scrollY: "50vh",
-            scrollX: !0,
+            scrollX: true,
+            autoWidth: false,
             scrollCollapse: !0,
             columns: [
+                { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
                 { data: 'no_faktur', title: 'No Faktur' },
                 { data: 'tanggal_bayar', title: 'Tanggal Bayar' },
                 { data: 'nama_supplier', title: 'Supplier' },
@@ -29,8 +31,20 @@ app.controller("myCtrl", function($scope,$http,API) {
                 { data: 'total_hutang', title: 'Total Hutang' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'total_piutang', title: 'Total Piutang' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'total_bayar', title: 'Total Bayar' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
-                { data: 'keterangan', title: 'keterangan' },
-                { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
+                { 
+                    data: 'keterangan', 
+                    title: 'Keterangan', 
+                    render: function (data, type, row) {
+                        if (!data) return '';
+                        let shortText = data.length > 50 ? data.substr(0, 50) + '...' : data;
+                        return `<span title="${data.replace(/"/g, '&quot;')}">${shortText}</span>`;
+                    },
+                    width: '200px'
+                },
+                { data: 'created_by_name', title: 'Created By' },
+                { data: 'created_at_formatted', title: 'Created At' },
+                { data: 'updated_by_name', title: 'Updated By' },
+                { data: 'updated_at_formatted', title: 'Updated At' },
             ]
         })
 

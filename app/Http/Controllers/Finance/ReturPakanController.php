@@ -38,6 +38,7 @@ class ReturPakanController extends Controller
             ->select([
                 'retur_pakan.uuid', 'retur_pakan.no_retur', 'retur_pakan.total', 'retur_pakan.keterangan','retur_pakan.tanggal_retur','retur_pakan.deleted_at'
                 ,'pembelian_pakan.no_pembelian','setup_lokasi.uuid as uuid_lokasi','setup_lokasi.nama_lokasi','setup_siklus.uuid as uuid_siklus','setup_siklus.nama_siklus',
+                'retur_pakan.created_by','retur_pakan.updated_by','retur_pakan.created_at','retur_pakan.updated_at'
             ]);
         return DataTables::of($query)
             ->addColumn('status', fn($row) => $row->deleted_at!=null ?'Batal':'')

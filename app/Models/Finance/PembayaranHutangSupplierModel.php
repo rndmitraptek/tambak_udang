@@ -4,17 +4,19 @@ namespace App\Models\Finance;
 
 use App\Models\SetupSupplier;
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUserAudit;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class PembayaranHutangSupplierModel extends Model
 {
     //
-    use HasUuid,CreatedUpdatedBy;
+    use HasUuid,CreatedUpdatedBy,HasUserAudit;
 
     protected $table = 'pembayaran_hutang_supplier';
     protected $primaryKey = 'id_pembayaran_hutang_supplier';
     protected $fillable = ['uuid','no_faktur','id_supplier','tanggal_bayar','total_hutang','total_piutang','total_bayar','keterangan','file'];
+    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     public function Supplier(){
         return $this->belongsTo(SetupSupplier::class, 'id_supplier','id_supplier');

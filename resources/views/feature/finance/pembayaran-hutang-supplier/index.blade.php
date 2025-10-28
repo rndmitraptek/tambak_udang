@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel"></table>
+                    <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabel"></table>
                 </div>
             </div>
         </div>
@@ -109,7 +109,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <h5>Hutang Supplier</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                                 <thead>
                                     <tr>
                                         <th style="width: 50px">#</th>
@@ -148,7 +148,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <h5>Piutang Supplier</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                                 <thead>
                                     <tr>
                                         <th style="width: 50px">#</th>
@@ -260,7 +260,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <h5>Hutang Supplier</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                                 <thead>
                                     <tr>
                                         <th style="width: 50px">#</th>
@@ -291,7 +291,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <h5>Piutang Supplier</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                                 <thead>
                                     <tr>
                                         <th style="width: 50px">#</th>
@@ -350,7 +350,7 @@
                     <div class="row" ng-show="detail.transfer.length !=0">
                         <div class="col-lg-12">
                             <h5>Transfer</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                                 <thead>
                                     <tr>
                                         <th style="width: 50px">#</th>
@@ -377,7 +377,7 @@
                     <div class="row" ng-show="detail.giro.length !=0">
                         <div class="col-lg-12">
                             <h5>Giro</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                                 <thead>
                                     <tr>
                                         <th style="width: 50px">#</th>
@@ -404,7 +404,7 @@
                     <div class="row" ng-show="detail.tunai.length !=0">
                         <div class="col-lg-12">
                             <h5>Tunai</h5>
-                            <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                            <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                                 <thead>
                                     <tr>
                                         <th style="width: 50px">#</th>
@@ -554,7 +554,7 @@
                     </div>
                     <div class="col-lg-12">
                         <h5>Transfer</h5>
-                        <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                        <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                             <thead>
                                 <tr>
                                     <th style="width: 50px">#</th>
@@ -665,7 +665,7 @@
                     </div>
                     <div class="col-lg-12">
                         <h5>Giro</h5>
-                        <table class="table table-sm table-striped- table-bordered table-hover table-checkable">
+                        <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                             <thead>
                                 <tr>
                                     <th style="width: 50px">#</th>

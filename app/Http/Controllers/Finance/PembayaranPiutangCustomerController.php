@@ -30,7 +30,8 @@ class PembayaranPiutangCustomerController extends Controller
             ->join('setup_customer','setup_customer.id_customer','=','pembayaran_piutang_customer.id_customer')
             ->select([
                 'pembayaran_piutang_customer.uuid','pembayaran_piutang_customer.no_faktur','pembayaran_piutang_customer.tanggal_bayar','pembayaran_piutang_customer.id_customer','pembayaran_piutang_customer.total_bayar','pembayaran_piutang_customer.keterangan','pembayaran_piutang_customer.file',
-                'setup_customer.uuid as uuid_customer','setup_customer.nama_customer'
+                'setup_customer.uuid as uuid_customer','setup_customer.nama_customer',
+                'pembayaran_piutang_customer.created_by','pembayaran_piutang_customer.updated_by','pembayaran_piutang_customer.created_at','pembayaran_piutang_customer.updated_at'
             ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {

@@ -29,6 +29,7 @@ class PoController extends Controller
             ->select([
                 'po_benur.uuid', 'po_benur.no_po', 'setup_supplier.uuid as uuid_supplier', 'po_benur.tanggal_po','po_benur.tanggal_kirim','setup_supplier.nama_supplier','setup_siklus.uuid as uuid_siklus','setup_siklus.nama_siklus',
                 'setup_lokasi.nama_lokasi','setup_lokasi.uuid as uuid_lokasi', 'po_benur.qty', 'po_benur.harga_satuan', 'po_benur.total','po_benur.keterangan',
+                'po_benur.created_by','po_benur.updated_by','po_benur.created_at','po_benur.updated_at'
             ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {

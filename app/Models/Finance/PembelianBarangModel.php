@@ -5,13 +5,14 @@ namespace App\Models\Finance;
 use App\Models\SetupLokasi;
 use App\Models\SetupSupplier;
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUserAudit;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PembelianBarangModel extends Model
 {
-    use SoftDeletes,HasUuid,CreatedUpdatedBy;
+    use SoftDeletes,HasUuid,CreatedUpdatedBy,HasUserAudit;
     //
     protected $table = 'pembelian_barang';
     protected $primaryKey = 'id_pembelian_barang';
@@ -26,6 +27,7 @@ class PembelianBarangModel extends Model
         'jumlah',
         'total'
     ];
+    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     public function supplier()
     {

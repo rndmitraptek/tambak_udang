@@ -38,7 +38,8 @@ class PanenController extends Controller
             'setup_siklus.uuid as uuid_siklus','setup_siklus.nama_siklus',
             'setup_lokasi.nama_lokasi',
             'setup_blok.uuid as uuid_blok','setup_blok.nama_blok',
-            'setup_petak.uuid as uuid_petak','setup_petak.nama_petak'
+            'setup_petak.uuid as uuid_petak','setup_petak.nama_petak',
+            'panen.created_by','panen.updated_by','panen.created_at','panen.updated_at'
         ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {

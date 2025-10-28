@@ -9,11 +9,12 @@ use App\Models\SetupSiklus;
 use App\Models\Finance\ReturPakanDetail;
 use App\Models\Finance\PembelianPakan;
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUserAudit;
 use App\Traits\HasUuid;
 
 class ReturPakan extends Model
 {
-    use SoftDeletes, CreatedUpdatedBy, HasUuid;
+    use SoftDeletes, CreatedUpdatedBy, HasUuid, HasUserAudit;
 
     protected $table = 'retur_pakan';
     protected $primaryKey = 'id_retur';
@@ -27,6 +28,7 @@ class ReturPakan extends Model
         'created_by',
         'updated_by',
     ];
+    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     public function detail()
     {

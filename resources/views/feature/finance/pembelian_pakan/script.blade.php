@@ -11,6 +11,7 @@ app.controller("myCtrl", function($scope,$http) {
             scrollX: !0,
             scrollCollapse: !0,
             columns: [
+                { data: 'actions', title: 'Action', orderable: false, searchable: false,width:'80px' },
                 { data: 'no_pembelian', title: 'No Pembelian' },
                 { data: 'tanggal_pembelian', title: 'Tanggal' },
                 { data: 'supplier', title: 'Supplier' },
@@ -26,7 +27,16 @@ app.controller("myCtrl", function($scope,$http) {
                         return data ? 'Rp ' + parseInt(data).toLocaleString('id-ID') : '-';
                     }
                 },
-                { data: 'keterangan', title: 'Keterangan' },
+                { 
+                    data: 'keterangan', 
+                    title: 'Keterangan', 
+                    render: function (data, type, row) {
+                        if (!data) return '';
+                        let shortText = data.length > 50 ? data.substr(0, 50) + '...' : data;
+                        return `<span title="${data.replace(/"/g, '&quot;')}">${shortText}</span>`;
+                    },
+                    width: '200px'
+                },
                 { 
                     data: 'status', 
                     title: 'Status',
@@ -34,7 +44,10 @@ app.controller("myCtrl", function($scope,$http) {
                         return '<span class="badge badge-danger">'+data+'</span>';
                     }
                 },
-                { data: 'actions', title: 'Action', orderable: false, searchable: false,width:'80px' },
+                { data: 'created_by_name', title: 'Created By' },
+                { data: 'created_at_formatted', title: 'Created At' },
+                { data: 'updated_by_name', title: 'Updated By' },
+                { data: 'updated_at_formatted', title: 'Updated At' },
             ]
         })
 

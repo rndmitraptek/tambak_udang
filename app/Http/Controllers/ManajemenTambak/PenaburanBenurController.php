@@ -37,6 +37,7 @@ class PenaburanBenurController extends Controller
             ->select([
                 'penaburan_benur.uuid', 'penaburan_benur.no_penaburan_benur', 'po_benur.uuid as uuid_po', 'penaburan_benur.keterangan','penaburan_benur.tanggal_penaburan'
                 ,'po_benur.no_po','setup_supplier.nama_supplier','setup_supplier.uuid as uuid_supplier','setup_lokasi.uuid as uuid_lokasi','setup_lokasi.nama_lokasi','setup_siklus.uuid as uuid_siklus','setup_siklus.nama_siklus',
+                'penaburan_benur.created_by','penaburan_benur.updated_by','penaburan_benur.created_at','penaburan_benur.updated_at'
             ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {
@@ -124,7 +125,7 @@ class PenaburanBenurController extends Controller
                 'tanggal_selesai'   => $data['tanggal_penaburan'],
                 'biaya_id'          => 1,
                 'nominal'           => $data['total_nominal_netto'],
-                'coa_id'            => 2,
+                'coa_id'            => 13,
                 'keterangan'        => 'transaksi penaburan benur',
                 'reff_id'           => $insert->id_penaburan_benur,
                 'reff_trans'        => 'penaburan_benur'
@@ -214,7 +215,7 @@ class PenaburanBenurController extends Controller
                 'tanggal_selesai'   => $data['tanggal_penaburan'],
                 'biaya_id'          => 1,
                 'nominal'           => $data['total_nominal_netto'],
-                'coa_id'            => 2,
+                'coa_id'            => 13,
                 'keterangan'        => 'transaksi penaburan benur'
             ]);
 

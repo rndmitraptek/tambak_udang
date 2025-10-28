@@ -32,7 +32,8 @@ class PembayaranHutangSupplierController extends Controller
             ->join('setup_supplier','setup_supplier.id_supplier','=','pembayaran_hutang_supplier.id_supplier')
             ->select([
                 'pembayaran_hutang_supplier.uuid','pembayaran_hutang_supplier.no_faktur','pembayaran_hutang_supplier.tanggal_bayar','pembayaran_hutang_supplier.id_supplier','pembayaran_hutang_supplier.total_hutang','pembayaran_hutang_supplier.total_piutang','pembayaran_hutang_supplier.total_bayar','pembayaran_hutang_supplier.keterangan','pembayaran_hutang_supplier.file',
-                'setup_supplier.uuid as uuid_supplier','setup_supplier.nama_supplier'
+                'setup_supplier.uuid as uuid_supplier','setup_supplier.nama_supplier',
+                'pembayaran_hutang_supplier.created_by','pembayaran_hutang_supplier.updated_by','pembayaran_hutang_supplier.created_at','pembayaran_hutang_supplier.updated_at'
             ]);
         return DataTables::of($query)
             ->addColumn('action', function ($row) {

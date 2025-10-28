@@ -7,9 +7,11 @@ app.controller("myCtrl", function($scope,$http) {
             serverSide: true,
             ajax: '{{ route("finance.pembelian_barang.datatable") }}',
             scrollY: "50vh",
-            scrollX: !0,
+            scrollX: true,
+            autoWidth: false,
             scrollCollapse: !0,
             columns: [
+                { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
                 { data: 'no_pembelian_barang', title: 'No Pembelian Barang' },
                 { data: 'tanggal_pembelian_barang', title: 'Tanggal Pembelian' },
                 { data: 'nama_lokasi', title: 'Lokasi' },
@@ -18,7 +20,20 @@ app.controller("myCtrl", function($scope,$http) {
                 { data: 'total', title: 'Total' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'pembayaran', title: 'Pembayaran' },
                 { data: 'keterangan', title: 'Keterangan' },
-                { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
+                { 
+                    data: 'keterangan', 
+                    title: 'Keterangan', 
+                    render: function (data, type, row) {
+                        if (!data) return '';
+                        let shortText = data.length > 50 ? data.substr(0, 50) + '...' : data;
+                        return `<span title="${data.replace(/"/g, '&quot;')}">${shortText}</span>`;
+                    },
+                    width: '200px'
+                },
+                { data: 'created_by_name', title: 'Created By' },
+                { data: 'created_at_formatted', title: 'Created At' },
+                { data: 'updated_by_name', title: 'Updated By' },
+                { data: 'updated_at_formatted', title: 'Updated At' },
             ]
         })
 
@@ -158,6 +173,12 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.tambah = function(){
         $scope.input = {};
         $scope.detail = []
+        $http.get("{{ route('long','pembelian_barang') }}")
+        .then(function(res){
+            $scope.input.no_pembelian_barang = res.data.nomor;
+        }).catch(function(error) {
+            swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+        });
         $scope.form = "input";
         $scope.edit = false;
     }
@@ -210,10 +231,12 @@ app.controller("myCtrl", function($scope,$http) {
                     swal({
                         title: "Tersimpan ",text: "Data Pembelian Barang berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
-                        $scope.edit = true;
-                        $scope.form = "input";
-                        $scope.input.uuid = res.data.data.uuid;
-                        table.draw();
+                        //$scope.edit = true;
+                        //$scope.form = "input";
+                        //$scope.input.uuid = res.data.data.uuid;
+                        //table.draw();
+                        $scope.kembali();
+                        $scope.$apply();
                     })
                 }else{
                     swal({

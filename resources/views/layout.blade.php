@@ -91,6 +91,24 @@ License: You must have a valid license purchased only from themeforest(the above
 				font-size: 12px;
 				margin-top: 5px;
 			}
+			.table,
+			.table tr,
+			.table th,
+			.table td,
+			.table input {
+				border: 1px solid #f2f3f8;
+				border-collapse: collapse;
+			}
+			/* biar DataTables menghormati width dan teks tidak wrap */
+			#viewtabel.dataTable th,
+			#viewtabel.dataTable td {
+				white-space: nowrap;
+			}
+
+			/* perbaiki lebar header cloned saat scrollX */
+			.dataTables_scrollHeadInner > table {
+				width: 100% !important;
+			}
 		</style>
 		<script src="{{ url('/') }}/angularJS/angular.min.js"></script>
   		<script src="{{ url('/') }}/angularJS/app.js"></script>

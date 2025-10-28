@@ -347,6 +347,7 @@ app.controller("myCtrl", function($scope,$http) {
                     row.biaya_perpetak = 0;
                 } else if (totalLuas > 0) {
                     row.persentase = ((luas / totalLuas) * 100).toFixed(2); // %
+                    console.log($('#biaya-dropdown').val());
                     if($('#biaya-dropdown').val() !=1 && $('#biaya-dropdown').val() !=2){
                         row.biaya_perpetak = ((luas / totalLuas) * nominal).toFixed(0); // Rp
                     }

@@ -11,13 +11,23 @@ app.controller("myCtrl", function($scope,$http) {
             scrollX: !0,
             scrollCollapse: !0,
             columns: [
+                { data: 'action', title: 'Action', orderable: false, searchable: false,width:'80px' },
                 { data: 'no_retur', title: 'No Retur' },
                 { data: 'tanggal_retur', title: 'Tanggal Retur' },
                 { data: 'no_pembelian', title: 'No Pembelian' },
                 { data: 'nama_lokasi', title: 'Lokasi' },
                 { data: 'nama_siklus', title: 'Siklus' },
                 { data: 'total', title: 'Total' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
-                { data: 'keterangan', title: 'Keterangan' },
+                { 
+                    data: 'keterangan', 
+                    title: 'Keterangan', 
+                    render: function (data, type, row) {
+                        if (!data) return '';
+                        let shortText = data.length > 50 ? data.substr(0, 50) + '...' : data;
+                        return `<span title="${data.replace(/"/g, '&quot;')}">${shortText}</span>`;
+                    },
+                    width: '200px'
+                },
                 {
                     data: 'status',
                     title: 'Status',
@@ -25,7 +35,10 @@ app.controller("myCtrl", function($scope,$http) {
                         return '<span class="badge badge-danger">'+data+'</span>';
                     }
                 },
-                { data: 'action', title: 'Action', orderable: false, searchable: false,width:'80px' },
+                { data: 'created_by_name', title: 'Created By' },
+                { data: 'created_at_formatted', title: 'Created At' },
+                { data: 'updated_by_name', title: 'Updated By' },
+                { data: 'updated_at_formatted', title: 'Updated At' },
             ]
         })
 
@@ -203,9 +216,11 @@ app.controller("myCtrl", function($scope,$http) {
                     swal({
                         title: "Tersimpan ",text: "Data transaksi berhasil tersimpan!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
-                        $scope.edit = true;
-                        $scope.form = "list";
-                        table.draw();
+                        //$scope.edit = true;
+                        //$scope.form = "list";
+                        //table.draw();
+                        $scope.kembali();
+                        $scope.$apply();
                     })
                 }else{
                     swal({

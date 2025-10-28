@@ -9,9 +9,11 @@ app.controller("myCtrl", function($scope,$http,API) {
             serverSide: true,
             ajax: '{{ route("finance.po.datatable") }}',
             scrollY: "50vh",
-            scrollX: !0,
+            scrollX: true,
+            autoWidth: false,
             scrollCollapse: !0,
             columns: [
+                { data: 'action', title: 'action', orderable: false, searchable: false },
                 { data: 'no_po', title: 'No PO' },
                 { data: 'tanggal_po', title: 'Tanggal PO' },
                 { data: 'tanggal_kirim', title: 'Tanggal Kirim' },
@@ -21,16 +23,27 @@ app.controller("myCtrl", function($scope,$http,API) {
                 { data: 'qty', title: 'Qty' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'harga_satuan', title: 'Harga Satuan' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'total', title: 'Total' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
-                { data: 'keterangan', title: 'keterangan' },
-                { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
+                { 
+                    data: 'keterangan', 
+                    title: 'Keterangan', 
+                    render: function (data, type, row) {
+                        if (!data) return '';
+                        let shortText = data.length > 50 ? data.substr(0, 50) + '...' : data;
+                        return `<span title="${data.replace(/"/g, '&quot;')}">${shortText}</span>`;
+                    },
+                    width: '200px'
+                },
+                { data: 'created_by_name', title: 'Created By' },
+                { data: 'created_at_formatted', title: 'Created At' },
+                { data: 'updated_by_name', title: 'Updated By' },
+                { data: 'updated_at_formatted', title: 'Updated At' },
             ]
         })
 
         $('#viewtabel tbody').on('click', '#edit', function () {
             var tr = $(this).closest('tr');
             var x = table.row(tr).data();
-            $scope.input = x;
-            $scope.input.nama_supplier = x.supplier;
+            $scope.input = angular.copy(x);
             $scope.edit = true;
             $scope.form = "input";
             $scope.$apply();
@@ -217,12 +230,14 @@ app.controller("myCtrl", function($scope,$http,API) {
             .then(function(res){
                 if(res.data.success){
                     swal({
-                        title: "Tersimpan ",text: "Data PO berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
+                        title: "Tersimpan ",text: "Data PO berhasil tersimpan!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
-                        table.draw();
-                        $scope.edit = true;
-                        $scope.form = "input";
-                        $scope.input.uuid = res.data.data.uuid;
+                        //table.draw();
+                        //$scope.edit = true;
+                        //$scope.form = "input";
+                        //$scope.input.uuid = res.data.data.uuid;
+                        $scope.kembali();
+                        $scope.$apply();
                     })
                 }else{
                     swal({

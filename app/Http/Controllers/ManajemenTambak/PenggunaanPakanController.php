@@ -40,6 +40,7 @@ class PenggunaanPakanController extends Controller
                 'keterangan','penggunaan_pakan.deleted_at',
                 'setup_lokasi.nama_lokasi',
                 'setup_siklus.nama_siklus',
+                'penggunaan_pakan.created_by','penggunaan_pakan.updated_by','penggunaan_pakan.created_at','penggunaan_pakan.updated_at'
             ]);
         return DataTables::of($query)
             ->addColumn('status', fn($row) => $row->deleted_at!=null ?'Batal':'')
@@ -140,7 +141,7 @@ class PenggunaanPakanController extends Controller
                 'tanggal_selesai'   => $data['tanggal_penggunaan'],
                 'biaya_id'          => $biaya_id,
                 'nominal'           => $data['total'],
-                'coa_id'            => 2,
+                'coa_id'            => 13,
                 'keterangan'        => 'transaksi penggunaan pakan',
                 'reff_id'           => $insert->id_penggunaan,
                 'reff_trans'        => 'penggunaan_pakan'

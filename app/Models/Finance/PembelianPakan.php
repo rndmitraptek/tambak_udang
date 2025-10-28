@@ -9,11 +9,12 @@ use App\Models\SetupLokasi;
 use App\Models\SetupSiklus;
 use App\Models\Finance\PembelianPakanDetail;
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUserAudit;
 use App\Traits\HasUuid;
 
 class PembelianPakan extends Model
 {
-    use SoftDeletes, CreatedUpdatedBy, HasUuid;
+    use SoftDeletes, CreatedUpdatedBy, HasUuid,HasUserAudit;
 
     protected $table = 'pembelian_pakan';
     protected $primaryKey = 'id_pembelian';
@@ -28,6 +29,7 @@ class PembelianPakan extends Model
         'created_by',
         'updated_by',
     ];
+    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     public function detail()
     {
