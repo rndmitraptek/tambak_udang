@@ -119,7 +119,10 @@ app.controller("myCtrl", function($scope,$http,API) {
         }
     }
     $scope.hitung = function(){
-        $scope.input.total = parseInt($scope.input.qty) * parseInt($scope.input.harga_satuan)
+        console.log($scope.input.qty);
+         console.log($scope.input.harga_satuan);
+        $scope.input.total = parseFloat($scope.input.qty) * parseFloat($scope.input.harga_satuan)
+        console.log($scope.input.total);
     }
     $scope.kembali = function(){
         $scope.form = "list";

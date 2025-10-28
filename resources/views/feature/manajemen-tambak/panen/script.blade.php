@@ -204,9 +204,9 @@ app.controller("myCtrl", function($scope,$http) {
         $scope.jumlah = 0;
         $scope.total = 0;
         $scope.detail.forEach(function(detail, index) {
-            detail.subtotal = parseInt(detail.jumlah) * parseInt(detail.harga);
-            $scope.jumlah = $scope.jumlah + parseInt(detail.jumlah);
-            $scope.total = $scope.total + parseInt(detail.subtotal);
+            detail.subtotal = parseFloat(detail.jumlah) * parseFloat(detail.harga);
+            $scope.jumlah = $scope.jumlah + parseFloat(detail.jumlah);
+            $scope.total = $scope.total + parseFloat(detail.subtotal);
         });
     }
 

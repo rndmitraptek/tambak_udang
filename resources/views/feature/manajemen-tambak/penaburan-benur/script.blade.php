@@ -237,15 +237,15 @@ app.controller("myCtrl", function($scope,$http) {
         $scope.total_jumlah_neto = 0;
         $scope.total_jumlah_actual = 0;
         $scope.detail.forEach(function(detail, index) {
-            detail.subtotal_bruto = parseInt(detail.harga_bruto) * parseInt(detail.jumlah_bruto);
-            detail.subtotal_neto = parseInt(detail.harga_neto) * parseInt(detail.jumlah_neto);
-            detail.subtotal_actual = parseInt(detail.harga_actual) * parseInt(detail.jumlah_actual);
+            detail.subtotal_bruto = parseFloat(detail.harga_bruto) * parseFloat(detail.jumlah_bruto);
+            detail.subtotal_neto = parseFloat(detail.harga_neto) * parseFloat(detail.jumlah_neto);
+            detail.subtotal_actual = parseFloat(detail.harga_actual) * parseFloat(detail.jumlah_actual);
             $scope.total_harga_bruto = $scope.total_harga_bruto + detail.subtotal_bruto;
             $scope.total_harga_neto = $scope.total_harga_neto + detail.subtotal_neto;
             $scope.total_harga_actual = $scope.total_harga_actual + detail.subtotal_actual;
-            $scope.total_jumlah_bruto = $scope.total_jumlah_bruto + parseInt(detail.jumlah_bruto);
-            $scope.total_jumlah_neto = $scope.total_jumlah_neto + parseInt(detail.jumlah_neto);
-            $scope.total_jumlah_actual = $scope.total_jumlah_actual + parseInt(detail.jumlah_actual);
+            $scope.total_jumlah_bruto = $scope.total_jumlah_bruto + parseFloat(detail.jumlah_bruto);
+            $scope.total_jumlah_neto = $scope.total_jumlah_neto + parseFloat(detail.jumlah_neto);
+            $scope.total_jumlah_actual = $scope.total_jumlah_actual + parseFloat(detail.jumlah_actual);
         });
     }
 

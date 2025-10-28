@@ -1,0 +1,71 @@
+truncate table pembayaran_hutang_supplier_giro RESTART IDENTITY;
+truncate table pembayaran_hutang_supplier_tunai RESTART IDENTITY;
+truncate table pembayaran_hutang_supplier_transfer RESTART IDENTITY;
+truncate table pembayaran_hutang_supplier_detail_hutang RESTART IDENTITY;
+truncate table pembayaran_hutang_supplier_detail_piutang RESTART IDENTITY;
+truncate table pembayaran_hutang_supplier RESTART IDENTITY CASCADE;
+
+truncate table pembayaran_piutang_customer_giro RESTART IDENTITY;
+truncate table pembayaran_piutang_customer_tunai RESTART IDENTITY;
+truncate table pembayaran_piutang_customer_detail RESTART IDENTITY;
+truncate table pembayaran_piutang_customer_giro RESTART IDENTITY;
+truncate table pembayaran_piutang_customer RESTART IDENTITY CASCADE;
+
+TRUNCATE TABLE piutang_customer RESTART IDENTITY CASCADE;
+truncate TABLE piutang_supplier RESTART IDENTITY CASCADE;
+
+truncate table pembelian_barang_detail RESTART IDENTITY ;
+truncate table pembelian_barang RESTART IDENTITY CASCADE;
+
+TRUNCATE TABLE penaburan_benur_detail RESTART IDENTITY;
+TRUNCATE table penaburan_benur restart IDENTITY CASCADE;
+
+TRUNCATE TABLE po_benur RESTART IDENTITY CASCADE;
+
+truncate TABLE panen_detail RESTART IDENTITY;
+TRUNCATE TABLE panen RESTART IDENTITY CASCADE;
+
+truncate TABLE transaksi_biaya_simulasi_petak RESTART IDENTITY;
+truncate TABLE transaksi_biaya_simulasi_siklus RESTART IDENTITY CASCADE;
+TRUNCATE TABLE transaksi_biaya_simulasi RESTART IDENTITY CASCADE;
+TRUNCATE TABLE transaksi_biaya_siklus RESTART IDENTITY CASCADE;
+TRUNCATE TABLE transaksi_biaya_petak RESTART IDENTITY CASCADE;
+
+truncate TABLE transaksi_simulasi_biaya RESTART IDENTITY CASCADE;
+truncate table transaksi_simulasi_pendapatan RESTART IDENTITY CASCADE;
+truncate table transaksi_simulasi_detail RESTART IDENTITY CASCADE;
+truncate table transaksi_simulasi RESTART IDENTITY CASCADE;
+
+TRUNCATE TABLE setup_siklus_petak RESTART IDENTITY;
+truncate table setup_siklus RESTART IDENTITY CASCADE;
+
+truncate table pembelian_pakan_detail RESTART IDENTITY;
+truncate TABLE pembelian_pakan RESTART IDENTITY CASCADE;
+
+TRUNCATE TABLE retur_pakan_detail RESTART IDENTITY;
+TRUNCATE TABLE retur_pakan RESTART IDENTITY CASCADE;
+
+TRUNCATE TABLE penggunaan_pakan_detail RESTART IDENTITY;
+TRUNCATE table penggunaan_pakan RESTART IDENTITY CASCADE;
+
+TRUNCATE TABLE stok_pakan RESTART IDENTITY;
+TRUNCATE TABLE history_kartu_stok RESTART IDENTITY CASCADE;
+
+TRUNCATE TABLE setup_rekening_bank RESTART IDENTITY CASCADE;
+truncate TABLE setup_biaya_lokasi RESTART IDENTITY CASCADE;
+truncate TABLE setup_biaya RESTART IDENTITY CASCADE;
+
+truncate TABLE setup_barang RESTART IDENTITY CASCADE;
+TRUNCATE TABLE setup_customer RESTART IDENTITY CASCADE;
+TRUNCATE TABLE setup_supplier RESTART IDENTITY CASCADE;
+TRUNCATE TABLE setup_item RESTART IDENTITY CASCADE;
+TRUNCATE TABLE setup_petak RESTART IDENTITY CASCADE;
+TRUNCATE TABLE setup_blok RESTART IDENTITY CASCADE;
+TRUNCATE TABLE setup_lokasi RESTART IDENTITY CASCADE;
+TRUNCATE TABLE setup_benur RESTART IDENTITY CASCADE;
+TRUNCATE TABLE setup_pakan RESTART IDENTITY CASCADE;
+
+
+truncate TABLE jurnal_detail RESTART IDENTITY;
+TRUNCATE TABLE jurnal RESTART IDENTITY CASCADE;
+

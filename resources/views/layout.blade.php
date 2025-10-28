@@ -1012,6 +1012,55 @@ License: You must have a valid license purchased only from themeforest(the above
                 clearBtn: !0,
 				format: "yyyy-mm-dd"
 			})
+			// Directive
+			app.directive('inputCurrency', ['$timeout', function($timeout) {
+				return {
+					restrict: 'A',
+					require: 'ngModel',
+					link: function(scope, element, attrs, ngModel) {
+
+						// Inisialisasi Inputmask
+						$(element).inputmask("numeric", {
+							radixPoint: ",",
+							groupSeparator: ".",
+							digits: 2,
+							autoGroup: true,
+							prefix: '',
+							rightAlign: false,
+							autoUnmask: true,
+							oncomplete: function() {
+								$timeout(function() {
+									var val = $(element).val();
+									var num = parseFloat(val.replace(',', '.'));
+									ngModel.$setViewValue(isNaN(num) ? null : num);
+									if (attrs.ngChange) scope.$eval(attrs.ngChange);
+								});
+							}
+						});
+
+						// Saat nilai dari model berubah, update tampilan inputmask
+						ngModel.$formatters.push(function(value) {
+							if (value == null || value === '') return '';
+							// pastikan angka diformat sesuai mask
+							$timeout(() => {
+								$(element).val(value);
+								$(element).trigger('input');
+							});
+							return value;
+						});
+
+						// Saat nilai diinput, simpan ke model Angular
+						element.on('input', function() {
+							scope.$applyAsync(function() {
+								// Inputmask autoUnmask:true => hasil value sudah angka murni
+								var val = $(element).val();
+								var num = parseFloat(val.replace(',', '.'));
+								ngModel.$setViewValue(isNaN(num) ? null : num);
+							});
+						});
+					}
+				};
+			}]);
 		</script>
 	</body>
 	<!-- end::Body -->

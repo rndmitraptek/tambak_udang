@@ -86,8 +86,8 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.total_debit = 0;
         $scope.total_kredit = 0;
         $scope.detail.forEach(function(detail, index) {
-            $scope.total_debit = $scope.total_debit + parseInt(detail.debit);
-            $scope.total_kredit = $scope.total_kredit + parseInt(detail.kredit);
+            $scope.total_debit = $scope.total_debit + parseFloat(detail.debit);
+            $scope.total_kredit = $scope.total_kredit + parseFloat(detail.kredit);
         });
     }
     $scope.simpan = function(){
