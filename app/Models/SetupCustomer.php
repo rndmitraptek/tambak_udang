@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUserAudit;
 use App\Traits\HasUuid;
 
 class SetupCustomer extends Model
 {
-    use SoftDeletes,HasUuid,CreatedUpdatedBy;
+    use SoftDeletes,HasUuid,CreatedUpdatedBy,HasUserAudit;
 
     protected $table = 'setup_customer';
     protected $primaryKey = 'id_customer';
@@ -25,6 +26,7 @@ class SetupCustomer extends Model
         'created_by',
         'updated_by',
     ];
+    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     // protected static function boot()
     // {

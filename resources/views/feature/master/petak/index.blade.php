@@ -22,7 +22,7 @@
 <!-- END: Subheader -->
 <div class="m-content">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -51,17 +51,7 @@
                 <div class="m-portlet__body">
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
-                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        <thead>
-                            <tr>
-                                <th>Nama Lokasi</th>
-                                <th>Blok</th>
-                                <th>Nama Petak</th>
-                                <th>Luas (m<sup>2</sup>)</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                    <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabel">
                     </table>
                 </div>
             </div>

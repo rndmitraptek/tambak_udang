@@ -22,9 +22,13 @@ $(document).ready(function() {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
         columns: [
-            { data: 'kode_lokasi', name: 'kode_lokasi' },
-            { data: 'nama_lokasi', name: 'nama_lokasi' },
-            { data: 'alamat_lokasi', name: 'alamat_lokasi' },
+            { data: 'kode_lokasi', title: 'Kode Lokasi' },
+            { data: 'nama_lokasi', title: 'Nama Lokasi' },
+            { data: 'alamat_lokasi', title: 'Alamat Lokasi' },
+            { data: 'created_by_name', title: 'Created By' },
+            { data: 'created_at_formatted', title: 'Created At' },
+            { data: 'updated_by_name', title: 'Updated By' },
+            { data: 'updated_at_formatted', title: 'Updated At' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

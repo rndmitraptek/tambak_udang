@@ -51,18 +51,7 @@
                 <div class="m-portlet__body">
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
-                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        <thead>
-                            <tr>
-                                <th>Kode Benur</th>
-                                <th>Kode Supplier</th>
-                                <th>Jenis Benur</th>
-                                <th>Harga</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabel"></table>
                 </div>
             </div>
         </div>

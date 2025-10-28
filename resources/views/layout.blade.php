@@ -1076,6 +1076,18 @@ License: You must have a valid license purchased only from themeforest(the above
 								ngModel.$setViewValue(isNaN(num) ? null : num);
 							});
 						});
+
+						// Tambahan: auto-select saat diklik atau fokus
+						element.on('focus click', function() {
+							$timeout(function() {
+								element[0].select();
+							});
+						});
+
+						// Opsional: kalau ingin agar kehilangan fokus tidak error
+						element.on('blur', function() {
+							// bisa tambahkan validasi atau format ulang di sini jika perlu
+						});
 					}
 				};
 			}]);

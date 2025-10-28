@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUserAudit;
 use App\Traits\HasUuid;
 
 class SetupSiklus extends Model
 {
-    use HasFactory, SoftDeletes, HasUuid, CreatedUpdatedBy;
+    use HasFactory, SoftDeletes, HasUuid, CreatedUpdatedBy, HasUserAudit;
 
     protected $table = 'setup_siklus';
     protected $primaryKey = 'id_siklus';
@@ -26,6 +27,7 @@ class SetupSiklus extends Model
         'created_by',
         'updated_by',
     ];
+    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     // protected static function boot()
     // {

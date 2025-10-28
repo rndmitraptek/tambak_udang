@@ -44,17 +44,21 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/petak/data",
         columns: [
-            { data: 'nama_lokasi', name: 'nama_lokasi' },
-            { data: 'nama_blok', name: 'nama_blok' },
-            { data: 'nama_petak', name: 'nama_petak' },
+            { data: 'nama_lokasi', title: 'nama_lokasi' },
+            { data: 'nama_blok', title: 'nama_blok' },
+            { data: 'nama_petak', title: 'nama_petak' },
             { 
                 data: 'luas_petak', 
-                name: 'luas_petak',
+                title: 'luas_petak',
                 render: function(data, type, row) {
                     return  parseInt(data).toLocaleString('id-ID');
                 }
             },
-            { data: 'keterangan', name: 'keterangan' },
+            { data: 'keterangan', title: 'keterangan' },
+            { data: 'created_by_name', title: 'Created By' },
+            { data: 'created_at_formatted', title: 'Created At' },
+            { data: 'updated_by_name', title: 'Updated By' },
+            { data: 'updated_at_formatted', title: 'Updated At' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

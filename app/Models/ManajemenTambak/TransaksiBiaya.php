@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\SetupBiaya;
 use App\Models\SetupCoa;
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUserAudit;
 use App\Traits\HasUuid;
 
 class TransaksiBiaya extends Model
 {
-    use SoftDeletes, CreatedUpdatedBy, HasUuid;
+    use SoftDeletes, CreatedUpdatedBy, HasUuid, HasUserAudit;
 
     protected $table = 'transaksi_biaya';
     protected $fillable = [
@@ -19,6 +20,7 @@ class TransaksiBiaya extends Model
         'biaya_id','nominal','coa_id','keterangan','created_by','updated_by','validated_by', 'validated_at',
         'reff_id','reff_trans'
     ];
+    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     public function biaya()
     {

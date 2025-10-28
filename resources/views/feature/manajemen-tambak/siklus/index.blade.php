@@ -51,18 +51,7 @@
                 <div class="m-portlet__body">
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
-                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        <thead>
-                            <tr>
-                                <th>Nama Siklus</th>
-                                <th>Lokasi Tambak</th>
-                                <th>Tanggal Mulai</th>
-                                <th>Tanggal Selesai</th>
-                                <th>Catatan</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                    <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabel">
                     </table>
                 </div>
             </div>
@@ -110,7 +99,7 @@
                         </div>
                         <div class="col-lg-8" style="border-left: 1px solid #ccc;">
                             <h4>Petak Dalam Siklus</h4>
-                            <table id="viewtabelpetak" class="table table-striped- table-bordered table-hover table-checkable" ng-if="lokasi != ''">
+                            <table id="viewtabelpetak" class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" ng-if="lokasi != ''">
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" id="checkAllPetak"></th>

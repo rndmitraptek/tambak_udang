@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
+                    <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabel">
                         <thead>
                         <tr>
                             <th>Kode Akun</th>

@@ -51,18 +51,8 @@
                 <div class="m-portlet__body">
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
-                    <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabel">
-                        <thead>
-                            <tr>
-                                <th>No Transaksi</th>
-                                <th>Siklus</th>
-                                <th>Tanggal Transaksi</th>
-                                <th>Biaya</th>
-                                <th>Nominal Biaya</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                    <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabel">
+                        
                     </table>
                 </div>
             </div>
@@ -171,7 +161,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8" style="border-left: 1px solid #ccc;">
-                                <table class="table table-striped- table-bordered table-hover table-checkable" id="viewtabelpetak">
+                                <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabelpetak">
                                     <thead>
                                         <tr>
                                             <th>ID Siklus</th>
@@ -222,7 +212,7 @@
                         </div>
                     </div>
                 </div>
-                <table class="table table-striped- table-bordered table-hover table-checkable">
+                <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info">
                     <thead>
                         <tr>
                             <th>Kode</th>

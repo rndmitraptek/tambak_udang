@@ -96,12 +96,16 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/setup-siklus/data",
         columns: [
-            { data: 'nama_siklus', name: 'nama_siklus' },
-            { data: 'nama_lokasi', name: 'nama_lokasi' },
-            { data: 'tanggal_mulai', name: 'tanggal_mulai' },
-            { data: 'tanggal_selesai', name: 'tanggal_selesai' },
-            { data: 'catatan', name: 'catatan' },
-            { data: 'status', name: 'status' },
+            { data: 'nama_siklus', title: 'nama_siklus' },
+            { data: 'nama_lokasi', title: 'nama_lokasi' },
+            { data: 'tanggal_mulai', title: 'tanggal_mulai' },
+            { data: 'tanggal_selesai', title: 'tanggal_selesai' },
+            { data: 'catatan', title: 'catatan' },
+            { data: 'status', title: 'status' },
+            { data: 'created_by_name', title: 'Created By' },
+            { data: 'created_at_formatted', title: 'Created At' },
+            { data: 'updated_by_name', title: 'Updated By' },
+            { data: 'updated_at_formatted', title: 'Updated At' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

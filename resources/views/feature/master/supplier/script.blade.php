@@ -39,14 +39,18 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/supplier/data",
         columns: [
-            { data: 'kode_supplier', name: 'kode_supplier' },
-            { data: 'nama_supplier', name: 'nama_supplier' },
-            { data: 'alamat_supplier', name: 'alamat_supplier' },
-            { data: 'telepon_supplier', name: 'telepon_supplier' },
-            { data: 'email_supplier', name: 'email_supplier' },
-            { data: 'nama_perusahaan', name: 'nama_perusahaan' },
-            { data: 'catatan', name: 'catatan' },
-            { data: 'actions', name: 'actions', orderable: false, searchable: false }
+            { data: 'kode_supplier', title: 'kode Supplier' },
+            { data: 'nama_supplier', title: 'Nama title' },
+            { data: 'alamat_supplier', title: 'Alamat title' },
+            { data: 'telepon_supplier', title: 'telepon title' },
+            { data: 'email_supplier', title: 'Email title' },
+            { data: 'nama_perusahaan', title: 'Nama Perusahaan' },
+            { data: 'catatan', title: 'catatan' },
+            { data: 'created_by_name', title: 'Created By' },
+            { data: 'created_at_formatted', title: 'Created At' },
+            { data: 'updated_by_name', title: 'Updated By' },
+            { data: 'updated_at_formatted', title: 'Updated At' },
+            { data: 'actions', title: 'actions', orderable: false, searchable: false }
         ]
     });
 

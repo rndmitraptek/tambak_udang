@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Traits\CreatedUpdatedBy;
+use App\Traits\HasUserAudit;
 use App\Traits\HasUuid;
 use App\Traits\LogActivity;
 
 class SetupLokasi extends Model
 {
-    use SoftDeletes,HasUuid,CreatedUpdatedBy,LogActivity;
+    use SoftDeletes,HasUuid,CreatedUpdatedBy,LogActivity,HasUserAudit;
 
     protected $table = 'setup_lokasi';
     protected $primaryKey = 'id_lokasi';
@@ -23,6 +24,7 @@ class SetupLokasi extends Model
         'created_by',
         'updated_by',
     ];
+    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     // protected static function boot()
     // {

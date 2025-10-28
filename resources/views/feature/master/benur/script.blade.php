@@ -39,18 +39,22 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/benur/data",
         columns: [
-            { data: 'kode_benur', name: 'kode_benur' },
-            { data: 'kode_supplier', name: 'kode_supplier' },
-            { data: 'jenis_benur', name: 'jenis_benur' },
+            { data: 'kode_benur', title: 'Kode Benur' },
+            { data: 'kode_supplier', title: 'Kode Supplier' },
+            { data: 'jenis_benur', title: 'Jenis Benur' },
             { 
                 data: 'harga_benur', 
-                name: 'harga_benur',
+                title: 'Harga Benur',
                 render: function(data, type, row) {
                     // Format angka ke Rupiah
                     return 'Rp ' + parseInt(data).toLocaleString('id-ID');
                 }
             },
-            { data: 'keterangan', name: 'keterangan' },
+            { data: 'keterangan', title: 'Keterangan' },
+            { data: 'created_by_name', title: 'Created By' },
+            { data: 'created_at_formatted', title: 'Created At' },
+            { data: 'updated_by_name', title: 'Updated By' },
+            { data: 'updated_at_formatted', title: 'Updated At' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

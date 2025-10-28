@@ -40,12 +40,16 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/customer/data",
         columns: [
-            { data: 'kode_customer', name: 'kode_customer' },
-            { data: 'nama_customer', name: 'nama_customer' },
-            { data: 'alamat_customer', name: 'alamat_customer' },
-            { data: 'telepon_customer', name: 'telepon_customer' },
-            { data: 'email_customer', name: 'email_customer' },
-            { data: 'catatan', name: 'catatan' },
+            { data: 'kode_customer', title: 'Kode Customer' },
+            { data: 'nama_customer', title: 'Nama Customer' },
+            { data: 'alamat_customer', title: 'Alamat Customer' },
+            { data: 'telepon_customer', title: 'Telepon Customer' },
+            { data: 'email_customer', title: 'Email Customer' },
+            { data: 'catatan', title: 'Catatan' },
+            { data: 'created_by_name', title: 'Created By' },
+            { data: 'created_at_formatted', title: 'Created At' },
+            { data: 'updated_by_name', title: 'Updated By' },
+            { data: 'updated_at_formatted', title: 'Updated At' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

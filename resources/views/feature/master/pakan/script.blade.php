@@ -39,19 +39,23 @@ $(document).ready(function() {
         serverSide: true,
         ajax: "/pakan/data",
         columns: [
-            { data: 'kode_pakan', name: 'kode_pakan' },
-            { data: 'nama_pakan', name: 'nama_pakan' },
-            { data: 'jenis_pakan', name: 'jenis_pakan' },
-            { data: 'merk_pakan', name: 'merk_pakan' },
-            { data: 'satuan_pakan', name: 'satuan_pakan' },
+            { data: 'kode_pakan', title: 'Kode Pakan' },
+            { data: 'nama_pakan', title: 'Nama Pakan' },
+            { data: 'jenis_pakan', title: 'Jenis Pakan' },
+            { data: 'merk_pakan', title: 'Merk Pakan' },
+            { data: 'satuan_pakan', title: 'Saruan Pakan' },
             { 
                 data: 'harga_pakan', 
-                name: 'harga_pakan',
+                title: 'Harga Pakan',
                 render: function(data, type, row) {
                     return 'Rp ' + parseInt(data).toLocaleString('id-ID');
                 }
             },
-            { data: 'keterangan', name: 'keterangan' },
+            { data: 'keterangan', title: 'keterangan' },
+            { data: 'created_by_name', title: 'Created By' },
+            { data: 'created_at_formatted', title: 'Created At' },
+            { data: 'updated_by_name', title: 'Updated By' },
+            { data: 'updated_at_formatted', title: 'Updated At' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });
