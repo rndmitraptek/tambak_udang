@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\StokHelper;
+use App\Models\Akuntansi\JurnalDetailModel;
+use App\Models\Akuntansi\JurnalModel;
 use App\Models\Finance\HutangSupplierModel;
 use App\Models\Finance\PoModel;
 use App\Models\SetupCoa;
@@ -151,7 +153,6 @@ class PembelianPakanController extends Controller
                 'no_pembelian'      => 'required',
                 'tanggal_pembelian' => 'required',
             ]);
-
             if ($validator->fails()) {
                 return response()->json(['success'=>false,'errors'=>$validator->errors()]);
             }
@@ -161,10 +162,32 @@ class PembelianPakanController extends Controller
             $data['supplier_id'] = $supplier->id_supplier;
             $data['lokasi_id']   = $lokasi->id_lokasi;
             $data['siklus_id']   = $siklus->id_siklus;
-            $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
-            $data['kode_coa'] = $coa->kode_coa;
+            if(!empty($data['is_hutang']) && $data['is_hutang'] == 1){
+                $data['id_coa'] = null;
+                $data['kode_coa'] = null;
+            }else{
+                $coa = SetupCoa::where('id_coa',$data['id_coa'])->first();
+                // dd($coa);
+                $data['kode_coa'] = $coa->kode_coa;
+            }
             $insert = PembelianPakan::create($data);
-
+            // jurnal
+            //insert jurnal
+            $jurnal = JurnalModel::create([
+                'tanggal'    =>$data['tanggal_pembelian'],
+                'no_bukti'   =>$data['no_pembelian'],
+                'reff_id'    =>$insert->id_pembelian,
+                'reff_trans' =>'PEMBELIAN_PAKAN',
+                'keterangan' =>'Pembelian Pakan, '.$supplier->nama_supplier
+            ]);
+            JurnalDetailModel::create([
+                'id_jurnal' =>$jurnal->id_jurnal,
+                'id_coa'    =>22,
+                'kode_coa'  =>'11402',
+                'nama_coa'  =>'PERSEDIAAN PAKAN UDANG',
+                'debit'     =>$data['total'],
+                'kredit'    =>0
+            ]);
             //insert hutang supplier (kredit)
             if (!empty($data['is_hutang']) && $data['is_hutang'] == 1) {
                 HutangSupplierModel::create([
@@ -178,8 +201,24 @@ class PembelianPakanController extends Controller
                     'dibayar' => 0,
                     'sisa' => $data['total'],
                 ]);
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>81,
+                    'kode_coa'  =>'21202',
+                    'nama_coa'  =>'HUTANG USAHA - PAKAN',
+                    'debit'     =>0,
+                    'kredit'    =>$data['total']
+                ]);
+            }else{
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>$coa->id_coa,
+                    'kode_coa'  =>$coa->kode_coa,
+                    'nama_coa'  =>$coa->nama_coa,
+                    'debit'     =>0,
+                    'kredit'    =>$data['total']
+                ]);
             }
-
             foreach($req->detail as $d){
                 $d['id_pembelian'] = $insert->id_pembelian;
                 unset($d['kode_pakan'], $d['nama_pakan']);

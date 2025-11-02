@@ -138,6 +138,17 @@ app.controller("myCtrl", function($scope,$http,API) {
             swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
         });
     }
+
+    $scope.coa = [];
+    $http.get("{{ route('finance.pembayaran_hutang_supplier.get_coa') }}")
+    .then(function(res){
+        if(res.data.success){
+            $scope.coa = res.data.data;
+        }
+    }).catch(function(error) {
+        swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+    });
+
     $scope.supplierColumns = [
         { data: 'kode_supplier', title: 'Kode Supplier' },
         { data: 'nama_supplier', title: 'Nama Supplier' },

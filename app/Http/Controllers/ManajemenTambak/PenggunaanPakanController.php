@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManajemenTambak;
 
 use App\Helpers\GeneradeNomorHelper;
+use App\Helpers\JurnalTransaksiHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PoModel;
 use App\Models\ManajemenTambak\PenggunaanPakanDetail;
@@ -188,6 +189,15 @@ class PenggunaanPakanController extends Controller
                     $data['tanggal_penggunaan']
                 );
             }
+            // insert jurnal
+            JurnalTransaksiHelper::penaburan_pakan([
+                'tanggal' => $data['tanggal_penggunaan'],
+                'no_bukti'=> $data['no_penggunaan'],
+                'reff_id' => $insert->id_penggunaan,
+                'reff_trans' => 'PENABURAN PAKAN',
+                'keterangan' => 'Penggunakan Pakan, ',
+                'nominal' => $data['total'],
+            ]);
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
         }catch(\Exception $err) {

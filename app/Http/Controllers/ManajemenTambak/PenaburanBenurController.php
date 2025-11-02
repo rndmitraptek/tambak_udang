@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ManajemenTambak;
 
 use App\Helpers\GeneradeNomorHelper;
+use App\Helpers\JurnalTransaksiHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\HutangSupplierModel;
 use App\Models\Finance\PoModel;
@@ -172,6 +173,15 @@ class PenaburanBenurController extends Controller
                     'sisa'                  =>$data['total_nominal_bruto']
                 ]);
             }
+            // insert jurnal
+            JurnalTransaksiHelper::penaburan_benur([
+                'tanggal' => $data['tanggal_penaburan'],
+                'no_bukti'=> $data['no_penaburan_benur'],
+                'reff_id' => $insert->id_penaburan_benur,
+                'reff_trans' => 'PENABURAN BENUR',
+                'keterangan' => 'PENABURAN BENUR, '.$lokasi->nama_lokasi.', '.$data['keterangan'],
+                'nominal' => $data['total_nominal_netto'],
+            ]);
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
         }catch(\Exception $err) {
@@ -248,6 +258,31 @@ class PenaburanBenurController extends Controller
                     'tanggal_selesai'       =>$data['tanggal_penaburan'],
                 ]);
             }
+             // insert hutang supplier
+            HutangSupplierModel::where('reff_id',$penaburanBenur->id_penaburan_benur)
+            ->where('reff_trans','PENABURAN BENUR')->delete();
+            if (!empty($data['is_hutang']) && $data['is_hutang'] == 1) {
+                $insert_hutang_supplier = HutangSupplierModel::create([
+                    'id_supplier'           =>$po->id_supplier,
+                    'no_faktur'             =>$data['no_penaburan_benur'],
+                    'reff_id'               =>$penaburanBenur->id_penaburan_benur,
+                    'reff_trans'            =>'PENABURAN BENUR',
+                    'tanggal_hutang'        =>$data['tanggal_penaburan'],
+                    'tanggal_jatuh_tempo'   =>$data['tanggal_penaburan'],
+                    'jumlah_hutang'         =>$data['total_nominal_bruto'],
+                    'dibayar'               =>0,
+                    'sisa'                  =>$data['total_nominal_bruto']
+                ]);
+            }
+            // insert jurnal
+            JurnalTransaksiHelper::penaburan_benur([
+                'tanggal' => $data['tanggal_penaburan'],
+                'no_bukti'=> $data['no_penaburan_benur'],
+                'reff_id' => $penaburanBenur->id_penaburan_benur,
+                'reff_trans' => 'PENABURAN BENUR',
+                'keterangan' => 'PENABURAN BENUR, '.$lokasi->nama_lokasi.', '.$data['keterangan'],
+                'nominal' => $data['total_nominal_netto'],
+            ]);
             DB::commit();
             return response()->json(['success'=>true,'data'=>$penaburanBenur,'message'=>'']);
         }catch(\Exception $err) {

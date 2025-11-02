@@ -104,4 +104,6 @@ class CoaController extends Controller
         $coa->delete();
         return response()->json(['success' => true]);
     }
+
+
 }

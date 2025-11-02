@@ -131,4 +131,9 @@ class PembayaranPiutangCustomerController extends Controller
         ->where('uuid',$uuid)->first();
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
+    
+    public function get_coa(){
+        $data = DB::select("SELECT * FROM setup_coa WHERE LEFT(kode_coa, 3) = ('111') AND RIGHT(kode_coa, 1) <> '0'",[]);
+        return response()->json(['success' => true, 'data' => $data]);
+    }
 }

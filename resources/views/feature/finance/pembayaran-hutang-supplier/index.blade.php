@@ -716,6 +716,15 @@
                                 <input type="text" class="form-control" ng-model="form_tunai.nama_penerima" >
                             </div>
                         </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Kode COA</label>
+                            <div class="col-8">
+                                <select class="form-control" id="id_coa" ng-model="form_tunai.id_coa" name="id_coa">
+                                    <option value="" >-</option>
+                                    <option ng-repeat="x in coa" value="<% x.id_coa %>" ng-selected="x.id_coa == form_tunai.id_coa"><% x.kode_coa %> - <% x.nama_coa %></option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">

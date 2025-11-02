@@ -97,6 +97,16 @@ app.controller("myCtrl", function($scope,$http,API) {
         
     });
 
+    $scope.coa = [];
+    $http.get("{{ route('finance.pembayaran_piutang_customer.get_coa') }}")
+    .then(function(res){
+        if(res.data.success){
+            $scope.coa = res.data.data;
+        }
+    }).catch(function(error) {
+        swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+    });
+
     $scope.get_detail = function(uuid){
         url = "{{ route('finance.pembayaran_piutang_customer.get_detail',':uuid') }}"
         url = url.replace(':uuid', uuid)

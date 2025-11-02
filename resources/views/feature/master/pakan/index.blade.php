@@ -51,20 +51,7 @@
                 <div class="m-portlet__body">
                 {{-- <h1><% tes %></h1> --}}
                     <!--begin: Datatable -->
-                    <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabel">
-                        <thead>
-                            <tr>
-                                <th>Kode Pakan</th>
-                                <th>Nama Pakan</th>
-                                <th>Jenis Pakan</th>
-                                <th>Merk</th>
-                                <th>Satuan</th>
-                                <th>Harga Per Kg</th>
-                                <th>Keterangan</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <table class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" id="viewtabel"></table>
                 </div>
             </div>
         </div>

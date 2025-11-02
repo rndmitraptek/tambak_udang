@@ -7,10 +7,16 @@ use App\Models\Akuntansi\JurnalModel;
 use App\Models\nomorCounter;
 use App\Models\SetupCoa;
 
-class JurnalTransaksiHelperHelper
+class JurnalTransaksiHelper
 {
     public static function penaburan_benur($data)
     {
+        $cek = JurnalModel::where('reff_id',$data['reff_id'])
+        ->where('reff_trans',$data['reff_trans'])->first();
+        if($cek){
+            JurnalDetailModel::where('id_jurnal',$cek->id_jurnal)->delete();
+            $cek->delete();
+        }
         $jurnal = JurnalModel::create([
             'tanggal'   =>$data['tanggal'],
             'no_bukti'  =>$data['no_bukti'],
@@ -56,80 +62,14 @@ class JurnalTransaksiHelperHelper
             'kredit'    =>$data['nominal']
         ]);
     }
-
-    public static function pembayaran_hutang($data)
-    {
-        $jurnal = JurnalModel::create([
-            'tanggal'   =>$data['tanggal'],
-            'no_bukti'  =>$data['no_bukti'],
-            'reff_id'   =>$data['reff_id'],
-            'reff_trans'=>$data['reff_trans'],
-            'keterangan'=>$data['keterangan']
-        ]);
-        // Transaksi Pembayaran Hutang Dagang
-        // 21201	 HUTANG USAHA - BENUR 
-	    //     1	 Kas/Bank
-        JurnalDetailModel::create([
-            'id_jurnal' =>$jurnal->id_jurnal,
-            'id_coa'    =>80,
-            'kode_coa'  =>'21201',
-            'nama_coa'  =>'HUTANG USAHA - BENUR',
-            'debit'     =>$data['nominal'],
-            'kredit'    =>0
-        ]);
-        // KAS / BANK
-        JurnalDetailModel::create([
-            'id_jurnal' =>$jurnal->id_jurnal,
-            'id_coa'    =>$data['id_coa'],
-            'kode_coa'  =>$data['kode_coa'],
-            'nama_coa'  =>$data['nama_coa'],
-            'debit'     =>0,
-            'kredit'    =>$data['nominal']
-        ]);
-    }
-
-    public static function pembelian_pakan($data){
-        $jurnal = JurnalModel::create([
-            'tanggal'   =>$data['tanggal'],
-            'no_bukti'  =>$data['no_bukti'],
-            'reff_id'   =>$data['reff_id'],
-            'reff_trans'=>$data['reff_trans'],
-            'keterangan'=>$data['keterangan']
-        ]);
-        // 11402	 PERSEDIAAN PAKAN UDANG 
-	    //      21202/1	 HUTANG USAHA - PAKAN / KAS / BANK
-        JurnalDetailModel::create([
-            'id_jurnal' =>$jurnal->id_jurnal,
-            'id_coa'    =>22,
-            'kode_coa'  =>'11402',
-            'nama_coa'  =>'PERSEDIAAN PAKAN UDANG',
-            'debit'     =>$data['nominal'],
-            'kredit'    =>0
-        ]);
-        // Hutang / Tunai
-        if($data['tunai']){
-            JurnalDetailModel::create([
-                'id_jurnal' =>$jurnal->id_jurnal,
-                'id_coa'    =>$data['id_coa'],
-                'kode_coa'  =>$data['kode_coa'],
-                'nama_coa'  =>$data['nama_coa'],
-                'debit'     =>0,
-                'kredit'    =>$data['nominal']
-            ]);
-        }else{
-            JurnalDetailModel::create([
-                'id_jurnal' =>$jurnal->id_jurnal,
-                'id_coa'    =>81,
-                'kode_coa'  =>'21202',
-                'nama_coa'  =>'HUTANG USAHA - PAKAN',
-                'debit'     =>0,
-                'kredit'    =>$data['nominal']
-            ]);
-        }
-        
-    }
-
+    
     public static function penaburan_pakan($data){
+        $cek = JurnalModel::where('reff_id',$data['reff_id'])
+        ->where('reff_trans',$data['reff_trans'])->first();
+        if($cek){
+            JurnalDetailModel::where('id_jurnal',$cek->id_jurnal)->delete();
+            $cek->delete();
+        }
         $jurnal = JurnalModel::create([
             'tanggal'   =>$data['tanggal'],
             'no_bukti'  =>$data['no_bukti'],
@@ -159,6 +99,12 @@ class JurnalTransaksiHelperHelper
     }
 
     public static function retur_pakan($data){
+        $cek = JurnalModel::where('reff_id',$data['reff_id'])
+        ->where('reff_trans',$data['reff_trans'])->first();
+        if($cek){
+            JurnalDetailModel::where('id_jurnal',$cek->id_jurnal)->delete();
+            $cek->delete();
+        }
         $jurnal = JurnalModel::create([
             'tanggal'   =>$data['tanggal'],
             'no_bukti'  =>$data['no_bukti'],
@@ -187,6 +133,12 @@ class JurnalTransaksiHelperHelper
     }
 
     public static function panen($data){
+        $cek = JurnalModel::where('reff_id',$data['reff_id'])
+        ->where('reff_trans',$data['reff_trans'])->first();
+        if($cek){
+            JurnalDetailModel::where('id_jurnal',$cek->id_jurnal)->delete();
+            $cek->delete();
+        }
         $jurnal = JurnalModel::create([
             'tanggal'   =>$data['tanggal'],
             'no_bukti'  =>$data['no_bukti'],
@@ -262,6 +214,12 @@ class JurnalTransaksiHelperHelper
     }
 
     public static function pembelian_barang_activa($data){
+        $cek = JurnalModel::where('reff_id',$data['reff_id'])
+        ->where('reff_trans',$data['reff_trans'])->first();
+        if($cek){
+            JurnalDetailModel::where('id_jurnal',$cek->id_jurnal)->delete();
+            $cek->delete();
+        }
         $jurnal = JurnalModel::create([
             'tanggal'   =>$data['tanggal'],
             'no_bukti'  =>$data['no_bukti'],

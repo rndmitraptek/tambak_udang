@@ -22,4 +22,9 @@ class SetupBarang extends Model
         'harga'
     ];
     protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
+    
+    public function coa()
+    {
+        return $this->belongsTo(SetupCoa::class, 'id_coa','id_coa');
+    }
 }

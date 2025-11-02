@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Finance;
 
 use App\Helpers\GeneradeNomorHelper;
+use App\Helpers\JurnalTransaksiHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Finance\PembelianPakan;
 use App\Models\Finance\ReturPakanDetail;
@@ -20,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\StokHelper;
+use App\Models\SetupSupplier;
 
 class ReturPakanController extends Controller
 {
@@ -179,6 +181,16 @@ class ReturPakanController extends Controller
                     $data['tanggal_retur']
                 );
             }
+            $supplier = SetupSupplier::where('id_supplier',$pembelian->supplier_id)->first();
+            // insert jurnal
+            JurnalTransaksiHelper::retur_pakan([
+                'tanggal' => $data['tanggal_retur'],
+                'no_bukti'=> $data['no_retur'],
+                'reff_id' => $insert->id_retur,
+                'reff_trans' => 'RETUR PAKAN',
+                'keterangan' => 'Retur Pakan, '.$supplier->nama_supplier,
+                'nominal' => $data['total'],
+            ]);
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
         }catch(\Exception $err) {

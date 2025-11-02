@@ -18,6 +18,9 @@ return new class extends Migration
             $table->date('tanggal_bayar');
             $table->string('nama_penerima');
             $table->string('nama_pemberi');
+            $table->unsignedBigInteger('id_coa');
+            $table->foreign('id_coa')->references('id_coa')->on('setup_coa')->onDelete('restrict');
+            $table->string('kode_coa',30);
             $table->float('nominal',18,2);
             $table->timestamps();
         });

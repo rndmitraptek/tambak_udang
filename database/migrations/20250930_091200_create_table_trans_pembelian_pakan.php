@@ -22,7 +22,6 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->unsignedBigInteger('id_coa')->nullable();
-            $table->foreign('id_coa')->references('id_coa')->on('setup_coa')->onDelete('restrict')->nullable();
             $table->string('kode_coa',30)->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -30,6 +29,7 @@ return new class extends Migration
             $table->foreign('supplier_id')->references('id_supplier')->on('setup_supplier')->onDelete('cascade');
             $table->foreign('lokasi_id')->references('id_lokasi')->on('setup_lokasi')->onDelete('cascade');
             $table->foreign('siklus_id')->references('id_siklus')->on('setup_siklus')->onDelete('cascade');
+            $table->foreign('id_coa')->references('id_coa')->on('setup_coa')->onDelete('restrict');
         });
 
         Schema::create('pembelian_pakan_detail', function (Blueprint $table) {

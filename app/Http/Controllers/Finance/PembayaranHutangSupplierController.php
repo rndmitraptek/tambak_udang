@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Finance;
 
 use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Akuntansi\JurnalDetailModel;
+use App\Models\Akuntansi\JurnalModel;
 use App\Models\Finance\HutangSupplierModel;
 use App\Models\Finance\PembayaranHutangSupplierDetailHutangModel;
 use App\Models\Finance\PembayaranHutangSupplierDetailPiutangModel;
@@ -12,6 +14,7 @@ use App\Models\Finance\PembayaranHutangSupplierModel;
 use App\Models\Finance\PembayaranHutangSupplierTransferModel;
 use App\Models\Finance\PembayaranHutangSupplierTunaiModel;
 use App\Models\Finance\PiutangSupplierModel;
+use App\Models\SetupCoa;
 use App\Models\SetupRekeningBankModel;
 use App\Models\SetupSupplier;
 use Illuminate\Http\Request;
@@ -94,6 +97,14 @@ class PembayaranHutangSupplierController extends Controller
             unset($data['uuid_supplier']);
             $data['id_supplier']    = $supplier->id_supplier;
             $insert = PembayaranHutangSupplierModel::create($data);
+            // Jurnal Header 
+            $jurnal = JurnalModel::create([
+                'tanggal'   =>$data['tanggal_bayar'],
+                'no_bukti'  =>$data['no_faktur'],
+                'reff_id'   =>$insert->id_pembayaran_hutang_supplier,
+                'reff_trans'=>'PEMBAYARAN HUTANG SUPPLIER',
+                'keterangan'=>'pembayaran hutang supplier, '.$supplier->nama_supplier
+            ]);
             foreach($req->hutang as $d){
                 $hutangSupplier = HutangSupplierModel::where('uuid',$d['uuid'])->first();
                 $detail = $d;
@@ -104,6 +115,73 @@ class PembayaranHutangSupplierController extends Controller
                 $hutangSupplier->update([
                     'sisa'=>$hutangSupplier['sisa'] - $detail['nominal_hutang'],
                     'dibayar'=>$hutangSupplier['dibayar'] + $detail['nominal_hutang']
+                ]);
+                //jurnal detail coa hutang pada debit
+                if($hutangSupplier->reff_trans=='PENABURAN BENUR'){
+                    JurnalDetailModel::create([
+                        'id_jurnal' =>$jurnal->id_jurnal,
+                        'id_coa'    =>80,
+                        'kode_coa'  =>'21201',
+                        'nama_coa'  =>'HUTANG USAHA - BENUR',
+                        'debit'     =>$detail['nominal_hutang'],
+                        'kredit'    =>0
+                    ]);
+                }else{
+                    JurnalDetailModel::create([
+                        'id_jurnal' =>$jurnal->id_jurnal,
+                        'id_coa'    =>81,
+                        'kode_coa'  =>'21202',
+                        'nama_coa'  =>'HUTANG USAHA - PAKAN',
+                        'debit'     =>$detail['nominal_hutang'],
+                        'kredit'    =>0
+                    ]);
+                }
+            }
+            foreach($req->transfer as $d){
+                $rekening_bank = SetupRekeningBankModel::with('coa')->where('uuid',$d['uuid_rekeing'])->first();
+                $detail = $d;
+                $detail['id_pembayaran_hutang_supplier'] = $insert->id_pembayaran_hutang_supplier;
+                $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
+                $insert_transfer = PembayaranHutangSupplierTransferModel::create($detail);
+                // jurnal detail pada bank
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>$rekening_bank->coa->id_coa,
+                    'kode_coa'  =>$rekening_bank->coa->kode_coa,
+                    'nama_coa'  =>$rekening_bank->coa->nama_coa,
+                    'debit'     =>0,
+                    'kredit'    =>$detail['nominal']
+                ]);
+            }
+            foreach($req->giro as $d){
+                $rekening_bank = SetupRekeningBankModel::with('coa')->where('uuid',$d['uuid_rekeing'])->first();
+                $detail = $d;
+                $detail['id_pembayaran_hutang_supplier'] = $insert->id_pembayaran_hutang_supplier;
+                $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
+                $insert_giro = PembayaranHutangSupplierGiroModel::create($detail);
+                // jurnal detail pada pembelian benur
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>$rekening_bank->coa->id_coa,
+                    'kode_coa'  =>$rekening_bank->coa->kode_coa,
+                    'nama_coa'  =>$rekening_bank->coa->nama_coa,
+                    'debit'     =>0,
+                    'kredit'    =>$detail['nominal']
+                ]);
+            }
+            foreach($req->tunai as $d){
+                $detail = $d;
+                $detail['id_pembayaran_hutang_supplier'] = $insert->id_pembayaran_hutang_supplier;
+                $insert_tunai = PembayaranHutangSupplierTunaiModel::create($detail);
+                // jurnal detail pada pembelian benur
+                $coa = SetupCoa::where('id_coa',$detail['id_coa'])->first();
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>$coa->id_coa,
+                    'kode_coa'  =>$coa->kode_coa,
+                    'nama_coa'  =>$coa->nama_coa,
+                    'debit'     =>0,
+                    'kredit'    =>$detail['nominal']
                 ]);
             }
             foreach($req->piutang as $d){
@@ -117,25 +195,15 @@ class PembayaranHutangSupplierController extends Controller
                     'sisa'=>$piutangSupplier['sisa'] - $detail['nominal_piutang'],
                     'dibayar'=>$piutangSupplier['dibayar'] + $detail['nominal_piutang']
                 ]);
-            }
-            foreach($req->transfer as $d){
-                $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekeing'])->first();
-                $detail = $d;
-                $detail['id_pembayaran_hutang_supplier'] = $insert->id_pembayaran_hutang_supplier;
-                $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
-                $insert_transfer = PembayaranHutangSupplierTransferModel::create($detail);
-            }
-            foreach($req->giro as $d){
-                $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekeing'])->first();
-                $detail = $d;
-                $detail['id_pembayaran_hutang_supplier'] = $insert->id_pembayaran_hutang_supplier;
-                $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
-                $insert_giro = PembayaranHutangSupplierGiroModel::create($detail);
-            }
-            foreach($req->tunai as $d){
-                $detail = $d;
-                $detail['id_pembayaran_hutang_supplier'] = $insert->id_pembayaran_hutang_supplier;
-                $insert_tunai = PembayaranHutangSupplierTunaiModel::create($detail);
+                // jurnal detail pada pembelian benur
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>154,
+                    'kode_coa'  =>'53102',
+                    'nama_coa'  =>'PEMBELIAN BENUR',
+                    'debit'     =>0,
+                    'kredit'    =>$detail['nominal_piutang']
+                ]);
             }
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
@@ -226,5 +294,10 @@ class PembayaranHutangSupplierController extends Controller
         $benur = PembayaranHutangSupplierModel::where('uuid', $uuid)->firstOrFail();
         $benur->delete();
         return response()->json(['success' => true]);
+    }
+
+    public function get_coa(){
+        $data = DB::select("SELECT * FROM setup_coa WHERE LEFT(kode_coa, 3) = ('111') AND RIGHT(kode_coa, 1) <> '0'",[]);
+        return response()->json(['success' => true, 'data' => $data]);
     }
 }
