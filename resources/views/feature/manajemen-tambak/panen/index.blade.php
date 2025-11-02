@@ -155,6 +155,7 @@
                                         <tr>
                                             <th style="width: 400px">Nama Customer</th>
                                             <th style="width: 200px">Metode Pembayaran</th>
+                                            <th style="width: 200px" >Kode COA</th>
                                             <th style="width: 200px">Item</th>
                                             <th style="width: 200px">Harga</th>
                                             <th style="width: 200px">Jumlah</th>
@@ -169,6 +170,12 @@
                                                 <select style="width: 200px" id="uuid_payment_method" name="uuid_payment_method" ng-model="i.uuid_payment_method">
                                                     <option value="">Pillih Payment</option>
                                                     <option ng-repeat="x in payment_method" value="<% x.uuid %>"><% x.payment_method %></option>
+                                                </select>
+                                            </td>
+                                            <td >
+                                                <select style="width: 200px" id="id_coa" name="id_coa" ng-model="i.id_coa" ng-show="i.uuid_payment_method!='0bb79648-a9aa-454d-a36d-05f961e49697'">
+                                                    <option value="">Pillih COA</option>
+                                                    <option ng-repeat="x in coa" value="<% x.id_coa %>"><% x.nama_coa %></option>
                                                 </select>
                                             </td>
                                             <td>

@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/get_customer',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_customer'])->name('get_customer');
         Route::get('/get_item',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_item'])->name('get_item');
         Route::get('/get_payment_method',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_payment_method'])->name('get_payment_method');
+        Route::get('/get_coa',[App\Http\Controllers\ManajemenTambak\PanenController::class, 'get_coa'])->name('get_coa');
     });
 
     Route::prefix('simulasi')->name('simulasi.')->group(function(){

@@ -8,6 +8,7 @@ use App\Models\Finance\PiutangCustomer;
 use App\Models\ManajemenTambak\PanenDetailModel;
 use App\Models\ManajemenTambak\PanenModel;
 use App\Models\SetupBlok;
+use App\Models\SetupCoa;
 use App\Models\SetupCustomer;
 use App\Models\SetupItem;
 use App\Models\SetupLokasi;
@@ -240,5 +241,10 @@ class PanenController extends Controller
                 'panen_detail.subtotal',
             ])->get();
         return response()->json(['success'=>true,'data'=>$detail,'message'=>'']);
+    }
+
+    public function get_coa(){
+        $data = SetupCoa::whereRaw("LEFT(kode_coa, 3) in ('112','111') AND RIGHT(kode_coa, 1) <> '0'")->get();
+        return response()->json(['success' => true, 'data' => $data]);
     }
 }

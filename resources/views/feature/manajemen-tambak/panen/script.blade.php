@@ -111,6 +111,16 @@ app.controller("myCtrl", function($scope,$http) {
         });
     });
 
+    $scope.coa = [];
+    $http.get("{{ route('panen.get_coa') }}")
+    .then(function(res){
+        if(res.data.success){
+            $scope.coa = res.data.data;
+        }
+    }).catch(function(error) {
+        swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+    });
+
     $scope.item = [];
     $http.get("{{ route('panen.get_item') }}")
     .then(function(res){
