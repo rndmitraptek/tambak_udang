@@ -7,6 +7,7 @@ use App\Models\Finance\HutangSupplierModel;
 use App\Models\Finance\PembelianBarangDetailModel;
 use App\Models\Finance\PembelianBarangModel;
 use App\Models\SetupBarang;
+use App\Models\SetupCoa;
 use App\Models\SetupLokasi;
 use App\Models\SetupSupplier;
 use Illuminate\Http\Request;
@@ -75,6 +76,8 @@ class PembelianBarangController extends Controller
                 'tanggal_pembelian_barang'   => 'required',
             ]);
             $data = $req->all();
+            $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+            $data['kode_coa'] = $coa->kode_coa;
             $data['id_lokasi']      = $lokasi->id_lokasi;
             $data['id_supplier']      = $supplier->id_supplier;
             $insert = PembelianBarangModel::create($data);
@@ -118,6 +121,8 @@ class PembelianBarangController extends Controller
                 'tanggal_pembelian_barang'   => 'required',
             ]);
             $data = $req->all();
+            $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+            $data['kode_coa'] = $coa->kode_coa;
             $data['id_lokasi']      = $lokasi->id_lokasi;
             $data['id_supplier']      = $supplier->id_supplier;
             $pembelianBarang->update($data);
@@ -174,6 +179,11 @@ class PembelianBarangController extends Controller
                 'pembelian_barang_detail.subtotal',
             ])->get();
         return response()->json(['success'=>true,'data'=>$detail,'message'=>'']);
+    }
+
+    public function get_coa(){
+        $data = SetupCoa::whereRaw("LEFT(kode_coa, 3) in ('112','111') AND RIGHT(kode_coa, 1) <> '0'")->get();
+        return response()->json(['success' => true, 'data' => $data]);
     }
 
 }

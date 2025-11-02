@@ -74,8 +74,18 @@ app.controller("myCtrl", function($scope,$http,API) {
 
     $scope.input = {};
     $scope.edit = false;
+    $scope.coa = [];
+    $http.get("{{ route('barang.get_coa') }}")
+    .then(function(res){
+        if(res.data.success){
+            $scope.coa = res.data.data;
+        }
+    }).catch(function(error) {
+        swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+    });
     $scope.tambah = function(){
         $scope.input = {};
+        $scope.input.is_activa = false;
         $('#m_create').modal('show');
         $scope.edit = false;
     }
@@ -90,6 +100,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             mUtil.scrollTo("formInput", -200)
         },
         submitHandler: function(e) {
+            
             swal({title: "Presesing...!",text: "Please Wait",
                 onOpen: function() {
                     swal.showLoading()

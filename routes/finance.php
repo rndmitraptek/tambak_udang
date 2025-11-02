@@ -55,7 +55,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/get_benur',[App\Http\Controllers\Finance\PembelianPakanController::class, 'get_benur'])->name('get_benur');
         Route::get('/batal/{uuid}',[App\Http\Controllers\Finance\PembelianPakanController::class, 'batal'])->name('batal');
         Route::get('/detail/{uuid}',[App\Http\Controllers\Finance\PembelianPakanController::class, 'detail'])->name('detail');
-        
+        Route::get('/get_coa',[App\Http\Controllers\Finance\PembelianPakanController::class, 'get_coa'])->name('get_coa');
+
     });
     Route::prefix('penggunaan_pakan')->name('penggunaan_pakan.')->group(function(){
         Route::post('/insert',[App\Http\Controllers\ManajemenTambak\PenggunaanPakanController::class, 'insert'])->name('insert');
@@ -94,5 +95,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/get_supplier',[App\Http\Controllers\Finance\PembelianBarangController::class, 'supplier'])->name('get_supplier');
         Route::get('/get_barang',[App\Http\Controllers\Finance\PembelianBarangController::class, 'barang'])->name('get_barang');
         Route::get('/get_detail/{uuid}',[App\Http\Controllers\Finance\PembelianBarangController::class, 'get_detail'])->name('get_detail');
+        Route::get('/get_coa',[App\Http\Controllers\Finance\PembelianBarangController::class, 'get_coa'])->name('get_coa');
     });
 });

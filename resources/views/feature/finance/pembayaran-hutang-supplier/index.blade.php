@@ -121,7 +121,6 @@
                                         <th style="width: 200px">Sudah di Bayar</th>
                                         <th style="width: 200px">Belum di Bayar</th>
                                         <th style="width: 200px">Jumlah Bayar</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>

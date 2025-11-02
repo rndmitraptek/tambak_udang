@@ -17,7 +17,8 @@ class SetupRekeningBankModel extends Model
         'no_rekening',
         'nama_bank',
         'atas_nama',
-        'kode_coa'
+        'kode_coa',
+        'id_coa',
     ];
     protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 }

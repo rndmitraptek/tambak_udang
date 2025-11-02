@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id('id_item');
             $table->uuid('uuid');
             $table->string('nama_item',30);
+            $table->unsignedBigInteger('id_coa');
+            $table->foreign('id_coa')->references('id_coa')->on('setup_coa')->onDelete('restrict');
+            $table->string('kode_coa',30);
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

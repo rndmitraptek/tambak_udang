@@ -175,6 +175,13 @@
                                         <option ng-repeat="x in lokasi" value="<% x.uuid %>" ><% x.nama_lokasi %></option>
                                     </select>
                                 </div>
+                                <div class="form-group m-form__group" ng-show="input.is_hutang">
+                                    <label for="message-text" class="form-control-label" id="id_coa" >Kode COA</label>
+                                    <select class="form-control" id="id_coa" ng-model="input.id_coa" name="id_coa">
+                                        <option value="" >-</option>
+                                        <option ng-repeat="x in coa" value="<% x.id_coa %>" ng-selected="x.id_coa == input.id_coa"><% x.kode_coa %> - <% x.nama_coa %></option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">

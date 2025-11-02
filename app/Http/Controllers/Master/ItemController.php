@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Models\SetupCoa;
 use App\Models\SetupItem;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -30,8 +31,11 @@ class ItemController extends Controller
     public function insert(Request $req){
         $req->validate([
             'nama_item' => 'required',
+            'id_coa' => 'required',
         ]);
         $data = $req->all();
+        $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+        $data['kode_coa'] = $coa->kode_coa;
         $insert = SetupItem::create($data);
         return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
     }
@@ -41,8 +45,11 @@ class ItemController extends Controller
         $benur = SetupItem::where('uuid', $uuid)->firstOrFail();
         $req->validate([
             'nama_item' => 'required',
+            'id_coa' => 'required',
         ]);
         $data = $req->all();
+        $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+        $data['kode_coa'] = $coa->kode_coa;
         $benur->update($data);
         return response()->json(['success' => true, 'data' => $benur]);
     }
@@ -52,5 +59,10 @@ class ItemController extends Controller
         $benur = SetupItem::where('uuid', $uuid)->firstOrFail();
         $benur->delete();
         return response()->json(['success' => true]);
+    }
+
+    public function get_coa(){
+        $data = SetupCoa::whereRaw("LEFT(kode_coa, 3) = '411' AND RIGHT(kode_coa, 1) <> '0'")->get();
+        return response()->json(['success' => true, 'data' => $data]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\SetupBarang;
+use App\Models\SetupCoa;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -33,6 +34,8 @@ class SetupBarangContoller extends Controller
             'nama_barang' => 'required',
         ]);
         $data = $req->all();
+        $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+        $data['kode_coa'] = $coa->kode_coa;
         $insert = SetupBarang::create($data);
         return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
     }
@@ -44,6 +47,8 @@ class SetupBarangContoller extends Controller
             'nama_item' => 'required',
         ]);
         $data = $req->all();
+        $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+        $data['kode_coa'] = $coa->kode_coa;
         $benur->update($data);
         return response()->json(['success' => true, 'data' => $benur]);
     }
@@ -53,5 +58,10 @@ class SetupBarangContoller extends Controller
         $benur = SetupBarang::where('uuid', $uuid)->firstOrFail();
         $benur->delete();
         return response()->json(['success' => true]);
+    }
+
+    public function get_coa(){
+        $data = SetupCoa::whereRaw("LEFT(kode_coa, 2) = '12' AND RIGHT(kode_coa, 1) <> '0' AND nama_coa not like '%AKM.%'")->get();
+        return response()->json(['success' => true, 'data' => $data]);
     }
 }

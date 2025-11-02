@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('no_rekening');
             $table->string('nama_bank',100);
             $table->string('atas_nama',100);
-            $table->string('kode_coa',100)->nullable();
+            $table->unsignedBigInteger('id_coa');
+            $table->foreign('id_coa')->references('id_coa')->on('setup_coa')->onDelete('restrict');
+            $table->string('kode_coa',30);
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

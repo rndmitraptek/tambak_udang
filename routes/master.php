@@ -121,6 +121,7 @@ Route::prefix('item')->name('item.')->group(function(){
     Route::post('/update/{id}',[App\Http\Controllers\Master\ItemController::class, 'update'])->name('update');
     Route::get('/datatable',[App\Http\Controllers\Master\ItemController::class, 'datatable'])->name('datatable');
     Route::delete('/delete/{id}',[App\Http\Controllers\Master\ItemController::class, 'destroy'])->name('delete');
+    Route::get('/get_coa',[App\Http\Controllers\Master\ItemController::class, 'get_coa'])->name('get_coa');
 });
 
 Route::prefix('barang')->name('barang.')->group(function(){
@@ -128,6 +129,7 @@ Route::prefix('barang')->name('barang.')->group(function(){
     Route::post('/update/{id}',[App\Http\Controllers\Master\SetupBarangContoller::class, 'update'])->name('update');
     Route::get('/datatable',[App\Http\Controllers\Master\SetupBarangContoller::class, 'datatable'])->name('datatable');
     Route::delete('/delete/{id}',[App\Http\Controllers\Master\SetupBarangContoller::class, 'destroy'])->name('delete');
+    Route::get('/get_coa',[App\Http\Controllers\Master\SetupBarangContoller::class, 'get_coa'])->name('get_coa');
 });
 
 Route::prefix('rekening_bank')->name('rekening_bank.')->group(function(){
@@ -135,6 +137,7 @@ Route::prefix('rekening_bank')->name('rekening_bank.')->group(function(){
     Route::post('/update/{id}',[App\Http\Controllers\Master\SetupRekeningBankController::class, 'update'])->name('update');
     Route::get('/datatable',[App\Http\Controllers\Master\SetupRekeningBankController::class, 'datatable'])->name('datatable');
     Route::delete('/delete/{id}',[App\Http\Controllers\Master\SetupRekeningBankController::class, 'destroy'])->name('delete');
+    Route::get('/get_coa',[App\Http\Controllers\Master\SetupRekeningBankController::class, 'get_coa'])->name('get_coa');
 });
 
 Route::prefix('payment_method')->name('payment_method.')->group(function(){

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Models\SetupCoa;
 use App\Models\SetupRekeningBankModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -33,8 +34,11 @@ class SetupRekeningBankController extends Controller
             'no_rekening' => 'required',
             'nama_bank' => 'required',
             'atas_nama' => 'required',
+            'id_coa' => 'required',
         ]);
         $data = $req->all();
+        $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+        $data['kode_coa'] = $coa->kode_coa;
         $insert = SetupRekeningBankModel::create($data);
         return response()->json(['success'=>true,'data'=>$insert,'message'=>'lahhh...']);
     }
@@ -46,8 +50,11 @@ class SetupRekeningBankController extends Controller
             'no_rekening' => 'required',
             'nama_bank' => 'required',
             'atas_nama' => 'required',
+            'id_coa' => 'required',
         ]);
         $data = $req->all();
+        $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+        $data['kode_coa'] = $coa->kode_coa;
         $benur->update($data);
         return response()->json(['success' => true, 'data' => $benur]);
     }
@@ -57,5 +64,10 @@ class SetupRekeningBankController extends Controller
         $benur = SetupRekeningBankModel::where('uuid', $uuid)->firstOrFail();
         $benur->delete();
         return response()->json(['success' => true]);
+    }
+
+    public function get_coa(){
+        $data = SetupCoa::whereRaw("LEFT(kode_coa, 3) = '112' AND RIGHT(kode_coa, 1) <> '0'")->get();
+        return response()->json(['success' => true, 'data' => $data]);
     }
 }

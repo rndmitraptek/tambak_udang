@@ -71,6 +71,19 @@
                         <label for="recipient-name" class="form-control-label">Nama Barang</label>
                         <input type="text" class="form-control" name="nama_barang" ng-model="input.nama_barang">
                     </div>
+                    <div class="form-group">
+                        <label class="m-checkbox" style="margin-top: 10px;">
+                            <input name="is_activa" ng-model="input.is_activa" type="checkbox"> Is Activa?
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="form-group m-form__group" ng-show="input.is_activa">
+                        <label for="message-text" class="form-control-label" id="id_coa" >Kode COA</label>
+                        <select class="form-control" id="id_coa" ng-model="input.id_coa" name="id_coa">
+                            <option value="" >-</option>
+                            <option ng-repeat="x in coa" value="<% x.id_coa %>" ng-selected="x.id_coa == input.id_coa"><% x.kode_coa %> - <% x.nama_coa %></option>
+                        </select>
+                    </div>
                     <div class="form-group m-form__group">
                         <label for="recipient-name" class="form-control-label">Harga</label>
                         <input type="text" class="form-control text-right" input-currency name="harga" ng-model="input.harga">

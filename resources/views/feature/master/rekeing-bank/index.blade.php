@@ -79,6 +79,13 @@
                         <label for="recipient-name" class="form-control-label">Atas Nama</label>
                         <input type="text" class="form-control" name="atas_nama" ng-model="input.atas_nama">
                     </div>
+                    <div class="form-group m-form__group">
+                        <label for="message-text" class="form-control-label" id="id_coa" >Kode COA</label>
+                        <select class="form-control" id="id_coa" ng-model="input.id_coa" name="id_coa">
+                            <option value="" >-</option>
+                            <option ng-repeat="x in coa" value="<% x.id_coa %>" ng-selected="x.id_coa == input.id_coa"><% x.kode_coa %> - <% x.nama_coa %></option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>

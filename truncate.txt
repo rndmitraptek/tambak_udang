@@ -69,3 +69,9 @@ TRUNCATE TABLE setup_pakan RESTART IDENTITY CASCADE;
 truncate TABLE jurnal_detail RESTART IDENTITY;
 TRUNCATE TABLE jurnal RESTART IDENTITY CASCADE;
 
+
+update setup_coa set tipe_coa = 'Detail' where length(kode_coa) = 5 and right(kode_coa,1)<>'0'
+
+update setup_coa set pos_laporan = 'Neraca' where left(kode_coa,1) in ('1','2','3')
+
+update setup_coa set saldo_normal = 'Kredit' where left(kode_coa,1) not in ('1','5','6','8')

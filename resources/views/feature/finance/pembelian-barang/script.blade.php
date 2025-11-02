@@ -109,7 +109,15 @@ app.controller("myCtrl", function($scope,$http) {
         });
     });
 
-    
+    $scope.coa = [];
+    $http.get("{{ route('finance.pembelian_barang.get_coa') }}")
+    .then(function(res){
+        if(res.data.success){
+            $scope.coa = res.data.data;
+        }
+    }).catch(function(error) {
+        swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+    });
 
     $scope.lokasi = [];
     $http.get("{{ route('finance.pembelian_barang.get_lokasi') }}")
@@ -174,6 +182,7 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.form = "list";
     $scope.tambah = function(){
         $scope.input = {};
+        $scope.input.id_coa=''
         $scope.detail = []
         $http.get("{{ route('long','pembelian_barang') }}")
         .then(function(res){
@@ -210,6 +219,12 @@ app.controller("myCtrl", function($scope,$http) {
             mUtil.scrollTo("formInput", -200)
         },
         submitHandler: function(e) {
+            if($scope.input.pembayaran=='TUNAI'){
+                if($scope.input.id_coa==''){
+                    swal({title: 'Kode COA',text: 'Kode Coa Harus Di isi jika pembelian secara tunai',type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+                    return false;
+                }
+            }
             swal({title: "Presesing...!",text: "Please Wait",
                 onOpen: function() {
                     swal.showLoading()

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Helpers\StokHelper;
 use App\Models\Finance\HutangSupplierModel;
 use App\Models\Finance\PoModel;
+use App\Models\SetupCoa;
 
 class PembelianPakanController extends Controller
 {
@@ -160,6 +161,8 @@ class PembelianPakanController extends Controller
             $data['supplier_id'] = $supplier->id_supplier;
             $data['lokasi_id']   = $lokasi->id_lokasi;
             $data['siklus_id']   = $siklus->id_siklus;
+            $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+            $data['kode_coa'] = $coa->kode_coa;
             $insert = PembelianPakan::create($data);
 
             //insert hutang supplier (kredit)
@@ -257,5 +260,10 @@ class PembelianPakanController extends Controller
             'success' => true,
             'data' => $transaksi
         ]);
+    }
+
+    public function get_coa(){
+        $data = SetupCoa::whereRaw("LEFT(kode_coa, 3) in ('112','111') AND RIGHT(kode_coa, 1) <> '0'")->get();
+        return response()->json(['success' => true, 'data' => $data]);
     }
 }

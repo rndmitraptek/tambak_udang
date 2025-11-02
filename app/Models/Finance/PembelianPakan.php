@@ -26,6 +26,8 @@ class PembelianPakan extends Model
         'jumlah_item',
         'total',
         'keterangan',
+        'id_coa',
+        'kode_coa',
         'created_by',
         'updated_by',
     ];

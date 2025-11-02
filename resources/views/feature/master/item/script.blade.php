@@ -9,7 +9,7 @@ app.controller("myCtrl", function($scope,$http,API) {
             scrollX: !0,
             scrollCollapse: !0,
             columns: [
-                { data: 'nama_item', title: 'Nama Item' },
+                { data: 'nama_item', title: 'Nama Jenis Udang' },
                 { data: 'created_by_name', title: 'Created By' },
                 { data: 'created_at_formatted', title: 'Created At' },
                 { data: 'updated_by_name', title: 'Updated By' },
@@ -79,6 +79,16 @@ app.controller("myCtrl", function($scope,$http,API) {
         $('#m_create').modal('show');
         $scope.edit = false;
     }
+
+    $scope.coa = [];
+    $http.get("{{ route('item.get_coa') }}")
+    .then(function(res){
+        if(res.data.success){
+            $scope.coa = res.data.data;
+        }
+    }).catch(function(error) {
+        swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+    });
 
     $("#formInput").validate({
         rules: {

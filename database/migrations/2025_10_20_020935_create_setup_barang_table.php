@@ -16,6 +16,10 @@ return new class extends Migration
             $table->uuid('uuid');
             $table->string('nama_barang',100);
             $table->decimal('harga',30,2)->default(0);
+            $table->unsignedBigInteger('id_coa')->nullable();
+            $table->foreign('id_coa')->references('id_coa')->on('setup_coa')->onDelete('restrict')->nullable();
+            $table->string('kode_coa',30)->nullable();
+            $table->boolean('is_activa')->default(false);
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

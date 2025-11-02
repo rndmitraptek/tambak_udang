@@ -157,7 +157,8 @@ class JurnalController extends Controller
     public function get_laba_rugi(Request $req){
         $data = SetupCoa::
         select(['kode_coa','nama_coa','saldo_normal','tipe_coa'])->
-        where('pos_laporan','laba_rugi')->orderBy('kode_coa','asc')->get();
+        where('tipe_coa','Header')->
+        where('pos_laporan','Laba Rugi')->orderBy('kode_coa','asc')->get();
         $coa4 = 0;
         $coa5 = 0;
         $coa6 = 0;
@@ -201,7 +202,8 @@ class JurnalController extends Controller
     public function get_neraca(Request $req){
         $data = SetupCoa::
         select(['kode_coa','nama_coa','saldo_normal','tipe_coa'])
-        ->where('pos_laporan','neraca')
+        ->where('tipe_coa','Header')
+        ->where('pos_laporan','Neraca')
         ->where('kode_coa', 'like', "1%")
         ->orderBy('kode_coa','asc')->get();
         $coa1 = 0;
@@ -235,9 +237,12 @@ class JurnalController extends Controller
         ];
         $pasiva = SetupCoa::
         select(['kode_coa','nama_coa','saldo_normal','tipe_coa'])
-        ->where('pos_laporan','neraca')
-        ->where('kode_coa', 'like', "2%")
-        ->orWhere('kode_coa', 'like', "3%")
+        ->where('tipe_coa','Header')
+        ->where('pos_laporan','Neraca')
+        ->where(function($q) {
+            $q->where('kode_coa', 'like', '2%')
+            ->orWhere('kode_coa', 'like', '3%');
+        })
         ->orderBy('kode_coa','asc')->get();
         $coa1 = 0;
         $coa2 = 0;

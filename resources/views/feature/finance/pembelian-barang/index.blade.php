@@ -135,6 +135,13 @@
                                         <option value="HUTANG">HUTANG</option>
                                     </select>
                                 </div>
+                                <div class="form-group m-form__group" ng-show="input.pembayaran=='TUNAI'">
+                                    <label for="message-text" class="form-control-label" id="id_coa" >Kode COA</label>
+                                    <select class="form-control" id="id_coa" ng-model="input.id_coa" name="id_coa">
+                                        <option value="" >-</option>
+                                        <option ng-repeat="x in coa" value="<% x.id_coa %>" ng-selected="x.id_coa == input.id_coa"><% x.kode_coa %> - <% x.nama_coa %></option>
+                                    </select>
+                                </div>
                                 <div class="form-group -form__group">
                                     <label for="message-text" class="form-control-label" >Keterangan</label>
                                     <textarea class="form-control" id="keterangan" nama="keterangan" ng-model="input.keterangan"></textarea>

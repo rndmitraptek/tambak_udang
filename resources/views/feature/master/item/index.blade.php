@@ -31,7 +31,7 @@
                                 <i class="la la-gear"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                Item
+                                Jenis Udang
                             </h3>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                 <button ng-click="tambah()" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
                                         <i class="la la-plus"></i>
-                                        <span>Tambah Item</span>
+                                        <span>Tambah Jenis Udang</span>
                                     </span>
                                 </button>
                             </li>
@@ -61,15 +61,22 @@
         <div class="modal-content">
             <form id="formInput">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Item</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Jenis Udang</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group m-form__group">
-                        <label for="recipient-name" class="form-control-label">Nama Item</label>
+                        <label for="recipient-name" class="form-control-label">Nama Jenis Udang</label>
                         <input type="text" class="form-control" name="nama_item" ng-model="input.nama_item">
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="message-text" class="form-control-label" id="id_coa" >Kode COA</label>
+                        <select class="form-control" id="id_coa" ng-model="input.id_coa" name="id_coa">
+                            <option value="" >-</option>
+                            <option ng-repeat="x in coa" value="<% x.id_coa %>" ng-selected="x.id_coa == input.id_coa"><% x.kode_coa %> - <% x.nama_coa %></option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

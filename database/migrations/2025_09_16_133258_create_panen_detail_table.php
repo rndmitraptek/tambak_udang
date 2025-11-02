@@ -26,6 +26,9 @@ return new class extends Migration
             $table->float('harga',8,2);
             $table->float('jumlah',8,2);
             $table->float('subtotal',8,2);
+            $table->unsignedBigInteger('id_coa')->nullable();
+            $table->foreign('id_coa')->references('id_coa')->on('setup_coa')->onDelete('restrict')->nullable();
+            $table->string('kode_coa',30)->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

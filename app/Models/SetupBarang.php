@@ -16,6 +16,9 @@ class SetupBarang extends Model
     protected $primaryKey = 'id_barang';
     protected $fillable = [
         'nama_barang',
+        'is_activa',
+        'id_coa',
+        'kode_coa',
         'harga'
     ];
     protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
