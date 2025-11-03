@@ -180,7 +180,7 @@ app.controller("myCtrl", function($scope,$http) {
             tablePetak.ajax.url("/transaksi-biaya/petak-list?siklus_id[]=" + [siklus_id] + "&petak_id=" + petak_id).load();
         });
 
-        $.get('/setup-biaya/coa-list', function(res) {
+        $.get('/setup-biaya/coa-list-kas', function(res) {
             $('#coa_id').empty();
             res.forEach(function(coa) {
                 $('#coa_id').append('<option value="'+coa.id_coa+'">'+coa.kode_coa+' - '+coa.nama_coa+'</option>');

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\ManajemenTambak;
 
 use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Akuntansi\JurnalDetailModel;
+use App\Models\Akuntansi\JurnalModel;
 use App\Models\Finance\PiutangCustomer;
 use App\Models\ManajemenTambak\PanenDetailModel;
 use App\Models\ManajemenTambak\PanenModel;
@@ -118,9 +120,17 @@ class PanenController extends Controller
             unset($data['uuid_petak']);
             $data['id_petak'] = $petak->id_petak;
             $insert = PanenModel::create($data);
+            // insert jurnal
+            $jurnal = JurnalModel::create([
+                'tanggal'   =>$data['tanggal_panen'],
+                'no_bukti'  =>$data['no_panen'],
+                'reff_id'   =>$insert->id_panen,
+                'reff_trans'=>'PANEN',
+                'keterangan'=>'Panen, siklus '.$siklus->nama_siklus.', pada petak '.$petak->nama_petak
+            ]);
             foreach($req->detail as $d){
                 $customer = SetupCustomer::where('uuid',$d['uuid_customer'])->first();
-                $item = SetupItem::where('uuid',$d['uuid_item'])->first();
+                $item = SetupItem::with('coa')->where('uuid',$d['uuid_item'])->first();
                 $paymentMethod = SetupPaymentMethod::where('uuid',$d['uuid_payment_method'])->first();
                 unset($d['uuid_customer']);
                 unset($d['uuid_item']);
@@ -145,7 +155,33 @@ class PanenController extends Controller
                         'dibayar'               =>0,
                         'sisa'                  =>$detail['subtotal']
                     ]);
+                    JurnalDetailModel::create([
+                        'id_jurnal' =>$jurnal->id_jurnal,
+                        'id_coa'    =>15,
+                        'kode_coa'  =>'11301',
+                        'nama_coa'  =>'PIUTANG USAHA',
+                        'debit'     =>$detail['subtotal'],
+                        'kredit'    =>0
+                    ]);
+                }else{
+                    $coa = SetupCoa::where('id_coa',$detail['id_coa'])->first();
+                    JurnalDetailModel::create([
+                        'id_jurnal' =>$jurnal->id_jurnal,
+                        'id_coa'    =>$coa['id_coa'],
+                        'kode_coa'  =>$coa['kode_coa'],
+                        'nama_coa'  =>$coa['nama_coa'],
+                        'debit'     =>$detail['subtotal'],
+                        'kredit'    =>0
+                    ]);
                 }
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>$item->coa->id_coa,
+                    'kode_coa'  =>$item->coa->kode_coa,
+                    'nama_coa'  =>$item->coa->nama_coa,
+                    'debit'     =>0,
+                    'kredit'    =>$detail['subtotal']
+                ]);
             }
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
@@ -178,6 +214,18 @@ class PanenController extends Controller
             $panen->update($data);
             $delete_detail = PanenDetailModel::where('id_panen',$panen->id_panen)->delete();
             $delete_piutang = PiutangCustomer::where('no_faktur',$panen->no_panen)->delete();
+            // insert jurnal
+            $j = JurnalModel::where('reff_id',$panen->id_panen)
+            ->where('reff_trans','PANEN')->first();
+            $delete_jurnal_detail = JurnalDetailModel::where('id_jurnal',$j->id_jurnal)->delete();
+            $j->delete();
+            $jurnal = JurnalModel::create([
+                'tanggal'   =>$data['tanggal_panen'],
+                'no_bukti'  =>$data['no_panen'],
+                'reff_id'   =>$panen->id_panen,
+                'reff_trans'=>'PANEN',
+                'keterangan'=>'Panen, siklus '.$siklus->nama_siklus.', pada petak '.$petak->nama_petak
+            ]);
             foreach($req->detail as $d){
                 $customer = SetupCustomer::where('uuid',$d['uuid_customer'])->first();
                 $item = SetupItem::where('uuid',$d['uuid_item'])->first();
@@ -204,7 +252,33 @@ class PanenController extends Controller
                         'dibayar'               =>0,
                         'sisa'                  =>$detail['subtotal']
                     ]);
+                    JurnalDetailModel::create([
+                        'id_jurnal' =>$jurnal->id_jurnal,
+                        'id_coa'    =>15,
+                        'kode_coa'  =>'11301',
+                        'nama_coa'  =>'PIUTANG USAHA',
+                        'debit'     =>$detail['subtotal'],
+                        'kredit'    =>0
+                    ]);
+                }else{
+                    $coa = SetupCoa::where('id_coa',$detail['id_coa'])->first();
+                    JurnalDetailModel::create([
+                        'id_jurnal' =>$jurnal->id_jurnal,
+                        'id_coa'    =>$coa['id_coa'],
+                        'kode_coa'  =>$coa['kode_coa'],
+                        'nama_coa'  =>$coa['nama_coa'],
+                        'debit'     =>$detail['subtotal'],
+                        'kredit'    =>0
+                    ]);
                 }
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>$item->coa->id_coa,
+                    'kode_coa'  =>$item->coa->kode_coa,
+                    'nama_coa'  =>$item->coa->nama_coa,
+                    'debit'     =>0,
+                    'kredit'    =>$detail['subtotal']
+                ]);
             }
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
@@ -231,6 +305,7 @@ class PanenController extends Controller
             ->join('setup_item','setup_item.id_item','=','panen_detail.id_item')
             ->select([
                 'panen_detail.uuid',
+                'panen_detail.id_coa',
                 'panen_detail.tanggal_panen',
                 'setup_customer.uuid as uuid_customer',
                 'setup_customer.nama_customer',

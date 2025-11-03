@@ -175,7 +175,7 @@
                                             <td >
                                                 <select style="width: 200px" id="id_coa" name="id_coa" ng-model="i.id_coa" ng-show="i.uuid_payment_method!='0bb79648-a9aa-454d-a36d-05f961e49697'">
                                                     <option value="">Pillih COA</option>
-                                                    <option ng-repeat="x in coa" value="<% x.id_coa %>"><% x.nama_coa %></option>
+                                                    <option ng-repeat="x in coa" ng-selected="x.id_coa == i.id_coa" value="<% x.id_coa %>"><% x.nama_coa %></option>
                                                 </select>
                                             </td>
                                             <td>

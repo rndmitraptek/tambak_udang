@@ -85,6 +85,8 @@ Route::prefix('setup-biaya')->name('setup-biaya.')->group(function() {
     Route::post('/update/{uuid}', [App\Http\Controllers\Akuntansi\SetupBiayaController::class, 'update'])->name('update');
     Route::delete('/delete/{uuid}', [App\Http\Controllers\Akuntansi\SetupBiayaController::class, 'destroy'])->name('delete');
     Route::get('/coa-list', [App\Http\Controllers\Akuntansi\SetupBiayaController::class, 'coaList'])->name('coa-list');
+    Route::get('/coa-list-kas', [App\Http\Controllers\Akuntansi\SetupBiayaController::class, 'coaListKas'])->name('coa-list-kas');
+    
     Route::get('/lokasi-list', [App\Http\Controllers\Akuntansi\SetupBiayaController::class, 'lokasiList'])->name('lokasi-list');
     Route::get('/petak-list', [App\Http\Controllers\Akuntansi\SetupBiayaController::class, 'petakList'])->name('petak-list');
 });

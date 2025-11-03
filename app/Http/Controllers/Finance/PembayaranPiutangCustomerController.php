@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Finance;
 
 use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Akuntansi\JurnalDetailModel;
+use App\Models\Akuntansi\JurnalModel;
 use App\Models\Finance\PembayaranPiutangCustomerDetailModel;
 use App\Models\Finance\PembayaranPiutangCustomerGiroModel;
 use App\Models\Finance\PembayaranPiutangCustomerModel;
 use App\Models\Finance\PembayaranPiutangCustomerTransferModel;
 use App\Models\Finance\PembayaranPiutangCustomerTunaiModel;
 use App\Models\Finance\PiutangCustomer;
+use App\Models\SetupCoa;
 use App\Models\SetupCustomer;
 use App\Models\SetupRekeningBankModel;
 use Illuminate\Http\Request;
@@ -86,24 +89,29 @@ class PembayaranPiutangCustomerController extends Controller
             $data['no_faktur'] = GeneradeNomorHelper::long_update('pembayaran_hutang_customer');
             $data['id_customer']    = $customer->id_customer;
             $insert = PembayaranPiutangCustomerModel::create($data);
-            foreach($req->piutang as $d){
-                $piutangCustomer = PiutangCustomer::where('uuid',$d['uuid'])->first();
-                $detail = $d;
-                $detail['id_pembayaran_piutang_customer']   = $insert->id_pembayaran_piutang_customer;
-                $detail['id_piutang_customer']              = $piutangCustomer->id_piutang_customer;
-                $detail['nominal_piutang']                  = $d['bayar'];
-                $insert_detail = PembayaranPiutangCustomerDetailModel::create($detail);
-                $piutangCustomer->update([
-                    'sisa'=>$piutangCustomer['sisa'] - $detail['nominal_piutang'],
-                    'dibayar'=>$piutangCustomer['dibayar'] + $detail['nominal_piutang']
-                ]);
-            }
+            // Jurnal Header 
+            $jurnal = JurnalModel::create([
+                'tanggal'   =>$data['tanggal_bayar'],
+                'no_bukti'  =>$data['no_faktur'],
+                'reff_id'   =>$insert->id_pembayaran_piutang_customer,
+                'reff_trans'=>'PEMBAYARAN PIUTANG CUSTOMER',
+                'keterangan'=>'pembayaran hutang supplier, '.$customer->nama_customer
+            ]);
             foreach($req->transfer as $d){
-                $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekeing'])->first();
+                $rekening_bank = SetupRekeningBankModel::with('coa')->where('uuid',$d['uuid_rekeing'])->first();
                 $detail = $d;
                 $detail['id_pembayaran_piutang_customer']   = $insert->id_pembayaran_piutang_customer;
                 $detail['id_rekening_bank']              = $rekening_bank->id_rekening_bank;
                 $insert_transfer = PembayaranPiutangCustomerTransferModel::create($detail);
+                // jurnal detail pada bank
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>$rekening_bank->coa->id_coa,
+                    'kode_coa'  =>$rekening_bank->coa->kode_coa,
+                    'nama_coa'  =>$rekening_bank->coa->nama_coa,
+                    'debit'     =>$detail['nominal'],
+                    'kredit'    =>0
+                ]);
             }
             foreach($req->giro as $d){
                 // $rekening_bank = SetupRekeningBankModel::where('uuid',$d['uuid_rekeing'])->first();
@@ -117,6 +125,36 @@ class PembayaranPiutangCustomerController extends Controller
                 $detail = $d;
                 $detail['id_pembayaran_piutang_customer']   = $insert->id_pembayaran_piutang_customer;
                 $insert_tunai = PembayaranPiutangCustomerTunaiModel::create($detail);
+                // jurnal detail pada pembelian benur
+                $coa = SetupCoa::where('id_coa',$detail['id_coa'])->first();
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>$coa->id_coa,
+                    'kode_coa'  =>$coa->kode_coa,
+                    'nama_coa'  =>$coa->nama_coa,
+                    'debit'     =>$detail['nominal'],
+                    'kredit'    =>0
+                ]);
+            }
+            foreach($req->piutang as $d){
+                $piutangCustomer = PiutangCustomer::where('uuid',$d['uuid'])->first();
+                $detail = $d;
+                $detail['id_pembayaran_piutang_customer']   = $insert->id_pembayaran_piutang_customer;
+                $detail['id_piutang_customer']              = $piutangCustomer->id_piutang_customer;
+                $detail['nominal_piutang']                  = $d['bayar'];
+                $insert_detail = PembayaranPiutangCustomerDetailModel::create($detail);
+                $piutangCustomer->update([
+                    'sisa'=>$piutangCustomer['sisa'] - $detail['nominal_piutang'],
+                    'dibayar'=>$piutangCustomer['dibayar'] + $detail['nominal_piutang']
+                ]);
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>15,
+                    'kode_coa'  =>'11301',
+                    'nama_coa'  =>'PIUTANG USAHA',
+                    'debit'     =>0,
+                    'kredit'    =>$detail['nominal_piutang']
+                ]);
             }
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);

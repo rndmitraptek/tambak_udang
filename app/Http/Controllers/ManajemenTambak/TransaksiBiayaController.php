@@ -4,11 +4,14 @@ namespace App\Http\Controllers\ManajemenTambak;
 
 use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Akuntansi\JurnalDetailModel;
+use App\Models\Akuntansi\JurnalModel;
 use Illuminate\Http\Request;
 use App\Models\ManajemenTambak\TransaksiBiaya;
 use App\Models\ManajemenTambak\TransaksiBiayaSiklus;
 use App\Models\ManajemenTambak\TransaksiBiayaPetak;
 use App\Models\SetupBiaya;
+use App\Models\SetupCoa;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -131,11 +134,11 @@ class TransaksiBiayaController extends Controller
                 'siklus'        => 'array', // array id siklus
                 'petak'         => 'array', // array per siklus
             ]);
-
+            $no_transaksi = GeneradeNomorHelper::long_update('transaksi_biaya');
             // 1. simpan transaksi_biaya
             $transBiaya = TransaksiBiaya::create([
                 'uuid'              => \Str::uuid(),
-                'no_transaksi'      => GeneradeNomorHelper::long_update('transaksi_biaya'),
+                'no_transaksi'      => $no_transaksi,
                 'tanggal_transaksi' => $validated['tanggal_transaksi'],
                 'tanggal_mulai'     => $validated['tanggal_mulai'] ?? null,
                 'tanggal_selesai'   => $validated['tanggal_selesai'] ?? null,
@@ -179,6 +182,32 @@ class TransaksiBiayaController extends Controller
                     }
                 }
             }
+            // Jurnal
+            $setup_biaya = SetupBiaya::with('coa')->where('id_biaya',$request->biaya_id)->first();
+            $jurnal = JurnalModel::create([
+                'tanggal'   =>$validated['tanggal_transaksi'],
+                'no_bukti'  =>$no_transaksi,
+                'reff_id'   =>$transBiaya->id,
+                'reff_trans'=>'TRANSAKSI BIAYA',
+                'keterangan'=>'Transaksi Biaya, '.$setup_biaya->nama_biaya.', '.$validated['keterangan']
+            ]);
+            JurnalDetailModel::create([
+                'id_jurnal' =>$jurnal->id_jurnal,
+                'id_coa'    =>$setup_biaya->coa->id_coa,
+                'kode_coa'  =>$setup_biaya->coa->kode_coa,
+                'nama_coa'  =>$setup_biaya->coa->nama_coa,
+                'debit'     =>$validated['nominal'],
+                'kredit'    =>0
+            ]);
+            $coa = SetupCoa::where('id_coa',$validated['coa_id'])->first();
+            JurnalDetailModel::create([
+                'id_jurnal' =>$jurnal->id_jurnal,
+                'id_coa'    =>$coa->id_coa,
+                'kode_coa'  =>$coa->kode_coa,
+                'nama_coa'  =>$coa->nama_coa,
+                'debit'     =>0,
+                'kredit'    =>$validated['nominal']
+            ]);
 
             DB::commit();
             return response()->json(['success' => true, 'data' => $transBiaya]);
@@ -265,6 +294,38 @@ class TransaksiBiayaController extends Controller
                 }
             }
 
+            // Jurnal
+            $cek = JurnalModel::where('reff_id',$trans->id)
+            ->where('reff_trans','TRANSAKSI BIAYA')->first();
+            JurnalDetailModel::where('id_jurnal',$cek->id_jurnal)->delete();
+            $cek->delete();
+            
+            $setup_biaya = SetupBiaya::with('coa')->where('id_biaya',$request->biaya_id)->first();
+            $jurnal = JurnalModel::create([
+                'tanggal'   =>$validated['tanggal_transaksi'],
+                'no_bukti'  =>$validated['no_transaksi'],
+                'reff_id'   =>$trans->id,
+                'reff_trans'=>'TRANSAKSI BIAYA',
+                'keterangan'=>'Transaksi Biaya, '.$setup_biaya->nama_biaya.', '.$validated['keterangan']
+            ]);
+            JurnalDetailModel::create([
+                'id_jurnal' =>$jurnal->id_jurnal,
+                'id_coa'    =>$setup_biaya->coa->id_coa,
+                'kode_coa'  =>$setup_biaya->coa->kode_coa,
+                'nama_coa'  =>$setup_biaya->coa->nama_coa,
+                'debit'     =>$validated['nominal'],
+                'kredit'    =>0
+            ]);
+            $coa = SetupCoa::where('id_coa',$validated['coa_id'])->first();
+            JurnalDetailModel::create([
+                'id_jurnal' =>$jurnal->id_jurnal,
+                'id_coa'    =>$coa->id_coa,
+                'kode_coa'  =>$coa->kode_coa,
+                'nama_coa'  =>$coa->nama_coa,
+                'debit'     =>0,
+                'kredit'    =>$validated['nominal']
+            ]);
+
             DB::commit();
             return response()->json(['success' => true, 'data' => $trans]);
 
@@ -296,5 +357,10 @@ class TransaksiBiayaController extends Controller
         $last = TransaksiBiaya::latest('id')->first();
         $num = $last ? $last->id+1 : 1;
         return "TR".date('Ymd').str_pad($num, 5, '0', STR_PAD_LEFT);
+    }
+
+    public function get_coa(){
+        $data = SetupCoa::whereRaw("LEFT(kode_coa, 3) in ('112','111') AND RIGHT(kode_coa, 1) <> '0'")->get();
+        return response()->json(['success' => true, 'data' => $data]);
     }
 }

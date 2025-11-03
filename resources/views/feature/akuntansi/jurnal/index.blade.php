@@ -108,8 +108,8 @@
                                     <tr ng-repeat="i in jurnal_umum">
                                         <td><a ng-show="i.no_bukti!=jurnal_umum[$index-1].no_bukti"><% i.tanggal %></a></td>
                                         <td><a ng-show="i.no_bukti!=jurnal_umum[$index-1].no_bukti"><% i.no_bukti %></a></td>
-                                        <td><a ng-show="i.debit==0" >&nbsp;&nbsp;&nbsp;&nbsp;<% i.kode_coa %></a><a ng-show="i.debit!=0"><% i.kode_coa %></a></td>
-                                        <td><a ng-show="i.debit==0" >&nbsp;&nbsp;&nbsp;&nbsp;<% i.nama_coa %></a><a ng-show="i.debit!=0"><% i.nama_coa %></a></td>
+                                        <td><a ng-show="i.debit==0" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% i.kode_coa %></a><a ng-show="i.debit!=0"><% i.kode_coa %></a></td>
+                                        <td><a ng-show="i.debit==0" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% i.nama_coa %></a><a ng-show="i.debit!=0"><% i.nama_coa %></a></td>
                                         <td><a ng-show="i.no_bukti!=jurnal_umum[$index-1].no_bukti"><% i.keterangan %></a></td>
                                         <td class="text-right"><a ng-show="i.debit!=0"><% i.debit | currency:'' %></a></td>
                                         <td class="text-right"><a ng-show="i.kredit!=0"><% i.kredit | currency:'' %></a></td>

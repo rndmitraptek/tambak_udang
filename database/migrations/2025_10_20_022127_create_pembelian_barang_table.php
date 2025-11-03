@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->string('pembayaran',10)->default('TUNAI');
-            $table->text('keterangan');
+            $table->text('keterangan')->nullable();
             $table->unsignedBigInteger('id_coa')->nullable();
             $table->foreign('id_coa')->references('id_coa')->on('setup_coa')->onDelete('restrict')->nullable();
             $table->string('kode_coa',30)->nullable();

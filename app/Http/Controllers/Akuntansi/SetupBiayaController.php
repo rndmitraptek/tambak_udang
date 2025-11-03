@@ -26,6 +26,13 @@ class SetupBiayaController extends Controller
         return $data;
     }
 
+    public function coaListKas()
+    {
+        $data = DB::select("SELECT * FROM setup_coa where LENGTH(kode_coa)=5 AND LEFT(kode_coa, 3) in ('112','111') AND RIGHT(kode_coa, 1) <> '0' order by kode_coa",[]);
+        // SetupCoa::whereRaw("LENGTH(kode_coa)=5 AND (LEFT(kode_coa, 1)='5' OR LEFT(kode_coa, 1)='6') AND RIGHT(kode_coa, 1) <> '0'")->get();
+        return $data;
+    }
+
     public function lokasiList()
     {
         return SetupLokasi::select('id_lokasi', 'nama_lokasi')->get();

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Finance;
 
+use App\Helpers\GeneradeNomorHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Akuntansi\JurnalDetailModel;
+use App\Models\Akuntansi\JurnalModel;
 use App\Models\Finance\HutangSupplierModel;
 use App\Models\Finance\PembelianBarangDetailModel;
 use App\Models\Finance\PembelianBarangModel;
@@ -76,30 +79,76 @@ class PembelianBarangController extends Controller
                 'tanggal_pembelian_barang'   => 'required',
             ]);
             $data = $req->all();
-            $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
-            $data['kode_coa'] = $coa->kode_coa;
+            $data['no_pembelian_barang'] = GeneradeNomorHelper::long_update('pembelian_barang');
+            if($data['pembayaran']=='HUTANG'){
+                $data['kode_coa'] = null;
+                $data['id_coa'] = null;
+            }else{
+                $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+                $data['kode_coa'] = $coa->kode_coa;
+            }
             $data['id_lokasi']      = $lokasi->id_lokasi;
             $data['id_supplier']      = $supplier->id_supplier;
             $insert = PembelianBarangModel::create($data);
+            // Jurnal Header 
+            $jurnal = JurnalModel::create([
+                'tanggal'   =>$data['tanggal_pembelian_barang'],
+                'no_bukti'  =>$data['no_pembelian_barang'],
+                'reff_id'   =>$insert->id_pembelian_barang,
+                'reff_trans'=>'PEMBELIAN BARANG',
+                'keterangan'=>'pembelian barang, lokasi '.$lokasi->nama_lokasi.', supplier '.$supplier->nama_supplier
+            ]);
             foreach($req->detail as $d){
-                $barang = SetupBarang::where('uuid',$d['uuid_barang'])->first();
+                $barang = SetupBarang::with('coa')->where('uuid',$d['uuid_barang'])->first();
                 $detail = $d;
                 $detail['id_barang']    = $barang->id_barang;
                 $detail['id_pembelian_barang'] = $insert->id_pembelian_barang;
                 $insert_detail = PembelianBarangDetailModel::create($detail);
+                if($barang->is_activa){
+                    JurnalDetailModel::create([
+                        'id_jurnal' =>$jurnal->id_jurnal,
+                        'id_coa'    =>$barang->coa->id_coa,
+                        'kode_coa'  =>$barang->coa->kode_coa,
+                        'nama_coa'  =>$barang->coa->nama_coa,
+                        'debit'     =>$detail['subtotal'],
+                        'kredit'    =>0
+                    ]);
+                    if($data['pembayaran']=='HUTANG'){
+                        JurnalDetailModel::create([
+                            'id_jurnal' =>$jurnal->id_jurnal,
+                            'id_coa'    =>83,
+                            'kode_coa'  =>'21299',
+                            'nama_coa'  =>'HUTANG USAHA - LAINNYA',
+                            'debit'     =>0,
+                            'kredit'    =>$detail['subtotal']
+                        ]);
+                    }else{
+                        JurnalDetailModel::create([
+                            'id_jurnal' =>$jurnal->id_jurnal,
+                            'id_coa'    =>$coa->id_coa,
+                            'kode_coa'  =>$coa->kode_coa,
+                            'nama_coa'  =>$coa->nama_coa,
+                            'debit'     =>$data['nominal'],
+                            'kredit'    =>0
+                        ]);
+                    }
+                }
             }
-            // insert hutang supplier
-            $insert_hutang_supplier = HutangSupplierModel::create([
-                'id_supplier'           =>$supplier->id_supplier,
-                'no_faktur'             =>$data['no_pembelian_barang'],
-                'reff_id'               =>$insert->id_pembelian_barang,
-                'reff_trans'            =>'PEMBELIAN BARANG',
-                'tanggal_hutang'        =>$data['tanggal_pembelian_barang'],
-                'tanggal_jatuh_tempo'   =>$data['tanggal_jatuh_tempo'],
-                'jumlah_hutang'         =>$data['total'],
-                'dibayar'               =>0,
-                'sisa'                  =>$data['total']
-            ]);
+            if($data['pembayaran']=='HUTANG'){
+                // insert hutang supplier
+                $insert_hutang_supplier = HutangSupplierModel::create([
+                    'id_supplier'           =>$supplier->id_supplier,
+                    'no_faktur'             =>$data['no_pembelian_barang'],
+                    'reff_id'               =>$insert->id_pembelian_barang,
+                    'reff_trans'            =>'PEMBELIAN BARANG',
+                    'tanggal_hutang'        =>$data['tanggal_pembelian_barang'],
+                    'tanggal_jatuh_tempo'   =>$data['tanggal_jatuh_tempo'],
+                    'jumlah_hutang'         =>$data['total'],
+                    'dibayar'               =>0,
+                    'sisa'                  =>$data['total']
+                ]);
+            }
+            
             DB::commit();
             return response()->json(['success'=>true,'data'=>$insert,'message'=>'']);
         }catch(\Exception $err) {
@@ -121,21 +170,67 @@ class PembelianBarangController extends Controller
                 'tanggal_pembelian_barang'   => 'required',
             ]);
             $data = $req->all();
-            $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
-            $data['kode_coa'] = $coa->kode_coa;
+            if($data['pembayaran']=='HUTANG'){
+                $data['kode_coa'] = null;
+                $data['id_coa'] = null;
+            }else{
+                $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+                $data['kode_coa'] = $coa->kode_coa;
+            }
             $data['id_lokasi']      = $lokasi->id_lokasi;
             $data['id_supplier']      = $supplier->id_supplier;
             $pembelianBarang->update($data);
-            $delete_detail = PembelianBarangDetailModel::where('id_pembelian_barang',$pembelianBarang->id_pembelian_barang)->delete();
             // update hutang supplier
-            $hutangSupplier = HutangSupplierModel::where('reff_id', $pembelianBarang->id_pembelian_barang)->delete();
-
+            $hutangSupplier = HutangSupplierModel::where('reff_id', $pembelianBarang->id_pembelian_barang)
+            ->where('reff_trans','PEMBELIAN BARANG')->delete();
+            $delete_detail = PembelianBarangDetailModel::where('id_pembelian_barang',$pembelianBarang->id_pembelian_barang)->delete();
+            // insert jurnal
+            $j = JurnalModel::where('reff_id',$pembelianBarang->id_pembelian_barang)
+            ->where('reff_trans','PEMBELIAN BARANG')->first();
+            $delete_jurnal_detail = JurnalDetailModel::where('id_jurnal',$j->id_jurnal)->delete();
+            $j->delete();
+            $jurnal = JurnalModel::create([
+                'tanggal'   =>$data['tanggal_pembelian_barang'],
+                'no_bukti'  =>$data['no_pembelian_barang'],
+                'reff_id'   =>$pembelianBarang->id_pembelian_barang,
+                'reff_trans'=>'PEMBELIAN BARANG',
+                'keterangan'=>'pembelian barang, lokasi '.$lokasi->nama_lokasi.', supplier '.$supplier->nama_supplier
+            ]);
             foreach($req->detail as $d){
                 $barang = SetupBarang::where('uuid',$d['uuid_barang'])->first();
                 $detail = $d;
                 $detail['id_barang']    = $barang->id_barang;
                 $detail['id_pembelian_barang'] = $pembelianBarang->id_pembelian_barang;
                 $insert_detail = PembelianBarangDetailModel::create($detail);
+                if($barang->is_activa){
+                    JurnalDetailModel::create([
+                        'id_jurnal' =>$jurnal->id_jurnal,
+                        'id_coa'    =>$barang->coa->id_coa,
+                        'kode_coa'  =>$barang->coa->kode_coa,
+                        'nama_coa'  =>$barang->coa->nama_coa,
+                        'debit'     =>$detail['subtotal'],
+                        'kredit'    =>0
+                    ]);
+                    if($data['pembayaran']=='HUTANG'){
+                        JurnalDetailModel::create([
+                            'id_jurnal' =>$jurnal->id_jurnal,
+                            'id_coa'    =>83,
+                            'kode_coa'  =>'21299',
+                            'nama_coa'  =>'HUTANG USAHA - LAINNYA',
+                            'debit'     =>0,
+                            'kredit'    =>$detail['subtotal']
+                        ]);
+                    }else{
+                        JurnalDetailModel::create([
+                            'id_jurnal' =>$jurnal->id_jurnal,
+                            'id_coa'    =>$coa->id_coa,
+                            'kode_coa'  =>$coa->kode_coa,
+                            'nama_coa'  =>$coa->nama_coa,
+                            'debit'     =>$data['nominal'],
+                            'kredit'    =>0
+                        ]);
+                    }
+                }
             }
             // insert hutang supplier
             $insert_hutang_supplier = HutangSupplierModel::create([
