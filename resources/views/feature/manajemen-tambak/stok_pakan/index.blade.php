@@ -76,6 +76,24 @@
         </button>
       </div>
       <div class="modal-body">
+        
+        <div class="row mb-3">
+            <div class="col-md-3">
+            <label>Start Date</label>
+            <input type="date" id="start_date" class="form-control form-control-sm">
+            </div>
+
+            <div class="col-md-3">
+            <label>End Date</label>
+            <input type="date" id="end_date" class="form-control form-control-sm">
+            </div>
+
+            <div class="col-md-3">
+            <label>&nbsp;</label><br>
+            <button id="filterHistory" class="btn btn-sm btn-primary">Filter</button>
+            <button id="resetHistory" class="btn btn-sm btn-secondary">Reset</button>
+            </div>
+        </div>
           <table id="historyTable" class="table table-sm table-striped- table-bordered table-hover m-table m-table--head-bg-info" style="width:100%">
               <thead>
                   <tr>

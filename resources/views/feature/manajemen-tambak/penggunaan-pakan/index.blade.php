@@ -102,10 +102,10 @@
                                     <label for="recipient-name" class="form-control-label">Tanggal Penggunaan Pakan</label>
                                     <input type="text" class="form-control general_datepicker" id="tanggal_penggunaan" name="tanggal_penggunaan" ng-model="input.tanggal_penggunaan" >
                                 </div>
-                                <div class="form-group m-form__group">
+                                {{-- <div class="form-group m-form__group">
                                     <label for="waktu">Waktu</label>
                                     <input type="time" class="form-control" id="waktu" ng-model="input.waktu" name="waktu" required>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group m-form__group">

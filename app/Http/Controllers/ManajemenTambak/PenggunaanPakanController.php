@@ -71,6 +71,9 @@ class PenggunaanPakanController extends Controller
                 }
             })
             ->rawColumns(['action'])
+            ->orderColumn('created_at_formatted', function ($query, $order) {
+                $query->orderBy('created_at', $order);
+            })
             ->make(true);
     }
 
@@ -122,7 +125,6 @@ class PenggunaanPakanController extends Controller
             $req->validate([
                 'no_penggunaan'    => 'required',
                 'tanggal_penggunaan'   => 'required',
-                'waktu' => 'required',
             ]);
             $data = $req->all();
             unset($data['id_pakan']);

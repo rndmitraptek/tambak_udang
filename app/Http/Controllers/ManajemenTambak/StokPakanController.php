@@ -53,14 +53,23 @@ class StokPakanController extends Controller
     }
 
 
-    public function show($uuid)
+    public function show(Request $request,$uuid)
     {
         $stok = StokPakan::where('uuid', $uuid)->firstOrFail();
 
         $history = HistoryKartuStok::with(['pakan', 'lokasi'])
             ->where('id_pakan', $stok->pakan_id)
             ->where('id_lokasi', $stok->lokasi_id)
-            ->orderBy('id_kartu', 'desc');
+            ->orderBy('id_kartu', 'asc');
+
+        // filter date
+        if ($request->start_date) {
+            $history->whereDate('tanggal', '>=', $request->start_date);
+        }
+
+        if ($request->end_date) {
+            $history->whereDate('tanggal', '<=', $request->end_date);
+        }
 
         return datatables()->eloquent($history)
             ->addColumn('pakan', fn($row) => $row->pakan->nama_pakan ?? '-')

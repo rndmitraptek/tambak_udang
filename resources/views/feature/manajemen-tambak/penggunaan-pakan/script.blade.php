@@ -10,7 +10,7 @@ app.controller("myCtrl", function($scope,$http) {
             scrollY: "50vh",
             scrollX: !0,
             scrollCollapse: !0,
-            order: [[0, 'desc']],
+            order: [[11, 'desc']],
             columns: [
                 { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
                 { data: 'id_penggunaan', visible: false },
@@ -263,7 +263,7 @@ app.controller("myCtrl", function($scope,$http) {
         rules: {
             no_penggunaan: { required: true },
             tanggal_penggunaan: { required: true },
-            waktu: { required: true },
+            // waktu: { required: true },
             uuid_lokasi: { required: true },
             uuid_siklus: { required: true }
         },
@@ -305,7 +305,7 @@ app.controller("myCtrl", function($scope,$http) {
 
             // kumpulkan data utama
             $scope.input.tanggal_penggunaan = $('#tanggal_penggunaan').val();
-            $scope.input.waktu = $('#waktu').val();
+            // $scope.input.waktu = $('#waktu').val();
             $scope.input.total = total;
             $scope.input.jumlah_petak = $scope.detail.length;
             $scope.input.detail = $scope.detail;

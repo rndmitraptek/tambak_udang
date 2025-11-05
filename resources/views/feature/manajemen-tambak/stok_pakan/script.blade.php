@@ -22,16 +22,23 @@ app.controller("myCtrl", function($scope,$http) {
         historyTable = $('#historyTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '/stok_pakan/show/' + uuid,
+            ajax: {
+                url: '/stok_pakan/show/' + uuid,
+                data: function(d) {
+                    d.start_date = $('#start_date').val();
+                    d.end_date   = $('#end_date').val();
+                }
+            },
             columns: [
-                { data: 'tanggal', name: 'tanggal' },
-                { data: 'pakan', name: 'pakan.nama_pakan' },
-                { data: 'lokasi', name: 'lokasi.nama_lokasi' },
-                { data: 'transaksi', name: 'transaksi' },
-                { data: 'referensi_no', name: 'referensi_no' },
+                { data: 'tanggal', name: 'tanggal' ,sortable:false},
+                { data: 'pakan', name: 'pakan.nama_pakan' ,sortable:false},
+                { data: 'lokasi', name: 'lokasi.nama_lokasi' ,sortable:false},
+                { data: 'transaksi', name: 'transaksi' ,sortable:false},
+                { data: 'referensi_no', name: 'referensi_no' ,sortable:false},
                 { 
                     data: 'awal', 
                     name: 'awal',
+                    sortable:false,
                     className: 'text-right',
                     render: function(data) {
                         return data ? parseInt(data).toLocaleString('id-ID') : '-';
@@ -40,6 +47,7 @@ app.controller("myCtrl", function($scope,$http) {
                 { 
                     data: 'masuk', 
                     name: 'masuk',
+                    sortable:false,
                     className: 'text-right',
                     render: function(data) {
                         return data ? parseInt(data).toLocaleString('id-ID') : '-';
@@ -48,6 +56,7 @@ app.controller("myCtrl", function($scope,$http) {
                 { 
                     data: 'keluar', 
                     name: 'keluar',
+                    sortable:false,
                     className: 'text-right',
                     render: function(data) {
                         return data ? parseInt(data).toLocaleString('id-ID') : '-';
@@ -56,13 +65,13 @@ app.controller("myCtrl", function($scope,$http) {
                 { 
                     data: 'saldo', 
                     name: 'saldo',
+                    sortable:false,
                     className: 'text-right',
                     render: function(data) {
                         return data ? parseInt(data).toLocaleString('id-ID') : '-';
                     }
                 },
             ],
-            order: [[0, 'desc']]
         });
 
         // tampilkan modal
@@ -97,6 +106,18 @@ app.controller("myCtrl", function($scope,$http) {
         // }).catch(function(err){
         //     Swal.fire('Error', 'Gagal mengambil detail transaksi', 'error');
         // });
+    });
+
+    // tombol filter
+    $('#filterHistory').click(function () {
+        historyTable.ajax.reload();
+    });
+
+    // tombol reset
+    $('#resetHistory').click(function () {
+        $('#start_date').val('');
+        $('#end_date').val('');
+        historyTable.ajax.reload();
     });
     
 });
