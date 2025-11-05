@@ -128,7 +128,7 @@ class PembelianBarangController extends Controller
                             'id_coa'    =>$coa->id_coa,
                             'kode_coa'  =>$coa->kode_coa,
                             'nama_coa'  =>$coa->nama_coa,
-                            'debit'     =>$data['nominal'],
+                            'debit'     =>$detail['subtotal'],
                             'kredit'    =>0
                         ]);
                     }
@@ -226,7 +226,7 @@ class PembelianBarangController extends Controller
                             'id_coa'    =>$coa->id_coa,
                             'kode_coa'  =>$coa->kode_coa,
                             'nama_coa'  =>$coa->nama_coa,
-                            'debit'     =>$data['nominal'],
+                            'debit'     =>$detail['subtotal'],
                             'kredit'    =>0
                         ]);
                     }
