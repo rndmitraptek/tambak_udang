@@ -168,9 +168,9 @@ class PenaburanBenurController extends Controller
                     'reff_trans'            =>'PENABURAN BENUR',
                     'tanggal_hutang'        =>$data['tanggal_penaburan'],
                     'tanggal_jatuh_tempo'   =>$data['tanggal_penaburan'],
-                    'jumlah_hutang'         =>$data['total_nominal_bruto'],
+                    'jumlah_hutang'         =>$data['total_nominal_netto'],
                     'dibayar'               =>0,
-                    'sisa'                  =>$data['total_nominal_bruto']
+                    'sisa'                  =>$data['total_nominal_netto']
                 ]);
             }
             // insert jurnal
@@ -269,9 +269,9 @@ class PenaburanBenurController extends Controller
                     'reff_trans'            =>'PENABURAN BENUR',
                     'tanggal_hutang'        =>$data['tanggal_penaburan'],
                     'tanggal_jatuh_tempo'   =>$data['tanggal_penaburan'],
-                    'jumlah_hutang'         =>$data['total_nominal_bruto'],
+                    'jumlah_hutang'         =>$data['total_nominal_netto'],
                     'dibayar'               =>0,
-                    'sisa'                  =>$data['total_nominal_bruto']
+                    'sisa'                  =>$data['total_nominal_netto']
                 ]);
             }
             // insert jurnal
