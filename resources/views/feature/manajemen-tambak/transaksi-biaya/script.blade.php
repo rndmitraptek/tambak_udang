@@ -43,9 +43,30 @@ app.controller("myCtrl", function($scope,$http) {
         { "kode_akun": "41",  "nama_akun": "Pendapatan Penjualan","tipe_akun": "Revenue", "pos_laporan": "Laba Rugi","saldo_normal": "Kredit","kode_parent": "4" },
     ]
 
-    
+    $scope.biayaColumns = [
+        { data: 'kode_biaya', title: 'Kode biaya' },
+        { data: 'nama_biaya', title: 'Nama biaya' },
+        { data: 'kelompok_biaya', title: 'kelompok' },
+        { data: 'coa.kode_coa', title: 'Kode COA' },
+        { data: 'coa.nama_coa', title: 'Nama COA' },
+        { data: 'catatan', title: 'catatan' }
+    ];
+    $scope.selected_biaya = {};
+    $scope.selectBiaya = function(param){
+        console.log(param)
+        $scope.selected_biaya = param;
+        $("#biaya-dropdown").val(param.id_biaya);
+        $("#nama_biaya").val(param.nama_biaya);
+        $("#biaya-dropdown").change();
+    }
 
     $(document).ready(function() {
+        
+
+        $scope.cari_biaya = function(){
+            $('#lookup_biaya').modal('show');
+        }
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -79,8 +100,8 @@ app.controller("myCtrl", function($scope,$http) {
                 if (!selectedId) return; // kalau belum pilih apa-apa
 
                 // ambil data biaya dari attribute option
-                let biaya = JSON.parse($(this).find(":selected").attr("data-biak"));
-
+                let biaya =$scope.selected_biaya;// JSON.parse($(this).find(":selected").attr("data-biak"));
+                console.log(biaya);
                 let html = `<div class="biaya-item">`;
 
                 //jika biaya periode
@@ -169,7 +190,7 @@ app.controller("myCtrl", function($scope,$http) {
 
                 html += `</div>`;
                 detailContainer.html(html);
-
+                $scope.$apply();
             });
         });
 

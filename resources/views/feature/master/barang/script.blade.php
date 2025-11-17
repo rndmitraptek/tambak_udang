@@ -8,12 +8,13 @@ app.controller("myCtrl", function($scope,$http,API) {
             scrollY: "50vh",
             scrollX: !0,
             scrollCollapse: !0,
+            order: [[2, 'desc']],
             columns: [
                 { data: 'nama_barang', title: 'Nama Barang' },
-                { data: 'created_by_name', title: 'Created By' },
-                { data: 'created_at_formatted', title: 'Created At' },
-                { data: 'updated_by_name', title: 'Updated By' },
-                { data: 'updated_at_formatted', title: 'Updated At' },
+                { data: 'created_by_name', title: 'Created By', searchable: false, orderable: false },
+                { data: 'created_at_formatted', title: 'Created At', searchable: false, name: 'created_at' },
+                { data: 'updated_by_name', title: 'Updated By', searchable: false, orderable: false },
+                { data: 'updated_at_formatted', title: 'Updated At' , searchable: false, orderable: false},
                 { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
             ]
         })

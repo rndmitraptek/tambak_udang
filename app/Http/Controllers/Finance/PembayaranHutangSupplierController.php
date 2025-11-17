@@ -199,8 +199,8 @@ class PembayaranHutangSupplierController extends Controller
                 JurnalDetailModel::create([
                     'id_jurnal' =>$jurnal->id_jurnal,
                     'id_coa'    =>154,
-                    'kode_coa'  =>'53102',
-                    'nama_coa'  =>'PEMBELIAN BENUR',
+                    'kode_coa'  =>'53202',
+                    'nama_coa'  =>'Return pembelian',
                     'debit'     =>0,
                     'kredit'    =>$detail['nominal_piutang']
                 ]);

@@ -38,6 +38,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: "/benur/data",
+        order: [[6, 'desc']],
         columns: [
             { data: 'kode_benur', title: 'Kode Benur' },
             { data: 'kode_supplier', title: 'Kode Supplier' },
@@ -51,10 +52,10 @@ $(document).ready(function() {
                 }
             },
             { data: 'keterangan', title: 'Keterangan' },
-            { data: 'created_by_name', title: 'Created By' },
-            { data: 'created_at_formatted', title: 'Created At' },
-            { data: 'updated_by_name', title: 'Updated By' },
-            { data: 'updated_at_formatted', title: 'Updated At' },
+            { data: 'created_by_name', title: 'Created By', searchable: false, orderable: false },
+            { data: 'created_at_formatted', title: 'Created At', searchable: false, name: 'created_at' },
+            { data: 'updated_by_name', title: 'Updated By', searchable: false, orderable: false },
+            { data: 'updated_at_formatted', title: 'Updated At', searchable: false, orderable: false },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

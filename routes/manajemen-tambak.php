@@ -7,6 +7,7 @@ use App\Http\Controllers\ManajemenTambak\TransaksiBiayaSimulasiController;
 Route::middleware('auth')->group(function () {
     Route::prefix('transaksi-biaya')->group(function() {
         Route::get('/', [TransaksiBiayaController::class, 'index'])->name('transaksi-biaya.index');
+        Route::get('/getbiaya',[TransaksiBiayaController::class, 'getbiaya'])->name('transaksi-biaya.getbiaya');
         Route::get('/data', [TransaksiBiayaController::class, 'data'])->name('transaksi-biaya.data'); // datatables
         Route::get('/biaya-list', [TransaksiBiayaController::class, 'biayaList'])->name('transaksi-biaya.biaya-list');
         Route::get('/petak-list', [TransaksiBiayaController::class, 'petakList'])->name('transaksi-biaya.petak-list');

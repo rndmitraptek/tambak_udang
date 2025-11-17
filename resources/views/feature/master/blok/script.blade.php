@@ -25,15 +25,16 @@ $(document).ready(function() {
     var table = $('#viewtabel').DataTable({
         processing: true,
         serverSide: true,
+        order: [[4, 'desc']],
         ajax: "{{ route('blok.data') }}",
         columns: [
             { data: 'nama_lokasi', title: 'Nama Lokasi' },
             { data: 'nama_blok', title: 'Nama Blok' },
             { data: 'keterangan', title: 'Keterangan' },
-            { data: 'created_by_name', title: 'Created By' },
-            { data: 'created_at_formatted', title: 'Created At' },
-            { data: 'updated_by_name', title: 'Updated By' },
-            { data: 'updated_at_formatted', title: 'Updated At' },
+            { data: 'created_by_name', title: 'Created By', searchable: false, orderable: false },
+            { data: 'created_at_formatted', name: 'created_at', title: 'Created At', searchable: false },
+            { data: 'updated_by_name', title: 'Updated By', searchable: false, orderable: false },
+            { data: 'updated_at_formatted', title: 'Updated At', searchable: false, orderable: false },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

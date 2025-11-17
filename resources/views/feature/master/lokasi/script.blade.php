@@ -17,6 +17,7 @@ $(document).ready(function() {
     var table = $('#viewtabel').DataTable({
         processing: true,
         serverSide: true,
+        order: [[4, 'desc']],
         ajax: "{{ route('lokasi.data') }}",
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
@@ -25,10 +26,10 @@ $(document).ready(function() {
             { data: 'kode_lokasi', title: 'Kode Lokasi' },
             { data: 'nama_lokasi', title: 'Nama Lokasi' },
             { data: 'alamat_lokasi', title: 'Alamat Lokasi' },
-            { data: 'created_by_name', title: 'Created By' },
-            { data: 'created_at_formatted', title: 'Created At' },
-            { data: 'updated_by_name', title: 'Updated By' },
-            { data: 'updated_at_formatted', title: 'Updated At' },
+            { data: 'created_by_name', title: 'Created By', orderable: false, searchable: false  },
+            { data: 'created_at_formatted', name: 'created_at' , title: 'Created At', searchable: false  },
+            { data: 'updated_by_name', title: 'Updated By', orderable: false, searchable: false  },
+            { data: 'updated_at_formatted', title: 'Updated At', orderable: false, searchable: false  },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

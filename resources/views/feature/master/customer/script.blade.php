@@ -39,6 +39,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: "/customer/data",
+        order: [[7, 'desc']],
         columns: [
             { data: 'kode_customer', title: 'Kode Customer' },
             { data: 'nama_customer', title: 'Nama Customer' },
@@ -46,10 +47,10 @@ $(document).ready(function() {
             { data: 'telepon_customer', title: 'Telepon Customer' },
             { data: 'email_customer', title: 'Email Customer' },
             { data: 'catatan', title: 'Catatan' },
-            { data: 'created_by_name', title: 'Created By' },
-            { data: 'created_at_formatted', title: 'Created At' },
-            { data: 'updated_by_name', title: 'Updated By' },
-            { data: 'updated_at_formatted', title: 'Updated At' },
+            { data: 'created_by_name', title: 'Created By', orderable: false, searchable: false },
+            { data: 'created_at_formatted', name: 'created_at', title: 'Created At', orderable: false },
+            { data: 'updated_by_name', title: 'Updated By', orderable: false, searchable: false },
+            { data: 'updated_at_formatted', title: 'Updated At', orderable: false, searchable: false },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

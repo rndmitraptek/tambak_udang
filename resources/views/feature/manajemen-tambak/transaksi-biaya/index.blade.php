@@ -105,10 +105,21 @@
                                     <input type="text" class="form-control" id="tanggal_transaksi" name="tanggal_transaksi" value="{{ date('Y-m-d') }}" autocomplete="off" required>
                                 </div>
                                 <div class="form-group">
+                                    <label>Biaya</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control d-none" id="biaya-dropdown" name="biaya-dropdown">
+                                        <input type="text" class="form-control" id="nama_biaya" name="nama_biaya">
+                                        <div class="input-group-append">
+                                            <button ng-click="cari_biaya()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
+                                        </div>
+                                    </div>
+                                    <div id="biaya-detail"></div>
+                                </div>
+                                {{-- <div class="form-group">
                                     <label for="exampleSelect1">Biaya</label>
                                     <select id="biaya-dropdown" class="form-control"></select>
                                     <div id="biaya-detail"></div>
-                                </div>
+                                </div> --}}
                                 {{-- <div class="form-group m-form__group">
                                     <label for="exampleSelect1">Biaya</label>
                                     <select class="form-control" id="exampleSelect1">
@@ -246,6 +257,15 @@
         </div>
     </div>
 </div>
+
+<look-up-table
+      lookup-id="lookup_biaya"
+      ajax-url="{{ route('transaksi-biaya.getbiaya') }}"
+      columns="biayaColumns"
+      page-length="8"
+      on-select="selectBiaya(row)">
+</look-up-table>
+
 
 <!--end::Modal-->
 @endsection

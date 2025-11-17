@@ -116,8 +116,8 @@ class JurnalTransaksiHelper
         JurnalDetailModel::create([
             'id_jurnal' =>$jurnal->id_jurnal,
             'id_coa'    =>81,
-            'kode_coa'  =>'21202',
-            'nama_coa'  =>'HUTANG USAHA - PAKAN',
+            'kode_coa'  =>'53202',
+            'nama_coa'  =>'Return pembelian',
             'debit'     =>$data['nominal'],
             'kredit'    =>0
         ]);

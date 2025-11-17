@@ -38,6 +38,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: "/pakan/data",
+        order: [[8, 'desc']],
         columns: [
             { data: 'kode_pakan', title: 'Kode Pakan' },
             { data: 'nama_pakan', title: 'Nama Pakan' },
@@ -52,10 +53,10 @@ $(document).ready(function() {
                 }
             },
             { data: 'keterangan', title: 'keterangan' },
-            { data: 'created_by_name', title: 'Created By' },
-            { data: 'created_at_formatted', title: 'Created At' },
-            { data: 'updated_by_name', title: 'Updated By' },
-            { data: 'updated_at_formatted', title: 'Updated At' },
+            { data: 'created_by_name', title: 'Created By', orderable: false, searchable: false },
+            { data: 'created_at_formatted', name: 'created_at', title: 'Created At', orderable: false },
+            { data: 'updated_by_name', title: 'Updated By', orderable: false, searchable: false },
+            { data: 'updated_at_formatted', title: 'Updated At', orderable: false, searchable: false },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });

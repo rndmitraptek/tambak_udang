@@ -49,7 +49,7 @@ class SetupBarangContoller extends Controller
     {
         $benur = SetupBarang::where('uuid', $uuid)->firstOrFail();
         $req->validate([
-            'nama_item' => 'required',
+            'nama_barang' => 'required',
         ]);
         $data = $req->all();
         $coa = SetupCoa::where('id_coa',$req->id_coa)->first();

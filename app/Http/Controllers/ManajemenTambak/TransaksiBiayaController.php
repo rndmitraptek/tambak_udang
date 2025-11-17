@@ -36,6 +36,16 @@ class TransaksiBiayaController extends Controller
         return response()->json($biaya);
     }
 
+    public function getbiaya(Request $request){
+        $query = SetupBiaya::with(['petak','coa', 'lokasi.siklus'])->orderBy('nama_biaya','asc');
+        if ($request->has('textSearch') && $request->textSearch != '') {
+            $text = strtoupper($request->textSearch);
+            $query->where(DB::raw('UPPER(kode_biaya)'), 'like', "%{$text}%");
+            $query->orWhere(DB::raw('UPPER(nama_biaya)'), 'like', "%{$text}%");
+        }
+        return DataTables::of($query)->make(true);
+    }
+
     public function petakList(Request $request)
     {
         // siklus_id bisa array (dari query string ?siklus_id[]=1&siklus_id[]=2)

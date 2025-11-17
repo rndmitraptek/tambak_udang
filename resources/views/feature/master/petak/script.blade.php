@@ -43,22 +43,23 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: "/petak/data",
+        order: [[6, 'desc']],
         columns: [
             { data: 'nama_lokasi', title: 'nama_lokasi' },
             { data: 'nama_blok', title: 'nama_blok' },
             { data: 'nama_petak', title: 'nama_petak' },
-            { 
-                data: 'luas_petak', 
+            {
+                data: 'luas_petak',
                 title: 'luas_petak',
                 render: function(data, type, row) {
                     return  parseInt(data).toLocaleString('id-ID');
                 }
             },
             { data: 'keterangan', title: 'keterangan' },
-            { data: 'created_by_name', title: 'Created By' },
-            { data: 'created_at_formatted', title: 'Created At' },
-            { data: 'updated_by_name', title: 'Updated By' },
-            { data: 'updated_at_formatted', title: 'Updated At' },
+            { data: 'created_by_name', title: 'Created By', orderable: false, searchable: false },
+            { data: 'created_at_formatted', name: 'created_at', title: 'Created At', searchable: false },
+            { data: 'updated_by_name', title: 'Updated By', orderable: false, searchable: false },
+            { data: 'updated_at_formatted', title: 'Updated At', orderable: false, searchable: false },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });
