@@ -56,8 +56,7 @@ class ItemController extends Controller
 
     public function destroy($uuid)
     {
-        $benur = SetupItem::where('uuid', $uuid)->firstOrFail();
-        $benur->delete();
+        $benur = SetupItem::where('uuid', $uuid)->delete();
         return response()->json(['success' => true]);
     }
 

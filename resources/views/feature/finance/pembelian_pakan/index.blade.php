@@ -162,7 +162,7 @@
                                 <div class="form-group m-form__group">
                                     <label>Pillih Supplier</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" ng-model="input.nama_supplier" id="nama_supplier" name="nama_supplier" placeholder="Search for..." required>
+                                        <input type="text" class="form-control" ng-model="input.nama_supplier" id="nama_supplier" name="nama_supplier" placeholder="Search for..." required readonly>
                                         <div class="input-group-append">
                                             <button ng-click="cari_supplier()" class="btn btn-info" type="button"><i class="la la-search"></i></button>
                                         </div>

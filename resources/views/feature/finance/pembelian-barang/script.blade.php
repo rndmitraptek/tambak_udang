@@ -136,6 +136,7 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.supplierColumns = [
         { data: 'kode_supplier', title: 'Kode supplier' },
         { data: 'nama_supplier', title: 'Nama supplier' },
+        { data: 'nama_perusahaan', title: 'Perusahaan'},
         { data: 'telepon_supplier', title: 'Telepon' }
     ];
 

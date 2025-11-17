@@ -47,7 +47,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                             swal.showLoading()
                         }
                     })
-                    url = "{{ route('item.delete',':uuid') }}";
+                    url = "{{ route('barang.delete',':uuid') }}";
                     url = url.replace(':uuid', x.uuid);
                     $http.delete(url)
                     .then(function(res){
