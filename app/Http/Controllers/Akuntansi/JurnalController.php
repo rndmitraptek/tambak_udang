@@ -96,6 +96,7 @@ class JurnalController extends Controller
         $data = JurnalDetailModel::join('jurnal', 'jurnal.id_jurnal', '=', 'jurnal_detail.id_jurnal')
         ->whereBetween('jurnal.tanggal', [$req->tanggal_mulai, $req->tanggal_selesai])
         ->select('jurnal_detail.*', 'jurnal.tanggal', 'jurnal.keterangan', 'jurnal.no_bukti')
+        ->orderBy('jurnal.tanggal', 'asc')
         ->get();
         return response()->json(['success'=>true,'data'=>$data,'message'=>'']);
     }
