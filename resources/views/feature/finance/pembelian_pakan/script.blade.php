@@ -13,7 +13,7 @@ app.controller("myCtrl", function($scope,$http) {
             columns: [
                 { data: 'actions', title: 'Action', orderable: false, searchable: false,width:'80px' },
                 { data: 'no_pembelian', title: 'No Pembelian' },
-                { data: 'tanggal_pembelian', title: 'Tanggal' },
+                { data: 'tanggal_format_indo', title: 'Tanggal' },
                 { data: 'supplier', title: 'Supplier' },
                 { data: 'lokasi', title: 'Lokasi' },
                 { data: 'siklus', title: 'Siklus' },

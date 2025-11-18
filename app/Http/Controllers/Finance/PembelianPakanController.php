@@ -35,6 +35,7 @@ class PembelianPakanController extends Controller
     public function datatable(Request $request)
     {
         $query = PembelianPakan::withTrashed()->with(['supplier','lokasi'])
+            ->where('deleted_at',null)
             ->orderBy('id_pembelian', 'desc');
 
         return DataTables::of($query)
@@ -157,7 +158,7 @@ class PembelianPakanController extends Controller
                 return response()->json(['success'=>false,'errors'=>$validator->errors()]);
             }
             $data = $req->header;
-            $data['no_pembelian'] = GeneradeNomorHelper::long_update('pembelian_pakan');
+            $no_pembelian = GeneradeNomorHelper::long_update('pembelian_pakan');
             unset($data['uuid_supplier'], $data['uuid_lokasi'], $data['uuid_siklus'], $data['id_pakan']);
             $data['supplier_id'] = $supplier->id_supplier;
             $data['lokasi_id']   = $lokasi->id_lokasi;

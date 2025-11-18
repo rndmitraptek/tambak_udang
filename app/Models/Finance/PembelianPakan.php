@@ -18,6 +18,9 @@ class PembelianPakan extends Model
 
     protected $table = 'pembelian_pakan';
     protected $primaryKey = 'id_pembelian';
+    protected $casts = [
+        'tanggal_pembelian' => 'date',
+    ];
     protected $fillable = [
         'uuid','no_pembelian','tanggal_pembelian',
         'supplier_id',
@@ -31,7 +34,7 @@ class PembelianPakan extends Model
         'created_by',
         'updated_by',
     ];
-    protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
+    protected $appends = ['tanggal_format_indo','created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     public function detail()
     {
@@ -51,5 +54,10 @@ class PembelianPakan extends Model
     public function siklus()
     {
         return $this->belongsTo(SetupSiklus::class, 'siklus_id');
+    }
+
+    public function getTanggalFormatIndoAttribute()
+    {
+        return $this->tanggal_pembelian ? $this->tanggal_pembelian->format('d-m-Y') : null;
     }
 }
