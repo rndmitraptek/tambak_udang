@@ -1,6 +1,9 @@
 @extends('layout')
 @section('css')
 	<link href="{{ url('/') }}/template/assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    .datepicker {
+        z-index: 99999999 !important;
+    }
 @endsection
 @section('ctrl')
 @include('feature.manajemen-tambak.transaksi-biaya.script')
