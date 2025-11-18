@@ -18,10 +18,14 @@ app.controller("myCtrl", function($scope,$http) {
 
     $scope.$watch('kelompok_biaya', function (v) {
     if (v === 'Perlokasi') {
+        console.log('perlokasi');
+        $('#lokasi_id_multi').val(null).trigger('change');
         // kalau sebelumnya ada data array, isi ulang ke single
         $scope.lokasiSingle = $scope.lokasi.length ? $scope.lokasi[0] : null;
         $scope.lokasi = $scope.lokasiSingle ? [$scope.lokasiSingle] : [];
     } else if (v === 'Gabungan') {
+        console.log('gabungan');
+        $('#lokasi_id_single').val(null).trigger('change');
         // pastikan selalu array
         if (!Array.isArray($scope.lokasi)) {
         $scope.lokasi = [];
@@ -87,6 +91,7 @@ $(document).ready(function() {
     });
     $.get('/setup-biaya/lokasi-list', function(res) {
         $('#lokasi_id_single').empty();
+        // $scope.lokasiList = res;
         res.forEach(function(lokasi) {
             $('#lokasi_id_single').append('<option value="'+lokasi.id_lokasi+'">'+lokasi.nama_lokasi+'</option>');
         });
@@ -132,6 +137,10 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: "/setup-biaya/data",
+        scrollY: "50vh",
+        scrollX: true,
+        autoWidth: false,
+        scrollCollapse: !0,
         columns: [
             { data: 'kode_biaya', name: 'kode_biaya' },
             { data: 'nama_biaya', name: 'nama_biaya' },
@@ -155,6 +164,26 @@ $(document).ready(function() {
         $('#formSetupBiaya')[0].reset();
         $('#uuid').val('');
         $('#m_create').modal('show');
+        $.get('/setup-biaya/lokasi-list', function(res) {
+            $('#lokasi_id_single').empty();
+            // $scope.lokasiList = res;
+            res.forEach(function(lokasi) {
+                $('#lokasi_id_single').append('<option value="'+lokasi.id_lokasi+'">'+lokasi.nama_lokasi+'</option>');
+            });
+            $('#lokasi_id_multi').empty();
+            res.forEach(function(lokasi) {
+                $('#lokasi_id_multi').append('<option value="'+lokasi.id_lokasi+'">'+lokasi.nama_lokasi+'</option>');
+            });
+
+            // Panggil setelah $scope.lokasiList diisi
+            setTimeout(function() {
+            $('#lokasi_id_multi').select2({
+                placeholder: "Pilih Lokasi",
+                allowClear: true,
+                width: '100%'
+            });
+            }, 100);
+        });
         // $('#lokasi-group').hide();
         // $('#btnTambahLokasi').hide();
     });
@@ -200,43 +229,68 @@ $(document).ready(function() {
 });
 
 function editBiaya(uuid) {
-    $.get('/setup-biaya/show/' + uuid, function(res) {
-        var scope = angular.element($('#m_create')).scope();
-        scope.$apply(function () {
-            // isi field yang dihandle Angular
-            scope.kelompok_biaya = res.kelompok_biaya;
-            scope.periode_biaya = res.periode_biaya == 1;
-            scope.nominal_biaya = res.nominal_biaya;
-            scope.catatan = res.catatan;
+    $.get('/setup-biaya/lokasi-list', function(resLokasi) {
+        $('#lokasi_id_single').empty();
 
-            // lokasi
-            if (res.kelompok_biaya === 'Perlokasi') {
-                if (res.lokasi && res.lokasi.length > 0) {
-                    scope.lokasiSingle = res.lokasi[0].id;
-                    scope.lokasi = [res.lokasi[0].id];
-                    $('#lokasi_id_single').val(scope.lokasiSingle).trigger('change');
-                }
-            } else if (res.kelompok_biaya === 'Gabungan') {
-                var lokasiIds = res.lokasi.map(l => l.id);
-                scope.lokasi = lokasiIds;
-                $('#lokasi_id_multi').val(lokasiIds).trigger('change'); // sync select2
-            } else if (res.kelompok_biaya === 'Perpetak') {
-                // scope.petak = res.petak_id;
-                // $('#petak_id').val(res.petak_id).trigger('change');
-            }
+        // Panggil setelah $scope.lokasiList diisi
+        setTimeout(function() {
+        $('#lokasi_id_multi').select2({
+            placeholder: "Pilih Lokasi",
+            allowClear: true,
+            width: '100%'
         });
-        
-        // isi field biasa (jQuery langsung, karena tidak ada ng-model)
-        $('#uuid').val(res.uuid);
-        $('#kode_biaya').val(res.kode_biaya);
-        $('#nama_biaya').val(res.nama_biaya);
-        $('#nominal_biaya').val(res.nominal_biaya);
-        $('#coa_id').val(res.coa_id).trigger('change');
-        $('#catatan').val(res.catatan);
-        // periode (checkbox)
-        $('input[name="periode_biaya"]').prop('checked', res.periode_biaya == 1);
+        }, 100);
+    
+        $.get('/setup-biaya/show/' + uuid, function(res) {
+            var scope = angular.element($('#m_create')).scope();
+            scope.$apply(function () {
+                // isi field yang dihandle Angular
+                scope.kelompok_biaya = res.kelompok_biaya;
+                scope.periode_biaya = res.periode_biaya == 1;
+                scope.nominal_biaya = res.nominal_biaya;
+                scope.catatan = res.catatan;
 
-        $('#m_create').modal('show');
+                // lokasi
+                if (res.kelompok_biaya === 'Perlokasi') {
+                    if (res.lokasi && res.lokasi.length > 0) {
+                        scope.lokasiSingle = res.lokasi[0].id_lokasi;
+                        scope.lokasi = [res.lokasi[0].id_lokasi];
+                        resLokasi.forEach(function(lokasi) {
+                            let selected ='';
+                            console.log('id=',lokasi.id_lokasi);
+                            if(lokasi.id_lokasi==res.lokasi[0].id_lokasi){
+                                selected='selected';
+                                console.log('select');
+                            }
+                            $('#lokasi_id_single').append('<option value="'+lokasi.id_lokasi+'" '+selected+'>'+lokasi.nama_lokasi+'</option>');
+                        });
+                        // $('#lokasi_id_single').val(scope.lokasiSingle).trigger('change');
+                    }
+                } else if (res.kelompok_biaya === 'Gabungan') {
+                    resLokasi.forEach(function(lokasi) {
+                        $('#lokasi_id_single').append('<option value="'+lokasi.id_lokasi+'" >'+lokasi.nama_lokasi+'</option>');
+                    });
+                    var lokasiIds = res.lokasi.map(l => l.id_lokasi);
+                    scope.lokasi = lokasiIds;
+                    $('#lokasi_id_multi').val(lokasiIds).trigger('change'); // sync select2
+                } else if (res.kelompok_biaya === 'Perpetak') {
+                    // scope.petak = res.petak_id;
+                    // $('#petak_id').val(res.petak_id).trigger('change');
+                }
+            });
+            
+            // isi field biasa (jQuery langsung, karena tidak ada ng-model)
+            $('#uuid').val(res.uuid);
+            $('#kode_biaya').val(res.kode_biaya);
+            $('#nama_biaya').val(res.nama_biaya);
+            $('#nominal_biaya').val(res.nominal_biaya);
+            $('#coa_id').val(res.coa_id).trigger('change');
+            $('#catatan').val(res.catatan);
+            // periode (checkbox)
+            $('input[name="periode_biaya"]').prop('checked', res.periode_biaya == 1);
+
+            $('#m_create').modal('show');
+        });
     });
 }
 

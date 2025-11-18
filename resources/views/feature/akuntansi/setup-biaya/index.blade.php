@@ -99,19 +99,22 @@
                             <option value="">- Pilih -</option>
                             <option value="Gabungan">Gabungan</option>
                             <option value="Perlokasi">Perlokasi</option>
-                            <option value="Perpetak">Perpetak</option>
+                            {{-- <option value="Perpetak">Perpetak</option> --}}
                         </select>
                     </div>
 
                     <!-- Perlokasi -->
                     <div class="form-group" ng-show="kelompok_biaya == 'Perlokasi'">
                     <label for="lokasi_id_single">Nama Lokasi</label>
-                    <select class="form-control"
+                    {{-- <select class="form-control"
                             id="lokasi_id_single"
                             name="lokasi[]"
                             ng-model="lokasiSingle"
-                            ng-options="l.id as l.nama for l in lokasiList"
+                            ng-options="l.id_lokasi as l.nama_lokasi for l in lokasiList"
                             >
+                        <option value="">- Pilih Lokasi -</option>
+                    </select> --}}
+                    <select class="form-control" id="lokasi_id_single" name="lokasi[]">
                         <option value="">- Pilih Lokasi -</option>
                     </select>
                     </div>
@@ -125,7 +128,7 @@
                             name="lokasi[]"
                             multiple
                             style="width:100%; min-height:120px; font-size:14px;"
-                            ng-options="l.id as l.nama for l in lokasiList">
+                            ng-options="l.id_lokasi as l.nama_lokasi for l in lokasiList">
                     </select>
                     </div>
 

@@ -101,7 +101,7 @@ class SetupBiayaController extends Controller
                 'nama_biaya'       => $request->nama_biaya,
                 'kelompok_biaya'   => $request->kelompok_biaya,
                 'petak_id'   => $request->kelompok_biaya == 'Perpetak' ? $request->petak_id : null,
-                'periode'    => $request->periode ?? false,
+                'periode_biaya'    => $request->periode_biaya ?? false,
                 'nominal_biaya'    => $request->nominal_biaya,
                 'coa_id'     => $request->coa_id,
                 'catatan'    => $request->catatan,
@@ -175,16 +175,17 @@ class SetupBiayaController extends Controller
                 'nama_biaya'       => $request->nama_biaya,
                 'kelompok_biaya'   => $request->kelompok_biaya,
                 'petak_id'   => $request->kelompok_biaya == 'Perpetak' ? $request->petak_id : null,
-                'periode'    => $request->periode ?? false,
+                'periode_biaya'    => $request->periode_biaya ?? false,
                 'nominal_biaya'    => $request->nominal_biaya,
                 'coa_id'     => $request->coa_id,
                 'catatan'    => $request->catatan,
             ]);
 
             // refresh lokasi
-            SetupBiayaLokasi::where('biaya_id', $biaya->id)->forceDelete();
+            SetupBiayaLokasi::where('biaya_id', $biaya->id_biaya)->forceDelete();
             if (in_array($request->kelompok_biaya, ['Gabungan', 'Perlokasi'])) {
-                foreach ($request->lokasi ?? [] as $lokasiId) {
+                $lokasiIds = array_unique($request->lokasi ?? []);
+                foreach ($lokasiIds as $lokasiId) {
                     SetupBiayaLokasi::create([
                         'biaya_id' => $biaya->id_biaya,
                         'lokasi_id'  => $lokasiId,
