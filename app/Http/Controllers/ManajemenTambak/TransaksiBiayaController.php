@@ -133,7 +133,7 @@ class TransaksiBiayaController extends Controller
         DB::beginTransaction();
         try {
             $validated = $request->validate([
-                'no_transaksi'  => 'required|unique:transaksi_biaya,no_transaksi',
+                'no_transaksi'  => 'required',
                 'tanggal_transaksi' => 'required|date',
                 'tanggal_mulai' => 'nullable|date',
                 'tanggal_selesai'=> 'nullable|date',
