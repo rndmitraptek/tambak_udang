@@ -417,7 +417,12 @@ app.controller("myCtrl", function($scope,$http) {
             processing: true,
             serverSide: true,
             ajax: "/transaksi-biaya/data",
+            scrollY: "50vh",
+            scrollX: true,
+            autoWidth: false,
+            scrollCollapse: !0,
             columns: [
+                { data: 'actions', name: 'actions', orderable: false, searchable: false },
                 { data: 'no_transaksi', title: 'no_transaksi' },
                 { data: 'siklus', title: 'siklus' },
                 { 
@@ -440,7 +445,6 @@ app.controller("myCtrl", function($scope,$http) {
                 { data: 'created_at_formatted', title: 'Created At' },
                 { data: 'updated_by_name', title: 'Updated By' },
                 { data: 'updated_at_formatted', title: 'Updated At' },
-                { data: 'actions', name: 'actions', orderable: false, searchable: false }
             ]
         });
 
