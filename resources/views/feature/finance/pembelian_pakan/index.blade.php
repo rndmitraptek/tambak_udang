@@ -151,6 +151,10 @@
                                     <input type="text" class="form-control general_datepicker" id="tanggal_pembelian" name="tanggal_pembelian" ng-model="input.tanggal_pembelian" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="recipient-name" class="form-control-label">Tanggal Jatuh Tempo</label>
+                                    <input type="text" class="form-control general_datepicker" id="tanggal_jatuh_tempo" name="tanggal_jatuh_tempo" ng-model="input.tanggal_jatuh_tempo" required>
+                                </div>
+                                <div class="form-group">
                                     <label for="is_hutang" class="form-control-label d-block mb-2">Catat Hutang?</label>
                                     <label class="switch">
                                         <input type="checkbox" id="is_hutang" name="is_hutang" ng-model="input.is_hutang">

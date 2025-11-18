@@ -20,9 +20,10 @@ class PembelianPakan extends Model
     protected $primaryKey = 'id_pembelian';
     protected $casts = [
         'tanggal_pembelian' => 'date',
+        'tanggal_jatuh_tempo' => 'date',
     ];
     protected $fillable = [
-        'uuid','no_pembelian','tanggal_pembelian',
+        'uuid','no_pembelian','tanggal_pembelian','tanggal_jatuh_tempo',
         'supplier_id',
         'lokasi_id',
         'siklus_id',
@@ -34,7 +35,7 @@ class PembelianPakan extends Model
         'created_by',
         'updated_by',
     ];
-    protected $appends = ['tanggal_format_indo','created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
+    protected $appends = ['tanggal_format_indo','tanggal_format_indo_tempo','created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     public function detail()
     {
@@ -59,5 +60,10 @@ class PembelianPakan extends Model
     public function getTanggalFormatIndoAttribute()
     {
         return $this->tanggal_pembelian ? $this->tanggal_pembelian->format('d-m-Y') : null;
+    }
+
+        public function getTanggalFormatIndoTempoAttribute()
+    {
+        return $this->tanggal_jatuh_tempo ? $this->tanggal_jatuh_tempo->format('d-m-Y') : null;
     }
 }

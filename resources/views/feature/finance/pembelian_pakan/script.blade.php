@@ -14,6 +14,7 @@ app.controller("myCtrl", function($scope,$http) {
                 { data: 'actions', title: 'Action', orderable: false, searchable: false,width:'80px' },
                 { data: 'no_pembelian', title: 'No Pembelian' },
                 { data: 'tanggal_format_indo', title: 'Tanggal' },
+                { data: 'tanggal_format_indo_tempo', title: 'Tanggal Jatuh Tempo' },
                 { data: 'supplier', title: 'Supplier' },
                 { data: 'lokasi', title: 'Lokasi' },
                 { data: 'siklus', title: 'Siklus' },
@@ -305,7 +306,8 @@ app.controller("myCtrl", function($scope,$http) {
                 ...$scope.input,
                 is_hutang: $scope.input.is_hutang ? 1 : 0, 
                 tanggal_pembelian:$('#tanggal_pembelian').val(), 
-                jumlah_item:$scope.daftarPakan.length, 
+                tanggal_jatuh_tempo:$('#tanggal_jatuh_tempo').val(),
+                jumlah_item:$scope.daftarPakan.length,
                 total:$scope.grand_total
             },
             detail: $scope.daftarPakan
