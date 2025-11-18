@@ -267,8 +267,9 @@ class TransaksiBiayaController extends Controller
                 'keterangan'        => $validated['keterangan'] ?? null,
             ]);
 
-            // 2. simpan transaksi_biaya_siklus
+            TransaksiBiayaPetak::where('trans_biaya_id', $trans->id)->forceDelete();
             TransaksiBiayaSiklus::where('trans_biaya_id', $trans->id)->forceDelete();
+            // 2. simpan transaksi_biaya_siklus
             $siklusMap = [];
             if (!empty($validated['siklus'])) {
                 foreach ($validated['siklus'] as $siklusId) {
@@ -281,7 +282,7 @@ class TransaksiBiayaController extends Controller
             }
 
             // 3. simpan transaksi_biaya_petak
-            TransaksiBiayaPetak::where('trans_biaya_id', $trans->id)->forceDelete();
+            
             if (!empty($validated['petak'])) {
                 foreach ($validated['petak'] as $siklusId => $petaks) {
                     if (!isset($siklusMap[$siklusId])) continue;
