@@ -52,8 +52,13 @@ class SetupBarangContoller extends Controller
             'nama_barang' => 'required',
         ]);
         $data = $req->all();
-        $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
-        $data['kode_coa'] = $coa->kode_coa;
+        if($data['is_activa']){
+            $coa = SetupCoa::where('id_coa',$req->id_coa)->first();
+            $data['kode_coa'] = $coa->kode_coa;
+        }else{
+            $data['id_coa'] = null;
+            $data['kode_coa'] = null;
+        }
         $benur->update($data);
         return response()->json(['success' => true, 'data' => $benur]);
     }
