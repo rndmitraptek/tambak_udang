@@ -114,7 +114,7 @@ app.controller("myCtrl", function($scope,$http) {
                 //reset nominal jika sudah di isi
                 $('#nominal').val(0);
 
-                if (biaya.kelompok=='Perpetak') {
+                if (biaya.kelompok_biaya=='Perpetak') {
                     // 🔹 Dropdown semua siklus
                     html += `
                         <div class="form-group">
@@ -568,7 +568,8 @@ app.controller("myCtrl", function($scope,$http) {
             $('#tanggal_selesai').val(res.tanggal_selesai).change();
             $('#keterangan').val(res.keterangan);
             $('#coa_id').val(res.coa_id);
-            
+            $scope.selected_biaya =res.biaya;
+            $("#nama_biaya").val(res.biaya.nama_biaya);
             $('#biaya-dropdown').val(res.biaya_id).trigger("change");
 
             if(res.biaya_id==1 || res.biaya_id==2){
@@ -576,7 +577,7 @@ app.controller("myCtrl", function($scope,$http) {
             }
             setTimeout(function () {
                 // kelompok biaya dari relasi biaya
-                let kelompok = res.biaya.kelompok;
+                let kelompok = res.biaya.kelompok_biaya;
 
                 if (kelompok === 'Perpetak') {
                     // Ambil hanya satu siklus (karena Perpetak 1 siklus 1 petak)

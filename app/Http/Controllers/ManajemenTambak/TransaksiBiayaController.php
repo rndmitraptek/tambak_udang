@@ -230,7 +230,7 @@ class TransaksiBiayaController extends Controller
 
     public function show($uuid)
     {
-        $data = TransaksiBiaya::with(['biaya','coa','siklus.siklus','siklus.petak.petak'])
+        $data = TransaksiBiaya::with(['biaya.lokasi.siklus','coa','siklus.siklus','siklus.petak.petak'])
             ->where('uuid', $uuid)
             ->firstOrFail();
 
