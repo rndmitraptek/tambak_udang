@@ -158,9 +158,9 @@
                                             <td><% item.nama_pakan %></td>
                                             <td><% item.nama_blok %></td>
                                             <td><% item.nama_petak %></td>
-                                            <td class="text-right"><% item.jumlah | currency:'' %></td>
-                                            <td class="text-right"><% item.harga | currency:'' %></td>
-                                            <td class="text-right"><% item.subtotal | currency:'' %></td>
+                                            <td class="text-right"><input style="width: 90px;"  class="text-right" type="text" input-currency ng-model="item.jumlah" readonly></td>
+                                            <td class="text-right"><input style="width: 120px;"  class="text-right" type="text" input-currency ng-model="item.harga" readonly></td>
+                                            <td class="text-right"><input style="width: 120px;"  class="text-right" type="text" input-currency ng-model="item.subtotal" readonly></td>
                                             <td ><button type="button" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" ng-click="remove_detail($index)" title="remove" style="height: 25px;"><i class="la la-remove m--font-danger"></i></button></td>
                                         </tr>
                                     </tbody>

@@ -55,7 +55,7 @@ class GeneradeNomorHelper
             $master->tanggal = date('Y-m-d');
             $master->save();
 
-            return $master->prefix 
+            return $master->prefix
                 . substr($pecah[0], -2) 
                 . $pecah[1] 
                 . sprintf('%04s', $master->counter);

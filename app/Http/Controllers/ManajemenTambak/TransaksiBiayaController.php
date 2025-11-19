@@ -130,7 +130,7 @@ class TransaksiBiayaController extends Controller
 
     public function store(Request $request)
     {
-        $no_transaksi = GeneradeNomorHelper::long_update('transaksi_biaya');
+        $no_transaksi = GeneradeNomorHelper::long_update_new('transaksi_biaya');
         DB::beginTransaction();
         try {
             $validated = $request->validate([
