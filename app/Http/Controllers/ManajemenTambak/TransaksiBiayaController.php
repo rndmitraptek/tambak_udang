@@ -130,6 +130,7 @@ class TransaksiBiayaController extends Controller
 
     public function store(Request $request)
     {
+        $no_transaksi = GeneradeNomorHelper::long_update('transaksi_biaya');
         DB::beginTransaction();
         try {
             $validated = $request->validate([
@@ -144,7 +145,6 @@ class TransaksiBiayaController extends Controller
                 'siklus'        => 'array', // array id siklus
                 'petak'         => 'array', // array per siklus
             ]);
-            $no_transaksi = GeneradeNomorHelper::long_update('transaksi_biaya');
             // 1. simpan transaksi_biaya
             $transBiaya = TransaksiBiaya::create([
                 'uuid'              => \Str::uuid(),
