@@ -42,9 +42,7 @@ class GeneradeNomorHelper
         return DB::transaction(function () use ($keterangan) {
             $pecah = explode('-', date('Y-m-d'));
 
-            $master = nomorCounter::where('keterangan', $keterangan)
-                ->lockForUpdate()
-                ->first();
+            $master = nomorCounter::where('keterangan', $keterangan)->first();
 
             if (date('Y-m', strtotime($master->tanggal)) != date('Y-m')) {
                 $master->counter = 1;
