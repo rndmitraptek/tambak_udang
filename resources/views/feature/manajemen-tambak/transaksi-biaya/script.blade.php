@@ -10,6 +10,7 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.form = "list";
     $scope.tambah = function(){
         $scope.form = "input";
+        $('#uuid').val('');
         formTransaksi.reset();
         //nomor
         $http.get("{{ route('long','transaksi_biaya') }}")
