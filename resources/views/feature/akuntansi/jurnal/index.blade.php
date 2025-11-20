@@ -38,9 +38,9 @@
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <button ng-click="history()" class="btn btn-success m-btn m-btn--custom m-btn--icon m-btn--air">
+                                <button ng-click="history()" class="btn btn-warning m-btn m-btn--custom m-btn--icon m-btn--air">
                                     <span>
-                                        <i class="la la-save"></i>
+                                        <i class="la la-edit"></i>
                                         <span>History Input Jurnal</span>
                                     </span>
                                 </button>
