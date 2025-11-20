@@ -1,6 +1,62 @@
 <script>
 app.controller("myCtrl", function($scope,$http,API) {
     angular.element(document).ready(function () {
+
+        table = $("#viewtabel").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route("akuntansi.jurnal.datatable") }}',
+            scrollY: "50vh",
+            scrollX: true,
+            autoWidth: false,
+            scrollCollapse: !0,
+            columns: [
+                { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
+                { data: 'tanggal', title: 'Tanggal' },
+                { data: 'no_bukti', title: 'No Bukti' },
+                { 
+                    data: 'keterangan', 
+                    title: 'Keterangan', 
+                    render: function (data, type, row) {
+                        if (!data) return '';
+                        let shortText = data.length > 50 ? data.substr(0, 50) + '...' : data;
+                        return `<span title="${data.replace(/"/g, '&quot;')}">${shortText}</span>`;
+                    },
+                    width: '200px'
+                },
+                { data: 'created_by_name', title: 'Created By' },
+                { data: 'created_at_formatted', title: 'Created At' },
+                { data: 'updated_by_name', title: 'Updated By' },
+                { data: 'updated_at_formatted', title: 'Updated At' },
+            ]
+        })
+
+        $('#viewtabel tbody').on('click', '#edit', function () {
+            var tr = $(this).closest('tr');
+            var x = table.row(tr).data();
+            $scope.input = x;
+            url = "{{ route('akuntansi.jurnal.get_detail',':uuid') }}"
+            url = url.replace(':uuid', x.uuid)
+            swal({title: "Presesing...!",text: "Please Wait",
+                onOpen: function() {
+                    swal.showLoading()
+                }
+            })
+            $http.get(url)
+            .then(function(res){
+                if(res.data.success){
+                    $scope.detail = res.data.data.detail;
+                    $scope.hitung();
+                }
+                Swal.close();
+            }).catch(function(error) {
+                swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
+            });
+            $scope.edit = true;
+            $scope.form = "input";
+            $scope.$apply();
+        });
+
         $('#startDate').datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true,
@@ -53,6 +109,11 @@ app.controller("myCtrl", function($scope,$http,API) {
     }
     $scope.kembali = function(){
         $scope.form = "list";
+    }
+    $scope.history = function(){
+        $scope.form = "history";
+        table.draw();
+        $scope.$apply();
     }
     $scope.tambah = function(){
         $scope.input = {};
@@ -134,10 +195,8 @@ app.controller("myCtrl", function($scope,$http,API) {
                     swal({
                         title: "Tersimpan ",text: "Data Jurnal berhasil tersiman!",type: "success",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"
                     }).then(function(){
-                        $scope.edit = true;
-                        $scope.form = "input";
-                        $scope.input.uuid = res.data.data.uuid;
-                        table.draw();
+                        $scope.history();
+                        $scope.$apply();
                     })
                 }else{
                     swal({

@@ -33,6 +33,15 @@ class JurnalController extends Controller
         return view('feature.akuntansi.neraca.index');
     }
 
+    public function datatable(){
+        $query = JurnalModel::query()->whereNull('reff_id');
+        return DataTables::of($query)
+            ->addColumn('action', function ($row) {
+                return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
 
     public function get_coa(Request $request){
         $query = SetupCoa::select(['id_coa','uuid','kode_coa','nama_coa','tipe_coa','pos_laporan','saldo_normal']);
@@ -279,5 +288,10 @@ class JurnalController extends Controller
         ];
         $neraca = array_merge($data, $pasiva);
         return response()->json(['success'=>true,'data'=>$neraca,'message'=>'']);
+    }
+
+    public function get_detail($uuid){
+        $detail = JurnalModel::with('detail')->where('uuid',$uuid)->first();
+        return response()->json(['success'=>true,'data'=>$detail,'message'=>'']);
     }
 }

@@ -12,5 +12,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/get_buku_besar',[App\Http\Controllers\Akuntansi\JurnalController::class, 'get_buku_besar'])->name('get_buku_besar');
         Route::post('/get_laba_rugi',[App\Http\Controllers\Akuntansi\JurnalController::class, 'get_laba_rugi'])->name('get_laba_rugi');
         Route::post('/get_neraca',[App\Http\Controllers\Akuntansi\JurnalController::class, 'get_neraca'])->name('get_neraca');
+        Route::get('/datatable',[App\Http\Controllers\Akuntansi\JurnalController::class, 'datatable'])->name('datatable');
+        Route::get('/get_detail/{uuid}',[App\Http\Controllers\Akuntansi\JurnalController::class, 'get_detail'])->name('get_detail');
+        
     });
 });
