@@ -21,7 +21,7 @@ class SetupBiayaController extends Controller
 
     public function coaList()
     {
-        $data = DB::select("SELECT * FROM setup_coa where LENGTH(kode_coa)=5 AND (LEFT(kode_coa, 1)='5' OR LEFT(kode_coa, 1)='6') AND RIGHT(kode_coa, 1) <> '0' order by kode_coa",[]);
+        $data = DB::select("SELECT * FROM setup_coa where LENGTH(kode_coa)=5 AND (LEFT(kode_coa, 1)='5' OR LEFT(kode_coa, 1)='6' OR LEFT(kode_coa, 1)='8') AND RIGHT(kode_coa, 1) <> '0' order by kode_coa",[]);
         // SetupCoa::whereRaw("LENGTH(kode_coa)=5 AND (LEFT(kode_coa, 1)='5' OR LEFT(kode_coa, 1)='6') AND RIGHT(kode_coa, 1) <> '0'")->get();
         return $data;
     }
