@@ -122,6 +122,11 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.edit = false;
         $scope.$apply();
     }
+    $scope.remove_detail = function(index,item){
+        $scope.detail.splice(index, 1);
+        $scope.hitung();
+
+    }
     $scope.coaColumns = [
         { data: 'kode_coa', title: 'Kode COA' },
         { data: 'nama_coa', title: 'Nama COA' },
