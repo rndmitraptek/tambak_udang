@@ -81,8 +81,7 @@ class TransaksiBiayaController extends Controller
     public function data(Request $request)
     {
         $query = TransaksiBiaya::with(['biaya','coa','siklus.siklus'])
-            ->select('transaksi_biaya.*')
-            ->orderBy('id', 'desc');
+            ->select('transaksi_biaya.*');
 
         return DataTables::of($query)
             ->addColumn('siklus', function($row){

@@ -422,30 +422,33 @@ app.controller("myCtrl", function($scope,$http) {
             scrollX: true,
             autoWidth: false,
             scrollCollapse: !0,
+            order: [[8, 'desc']],
             columns: [
                 { data: 'actions', name: 'actions', orderable: false, searchable: false },
-                { data: 'no_transaksi', title: 'no_transaksi' },
-                { data: 'siklus', title: 'siklus' },
+                { data: 'no_transaksi', name:'no_transaksi', title: 'no_transaksi' },
+                { data: 'siklus', name:'siklus.nama_siklus', title: 'siklus', orderable: false },
                 { 
                     data: 'tanggal_transaksi', 
+                    name: 'tanggal_transaksi', 
                     title: 'tanggal_transaksi',
                     render: function(data) {
                         return new Date(data).toLocaleDateString('id-ID');
                     }
                 },
-                { data: 'biaya', title: 'biaya' },
+                { data: 'biaya', name:'biaya.nama_biaya', title: 'biaya' },
                 { 
                     data: 'nominal', 
+                    name: 'nominal', 
                     title: 'nominal',
                     render: function(data) {
                         return 'Rp ' + parseInt(data).toLocaleString('id-ID');
                     }
                 },
-                { data: 'keterangan', title: 'keterangan' },
-                { data: 'created_by_name', title: 'Created By' },
-                { data: 'created_at_formatted', title: 'Created At' },
-                { data: 'updated_by_name', title: 'Updated By' },
-                { data: 'updated_at_formatted', title: 'Updated At' },
+                { data: 'keterangan', name:'keterangan', title: 'keterangan' },
+                { data: 'created_by_name', title: 'Created By', orderable: false },
+                { data: 'created_at_formatted',name:'created_at', title: 'Created At' },
+                { data: 'updated_by_name', title: 'Updated By', orderable: false },
+                { data: 'updated_at_formatted',name:'updated_at', title: 'Updated At' },
             ]
         });
 
