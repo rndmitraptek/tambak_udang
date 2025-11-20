@@ -39,25 +39,19 @@ class GeneradeNomorHelper
 
     public static function long_update_new($keterangan)
     {
-        return DB::transaction(function () use ($keterangan) {
-            $pecah = explode('-', date('Y-m-d'));
-
-            $master = nomorCounter::where('keterangan', $keterangan)->first();
-
-            if (date('Y-m', strtotime($master->tanggal)) != date('Y-m')) {
-                $master->counter = 1;
-            } else {
-                $master->counter++;
-            }
-
-            $master->tanggal = date('Y-m-d');
-            $master->save();
-
-            return $master->prefix
-                . substr($pecah[0], -2) 
-                . $pecah[1] 
-                . sprintf('%04s', $master->counter);
-        });
+        $pecah = explode('-', date('Y-m-d'));
+        $master = nomorCounter::where('keterangan', $keterangan)->first();
+        if (date('Y-m', strtotime($master->tanggal)) != date('Y-m')) {
+            $master->counter = 1;
+        } else {
+            $master->counter++;
+        }
+        $master->tanggal = date('Y-m-d');
+        $master->save();
+        return $master->prefix
+            . substr($pecah[0], -2)
+            . $pecah[1] 
+            . sprintf('%04s', $master->counter);
     }
 
     public static function sort($keterangan)
