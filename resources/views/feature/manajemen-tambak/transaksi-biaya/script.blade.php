@@ -426,7 +426,7 @@ app.controller("myCtrl", function($scope,$http) {
             columns: [
                 { data: 'actions', name: 'actions', orderable: false, searchable: false },
                 { data: 'no_transaksi', name:'no_transaksi', title: 'no_transaksi' },
-                { data: 'siklus', name:'siklus.nama_siklus', title: 'siklus', orderable: false },
+                { data: 'siklus', name:'siklus.nama_siklus', title: 'siklus', orderable: false, searchable: false },
                 { 
                     data: 'tanggal_transaksi', 
                     name: 'tanggal_transaksi', 
@@ -445,9 +445,9 @@ app.controller("myCtrl", function($scope,$http) {
                     }
                 },
                 { data: 'keterangan', name:'keterangan', title: 'keterangan' },
-                { data: 'created_by_name', title: 'Created By', orderable: false },
+                { data: 'created_by_name', title: 'Created By', orderable: false, searchable: false},
                 { data: 'created_at_formatted',name:'created_at', title: 'Created At' },
-                { data: 'updated_by_name', title: 'Updated By', orderable: false },
+                { data: 'updated_by_name', title: 'Updated By', orderable: false, searchable: false },
                 { data: 'updated_at_formatted',name:'updated_at', title: 'Updated At' },
             ]
         });
