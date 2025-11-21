@@ -63,17 +63,24 @@ class SiklusController extends Controller
             ->addColumn('nama_lokasi', fn($row) => $row->lokasi->nama_lokasi ?? '-')
             ->addColumn('actions', function ($row) {
                 return '
-                    <a href="javascript:void(0)" onclick="editSiklus(\''.$row->uuid.'\')" 
-                        class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" 
-                        title="Edit">
-                        <i class="m--font-warning la la-edit"></i>
-                    </a>
                     <a href="javascript:void(0)" onclick="deleteSiklus(\''.$row->uuid.'\')" 
                         class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" 
                         title="Hapus">
                         <i class="m--font-danger la la-remove"></i>
                     </a>
                 ';
+                // return '
+                //     <a href="javascript:void(0)" onclick="editSiklus(\''.$row->uuid.'\')" 
+                //         class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" 
+                //         title="Edit">
+                //         <i class="m--font-warning la la-edit"></i>
+                //     </a>
+                //     <a href="javascript:void(0)" onclick="deleteSiklus(\''.$row->uuid.'\')" 
+                //         class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" 
+                //         title="Hapus">
+                //         <i class="m--font-danger la la-remove"></i>
+                //     </a>
+                // ';
             })
             ->rawColumns(['actions'])
             ->make(true);
