@@ -95,6 +95,10 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: "/setup-siklus/data",
+        scrollY: "50vh",
+        scrollX: !0,
+        scrollCollapse: !0,
+        order: [[7, 'desc']],
         columns: [
             { data: 'nama_siklus', title: 'nama_siklus' },
             { data: 'nama_lokasi', title: 'nama_lokasi' },
@@ -102,10 +106,10 @@ $(document).ready(function() {
             { data: 'tanggal_selesai', title: 'tanggal_selesai' },
             { data: 'catatan', title: 'catatan' },
             { data: 'status', title: 'status' },
-            { data: 'created_by_name', title: 'Created By' },
-            { data: 'created_at_formatted', title: 'Created At' },
-            { data: 'updated_by_name', title: 'Updated By' },
-            { data: 'updated_at_formatted', title: 'Updated At' },
+            { data: 'created_by_name', title: 'Created By',orderable: false },
+            { data: 'created_at_formatted',name:'created_at', title: 'Created At' },
+            { data: 'updated_by_name', title: 'Updated By',orderable: false },
+            { data: 'updated_at_formatted',name:'updated_at', title: 'Updated At' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ]
     });
@@ -113,6 +117,7 @@ $(document).ready(function() {
     $('#btnTambah').click(function() {
         $('#formSiklus')[0].reset();
         $('#uuid').val('');
+        $('#btnSimpanSiklus').show();
         $('#m_create').modal('show');
     });
 
@@ -168,6 +173,7 @@ function editSiklus(uuid) {
     $.get('/setup-siklus/show/' + uuid, function(res) {
         // isi field biasa
         $('#uuid').val(res.uuid);
+        $('#btnSimpanSiklus').hide();
         $('#lokasi_id').val(res.lokasi_id).trigger('change');
         $('#nama_siklus').val(res.nama_siklus);
         $('#tanggal_mulai').val(res.tanggal_mulai);

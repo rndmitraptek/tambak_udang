@@ -98,6 +98,10 @@ class PenggunaanPakanController extends Controller
     public function get_pakan($uuid_lokasi){
         $lokasi = SetupLokasi::where('uuid',$uuid_lokasi)->first();
         if($lokasi){
+            //handle case LOKASI BUNDAR convert jadi SEKURO
+            if($lokasi->id_lokasi==3){
+                $lokasi->id_lokasi =1;
+            }
             $data = SetupPakan::where('lokasi_id',$lokasi->id_lokasi)
             ->leftjoin('stok_pakan','stok_pakan.pakan_id','=','setup_pakan.id_pakan')
             ->select(['setup_pakan.id_pakan','setup_pakan.uuid as uuid','nama_pakan','kode_pakan','stok_pakan.stok','harga_pakan as harga'])->get();
@@ -181,6 +185,10 @@ class PenggunaanPakanController extends Controller
                 ]);
 
                 //Pengurangan stok pakan
+                //handle case LOKASI BUNDAR convert jadi SEKURO
+                if($lokasi->id_lokasi==3){
+                    $lokasi->id_lokasi =1;
+                }
                 StokHelper::updateStok(
                     $d['id_pakan'],
                     -abs($d['jumlah']),            // Negatif karena penggunaan
@@ -219,6 +227,10 @@ class PenggunaanPakanController extends Controller
             TransaksiBiaya::where('reff_id',$pembelian->id_penggunaan)->where('reff_trans','penggunaan_pakan')->delete();
             
             // kembalikan stok pakan
+            //handle case LOKASI BUNDAR convert jadi SEKURO
+            if($pembelian->lokasi_id==3){
+                $pembelian->lokasi_id =1;
+            }
             foreach($pembelian->detail as $item) {
                 StokHelper::batalTransaksi(
                     $item->pakan_id,
