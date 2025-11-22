@@ -24,6 +24,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                     },
                     width: '200px'
                 },
+                {data:'detail[0].nominal_value', title: 'Nominal',"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
                 { data: 'created_by_name', title: 'Created By' },
                 { data: 'created_at_formatted', title: 'Created At' },
                 { data: 'updated_by_name', title: 'Updated By' },
