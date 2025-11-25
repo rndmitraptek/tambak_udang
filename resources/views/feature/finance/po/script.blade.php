@@ -15,8 +15,8 @@ app.controller("myCtrl", function($scope,$http,API) {
             columns: [
                 { data: 'action', title: 'action', orderable: false, searchable: false },
                 { data: 'no_po', title: 'No PO' },
-                { data: 'tanggal_po', title: 'Tanggal PO' },
-                { data: 'tanggal_kirim', title: 'Tanggal Kirim' },
+                { data: 'tanggal_po', title: 'Tanggal Kirim' },
+                { data: 'tanggal_kirim', title: 'Tanggal Jatuh Tempo' },
                 { data: 'nama_supplier', title: 'Nama Supplier' },
                 { data: 'nama_lokasi', title: 'Nama Lokasi' },
                 { data: 'nama_siklus', title: 'Nama Siklus' },

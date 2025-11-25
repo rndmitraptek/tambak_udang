@@ -124,11 +124,11 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group m-form__group">
-                                <label for="recipient-name" class="form-control-label">Tanggal PO</label>
+                                <label for="recipient-name" class="form-control-label">Tanggal Kirim</label>
                                 <input type="text" class="form-control general_datepicker" id="tanggal_po" name="tanggal_po" ng-model="input.tanggal_po">
                             </div>
                             <div class="form-group">
-                                <label for="recipient-name" class="form-control-label">Tanggal Kirim</label>
+                                <label for="recipient-name" class="form-control-label">Tanggal Jatuh Tempo</label>
                                 <input type="text" class="form-control general_datepicker" id="tanggal_kirim" name="tanggal_kirim" ng-model="input.tanggal_kirim">
                             </div>
                             <div class="form-group m-form__group">
