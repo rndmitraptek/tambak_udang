@@ -17,7 +17,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY . /app
 
 # Install prod dependencies (laravel/framework ^12)
-RUN composer install --optimize-autoloader
+# RUN composer install --optimize-autoloader
+RUN composer install --ignore-platform-reqs
 
 # Permission
 RUN chown -R www-data:www-data storage bootstrap/cache \
