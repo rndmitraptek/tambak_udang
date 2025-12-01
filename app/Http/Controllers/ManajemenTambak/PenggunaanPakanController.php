@@ -135,7 +135,7 @@ class PenggunaanPakanController extends Controller
             unset($data['id_petak']);
             unset($data['uuid_lokasi']);
             unset($data['uuid_siklus']);
-            $data['no_penggunaan'] = GeneradeNomorHelper::long_update('penggunaan_pakan');
+            // $data['no_penggunaan'] = GeneradeNomorHelper::long_update('penggunaan_pakan');
             $data['lokasi_id']      = $lokasi->id_lokasi;
             $data['siklus_id']      = $siklus->id_siklus;
             $insert = PenggunaanPakan::create($data);
