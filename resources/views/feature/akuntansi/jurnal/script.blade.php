@@ -1,5 +1,6 @@
 <script>
 app.controller("myCtrl", function($scope,$http,API) {
+    $scope.cari_keterangan = '';
     angular.element(document).ready(function () {
 
         table = $("#viewtabel").DataTable({
@@ -97,6 +98,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                 $scope.jurnal_umum = res.data.data;
                 $scope.start_date = $('#startDate').val();
                 $scope.end_date = $('#endDate').val();
+                $scope.cari_keterangan = '';
                 Swal.close();
             }else{
                 swal({

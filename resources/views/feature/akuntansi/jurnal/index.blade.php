@@ -99,6 +99,14 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group -form__group">
+                                <label for="message-text" class="form-control-label" >Cari Keterangan</label>
+                                <input type="text" class="form-control" id="cari_keterangan" nama="cari_keterangan" ng-model="cari_keterangan">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-12">
                             <table class="table table-sm m-table m-table--head-bg-brand">
                                 <thead>
@@ -113,7 +121,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="i in jurnal_umum">
+                                    <tr ng-repeat="i in jurnal_umum | filter:{keterangan: cari_keterangan}" >
                                         <td><a ng-show="i.no_bukti!=jurnal_umum[$index-1].no_bukti"><% i.tanggal %></a></td>
                                         <td><a ng-show="i.no_bukti!=jurnal_umum[$index-1].no_bukti"><% i.no_bukti %></a></td>
                                         <td><a ng-show="i.debit==0" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% i.kode_coa %></a><a ng-show="i.debit!=0"><% i.kode_coa %></a></td>

@@ -39,6 +39,19 @@ class PembelianPakanController extends Controller
             ->orderBy('id_pembelian', 'desc');
 
         return DataTables::of($query)
+            ->filter(function ($query) {
+                $search = strtolower(request()->get('search')['value'] ?? '');
+                if ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->whereRaw('LOWER(pembelian_pakan.no_pembelian) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(pembelian_pakan.tanggal_pembelian, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(pembelian_pakan.tanggal_jatuh_tempo, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        // ->orWhereRaw('LOWER(setup_supplier.nama_supplier) LIKE ?', ["%{$search}%"])
+                        // ->orWhereRaw('LOWER(setup_lokasi.nama_lokasi) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(pembelian_pakan.keterangan) LIKE ?', ["%{$search}%"]);
+                    });
+                }
+            })
             ->addColumn('supplier', fn($row) => $row->supplier->nama_supplier ?? '-')
             ->addColumn('lokasi', fn($row) => $row->lokasi->nama_lokasi ?? '-')
             ->addColumn('siklus', fn($row) => $row->siklus->nama_siklus ?? '-')

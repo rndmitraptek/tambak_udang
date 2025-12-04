@@ -41,6 +41,20 @@ class PenaburanBenurController extends Controller
                 'penaburan_benur.created_by','penaburan_benur.updated_by','penaburan_benur.created_at','penaburan_benur.updated_at'
             ]);
         return DataTables::of($query)
+            ->filter(function ($query) {
+                $search = strtolower(request()->get('search')['value'] ?? '');
+                if ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->whereRaw('LOWER(penaburan_benur.no_penaburan_benur) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(penaburan_benur.tanggal_penaburan, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw('LOWER(po_benur.no_po) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_supplier.nama_supplier) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_lokasi.nama_lokasi) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_siklus.nama_siklus) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(penaburan_benur.keterangan) LIKE ?', ["%{$search}%"]);
+                    });
+                }
+            })
             ->addColumn('action', function ($row) {
                 return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>
                 <a href="javascript:void(0)" id="hapus" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-danger la la-remove"></i></a>';

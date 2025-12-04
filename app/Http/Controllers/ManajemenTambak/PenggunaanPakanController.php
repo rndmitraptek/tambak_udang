@@ -44,6 +44,18 @@ class PenggunaanPakanController extends Controller
                 'penggunaan_pakan.created_by','penggunaan_pakan.updated_by','penggunaan_pakan.created_at','penggunaan_pakan.updated_at'
             ]);
         return DataTables::of($query)
+            ->filter(function ($query) {
+                $search = strtolower(request()->get('search')['value'] ?? '');
+                if ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->whereRaw('LOWER(penggunaan_pakan.no_penggunaan) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(penggunaan_pakan.tanggal_penggunaan, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_lokasi.nama_lokasi) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_siklus.nama_siklus) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(penggunaan_pakan.keterangan) LIKE ?', ["%{$search}%"]);
+                    });
+                }
+            })
             ->addColumn('status', fn($row) => $row->deleted_at!=null ?'Batal':'')
             ->addColumn('action', function ($row) {
                 if ($row->deleted_at) {

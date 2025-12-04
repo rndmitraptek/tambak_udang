@@ -36,6 +36,20 @@ class PoController extends Controller
                 return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>
                 <a href="javascript:void(0)" id="hapus" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-danger la la-remove"></i></a>';
             })
+            ->filter(function ($query) {
+                $search = strtolower(request()->get('search')['value'] ?? '');
+                if ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->whereRaw('LOWER(po_benur.no_po) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(po_benur.tanggal_po, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(po_benur.tanggal_kirim, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_supplier.nama_supplier) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_lokasi.nama_lokasi) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_siklus.nama_siklus) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(po_benur.keterangan) LIKE ?', ["%{$search}%"]);
+                    });
+                }
+            })
             ->rawColumns(['action'])
             ->make(true);
     }

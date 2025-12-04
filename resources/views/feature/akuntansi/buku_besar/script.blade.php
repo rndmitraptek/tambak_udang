@@ -1,5 +1,6 @@
 <script>
 app.controller("myCtrl", function($scope,$http,API) {
+    $scope.cari_keterangan = '';
     angular.element(document).ready(function () {
         $('#startDate').datepicker({
             format: 'yyyy-mm-dd',
@@ -38,6 +39,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                 $scope.buku_besar = res.data.data;
                 $scope.start_date = $('#startDate').val();
                 $scope.end_date = $('#endDate').val();
+                $scope.cari_keterangan = '';
                 Swal.close();
             }else{
                 swal({

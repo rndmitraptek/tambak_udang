@@ -36,6 +36,16 @@ class JurnalController extends Controller
     public function datatable(){
         $query = JurnalModel::with('detail')->whereNull('reff_id');
         return DataTables::of($query)
+            ->filter(function ($query) {
+                $search = strtolower(request()->get('search')['value'] ?? '');
+                if ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->whereRaw('LOWER(jurnal.no_bukti) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(jurnal.tanggal, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw('LOWER(jurnal.keterangan) LIKE ?', ["%{$search}%"]);
+                    });
+                }
+            })
             ->addColumn('action', function ($row) {
                 return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>';
             })

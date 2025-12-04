@@ -99,6 +99,14 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group -form__group">
+                                <label for="message-text" class="form-control-label" >Cari Keterangan</label>
+                                <input type="text" class="form-control" id="cari_keterangan" nama="cari_keterangan" ng-model="cari_keterangan">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-12">
                             <table class="table table-sm m-table m-table--head-bg-brand">
                                 <thead>
@@ -113,7 +121,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="i in buku_besar">
+                                    <tr ng-repeat="i in buku_besar | filter:{keterangan: cari_keterangan}">
                                         <td><% i.tanggal %></td>
                                         <td><% i.no_bukti %></td>
                                         <td><% i.kode_coa %></td>

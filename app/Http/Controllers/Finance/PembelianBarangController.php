@@ -36,6 +36,19 @@ class PembelianBarangController extends Controller
             'pembelian_barang.created_by','pembelian_barang.updated_by','pembelian_barang.created_at','pembelian_barang.updated_at'
         ]);
         return DataTables::of($query)
+            ->filter(function ($query) {
+                $search = strtolower(request()->get('search')['value'] ?? '');
+                if ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->whereRaw('LOWER(pembelian_barang.no_pembelian_barang) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(pembelian_barang.tanggal_pembelian_barang, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(pembelian_barang.tanggal_jatuh_tempo, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_supplier.nama_supplier) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_lokasi.nama_lokasi) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(pembelian_barang.keterangan) LIKE ?', ["%{$search}%"]);
+                    });
+                }
+            })
             ->addColumn('action', function ($row) {
                 return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>
                 <a href="javascript:void(0)" id="hapus" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-danger la la-remove"></i></a>';
