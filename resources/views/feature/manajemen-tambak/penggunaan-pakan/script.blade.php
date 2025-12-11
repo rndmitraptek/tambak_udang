@@ -10,7 +10,7 @@ app.controller("myCtrl", function($scope,$http) {
             scrollY: "50vh",
             scrollX: !0,
             scrollCollapse: !0,
-            order: [[11, 'desc']],
+            order: [[12, 'desc']],
             columns: [
                 { data: 'action', title: 'action', orderable: false, searchable: false,width:'80px' },
                 { data: 'id_penggunaan', visible: false },
@@ -26,6 +26,20 @@ app.controller("myCtrl", function($scope,$http) {
                     className: 'text-right',
                     render: function(data) {
                         return data ? 'Rp ' + parseInt(data).toLocaleString('id-ID') : '-';
+                    }
+                },
+                { 
+                    data: 'total_kg', 
+                    name: 'total_kg',
+                    title: 'Total Kg',
+                    className: 'text-right',
+                    render: function(data) {
+                        if (data === null || data === undefined) return '0 Kg';
+
+                        return new Intl.NumberFormat('id-ID', {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 2
+                        }).format(parseFloat(data)) + ' Kg';
                     }
                 },
                 { 

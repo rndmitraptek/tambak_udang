@@ -34,6 +34,7 @@ class PenggunaanPakanController extends Controller
         $query = PenggunaanPakan::withTrashed()
             ->join('setup_siklus', 'penggunaan_pakan.siklus_id', '=', 'setup_siklus.id_siklus')
             ->join('setup_lokasi','setup_lokasi.id_lokasi','=','penggunaan_pakan.lokasi_id')
+            ->leftJoin('penggunaan_pakan_detail', 'penggunaan_pakan_detail.id_penggunaan', '=', 'penggunaan_pakan.id_penggunaan')
             ->select([
                 'penggunaan_pakan.id_penggunaan','penggunaan_pakan.uuid', 
                 'penggunaan_pakan.no_penggunaan', 'penggunaan_pakan.tanggal_penggunaan',
@@ -41,8 +42,26 @@ class PenggunaanPakanController extends Controller
                 'keterangan','penggunaan_pakan.deleted_at',
                 'setup_lokasi.nama_lokasi',
                 'setup_siklus.nama_siklus',
-                'penggunaan_pakan.created_by','penggunaan_pakan.updated_by','penggunaan_pakan.created_at','penggunaan_pakan.updated_at'
-            ]);
+                'penggunaan_pakan.created_by','penggunaan_pakan.updated_by','penggunaan_pakan.created_at','penggunaan_pakan.updated_at',
+                DB::raw('COALESCE(SUM(penggunaan_pakan_detail.jumlah), 0) AS total_kg')
+            ])
+            ->groupBy(
+                'penggunaan_pakan.id_penggunaan',
+                'penggunaan_pakan.uuid', 
+                'penggunaan_pakan.no_penggunaan',
+                'penggunaan_pakan.tanggal_penggunaan',
+                'penggunaan_pakan.waktu',
+                'penggunaan_pakan.jumlah_petak',
+                'penggunaan_pakan.total',
+                'keterangan',
+                'penggunaan_pakan.deleted_at',
+                'setup_lokasi.nama_lokasi',
+                'setup_siklus.nama_siklus',
+                'penggunaan_pakan.created_by',
+                'penggunaan_pakan.updated_by',
+                'penggunaan_pakan.created_at',
+                'penggunaan_pakan.updated_at'
+            );
         return DataTables::of($query)
             ->filter(function ($query) {
                 $search = strtolower(request()->get('search')['value'] ?? '');
