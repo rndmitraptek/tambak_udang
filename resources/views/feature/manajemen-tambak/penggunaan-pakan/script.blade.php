@@ -165,7 +165,7 @@ app.controller("myCtrl", function($scope,$http) {
         //nomor
         $http.get("{{ route('long','penggunaan_pakan') }}")
         .then(function(res){
-            $scope.input.no_penggunaan = res.data.nomor;
+            // $scope.input.no_penggunaan = res.data.nomor;
         }).catch(function(error) {
             swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
         });
