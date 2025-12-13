@@ -123,7 +123,7 @@ class PenaburanBenurController extends Controller
                 'tanggal_penaburan'   => 'required',
             ]);
             $data = $req->all();
-            $data['no_penaburan_benur'] = GeneradeNomorHelper::long_update('penaburan_benur');
+            // $data['no_penaburan_benur'] = GeneradeNomorHelper::long_update('penaburan_benur');
             unset($data['uuid_po']);
             unset($data['uuid_supplier']);
             unset($data['uuid_lokasi']);

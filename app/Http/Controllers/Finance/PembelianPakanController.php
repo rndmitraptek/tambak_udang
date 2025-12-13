@@ -171,7 +171,7 @@ class PembelianPakanController extends Controller
                 return response()->json(['success'=>false,'errors'=>$validator->errors()]);
             }
             $data = $req->header;
-            $no_pembelian = GeneradeNomorHelper::long_update('pembelian_pakan');
+            // $no_pembelian = GeneradeNomorHelper::long_update('pembelian_pakan');
             unset($data['uuid_supplier'], $data['uuid_lokasi'], $data['uuid_siklus'], $data['id_pakan']);
             $data['supplier_id'] = $supplier->id_supplier;
             $data['lokasi_id']   = $lokasi->id_lokasi;

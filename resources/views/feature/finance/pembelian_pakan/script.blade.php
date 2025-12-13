@@ -246,7 +246,7 @@ app.controller("myCtrl", function($scope,$http) {
         //nomor
         $http.get("{{ route('long','pembelian_pakan') }}")
         .then(function(res){
-            $scope.input.no_pembelian = res.data.nomor;
+            // $scope.input.no_pembelian = res.data.nomor;
         }).catch(function(error) {
             swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
         });

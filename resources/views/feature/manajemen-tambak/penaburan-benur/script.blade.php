@@ -159,7 +159,7 @@ app.controller("myCtrl", function($scope,$http) {
         //nomor
         $http.get("{{ route('long','penaburan_benur') }}")
         .then(function(res){
-            $scope.input.no_penaburan_benur = res.data.nomor;
+            // $scope.input.no_penaburan_benur = res.data.nomor;
         }).catch(function(error) {
             swal({title: error.statusText,text: error.data.message,type: "error",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
         });
