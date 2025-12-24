@@ -34,9 +34,10 @@ class DashboardController extends Controller
         $siklus = SetupSiklus::with('lokasi')->where('status','OPEN')->get();
         foreach($siklus as $key=>$data){
             $siklus[$key]->data = DB::select("
-            SELECT CONCAT('(',id_simulasi,') ',tanggal_simulasi) as x,sum(total_pendapatan) as pendapatan,sum(total_biaya) as biaya,sum(laba_rugi) as y FROM transaksi_simulasi_detail 
-            where siklus_id = ?
-            group by id_simulasi,tanggal_simulasi order by id_simulasi",[$data->id_siklus]);
+            SELECT CONCAT('(',tsd.id_simulasi,') ',tsd.tanggal_simulasi) as x,sum(tsd.total_pendapatan) as pendapatan,sum(tsd.total_biaya) as biaya,sum(tsd.laba_rugi) as y FROM transaksi_simulasi_detail tsd
+            inner join transaksi_simulasi ts on ts.id_simulasi=tsd.id_simulasi
+            where ts.siklus_id = ?
+			group by tsd.id_simulasi,tsd.tanggal_simulasi order by tsd.id_simulasi",[$data->id_siklus]);
         }
         return response()->json(['success'=>true,'data'=>$siklus,'message'=>'']);
     }
@@ -55,9 +56,10 @@ class DashboardController extends Controller
         // dd($petak);
         foreach($petak as $key=>$data){
             $petak[$key]->data = DB::select("
-            SELECT CONCAT('(',id_simulasi,') ',tanggal_simulasi) as x,sum(total_pendapatan) as pendapatan,sum(total_biaya) as biaya,sum(laba_rugi) as y FROM transaksi_simulasi_detail 
-            where petak_id = ?
-            group by id_simulasi,tanggal_simulasi order by id_simulasi",[$data->petak_id]);
+            SELECT CONCAT('(',tsd.id_simulasi,') ',tsd.tanggal_simulasi) as x,sum(tsd.total_pendapatan) as pendapatan,sum(tsd.total_biaya) as biaya,sum(tsd.laba_rugi) as y FROM transaksi_simulasi_detail tsd
+            inner join transaksi_simulasi ts on ts.id_simulasi=tsd.id_simulasi
+            where tsd.petak_id = ?
+			group by tsd.id_simulasi,tsd.tanggal_simulasi order by tsd.id_simulasi",[$data->petak_id]);
         }
         return response()->json(['success'=>true,'data'=>$petak,'message'=>'']);
     }
