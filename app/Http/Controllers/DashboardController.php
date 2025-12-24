@@ -36,7 +36,7 @@ class DashboardController extends Controller
             $siklus[$key]->data = DB::select("
             SELECT CONCAT('(',tsd.id_simulasi,') ',tsd.tanggal_simulasi) as x,sum(tsd.total_pendapatan) as pendapatan,sum(tsd.total_biaya) as biaya,sum(tsd.laba_rugi) as y FROM transaksi_simulasi_detail tsd
             inner join transaksi_simulasi ts on ts.id_simulasi=tsd.id_simulasi
-            where ts.siklus_id = ?
+            where ts.siklus_id = ? and ts.deleted_at is null
 			group by tsd.id_simulasi,tsd.tanggal_simulasi order by tsd.id_simulasi",[$data->id_siklus]);
         }
         return response()->json(['success'=>true,'data'=>$siklus,'message'=>'']);
@@ -58,7 +58,7 @@ class DashboardController extends Controller
             $petak[$key]->data = DB::select("
             SELECT CONCAT('(',tsd.id_simulasi,') ',tsd.tanggal_simulasi) as x,sum(tsd.total_pendapatan) as pendapatan,sum(tsd.total_biaya) as biaya,sum(tsd.laba_rugi) as y FROM transaksi_simulasi_detail tsd
             inner join transaksi_simulasi ts on ts.id_simulasi=tsd.id_simulasi
-            where tsd.petak_id = ?
+            where tsd.petak_id = ? and ts.deleted_at is null
 			group by tsd.id_simulasi,tsd.tanggal_simulasi order by tsd.id_simulasi",[$data->petak_id]);
         }
         return response()->json(['success'=>true,'data'=>$petak,'message'=>'']);
