@@ -10,6 +10,9 @@ Route::get('health',function(){
 });
 Route::get('/', [App\Http\Controllers\Auth\UsersController::class,'login']);
 Route::get('login', [App\Http\Controllers\Auth\UsersController::class,'login'])->name('login');
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
 Route::get('/user',[App\Http\Controllers\Auth\UsersController::class, 'index']);
 Route::middleware('auth')->group(function () {
     Route::get('/lokasi', [App\Http\Controllers\Master\LokasiController::class, 'index']);
