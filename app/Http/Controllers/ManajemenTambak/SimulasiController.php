@@ -264,6 +264,7 @@ class SimulasiController extends Controller
             ->whereNull('p.deleted_at')
             ->where('p.lokasi_id', $simulasi->lokasi_id)
             ->where('p.siklus_id', $simulasi->siklus_id)
+            ->where('p.tanggal_penggunaan','<=', $simulasi->tanggal_simulasi)
             ->select('d.petak_id', DB::raw('SUM(d.jumlah) as total_jumlah'))
             ->groupBy('d.petak_id')
             ->pluck('total_jumlah', 'd.petak_id'); 
