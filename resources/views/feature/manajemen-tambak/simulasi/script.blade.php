@@ -268,6 +268,51 @@ app.controller("myCtrl", function($scope,$http) {
         $('#modalDetailBiaya').modal('show');
     };
 
+    $scope.data_rekap_coa = [];
+    $scope.data_detail_biaya= [];
+    $scope.rekapCoa= function(detailBiaya){
+        $scope.data_detail_biaya= detailBiaya;
+        const result = Object.values(
+        detailBiaya.reduce((acc, item) => {
+            const key = `${item.kode_coa}-${item.nama_coa}`;
+
+            if (!acc[key]) {
+            acc[key] = {
+                kode_coa: item.kode_coa,
+                nama_coa: item.nama_coa,
+                total_nominal_petak: 0
+            };
+            }
+
+            acc[key].total_nominal_petak += Number(item.nominal_petak || 0);
+
+            return acc;
+        }, {})
+        );
+        $scope.data_rekap_coa = result; 
+        console.log(result);
+        $('#modalDetailBiayaGroup').modal('show');
+    };
+
+    $scope.coa_selected = '';
+    $scope.detail_per_coa = function(kode_coa){
+        $scope.coa_selected = kode_coa;
+        $('#modalDetailPerCOa').modal('show');
+    };
+
+    $scope.getTotalBiayaHitung = function () {
+        if (!$scope.selectedDetailBiaya || !$scope.coa_selected) return 0;
+
+        return $scope.selectedDetailBiaya
+        .filter(b => b.kode_coa === $scope.coa_selected)
+        .reduce((total, b) => total + Number(b.biaya_hitung || 0), 0);
+    };
+
+    $scope.closeDetailBiayaGroup = function(){
+        $scope.data_rekap_coa = [];
+        $('#modalDetailBiayaGroup').modal('hide');
+    };
+
     $scope.totalBiayaDetail = function() {
         return $scope.selectedDetailBiaya.reduce(function(total, b){
             return total + (b.biaya_hitung || 0);

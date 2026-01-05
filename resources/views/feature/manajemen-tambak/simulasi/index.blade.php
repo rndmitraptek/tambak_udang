@@ -433,6 +433,8 @@
                                         <td class="text-center">
                                             <button class="btn btn-sm btn-info" 
                                                     ng-click="viewDetail(item.detail_biaya)">View Detail</button>
+                                            <button class="btn btn-sm btn-info" 
+                                                    ng-click="rekapCoa(item.detail_biaya)">Rekap</button>
                                         </td>
                                     </tr>
                                     <!-- Total biaya semua petak -->
@@ -497,6 +499,104 @@
               <td colspan="6" class="text-right font-weight-bold">Total Biaya Hitung</td>
               <td class="text-right font-weight-bold">
                 Rp <% totalBiayaDetail() | currency %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- modal detail biaya json --}}
+<div class="modal fade" id="modalDetailBiayaGroup" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" style="max-width: 70vw;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detail Biaya Petak</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-sm table-striped- table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Kode COA</th>
+              <th>Nama COa</th>
+              <th>Total</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="b in data_rekap_coa">
+              <td><% b.kode_coa %></td>
+              <td><% b.nama_coa %></td>
+              <td class="text-right">Rp <% b.total  | currency %></td>
+              <td class="text-center">
+                                            <button class="btn btn-sm btn-info" 
+                                                    ng-click="detail_per_coa(item.kode_coa)">View Detail Per Coa</button>
+                                        </td>
+            </tr>
+            <!-- Total biaya_hitung -->
+            <tr>
+              <td colspan="3" class="text-right font-weight-bold">Total Biaya Hitung</td>
+              <td class="text-right font-weight-bold">
+                Rp <% totalBiayaDetail() | currency %>
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- modal detail biaya json --}}
+<div class="modal fade" id="modalDetailPerCOa" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" style="max-width: 70vw;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detail Biaya Petak</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-sm table-striped- table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Nama Biaya</th>
+              <th>No Transaksi</th>
+              <th>Tipe</th>
+              <th>Biaya Petak</th>
+              <th>Biaya / Hari</th>
+              <th>Hari Simulasi</th>
+              <th>Biaya Hitung</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="b in selectedDetailBiaya | filter:{kode_coa:coa_selected}">
+              <td><% b.nama_biaya %></td>
+              <td><% b.no_transaksi || '-' %></td>
+              <td><% b.tipe_perhitungan %></td>
+              <td class="text-right">Rp <% b.nominal_petak | currency %></td>
+              <td class="text-right">Rp <% b.biaya_per_hari | currency %></td>
+              <td class="text-right"><% b.hari_sampai_simulasi %> hari</td>
+              <td class="text-right">Rp <% b.biaya_hitung | currency %></td>
+            </tr>
+            <!-- Total biaya_hitung -->
+            <tr>
+              <td colspan="6" class="text-right font-weight-bold">Total Biaya Hitung</td>
+              <td class="text-right font-weight-bold">
+                Rp <% getTotalBiayaHitung() | currency %>
               </td>
             </tr>
           </tbody>
