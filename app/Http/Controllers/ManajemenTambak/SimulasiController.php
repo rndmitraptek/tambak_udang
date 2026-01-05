@@ -101,9 +101,10 @@ class SimulasiController extends Controller
             // Query 1: biaya selesai sebelum simulasi
             $biayaLaluRows = DB::table('transaksi_biaya_petak as tbp')
                 ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
+                ->leftJoin('setup_coa as sc','sb.coa_id','=','sc.id_coa')
                 ->join('transaksi_biaya as tb','tbp.trans_biaya_id','=','tb.id')
                 ->join('transaksi_biaya_siklus as tbs','tbp.trans_biaya_siklus_id','=','tbs.id')
-                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
+                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya','sb.coa_id','sc.nama_coa','sc.kode_coa')
                 ->where('tbp.petak_id', $petakId)
                 ->where('tbs.siklus_id', $siklusId)
                 ->whereNull('tb.deleted_at')
@@ -120,9 +121,10 @@ class SimulasiController extends Controller
             // Query 2: biaya berjalan saat simulasi
             $biayaBerjalanRows = DB::table('transaksi_biaya_petak as tbp')
                 ->join('setup_biaya as sb','tbp.biaya_id','=','sb.id_biaya')
+                ->leftJoin('setup_coa as sc','sb.coa_id','=','sc.id_coa')
                 ->join('transaksi_biaya as tb','tbp.trans_biaya_id','=','tb.id')
                 ->join('transaksi_biaya_siklus as tbs','tbp.trans_biaya_siklus_id','=','tbs.id')
-                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya')
+                ->select('tbp.*','tb.no_transaksi','sb.nama_biaya','sb.coa_id','sc.nama_coa','sc.kode_coa')
                 ->where('tbp.petak_id', $petakId)
                 ->where('tbs.siklus_id', $siklusId)
                 ->when($tglMulaiSiklus, function($q) use ($tglMulaiSiklus){
@@ -140,6 +142,9 @@ class SimulasiController extends Controller
                 $detailAll[] = [
                     'id_transaksi_biaya_petak' => $row->id,
                     'no_transaksi' => $row->no_transaksi,
+                    'coa_id' => $row->coa_id,
+                    'nama_coa' => $row->nama_coa,
+                    'kode_coa' => $row->kode_coa,
                     'nama_biaya' => $row->nama_biaya,
                     'tanggal_mulai' => $row->tanggal_mulai,
                     'tanggal_selesai' => $row->tanggal_selesai,
@@ -164,6 +169,9 @@ class SimulasiController extends Controller
                 $detailAll[] = [
                     'id_transaksi_biaya_petak' => $row->id,
                     'no_transaksi' => $row->no_transaksi,
+                    'coa_id' => $row->coa_id,
+                    'nama_coa' => $row->nama_coa,
+                    'kode_coa' => $row->kode_coa,
                     'nama_biaya' => $row->nama_biaya,
                     'tanggal_mulai' => $row->tanggal_mulai,
                     'tanggal_selesai' => $row->tanggal_selesai,
