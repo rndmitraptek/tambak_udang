@@ -300,9 +300,8 @@ class SimulasiController extends Controller
             $detailBiaya = $simulasi->biaya
                 ->where('petak_id', $petakId)
                 ->first();
-            $detailPendapatan = $simulasi->pendapatan()
+            $detailPendapatan = $simulasi->pendapatan
                 ->where('petak_id', $petakId)
-                ->orderBy('petak_id','asc')
                 ->first();
 
             //get panen
