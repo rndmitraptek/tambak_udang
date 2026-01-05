@@ -535,17 +535,17 @@
             <tr ng-repeat="b in data_rekap_coa">
               <td><% b.kode_coa %></td>
               <td><% b.nama_coa %></td>
-              <td class="text-right">Rp <% b.total  | currency %></td>
+              <td class="text-right">Rp <% b.total_nominal_petak  | currency %></td>
               <td class="text-center">
                                             <button class="btn btn-sm btn-info" 
-                                                    ng-click="detail_per_coa(item.kode_coa)">View Detail Per Coa</button>
+                                                    ng-click="detail_per_coa(b.kode_coa)">View Detail Per Coa</button>
                                         </td>
             </tr>
             <!-- Total biaya_hitung -->
             <tr>
-              <td colspan="3" class="text-right font-weight-bold">Total Biaya Hitung</td>
+              <td colspan="2" class="text-right font-weight-bold">Total Biaya Hitung</td>
               <td class="text-right font-weight-bold">
-                Rp <% totalBiayaDetail() | currency %>
+                Rp <% totalBiayaDetailRekapCoa() | currency %>
               </td>
               <td></td>
             </tr>
@@ -583,7 +583,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="b in selectedDetailBiaya | filter:{kode_coa:coa_selected}">
+            <tr ng-repeat="b in data_detail_biaya | filter:{kode_coa:coa_selected}">
               <td><% b.nama_biaya %></td>
               <td><% b.no_transaksi || '-' %></td>
               <td><% b.tipe_perhitungan %></td>
@@ -596,7 +596,7 @@
             <tr>
               <td colspan="6" class="text-right font-weight-bold">Total Biaya Hitung</td>
               <td class="text-right font-weight-bold">
-                Rp <% getTotalBiayaHitung() | currency %>
+                Rp <% getTotalBiayaHitungDetailCoa() | currency %>
               </td>
             </tr>
           </tbody>

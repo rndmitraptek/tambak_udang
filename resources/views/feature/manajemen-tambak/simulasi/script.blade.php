@@ -297,6 +297,7 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.coa_selected = '';
     $scope.detail_per_coa = function(kode_coa){
         $scope.coa_selected = kode_coa;
+        console.log('coa_selected==>',$scope.coa_selected);
         $('#modalDetailPerCOa').modal('show');
     };
 
@@ -304,6 +305,13 @@ app.controller("myCtrl", function($scope,$http) {
         if (!$scope.selectedDetailBiaya || !$scope.coa_selected) return 0;
 
         return $scope.selectedDetailBiaya
+        .filter(b => b.kode_coa === $scope.coa_selected)
+        .reduce((total, b) => total + Number(b.biaya_hitung || 0), 0);
+    };
+    $scope.getTotalBiayaHitungDetailCoa = function () {
+        if (!$scope.data_detail_biaya || !$scope.coa_selected) return 0;
+
+        return $scope.data_detail_biaya
         .filter(b => b.kode_coa === $scope.coa_selected)
         .reduce((total, b) => total + Number(b.biaya_hitung || 0), 0);
     };
@@ -315,6 +323,11 @@ app.controller("myCtrl", function($scope,$http) {
 
     $scope.totalBiayaDetail = function() {
         return $scope.selectedDetailBiaya.reduce(function(total, b){
+            return total + (b.biaya_hitung || 0);
+        }, 0);
+    };
+    $scope.totalBiayaDetailRekapCoa = function() {
+        return $scope.data_detail_biaya.reduce(function(total, b){
             return total + (b.biaya_hitung || 0);
         }, 0);
     };
