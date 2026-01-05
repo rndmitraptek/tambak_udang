@@ -300,12 +300,13 @@ class SimulasiController extends Controller
             $detailBiaya = $simulasi->biaya
                 ->where('petak_id', $petakId)
                 ->first();
-            $detailPendapatan = $simulasi->pendapatan
+            $detailPendapatan = $simulasi->pendapatan()
                 ->where('petak_id', $petakId)
+                ->orderBy('petak_id','asc')
                 ->first();
 
             //get panen
-            $panen =PanenModel::where('id_petak',$petakId)->where('id_siklus',$simulasi->siklus_id)->sum('total');
+            $panen =PanenModel::where('id_petak',$petakId)->where('tanggal_panen','<=', $simulasi->tanggal_simulasi)->where('id_siklus',$simulasi->siklus_id)->sum('total');
             $totalPanen = $panen ? $panen : 0;
             if($detailPendapatan){
                 $detailPendapatan->pendapatan_actual_partial =round($totalPanen,0);
