@@ -181,7 +181,7 @@
                                             <td>
                                                 <select style="width: 200px" id="uuid_item" name="uuid_item" ng-model="i.uuid_item">
                                                     <option value="">Pillih Item</option>
-                                                    <option ng-repeat="x in item" value="<% x.uuid %>"><% x.nama_item %></option>
+                                                    <option ng-repeat="x in item" value="<% x.uuid %>"><% x.nama_item %> - <% x.coa.kode_coa %> <% x.coa.nama_coa %></option>
                                                 </select>
                                             </td>
                                             <td class="text-right"><input style="width: 200px" class="text-right" type="text" input-currency ng-model="i.harga" ng-change="hitung()"></td>

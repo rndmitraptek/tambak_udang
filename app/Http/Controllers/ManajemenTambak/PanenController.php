@@ -94,7 +94,7 @@ class PanenController extends Controller
     }
 
     public function get_item(){
-        return response()->json(['success'=>true,'data'=>SetupItem::all()->makeHidden('id_item'),'message'=>'']);
+        return response()->json(['success'=>true,'data'=>SetupItem::with('coa')->get()->makeHidden('id_item'),'message'=>'']);
     }
     
     public function get_payment_method(){

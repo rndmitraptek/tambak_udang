@@ -10,6 +10,8 @@ app.controller("myCtrl", function($scope,$http,API) {
             scrollCollapse: !0,
             columns: [
                 { data: 'nama_item', title: 'Nama Jenis Udang' },
+                { data: 'coa.kode_coa', title: 'Kode COA' },
+                { data: 'coa.nama_coa', title: 'COA' },
                 { data: 'created_by_name', title: 'Created By', orderable: false, searchable: false },
                 { data: 'created_at_formatted', name: 'created_at', title: 'Created At', orderable: false },
                 { data: 'updated_by_name', title: 'Updated By' , orderable: false, searchable: false},
