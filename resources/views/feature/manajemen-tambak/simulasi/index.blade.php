@@ -322,6 +322,8 @@
                                         <td class="text-center">
                                             <button class="btn btn-sm btn-info" 
                                                     ng-click="viewDetail(item.detail_biaya.detail_biaya_actual)">View Detail</button>
+                                            <button class="btn btn-sm btn-info" 
+                                                    ng-click="rekapCoa(item.detail_biaya.detail_biaya_actual)">Rekap Per Coa</button>
                                         </td>
                                     </tr>
                                     <!-- Total biaya semua petak -->
@@ -434,7 +436,7 @@
                                             <button class="btn btn-sm btn-info" 
                                                     ng-click="viewDetail(item.detail_biaya)">View Detail</button>
                                             <button class="btn btn-sm btn-info" 
-                                                    ng-click="rekapCoa(item.detail_biaya)">Rekap</button>
+                                                    ng-click="rekapCoa(item.detail_biaya)">Rekap Per Coa</button>
                                         </td>
                                     </tr>
                                     <!-- Total biaya semua petak -->

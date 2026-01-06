@@ -120,6 +120,16 @@ class PanenController extends Controller
             unset($data['uuid_petak']);
             $data['id_petak'] = $petak->id_petak;
             $insert = PanenModel::create($data);
+
+            //update status_panen pada siklus_petak
+            if($data['jenis_panen']=='FINAL'){
+                $siklus_petak = SetupSiklusPetak::where('siklus_id',$siklus->id_siklus)
+                    ->where('petak_id',$petak->id_petak)
+                    ->first();
+                $siklus_petak->status_panen ='FINAL';
+                $siklus_petak->save();
+            }
+
             // insert jurnal
             $jurnal = JurnalModel::create([
                 'tanggal'   =>$data['tanggal_panen'],
@@ -212,6 +222,23 @@ class PanenController extends Controller
             unset($data['uuid_petak']);
             $data['id_petak'] = $petak->id_petak;
             $panen->update($data);
+
+            //update status_panen pada siklus_petak
+            if($data['jenis_panen']=='FINAL'){
+                $siklus_petak = SetupSiklusPetak::where('siklus_id',$siklus->id_siklus)
+                    ->where('petak_id',$petak->id_petak)
+                    ->first();
+                $siklus_petak->status_panen ='FINAL';
+                $siklus_petak->save();
+            }
+            if($data['jenis_panen']=='PARTIAL'){
+                $siklus_petak = SetupSiklusPetak::where('siklus_id',$siklus->id_siklus)
+                    ->where('petak_id',$petak->id_petak)
+                    ->first();
+                $siklus_petak->status_panen ='AKTIF';
+                $siklus_petak->save();
+            }
+
             $delete_detail = PanenDetailModel::where('id_panen',$panen->id_panen)->delete();
             $delete_piutang = PiutangCustomer::where('no_faktur',$panen->no_panen)->delete();
             // insert jurnal
@@ -292,6 +319,13 @@ class PanenController extends Controller
     {
         $benur = PanenModel::where('uuid', $uuid)->firstOrFail();
         $benurDetail = PanenDetailModel::where('id_panen', $benur->id_panen)->firstOrFail();
+        //update status_panen pada siklus_petak
+        $siklus_petak = SetupSiklusPetak::where('siklus_id',$benur->id_siklus)
+            ->where('petak_id',$benur->id_petak)
+            ->first();
+        $siklus_petak->status_panen ='AKTIF';
+        $siklus_petak->save();
+
         $benurDetail->delete();
         $benur->delete();
         return response()->json(['success' => true]);

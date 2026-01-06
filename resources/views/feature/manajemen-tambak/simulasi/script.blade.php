@@ -271,6 +271,11 @@ app.controller("myCtrl", function($scope,$http) {
     $scope.data_rekap_coa = [];
     $scope.data_detail_biaya= [];
     $scope.rekapCoa= function(detailBiaya){
+        console.log('typeof detailBiaya==>',typeof detailBiaya);
+        if(typeof detailBiaya=='string'){
+            detailBiaya =JSON.parse(detailBiaya);
+        }
+        console.log('typeof detailBiaya after==>',typeof detailBiaya);
         $scope.data_detail_biaya= detailBiaya;
         const result = Object.values(
         detailBiaya.reduce((acc, item) => {
