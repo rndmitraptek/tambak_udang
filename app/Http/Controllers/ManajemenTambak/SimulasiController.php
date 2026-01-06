@@ -404,6 +404,8 @@ class SimulasiController extends Controller
                 $pendapatanActualPartial =(float)($item['pendapatan_actual_partial'] ?? 0);
                 if (isset($item['harga_per_kg']) && isset($item['biomassa'])) {
                     $pendapatanSubtotal = $pendapatanSimulasi + $pendapatanActualPartial;
+                } else {
+                    $pendapatanSubtotal = $pendapatanActualPartial;
                 }
 
                 \App\Models\ManajemenTambak\TransaksiSimulasiPendapatan::updateOrCreate(
