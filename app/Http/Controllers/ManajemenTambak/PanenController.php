@@ -261,6 +261,7 @@ class PanenController extends Controller
                 unset($d['uuid_item']);
                 unset($d['uuid_payment_method']);
                 $detail = $d;
+                $detail['tanggal_panen'] = $data['tanggal_panen'];
                 $detail['id_panen'] = $panen->id_panen;
                 $detail['id_customer'] = $customer->id_customer;
                 $detail['id_item'] = $item->id_item;
