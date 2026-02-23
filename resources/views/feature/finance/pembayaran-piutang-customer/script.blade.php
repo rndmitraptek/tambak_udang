@@ -26,8 +26,10 @@ app.controller("myCtrl", function($scope,$http,API) {
                 { data: 'no_faktur', title: 'No Faktur' },
                 { data: 'tanggal_bayar', title: 'Tanggal Bayar' },
                 { data: 'nama_customer', title: 'Customer' },
-                { data: 'total_bayar', title: 'Total Bayar' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
-                { 
+                { data: 'total_bayar', title: 'Total Piutang' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
+                { data: 'jumlah_bayar', title: 'Jumlah Bayar' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
+                { data: 'selisih_bayar', title: 'Selisih Bayar' ,"className": "text-right",render: $.fn.dataTable.render.number( '.', ',', 0, '' )},
+                {
                     data: 'keterangan', 
                     title: 'Keterangan', 
                     render: function (data, type, row) {
@@ -263,6 +265,7 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.input.transfer.push(transfer);
         $scope.form_transfer = {};
         $scope.form_transfer.nominal = $scope.total_bayar;
+        $scope.hitung_jumlah_bayar();
     }
 
     $scope.handleClickTambahPembayaranGiro = function(){
@@ -277,6 +280,7 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.form_giro.nominal_materai = 0;
         $scope.form_giro.selisih_bayar = 0;
         console.log($scope.input.giro);
+        $scope.hitung_jumlah_bayar();
     }
 
     
@@ -306,8 +310,29 @@ app.controller("myCtrl", function($scope,$http,API) {
         $scope.form_giro.selisih_bayar = $scope.form_giro.nominal_materai - $scope.total_bayar;
     }
 
+    $scope.hitung_jumlah_bayar = function(){
+        setTimeout(function() {
+            $scope.input.jumlah_bayar = 0;
+            switch ($scope.input.metode_bayar) {
+                case 'TRANSFER':
+                    $scope.input.jumlah_bayar = $scope.total_transfer;
+                    break;
+                case 'GIRO':
+                    $scope.input.jumlah_bayar = $scope.total_giro;
+                    break;
+                case 'TUNAI':
+                    $scope.input.jumlah_bayar = $scope.form_tunai.nominal;
+                    break;
+                default:
+                    console.log("Nilai tidak diketahui");
+            }
+            $scope.input.selisih_bayar = $scope.input.jumlah_bayar - $scope.total_bayar;
+            $scope.$apply();
+        }, 500);
+    }
+
     $scope.simpan_pembayaran_hutang = function(){
-        switch ($scope.input.metode_bayar) {
+        {{-- switch ($scope.input.metode_bayar) {
             case 'TRANSFER':
                 if($scope.total_bayar !=$scope.total_transfer){
                     swal({title: "Total Transfer tidak sama dengan total bayar ",text:'',type: "warning",confirmButtonClass: "btn btn-secondary m-btn m-btn--wide"})
@@ -328,7 +353,7 @@ app.controller("myCtrl", function($scope,$http,API) {
                 break;
             default:
                 console.log("Nilai tidak diketahui");
-        }
+        } --}}
         swal({title: "Presesing...!",text: "Please Wait",
             onOpen: function() {
                 swal.showLoading()

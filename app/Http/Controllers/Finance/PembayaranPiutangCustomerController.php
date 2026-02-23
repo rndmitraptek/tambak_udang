@@ -32,7 +32,7 @@ class PembayaranPiutangCustomerController extends Controller
         $query = PembayaranPiutangCustomerModel::query()
             ->join('setup_customer','setup_customer.id_customer','=','pembayaran_piutang_customer.id_customer')
             ->select([
-                'pembayaran_piutang_customer.uuid','pembayaran_piutang_customer.no_faktur','pembayaran_piutang_customer.tanggal_bayar','pembayaran_piutang_customer.id_customer','pembayaran_piutang_customer.total_bayar','pembayaran_piutang_customer.keterangan','pembayaran_piutang_customer.file',
+                'pembayaran_piutang_customer.uuid','pembayaran_piutang_customer.no_faktur','pembayaran_piutang_customer.tanggal_bayar','pembayaran_piutang_customer.id_customer','pembayaran_piutang_customer.total_bayar','pembayaran_piutang_customer.jumlah_bayar','pembayaran_piutang_customer.selisih_bayar','pembayaran_piutang_customer.keterangan','pembayaran_piutang_customer.file',
                 'setup_customer.uuid as uuid_customer','setup_customer.nama_customer',
                 'pembayaran_piutang_customer.created_by','pembayaran_piutang_customer.updated_by','pembayaran_piutang_customer.created_at','pembayaran_piutang_customer.updated_at'
             ]);
@@ -124,9 +124,10 @@ class PembayaranPiutangCustomerController extends Controller
             foreach($req->tunai as $d){
                 $detail = $d;
                 $detail['id_pembayaran_piutang_customer']   = $insert->id_pembayaran_piutang_customer;
+                $coa = SetupCoa::where('id_coa',$detail['id_coa'])->first();
+                $detail['kode_coa'] = $coa->kode_coa;
                 $insert_tunai = PembayaranPiutangCustomerTunaiModel::create($detail);
                 // jurnal detail pada pembelian benur
-                $coa = SetupCoa::where('id_coa',$detail['id_coa'])->first();
                 JurnalDetailModel::create([
                     'id_jurnal' =>$jurnal->id_jurnal,
                     'id_coa'    =>$coa->id_coa,
@@ -154,6 +155,28 @@ class PembayaranPiutangCustomerController extends Controller
                     'nama_coa'  =>'PIUTANG USAHA',
                     'debit'     =>0,
                     'kredit'    =>$detail['nominal_piutang']
+                ]);
+            }
+            if($data['selisih_bayar'] < 0){
+                // jurnal detail selisih kurang bayar
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>285,
+                    'kode_coa'  =>'81000',
+                    'nama_coa'  =>'BEBAN LAIN DILUAR USAHA',
+                    'debit'     =>$data['selisih_bayar'] * -1,
+                    'kredit'    =>0
+                ]);
+            }
+            if($data['selisih_bayar'] > 0){
+                // jurnal detail selisih lebih bayar
+                JurnalDetailModel::create([
+                    'id_jurnal' =>$jurnal->id_jurnal,
+                    'id_coa'    =>277,
+                    'kode_coa'  =>'71000',
+                    'nama_coa'  =>'PENDAPATAN LAIN DILUAR USAHA',
+                    'debit'     =>$data['selisih_bayar'],
+                    'kredit'    =>0
                 ]);
             }
             DB::commit();

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('id_customer')->references('id_customer')->on('setup_customer')->onDelete('restrict');
             $table->date('tanggal_bayar');
             $table->float('total_bayar',18,2);
+            $table->float('selisih_bayar',18,2);
+            $table->float('bayar_piutang',18,2);
             $table->text('keterangan')->nullable();
             $table->string('status',10)->default('DRAFT');
             $table->string('file',200)->nullable();

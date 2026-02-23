@@ -338,6 +338,24 @@
                             </table>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                                <label for="recipient-name" class="col-4 col-form-label">Jumlah Bayar</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control m--font-boldest text-right" input-currency ng-model="input.jumlah_bayar" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                                <label for="recipient-name" class="col-4 col-form-label">selisih Bayar</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control m--font-boldest text-right" input-currency ng-model="input.selisih_bayar" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -387,7 +405,7 @@
                             <div class="col-8">
                                 <select class="form-control" id="metode_bayar" name="metode_bayar" ng-model="input.metode_bayar">
                                     <option value="TRANSFER">TRANSFER</option>
-                                    <option value="GIRO">GIRO</option>
+                                    {{-- <option value="GIRO">GIRO</option>  Giro Kode rekening banknya berapa? --}}
                                     <option value="TUNAI">TUNAI</option>
                                 </select>
                             </div>
@@ -628,7 +646,7 @@
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Kode COA</label>
                             <div class="col-8">
-                                <select class="form-control" id="id_coa" ng-model="form_tunai.id_coa" name="id_coa">
+                                <select class="form-control" id="id_coa" ng-model="form_tunai.id_coa" name="id_coa" ng-change="hitung_jumlah_bayar()">
                                     <option value="" >-</option>
                                     <option ng-repeat="x in coa" value="<% x.id_coa %>" ng-selected="x.id_coa == form_tunai.id_coa"><% x.kode_coa %> - <% x.nama_coa %></option>
                                 </select>
@@ -645,7 +663,25 @@
                         <div class="form-group m-form__group row" style="margin-bottom:0px!important">
                             <label for="recipient-name" class="col-4 col-form-label">Nominal</label>
                             <div class="col-8">
-                                <input type="text" class="form-control text-right" input-currency ng-model="form_tunai.nominal" >
+                                <input type="text" class="form-control text-right" input-currency ng-model="form_tunai.nominal" ng-change="hitung_jumlah_bayar()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">Jumlah Bayar</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control m--font-boldest text-right" input-currency ng-model="input.jumlah_bayar" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group m-form__group row" style="margin-bottom:0px!important">
+                            <label for="recipient-name" class="col-4 col-form-label">selisih Bayar</label>
+                            <div class="col-8">
+                                <input type="text" class="form-control m--font-boldest text-right" input-currency ng-model="input.selisih_bayar" readonly>
                             </div>
                         </div>
                     </div>

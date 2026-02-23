@@ -15,7 +15,7 @@ class PembayaranPiutangCustomerModel extends Model
 
     protected $table = 'pembayaran_piutang_customer';
     protected $primaryKey = 'id_pembayaran_piutang_customer';
-    protected $fillable = ['uuid','no_faktur','id_customer','tanggal_bayar','total_bayar','keterangan','file'];
+    protected $fillable = ['uuid','no_faktur','id_customer','tanggal_bayar','total_bayar','selisih_bayar','jumlah_bayar','keterangan','file'];
     protected $appends = ['created_by_name', 'updated_by_name','created_at_formatted','updated_at_formatted'];
 
     public function Customer(){

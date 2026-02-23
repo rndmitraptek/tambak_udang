@@ -45,6 +45,21 @@ class PanenController extends Controller
             'panen.created_by','panen.updated_by','panen.created_at','panen.updated_at'
         ]);
         return DataTables::of($query)
+            ->filter(function ($query) {
+                $search = strtolower(request()->get('search')['value'] ?? '');
+                if ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->whereRaw('LOWER(panen.no_panen) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw("LOWER(to_char(panen.tanggal_panen, 'YYYY-MM-DD')) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw('LOWER(panen.jenis_panen) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_siklus.nama_siklus) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_blok.nama_blok) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_petak.nama_petak) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(setup_lokasi.nama_lokasi) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(panen.keterangan) LIKE ?', ["%{$search}%"]);
+                    });
+                }
+            })
             ->addColumn('action', function ($row) {
                 return '<a href="javascript:void(0)" id="edit" class="m-portlet__nav-link btn m-btn m-btn--hover-warning m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-warning la la-edit"></i></a>
                 <a href="javascript:void(0)" id="hapus" class="m-portlet__nav-link btn m-btn m-btn--hover-danger m-btn--icon m-btn--icon-only m-btn--pill" title="View"><i class="m--font-danger la la-remove"></i></a>';
