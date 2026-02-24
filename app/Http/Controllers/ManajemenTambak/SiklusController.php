@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\ManajemenTambak;
 
 use App\Http\Controllers\Controller;
+use App\Models\ManajemenTambak\TransaksiBiaya;
+use App\Models\ManajemenTambak\TransaksiBiayaSiklus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\SetupSiklus;
@@ -146,10 +148,10 @@ class SiklusController extends Controller
             ]);
 
             // simpan petak kalau ada
-            SetupSiklusPetak::where('siklus_id', $siklus->id_siklus)->forceDelete();
-            if ($request->petak_id && is_array($request->petak_id)) {
-                $siklus->petak()->sync($request->petak_id);
-            }
+            // SetupSiklusPetak::where('siklus_id', $siklus->id_siklus)->forceDelete();
+            // if ($request->petak_id && is_array($request->petak_id)) {
+            //     $siklus->petak()->sync($request->petak_id);
+            // }
 
             DB::commit();
             return response()->json(['success' => true]);
@@ -160,10 +162,15 @@ class SiklusController extends Controller
     }
 
     // Delete
-    public function delete($uuid)
+    public function destroy($uuid)
     {
         $siklus = SetupSiklus::where('uuid', $uuid)->firstOrFail();
-        $siklus->delete();
+        $cektransksi = TransaksiBiayaSiklus::where('siklus_id', $siklus->id_siklus)->count();
+        if($cektransksi > 0){
+            return response()->json(['success' => false, 'message' => 'Siklus tidak bisa dihapus karena sudah memiliki transaksi biaya.']);
+        }
+        SetupSiklusPetak::where('siklus_id', $siklus->id_siklus)->forceDelete();
+        $siklus->forceDelete();
 
         return response()->json(['success' => true]);
     }

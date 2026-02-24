@@ -173,7 +173,7 @@ function editSiklus(uuid) {
     $.get('/setup-siklus/show/' + uuid, function(res) {
         // isi field biasa
         $('#uuid').val(res.uuid);
-        $('#btnSimpanSiklus').hide();
+        {{-- $('#btnSimpanSiklus').hide(); --}}
         $('#lokasi_id').val(res.lokasi_id).trigger('change');
         $('#nama_siklus').val(res.nama_siklus);
         $('#tanggal_mulai').val(res.tanggal_mulai);
@@ -227,11 +227,11 @@ function deleteSiklus(uuid) {
                 success: function(res) {
                     Swal.close();
                     if(res.success) {
-                        Swal.fire('Berhasil', 'Data berhasil dihapus!', 'success');
-                        $('#m_create').modal('hide');
-                        $('#viewtabel').DataTable().ajax.reload();
+                        Swal.fire('Berhasil', 'Data berhasil dihapus!', 'success').then(() => {
+                            $('#viewtabel').DataTable().ajax.reload();
+                        });
                     } else {
-                        Swal.fire('Gagal', 'Data gagal dihapus!', 'error');
+                        Swal.fire('Gagal', res.message, 'error');
                     }
                 },
                 error: function(xhr) {
