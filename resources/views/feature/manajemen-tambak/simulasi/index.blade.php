@@ -154,7 +154,7 @@
                                         </div>
                                         <div class="col-lg-6 mb-2">
                                             <p style="margin-bottom:0px">BIOMASA</P>
-                                            <p style="font-size: 1.2rem;font-weight: 500;margin-bottom:.25rem;"><% kolam.detail_pendapatan.biomassa | currency %></p>
+                                            <p style="font-size: 1.2rem;font-weight: 500;margin-bottom:.25rem;"><% kolam.detail_pendapatan.biomassa_subtotal | currency %></p>
                                         </div>
                                         <div class="col-lg-6 mb-2">
                                             <p style="margin-bottom:0px">HARGA /KG</P>
@@ -210,6 +210,10 @@
                                 <div class="col-lg-3">
                                     <p class="mb-0">Total Biaya</p>
                                     <h5><% getSummary('biaya') | currency %></h5>
+                                    <button class="btn btn-sm btn-success"
+                                            ng-click="rekapCoaAll()">
+                                        Rekap Biaya Actual Per Coa Semua Petak
+                                    </button>
                                 </div>
                                 <div class="col-lg-3">
                                     <p class="mb-0">Total Laba/Rugi</p>
@@ -230,6 +234,7 @@
                                         <th  style="width: 150px;">Harga /KG</th>
                                         <th  style="width: 150px;">Biomassa</th>
                                         <th>Pendapatan</th>
+                                        <th>Biomassa Actual (Panen)</th>
                                         <th>Pendapatan Actual (Panen)</th>
                                     </tr>
                                 </thead>
@@ -240,6 +245,7 @@
                                         <td><input type="text" ng-model="detail.harga_per_kg" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right"></td>
                                         <td><input type="text" ng-model="detail.biomassa" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right" ></td>
                                         <td><input type="text" ng-model="detail.pendapatan_simulasi" input-currency class="form-control text-right" ></td>
+                                        <td><input type="text" ng-model="detail.biomassa_actual" input-currency class="form-control text-right" readonly value="<% detail.biomassa_actual %>" style="background-color: rgb(225, 213, 213);"></td>
                                         <td><input type="text" ng-model="detail.pendapatan_actual_partial" input-currency class="form-control text-right" readonly value="<% detail.pendapatan_actual_partial %>" style="background-color: rgb(225, 213, 213);"></td>
                                     </tr>
                                 <tbody ng-if="detail.pendapatan.length >0">
@@ -249,6 +255,7 @@
                                         <td><input type="text" ng-model="detail.harga_per_kg" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right" value="<% detail.harga_per_kg %>"></td>
                                         <td><input type="text" ng-model="detail.biomassa" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right" value="<% detail.biomassa %>"></td>
                                         <td><input type="text" ng-model="detail.pendapatan_simulasi" ng-change="hitungPendapatanSimulasi(detail)" input-currency class="form-control text-right" value="<% detail.pendapatan_simulasi %>"></td>
+                                        <td><input type="text" ng-model="detail.biomassa_actual" input-currency class="form-control text-right" readonly value="<% detail.biomassa_actual %>" style="background-color: rgb(225, 213, 213);"></td>
                                         <td><input type="text" ng-model="detail.pendapatan_actual_partial" input-currency class="form-control text-right" readonly value="<% detail.pendapatan_actual_partial %>" style="background-color: rgb(225, 213, 213);"></td>
                                     </tr>
                                 </tbody>

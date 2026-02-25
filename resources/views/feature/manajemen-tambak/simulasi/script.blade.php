@@ -346,6 +346,54 @@ app.controller("myCtrl", function($scope,$http) {
     }
     });
 
+
+
+
+    $scope.rekapCoaAll = function () {
+        let allDetailBiaya = [];
+        // looping semua petak dalam simulasi
+        $scope.detail.simulasi.forEach(sim => {
+
+            let detail = sim.detail_biaya.detail_biaya_actual;
+
+            if (typeof detail === 'string') {
+                detail = JSON.parse(detail);
+            }
+
+            if (Array.isArray(detail)) {
+                allDetailBiaya = allDetailBiaya.concat(detail);
+            }
+        });
+
+        $scope.data_detail_biaya = allDetailBiaya;
+
+        const result = Object.values(
+            allDetailBiaya.reduce((acc, item) => {
+
+                const key = `${item.kode_coa}-${item.nama_coa}`;
+
+                if (!acc[key]) {
+                    acc[key] = {
+                        kode_coa: item.kode_coa,
+                        nama_coa: item.nama_coa,
+                        total_nominal_petak: 0
+                    };
+                }
+
+                acc[key].total_nominal_petak += Number(item.nominal_petak || 0);
+
+                return acc;
+
+            }, {})
+        );
+
+        $scope.data_rekap_coa = result;
+
+        $('#modalDetailBiayaGroup').modal('show');
+    };
+
+
+
     // simpan simulasi
     $scope.add_simulasi = function () {
         let data = {
@@ -401,6 +449,7 @@ app.controller("myCtrl", function($scope,$http) {
                 console.log('get biaya simulasi');
                 Swal.close();
                 $scope.detail = res.data;
+                console.log($scope.detail);
             })
             .catch(function (err) {
                 Swal.close();

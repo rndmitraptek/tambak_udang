@@ -304,20 +304,40 @@ class SimulasiController extends Controller
                 ->where('petak_id', $petakId)
                 ->first();
 
+            $biomassa = isset($detailPendapatan['biomassa']) ? (float)$detailPendapatan['biomassa'] : 0;
+            $totalBiayaAll = (float)$totalBiaya + (float)$totalBiayaSimulasi;
+
             //get panen
             $panen =PanenModel::where('id_petak',$petakId)->where('tanggal_panen','<=', $simulasi->tanggal_simulasi)->where('id_siklus',$simulasi->siklus_id)->sum('total');
             $totalPanen = $panen ? $panen : 0;
             if($detailPendapatan){
                 $detailPendapatan->pendapatan_actual_partial =round($totalPanen,0);
             }
+            //get biomassa panen
+            $biomassaPanen =PanenModel::where('id_petak',$petakId)->where('tanggal_panen','<=', $simulasi->tanggal_simulasi)->where('id_siklus',$simulasi->siklus_id)->sum('jumlah');
+            $totalBiomassaPanen = $biomassaPanen ? (float)$biomassaPanen : 0;
+            if($detailPendapatan){
+                $detailPendapatan->biomassa_actual =$totalBiomassaPanen;
+                $detailPendapatan->biomassa_subtotal =($biomassa + $totalBiomassaPanen);
+                // $detailPendapatan->harga_per_kg = $detailPendapatan->biomassa_subtotal > 0
+                //     ? round($totalBiayaAll / $detailPendapatan->biomassa_subtotal)
+                //     : 0;
+            }
+            
 
             // hitung hpp per kg
-            $biomassa = isset($detailPendapatan['biomassa']) ? (float)$detailPendapatan['biomassa'] : 0;
-            $totalBiayaAll = (float)$totalBiaya + (float)$totalBiayaSimulasi;
             $hppPerKg = 0;
             if ($biomassa > 0) {
-                $hppPerKg = round($totalBiayaAll / $biomassa);
+                // $hppPerKg = round($totalBiayaAll / $biomassa);
+                $hppPerKg = $detailPendapatan->biomassa_subtotal > 0
+                    ? round($totalBiayaAll / $detailPendapatan->biomassa_subtotal)
+                    : 0;
             }
+
+            $simulasiDetailPendapatan =$detailPendapatan->replicate();
+            $simulasiDetailPendapatan->harga_per_kg = $simulasiDetailPendapatan->biomassa_subtotal > 0
+                    ? round($totalBiayaAll / $simulasiDetailPendapatan->biomassa_subtotal)
+                    : 0;
 
             // ambil total pakan berdasarkan petak_id
             $totalPakanPetak = isset($pakanTotals[$petakId]) ? (float)$pakanTotals[$petakId] : 0;
@@ -332,6 +352,7 @@ class SimulasiController extends Controller
                 'total_biaya_all' => round($totalBiaya + $totalBiayaSimulasi,0),
                 'total_pendapatan' => round($totalPendapatan,0),
                 'pendapatan_actual_partial' => round($totalPanen,0),
+                'biomassa_actual' => $totalBiomassaPanen,
                 'laba_rugi' => round($labaRugi,0),
                 'hpp_per_kg' => $hppPerKg,
                 'total_pakan' => $totalPakanPetak,
@@ -339,7 +360,7 @@ class SimulasiController extends Controller
                 'fcr' => $fcr,
                 // jika mau sertakan detail json biaya:
                 'detail_biaya' => $detailBiaya,
-                'detail_pendapatan' => $detailPendapatan,
+                'detail_pendapatan' => $simulasiDetailPendapatan,
             ];
         }
 
@@ -407,6 +428,9 @@ class SimulasiController extends Controller
                 } else {
                     $pendapatanSubtotal = $pendapatanActualPartial;
                 }
+                $biomassa =(float)($item['biomassa'] ?? 0);
+                $biomassaActual =(float)($item['biomassa_actual'] ?? 0);
+                $biomassaSubtotal =$biomassa + $biomassaActual;
 
                 \App\Models\ManajemenTambak\TransaksiSimulasiPendapatan::updateOrCreate(
                     [
@@ -415,7 +439,9 @@ class SimulasiController extends Controller
                     ],
                     [
                         'harga_per_kg' => (float)($item['harga_per_kg'] ?? 0),
-                        'biomassa' => (float)($item['biomassa'] ?? 0),
+                        'biomassa' => $biomassa,
+                        'biomassa_actual' => $biomassaActual,
+                        'biomassa_subtotal' => $biomassaSubtotal,
                         'pendapatan_simulasi' => (float)($item['pendapatan_simulasi'] ?? 0),
                         'pendapatan_actual_partial' => (float)($item['pendapatan_actual_partial'] ?? 0),
                         'pendapatan_subtotal' => round($pendapatanSubtotal,2),
