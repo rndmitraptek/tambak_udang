@@ -266,6 +266,28 @@ class SimulasiController extends Controller
             ->merge(collect($simulasi->pendapatan)->pluck('petak_id'))
             ->unique();
 
+        // urutkan petak berdasarkan blok lalu petak (ascending, natural order)
+        $petakInfo = \App\Models\SetupPetak::with('blok')
+            ->whereIn('id_petak', $petakIds)
+            ->get()
+            ->keyBy('id_petak');
+
+        $petakIds = $petakIds
+            ->map(function ($pid) use ($petakInfo) {
+                $p = $petakInfo->get($pid);
+                return [
+                    'petak_id'   => $pid,
+                    'nama_blok'  => $p && $p->blok ? $p->blok->nama_blok : '',
+                    'nama_petak' => $p ? $p->nama_petak : '',
+                ];
+            })
+            ->sort(function ($a, $b) {
+                return strnatcasecmp($a['nama_blok'], $b['nama_blok'])
+                    ?: strnatcasecmp($a['nama_petak'], $b['nama_petak']);
+            })
+            ->pluck('petak_id')
+            ->values();
+
         // get total pakan per petak
         $pakanTotals = DB::table('penggunaan_pakan_detail as d')
             ->join('penggunaan_pakan as p', 'p.id_penggunaan', '=', 'd.id_penggunaan')
@@ -376,6 +398,19 @@ class SimulasiController extends Controller
                 'detail_pendapatan' => $simulasiDetailPendapatan,
             ];
         }
+
+        // urutkan relasi pendapatan berdasarkan blok lalu petak (untuk tab pendapatan)
+        $simulasi->setRelation('pendapatan', $simulasi->pendapatan
+            ->sort(function ($a, $b) {
+                $blokA = $a->petak && $a->petak->blok ? $a->petak->blok->nama_blok : '';
+                $blokB = $b->petak && $b->petak->blok ? $b->petak->blok->nama_blok : '';
+                return strnatcasecmp($blokA, $blokB)
+                    ?: strnatcasecmp(
+                        $a->petak ? $a->petak->nama_petak : '',
+                        $b->petak ? $b->petak->nama_petak : ''
+                    );
+            })
+            ->values());
 
         // tambahkan array ini ke response
         $simulasi->simulasi = $result;
@@ -602,8 +637,18 @@ class SimulasiController extends Controller
 
         $petakList = SetupSiklusPetak::with('petak.blok')
             ->where('siklus_id', $siklusId)
-            ->orderBy('id_siklus_petak','asc')
-            ->get();
+            ->get()
+            // urutkan petak berdasarkan blok lalu petak (ascending, natural order)
+            ->sort(function ($a, $b) {
+                $blokA = $a->petak && $a->petak->blok ? $a->petak->blok->nama_blok : '';
+                $blokB = $b->petak && $b->petak->blok ? $b->petak->blok->nama_blok : '';
+                return strnatcasecmp($blokA, $blokB)
+                    ?: strnatcasecmp(
+                        $a->petak ? $a->petak->nama_petak : '',
+                        $b->petak ? $b->petak->nama_petak : ''
+                    );
+            })
+            ->values();
 
         foreach ($petakList as $petakItem) {
             $petakId = $petakItem->petak_id;
