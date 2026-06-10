@@ -17,6 +17,8 @@ class TransaksiSimulasiPendapatan extends Model
         'petak_id',
         'harga_per_kg',
         'biomassa',
+        'biomassa_actual',
+        'biomassa_subtotal',
         'pendapatan_simulasi',
         'pendapatan_actual_partial',
         'pendapatan_subtotal',

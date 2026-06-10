@@ -304,6 +304,19 @@ class SimulasiController extends Controller
                 ->where('petak_id', $petakId)
                 ->first();
 
+            // jika belum ada data pendapatan untuk petak ini (mis. tabel masih kosong),
+            // buat objek default agar form tetap bisa ditampilkan tanpa error
+            if (!$detailPendapatan) {
+                $detailPendapatan = new \App\Models\ManajemenTambak\TransaksiSimulasiPendapatan();
+                $detailPendapatan->trans_simulasi_id = $simulasi->id_simulasi;
+                $detailPendapatan->petak_id = $petakId;
+                $detailPendapatan->harga_per_kg = 0;
+                $detailPendapatan->biomassa = 0;
+                $detailPendapatan->pendapatan_simulasi = 0;
+                $detailPendapatan->pendapatan_actual_partial = 0;
+                $detailPendapatan->pendapatan_subtotal = 0;
+            }
+
             $biomassa = isset($detailPendapatan['biomassa']) ? (float)$detailPendapatan['biomassa'] : 0;
             $totalBiayaAll = (float)$totalBiaya + (float)$totalBiayaSimulasi;
 
