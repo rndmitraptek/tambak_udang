@@ -491,13 +491,33 @@ app.controller("myCtrl", function($scope,$http) {
 
 
     //save pendapatan
+    $scope.savingPendapatan = false;
     $scope.save_pendapatan = function() {
+        if ($scope.savingPendapatan) return; // cegah double-submit / save ganda
+
         // data pendapatan bisa dari simulasi atau pendapatan tergantung kondisi
-        let payload = ($scope.detail.pendapatan && $scope.detail.pendapatan.length > 0)
+        let source = ($scope.detail.pendapatan && $scope.detail.pendapatan.length > 0)
                         ? $scope.detail.pendapatan
                         : $scope.detail.simulasi;
-        console.log($scope.simulasi.id_simulasi);
-        console.log(payload);
+
+        if (!source || !source.length) {
+            swal("Error!", "Tidak ada data pendapatan untuk disimpan.", "error");
+            return;
+        }
+
+        // kirim HANYA field yang dipakai backend agar body tidak membengkak (hindari 413)
+        let items = source.map(function(row){
+            return {
+                petak_id: row.petak_id,
+                harga_per_kg: row.harga_per_kg || 0,
+                biomassa: row.biomassa || 0,
+                biomassa_actual: row.biomassa_actual || 0,
+                pendapatan_simulasi: row.pendapatan_simulasi || 0,
+                pendapatan_actual_partial: row.pendapatan_actual_partial || 0
+            };
+        });
+
+        $scope.savingPendapatan = true;
         // kirim data ke backend
         swal({title: "Processing...!",text: "Please Wait",
             onOpen: function() {
@@ -505,18 +525,18 @@ app.controller("myCtrl", function($scope,$http) {
             }
         })
         $http.post('/simulasi/pendapatan/save', {
-            trans_simulasi_id: $scope.simulasi.id_simulasi, // atau uuid yg dipakai
-            items: payload
+            trans_simulasi_id: $scope.detail.id_simulasi, // konsisten dgn detail aktif
+            items: items
         }).then(function(res){
-            swal("Success!", "Data pendapatan berhasil disimpan!", "success");
-
-            // panggil lagi get_detail untuk refresh
-            // gunakan data yg sedang aktif (judul atau detail)
+            // refresh hanya setelah commit sukses
             if ($scope.detail && $scope.detail.uuid) {
                 $scope.get_detail($scope.detail, $scope.selected_index);
             }
+            swal("Success!", "Data pendapatan berhasil disimpan!", "success");
         }).catch(function(err){
             swal("Error!", "Gagal menyimpan pendapatan!", "error");
+        }).finally(function(){
+            $scope.savingPendapatan = false; // selalu lepas kunci
         });
     };
     
