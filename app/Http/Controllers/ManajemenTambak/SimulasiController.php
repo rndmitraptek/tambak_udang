@@ -297,7 +297,15 @@ class SimulasiController extends Controller
             ->where('p.tanggal_penggunaan','<=', $simulasi->tanggal_simulasi)
             ->select('d.petak_id', DB::raw('SUM(d.jumlah) as total_jumlah'))
             ->groupBy('d.petak_id')
-            ->pluck('total_jumlah', 'd.petak_id'); 
+            ->pluck('total_jumlah', 'd.petak_id');
+
+        // get total panen (total & biomassa) per petak sekaligus, hindari query per-petak
+        $panenTotals = PanenModel::where('id_siklus', $simulasi->siklus_id)
+            ->where('tanggal_panen', '<=', $simulasi->tanggal_simulasi)
+            ->selectRaw('id_petak, COALESCE(SUM(total),0) as total_panen, COALESCE(SUM(jumlah),0) as biomassa_panen')
+            ->groupBy('id_petak')
+            ->get()
+            ->keyBy('id_petak');
 
         foreach ($petakIds as $petakId) {
             // total biaya & pendapatan actual sudah langsung
@@ -342,15 +350,14 @@ class SimulasiController extends Controller
             $biomassa = isset($detailPendapatan['biomassa']) ? (float)$detailPendapatan['biomassa'] : 0;
             $totalBiayaAll = (float)$totalBiaya + (float)$totalBiayaSimulasi;
 
-            //get panen
-            $panen =PanenModel::where('id_petak',$petakId)->where('tanggal_panen','<=', $simulasi->tanggal_simulasi)->where('id_siklus',$simulasi->siklus_id)->sum('total');
-            $totalPanen = $panen ? $panen : 0;
+            //get panen (sudah diagregasi per petak di $panenTotals)
+            $panenRow = $panenTotals->get($petakId);
+            $totalPanen = $panenRow ? (float)$panenRow->total_panen : 0;
             if($detailPendapatan){
                 $detailPendapatan->pendapatan_actual_partial =round($totalPanen,0);
             }
             //get biomassa panen
-            $biomassaPanen =PanenModel::where('id_petak',$petakId)->where('tanggal_panen','<=', $simulasi->tanggal_simulasi)->where('id_siklus',$simulasi->siklus_id)->sum('jumlah');
-            $totalBiomassaPanen = $biomassaPanen ? (float)$biomassaPanen : 0;
+            $totalBiomassaPanen = $panenRow ? (float)$panenRow->biomassa_panen : 0;
             if($detailPendapatan){
                 $detailPendapatan->biomassa_actual =$totalBiomassaPanen;
                 $detailPendapatan->biomassa_subtotal =($biomassa + $totalBiomassaPanen);

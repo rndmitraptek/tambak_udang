@@ -7,6 +7,34 @@ use App\Models\Auth\UserModel;
 trait HasUserAudit
 {
     /**
+     * Memo nama user per-request agar accessor created_by_name / updated_by_name
+     * tidak memukul cache store (CACHE_STORE=database) berulang kali saat
+     * banyak model di-serialize sekaligus.
+     */
+    protected static $userNameMemo = [];
+
+    /**
+     * Resolve nama user 1x per id dalam satu request (memo statis),
+     * lalu fallback ke cache lintas-request.
+     */
+    protected static function resolveUserName($userId)
+    {
+        if ($userId === null) {
+            return null;
+        }
+
+        if (array_key_exists($userId, static::$userNameMemo)) {
+            return static::$userNameMemo[$userId];
+        }
+
+        return static::$userNameMemo[$userId] = cache()->remember(
+            "user_name_{$userId}",
+            3600,
+            fn() => UserModel::where('id_user', $userId)->value('nama')
+        );
+    }
+
+    /**
      * Relasi ke user pembuat data.
      */
     public function creator()
@@ -32,12 +60,8 @@ trait HasUserAudit
             return optional($this->creator)->nama;
         }
 
-        // fallback (lazy load 1x saja per ID via cache)
-        return cache()->remember(
-            "user_name_{$this->created_by}",
-            3600,
-            fn() => UserModel::where('id_user', $this->created_by)->value('nama')
-        );
+        // fallback (lazy load 1x saja per ID via memo + cache)
+        return static::resolveUserName($this->created_by);
     }
 
     /**
@@ -49,11 +73,7 @@ trait HasUserAudit
             return optional($this->updater)->nama;
         }
 
-        return cache()->remember(
-            "user_name_{$this->updated_by}",
-            3600,
-            fn() => UserModel::where('id_user', $this->updated_by)->value('nama')
-        );
+        return static::resolveUserName($this->updated_by);
     }
 
     /**
