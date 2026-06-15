@@ -82,11 +82,13 @@ class PenaburanBenurController extends Controller
                 'setup_lokasi.uuid as uuid_lokasi','setup_lokasi.nama_lokasi',
                 'setup_siklus.uuid as uuid_siklus','setup_siklus.nama_siklus',
             ]);
-        if ($request->has('textSearch') && $request->textSearch != '') {
+        if ($request->filled('textSearch')) {
             $text = strtoupper($request->textSearch);
-            $query->where(DB::raw('UPPER(no_po)'), 'like', "%{$text}%");
-            $query->orWhere(DB::raw('UPPER(supplier)'), 'like', "%{$text}%");
-            $query->orWhere(DB::raw('UPPER(lokasi)'), 'like', "%{$text}%");
+            $query->where(function ($q) use ($text) {
+                $q->whereRaw('UPPER(po_benur.no_po) LIKE ?', ["%{$text}%"])
+                  ->orWhereRaw('UPPER(setup_supplier.nama_supplier) LIKE ?', ["%{$text}%"])
+                  ->orWhereRaw('UPPER(setup_lokasi.nama_lokasi) LIKE ?', ["%{$text}%"]);
+            });
         }
         return DataTables::of($query)->make(true);
     }
