@@ -419,7 +419,7 @@
                             <h4>Petak Dalam Siklus</h4>
                             <div class="m-alert m-alert--outline alert alert-accent alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
-                                <strong>Info!</strong> Biaya di ambil dari transaksi biaya actual sampai dengan tanggal simulasi yang di input <% simulasi.tanggal_simulasi | date:'dd/MM/yyyy' %>.
+                                <strong>Info!!</strong> Biaya di ambil dari transaksi biaya actual sampai dengan tanggal simulasi yang di input <% simulasi.tanggal_simulasi | date:'dd/MM/yyyy' %>.
                             </div>
                             <table class="table table-striped- table-bordered table-hover table-checkable" ng-if="simulasi.siklus != ''">
                                 <thead>
