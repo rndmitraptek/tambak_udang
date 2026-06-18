@@ -409,7 +409,7 @@ app.controller("myCtrl", function($scope,$http) {
                 swal.showLoading()
             }
         })
-        $http.post('/simulasi/store', data).then(function (res) {
+        $http.post('/simulasi/store', data, { timeout: 120000 }).then(function (res) {
             Swal.close();
             swal.fire({
                 icon: 'success',
@@ -420,10 +420,15 @@ app.controller("myCtrl", function($scope,$http) {
             $scope.loadSimulasi();
         }).catch(function (err) {
             Swal.close();
+            // err.data bisa null saat timeout / response bukan JSON (mis. HTML 500),
+            // jadi jangan akses err.data.message langsung supaya notif tetap muncul.
+            var msg = (err && err.data && err.data.message)
+                ? err.data.message
+                : 'Terjadi kesalahan atau koneksi timeout. Silakan coba lagi.';
             swal.fire({
                 icon: 'error',
                 title: 'Gagal!',
-                text: err.data.message || 'Terjadi kesalahan'
+                text: msg
             });
             console.error(err);
         });

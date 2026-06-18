@@ -219,28 +219,36 @@ class SimulasiController extends Controller
                 'catatan' => $request->input('catatan'),
             ]);
 
-            // Loop petakList untuk simpan biaya per petak
-            foreach ($request->input('petakList') as $petak) {
-                // petak['detail_biaya'] adalah json detail dari query sebelumnya
-                // foreach ($petak['detail_biaya'] as $detail) {
-                    TransaksiSimulasiBiaya::create([
-                        'trans_simulasi_id' => $simulasi->id_simulasi,
-                        'petak_id' => $petak['petak_id'],
-                        'benur_id' => $petak['benur_id'],
-                        'luas_petak' => $petak['petak']['luas_petak'],
-                        'nominal_biaya' => $petak['biaya_simulasi'],
-                        'jenis_benur' => $petak['jenis_benur'],
-                        'jumlah_benur' => $petak['jumlah_benur'],
-                        'doc' => $petak['doc'],
-                        'detail_biaya_actual' => json_encode($petak['detail_biaya']),
-                    ]);
-                // }
+            // Susun seluruh baris biaya per petak lalu insert sekaligus (bulk insert).
+            // DB remote -> hindari 1 round-trip per petak yang bikin request lambat/timeout.
+            $now = now();
+            $rows = [];
+            foreach ($request->input('petakList', []) as $petak) {
+                $rows[] = [
+                    'trans_simulasi_id'   => $simulasi->id_simulasi,
+                    'petak_id'            => $petak['petak_id'] ?? null,
+                    'benur_id'            => $petak['benur_id'] ?? null,
+                    'luas_petak'          => $petak['petak']['luas_petak'] ?? null,
+                    'nominal_biaya'       => $petak['biaya_simulasi'] ?? 0,
+                    'jenis_benur'         => $petak['jenis_benur'] ?? null,
+                    'jumlah_benur'        => $petak['jumlah_benur'] ?? null,
+                    'doc'                 => $petak['doc'] ?? null,
+                    'detail_biaya_actual' => isset($petak['detail_biaya']) ? json_encode($petak['detail_biaya']) : null,
+                    'created_at'          => $now,
+                    'updated_at'          => $now,
+                ];
+            }
+
+            // chunk supaya satu statement tidak terlalu besar
+            foreach (array_chunk($rows, 200) as $chunk) {
+                TransaksiSimulasiBiaya::insert($chunk);
             }
 
             DB::commit();
             return response()->json(['status' => 'success', 'message' => 'Simulasi tersimpan']);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
+            \Log::error('Simulasi store gagal: '.$e->getMessage(), ['exception' => $e]);
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
