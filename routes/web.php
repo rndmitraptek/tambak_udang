@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jurnal', [App\Http\Controllers\Akuntansi\JurnalController::class, 'index']);
     Route::get('/buku_besar', [App\Http\Controllers\Akuntansi\JurnalController::class, 'buku_besar']);
     Route::get('/laba_rugi', [App\Http\Controllers\Akuntansi\JurnalController::class, 'laba_rugi']);
+    Route::get('/laba_rugi_petak', [App\Http\Controllers\Akuntansi\LabaRugiPetakController::class, 'index']);
     Route::get('/neraca', [App\Http\Controllers\Akuntansi\JurnalController::class, 'neraca']);
 });
 
