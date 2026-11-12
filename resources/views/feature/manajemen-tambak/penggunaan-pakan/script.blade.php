@@ -151,7 +151,7 @@ app.controller("myCtrl", function($scope,$http) {
 
     $scope.hitungSubtotal = function() {
         let harga = parseFloat($scope.harga) || 0;
-        let jumlah = parseInt($scope.jumlah) || 0;
+        let jumlah = parseFloat($scope.jumlah) || 0;
         $scope.subtotal = harga * jumlah;
     };
 
